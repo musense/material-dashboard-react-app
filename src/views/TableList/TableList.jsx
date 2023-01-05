@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 // @material-ui/core components
 import withStyles from "@material-ui/core/styles/withStyles";
 // core components
@@ -9,6 +9,9 @@ import Card from "components/Card/Card.jsx";
 import CardHeader from "components/Card/CardHeader.jsx";
 import CardBody from "components/Card/CardBody.jsx";
 
+import { useSelector, useDispatch } from "react-redux";
+import { GET_TAG_REQUEST } from "../../actions/GetTagsAction";
+
 const styles = {
   cardCategoryWhite: {
     "&,& a,& a:hover,& a:focus": {
@@ -16,11 +19,11 @@ const styles = {
       margin: "0",
       fontSize: "14px",
       marginTop: "0",
-      marginBottom: "0"
+      marginBottom: "0",
     },
     "& a,& a:hover,& a:focus": {
-      color: "#FFFFFF"
-    }
+      color: "#FFFFFF",
+    },
   },
   cardTitleWhite: {
     color: "#FFFFFF",
@@ -34,12 +37,19 @@ const styles = {
       color: "#777",
       fontSize: "65%",
       fontWeight: "400",
-      lineHeight: "1"
-    }
-  }
+      lineHeight: "1",
+    },
+  },
 };
 
 function TableList(props) {
+  const dispatch = useDispatch();
+  const tagList = useSelector((state) => state.getTagReducer.tagList);
+  console.log(`tagList:${tagList}`);
+  useEffect(() => {
+    dispatch({ type: GET_TAG_REQUEST });
+  }, [dispatch]);
+
   const { classes } = props;
   return (
     <GridContainer>
@@ -56,15 +66,7 @@ function TableList(props) {
               tableHeaderColor="primary"
               // tableHead={["Name", "Country", "City", "Salary"]}
               tableHead={["ID", "Name", "ShowOnPage", "TaggedNumber"]}
-              tableData={[
-                ["1", "desk", "true", "12"],
-                ["2", "chair", "true", "26"],
-                ["3", "dining table", "true", "10"],
-                ["4", "cupboard", "false", "6"],
-                ["5", "refrigirator", "false", "20"],
-                ["6", "microwave oven", "true", "6"],
-                ["7", "laptop", "false", "8"],
-              ]}
+              tableData={tagList}
             />
           </CardBody>
         </Card>

@@ -16,21 +16,21 @@ import pagesStyle from "assets/jss/material-dashboard-react/layouts/authStyle.js
 import register from "assets/img/register.jpeg";
 import login from "assets/img/login.jpeg";
 
-const switchRoutes = (
-  <Switch>
-    {routes.map((prop, key) => {
-      if (prop.layout === "/auth") {
-        return (
-          <Route
-            path={prop.layout + prop.path}
-            component={prop.component}
-            key={key}
-          />
-        );
-      }
-      return null;
-    })}
-  </Switch>
+const switchRoutes = (<></>
+  // <Switch>
+  //   {routes.map((prop, key) => {
+  //     if (prop.layout === "/auth") {
+  //       return (
+  //         <Route
+  //           path={prop.layout + prop.path}
+  //           component={prop.component}
+  //           key={key}
+  //         />
+  //       );
+  //     }
+  //     return null;
+  //   })}
+  // </Switch>
 );
 
 class Pages extends React.Component {

@@ -1,7 +1,8 @@
 import {
     GET_TAG_REQUEST,
     GET_TAG_SUCCESS,
-    GET_TAG_FAIL
+    GET_TAG_FAIL,
+    GET_SELECTED_TAG_SUCCESS
 } from "../../actions/GetTagsAction";
 import * as APIList from './../apiList'
 import { call, put, select, takeEvery } from 'redux-saga/effects'
@@ -47,6 +48,15 @@ function* GetTagList() {
         // });
     }
 }
+
+
+// function* watchSelectedTagClick() {
+//     yield takeEvery(GET_SELECTED_TAG_SUCCESS)
+//     yield put({
+//         type: TAG_UPDATE_PANEL_SHOW
+//     })
+
+// }
 
 function* mySaga() {
     yield takeEvery(GET_TAG_REQUEST, GetTagList)

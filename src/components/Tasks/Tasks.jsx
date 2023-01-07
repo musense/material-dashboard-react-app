@@ -19,9 +19,9 @@ import tasksStyle from "assets/jss/material-dashboard-react/components/tasksStyl
 
 class Tasks extends React.Component {
   state = {
-    checked: this.props.checkedIndexes
+    checked: this.props.checkedIndexes,
   };
-  handleToggle = value => () => {
+  handleToggle = (value) => () => {
     const { checked } = this.state;
     const currentIndex = checked.indexOf(value);
     const newChecked = [...checked];
@@ -33,18 +33,18 @@ class Tasks extends React.Component {
     }
 
     this.setState({
-      checked: newChecked
+      checked: newChecked,
     });
   };
   render() {
     const { classes, tasksIndexes, tasks, rtlActive } = this.props;
     const tableCellClasses = classnames(classes.tableCell, {
-      [classes.tableCellRTL]: rtlActive
+      [classes.tableCellRTL]: rtlActive,
     });
     return (
       <Table className={classes.table}>
         <TableBody>
-          {tasksIndexes.map(value => (
+          {tasksIndexes.map((value) => (
             <TableRow key={value} className={classes.tableRow}>
               <TableCell className={tableCellClasses}>
                 <Checkbox
@@ -55,7 +55,7 @@ class Tasks extends React.Component {
                   icon={<Check className={classes.uncheckedIcon} />}
                   classes={{
                     checked: classes.checked,
-                    root: classes.root
+                    root: classes.root,
                   }}
                 />
               </TableCell>
@@ -108,7 +108,7 @@ Tasks.propTypes = {
   classes: PropTypes.object.isRequired,
   tasksIndexes: PropTypes.arrayOf(PropTypes.number),
   tasks: PropTypes.arrayOf(PropTypes.node),
-  rtlActive: PropTypes.bool
+  rtlActive: PropTypes.bool,
 };
 
 export default withStyles(tasksStyle)(Tasks);

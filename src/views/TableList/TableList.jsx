@@ -9,8 +9,8 @@ import Card from "components/Card/Card.jsx";
 import CardHeader from "components/Card/CardHeader.jsx";
 import CardBody from "components/Card/CardBody.jsx";
 
-import { useSelector, useDispatch } from "react-redux";
-import { GET_TAG_REQUEST } from "../../actions/GetTagsAction";
+// import { useSelector, useDispatch } from "react-redux";
+// import { GET_TAG_REQUEST } from "../../actions/GetTagsAction";
 
 const styles = {
   cardCategoryWhite: {
@@ -43,12 +43,7 @@ const styles = {
 };
 
 function TableList(props) {
-  const dispatch = useDispatch();
-  const tagList = useSelector((state) => state.getTagReducer.tagList);
-  console.log(`tagList:${tagList}`);
-  useEffect(() => {
-    dispatch({ type: GET_TAG_REQUEST });
-  }, [dispatch]);
+
 
   const { classes } = props;
   return (
@@ -66,49 +61,11 @@ function TableList(props) {
               tableHeaderColor="primary"
               // tableHead={["Name", "Country", "City", "Salary"]}
               tableHead={["ID", "Name", "ShowOnPage", "TaggedNumber"]}
-              tableData={tagList}
+              // tableData={tagList}
             />
           </CardBody>
         </Card>
       </GridItem>
-      {/* <GridItem xs={12} sm={12} md={12}>
-        <Card plain>
-          <CardHeader plain color="primary">
-            <h4 className={classes.cardTitleWhite}>
-              Table on Plain Background
-            </h4>
-            <p className={classes.cardCategoryWhite}>
-              Here is a subtitle for this table
-            </p>
-          </CardHeader>
-          <CardBody>
-            <Table
-              tableHeaderColor="primary"
-              tableHead={["ID", "Name", "Country", "City", "Salary"]}
-              tableData={[
-                ["1", "Dakota Rice", "$36,738", "Niger", "Oud-Turnhout"],
-                ["2", "Minerva Hooper", "$23,789", "Curaçao", "Sinaai-Waas"],
-                ["3", "Sage Rodriguez", "$56,142", "Netherlands", "Baileux"],
-                [
-                  "4",
-                  "Philip Chaney",
-                  "$38,735",
-                  "Korea, South",
-                  "Overland Park"
-                ],
-                [
-                  "5",
-                  "Doris Greene",
-                  "$63,542",
-                  "Malawi",
-                  "Feldkirchen in Kärnten"
-                ],
-                ["6", "Mason Porter", "$78,615", "Chile", "Gloucester"]
-              ]}
-            />
-          </CardBody>
-        </Card>
-      </GridItem> */}
     </GridContainer>
   );
 }

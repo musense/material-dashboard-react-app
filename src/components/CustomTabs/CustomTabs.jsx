@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 // nodejs library that concatenates classes
 import classNames from "classnames";
 // nodejs library to set properties for components
@@ -15,78 +15,65 @@ import CardHeader from "components/Card/CardHeader.jsx";
 
 import customTabsStyle from "assets/jss/material-dashboard-react/components/customTabsStyle.jsx";
 
-class CustomTabs extends React.Component {
-  state = {
-    value: 0
-  };
-  handleChange = (event, value) => {
-    this.setState({ value });
-  };
-  render() {
-    const {
-      classes,
-      headerColor,
-      plainTabs,
-      tabs,
-      title,
-      rtlActive
-    } = this.props;
-    const cardTitle = classNames({
-      [classes.cardTitle]: true,
-      [classes.cardTitleRTL]: rtlActive
-    });
-    return (
-      <Card plain={plainTabs}>
-        <CardHeader color={headerColor} plain={plainTabs}>
-          {title !== undefined ? (
-            <div className={cardTitle}>{title}</div>
-          ) : null}
-          <Tabs
-            value={this.state.value}
-            onChange={this.handleChange}
-            classes={{
-              root: classes.tabsRoot,
-              indicator: classes.displayNone,
-              scrollButtons: classes.displayNone
-            }}
-            variant="scrollable"
-            scrollButtons="auto"
-          >
-            {tabs.map((prop, key) => {
-              var icon = {};
-              if (prop.tabIcon) {
-                icon = {
-                  icon: <prop.tabIcon />
-                };
-              }
-              return (
-                <Tab
-                  classes={{
-                    root: classes.tabRootButton,
-                    labelContainer: classes.tabLabelContainer,
-                    label: classes.tabLabel,
-                    selected: classes.tabSelected,
-                    wrapper: classes.tabWrapper
-                  }}
-                  key={key}
-                  label={prop.tabName}
-                  {...icon}
-                />
-              );
-            })}
-          </Tabs>
-        </CardHeader>
-        <CardBody>
+function CustomTabs({ ...props }) {
+  const [value, setvalue] = useState(0);
+  const handleChange = (value) => setvalue(value);
+
+  const { classes, headerColor, plainTabs, tabs, title, rtlActive } = props;
+
+  const cardTitle = classNames({
+    [classes.cardTitle]: true,
+    [classes.cardTitleRTL]: rtlActive,
+  });
+  return (
+    <Card plain={plainTabs}>
+      <CardHeader color={headerColor} plain={plainTabs}>
+        {title !== undefined ? <div className={cardTitle}>{title}</div> : null}
+        <Tabs
+          value={value}
+          onChange={handleChange}
+          classes={{
+            root: classes.tabsRoot,
+            indicator: classes.displayNone,
+            scrollButtons: classes.displayNone,
+          }}
+          variant="scrollable"
+          scrollButtons="auto"
+        >
           {tabs.map((prop, key) => {
-            if (key === this.state.value) {
-              return <div key={key}>{prop.tabContent}</div>;
+            var icon = {};
+            if (prop.tabIcon) {
+              icon = {
+                icon: <prop.tabIcon />,
+              };
             }
-            return null;
+            return (
+              <Tab
+                classes={{
+                  root: classes.tabRootButton,
+                  labelContainer: classes.tabLabelContainer,
+                  label: classes.tabLabel,
+                  selected: classes.tabSelected,
+                  wrapper: classes.tabWrapper,
+                }}
+                key={key}
+                label={prop.tabName}
+                {...icon}
+              />
+            );
           })}
-        </CardBody>
-      </Card>
-    );
-  }
+        </Tabs>
+      </CardHeader>
+      <CardBody>
+        {tabs.map((prop, key) => {
+          if (key === value) {
+            return <div key={key}>{prop.tabContent}</div>;
+          }
+          return null;
+        })}
+      </CardBody>
+    </Card>
+  );
 }
 
 CustomTabs.propTypes = {
@@ -96,18 +83,18 @@ CustomTabs.propTypes = {
     "success",
     "danger",
     "info",
-    "primary"
+    "primary",
   ]),
   title: PropTypes.string,
   tabs: PropTypes.arrayOf(
     PropTypes.shape({
       tabName: PropTypes.string.isRequired,
       tabIcon: PropTypes.func,
-      tabContent: PropTypes.node.isRequired
+      tabContent: PropTypes.node.isRequired,
     })
   ),
   rtlActive: PropTypes.bool,
-  plainTabs: PropTypes.bool
+  plainTabs: PropTypes.bool,
 };
 
 export default withStyles(customTabsStyle)(CustomTabs);

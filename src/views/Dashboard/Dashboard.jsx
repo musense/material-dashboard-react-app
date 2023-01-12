@@ -20,7 +20,7 @@ import Cloud from "@material-ui/icons/Cloud";
 // core components
 import GridItem from "components/Grid/GridItem.jsx";
 import GridContainer from "components/Grid/GridContainer.jsx";
-// import Table from "components/Table/Table.jsx";
+import Table from "components/Table/Table.jsx";
 import Tasks from "components/Tasks/Tasks.jsx";
 import CustomTabs from "components/CustomTabs/CustomTabs.jsx";
 import Danger from "components/Typography/Danger.jsx";
@@ -35,20 +35,29 @@ import { bugs, website, server } from "variables/general.jsx";
 import {
   dailySalesChart,
   emailsSubscriptionChart,
-  completedTasksChart
+  completedTasksChart,
 } from "variables/charts.jsx";
 
 import dashboardStyle from "assets/jss/material-dashboard-react/views/dashboardStyle.jsx";
 
+import { connect, useDispatch, useSelector } from "react-redux";
 class Dashboard extends React.Component {
+  constructor(props) {
+    super(props);
+  }
   state = {
-    value: 0
+    value: 0,
   };
+
+  // componentWillMount() {
+  //   this.props.REQUEST_TAG_SUCCESS();
+  // }
+
   handleChange = (event, value) => {
     this.setState({ value });
   };
 
-  handleChangeIndex = index => {
+  handleChangeIndex = (index) => {
     this.setState({ value: index });
   };
   render() {
@@ -72,7 +81,7 @@ class Dashboard extends React.Component {
                   <Danger>
                     <Warning />
                   </Danger>
-                  <a href="#pablo" onClick={e => e.preventDefault()}>
+                  <a href="#pablo" onClick={(e) => e.preventDefault()}>
                     Get more space
                   </a>
                 </div>
@@ -224,7 +233,7 @@ class Dashboard extends React.Component {
                       tasksIndexes={[0, 1, 2, 3]}
                       tasks={bugs}
                     />
-                  )
+                  ),
                 },
                 {
                   tabName: "Website",
@@ -235,7 +244,7 @@ class Dashboard extends React.Component {
                       tasksIndexes={[0, 1]}
                       tasks={website}
                     />
-                  )
+                  ),
                 },
                 {
                   tabName: "Server",
@@ -246,12 +255,12 @@ class Dashboard extends React.Component {
                       tasksIndexes={[0, 1, 2]}
                       tasks={server}
                     />
-                  )
-                }
+                  ),
+                },
               ]}
             />
           </GridItem>
-          {/* <GridItem xs={12} sm={12} md={6}>
+          <GridItem xs={12} sm={12} md={6}>
             <Card>
               <CardHeader color="warning">
                 <h4 className={classes.cardTitleWhite}>Employees Stats</h4>
@@ -267,12 +276,77 @@ class Dashboard extends React.Component {
                     ["1", "Dakota Rice", "$36,738", "Niger"],
                     ["2", "Minerva Hooper", "$23,789", "Curaçao"],
                     ["3", "Sage Rodriguez", "$56,142", "Netherlands"],
-                    ["4", "Philip Chaney", "$38,735", "Korea, South"]
+                    ["4", "Philip Chaney", "$38,735", "Korea, South"],
                   ]}
                 />
               </CardBody>
             </Card>
-          </GridItem> */}
+          </GridItem>
+        </GridContainer>
+        <GridContainer>
+          <GridItem xs={12} sm={12} md={6}>
+            <CustomTabs
+              title="Tasks:"
+              headerColor="primary"
+              tabs={[
+                {
+                  tabName: "Bugs",
+                  tabIcon: BugReport,
+                  tabContent: (
+                    <Tasks
+                      checkedIndexes={[0, 3]}
+                      tasksIndexes={[0, 1, 2, 3]}
+                      tasks={bugs}
+                    />
+                  ),
+                },
+                {
+                  tabName: "Website",
+                  tabIcon: Code,
+                  tabContent: (
+                    <Tasks
+                      checkedIndexes={[0]}
+                      tasksIndexes={[0, 1]}
+                      tasks={website}
+                    />
+                  ),
+                },
+                {
+                  tabName: "Server",
+                  tabIcon: Cloud,
+                  tabContent: (
+                    <Tasks
+                      checkedIndexes={[1]}
+                      tasksIndexes={[0, 1, 2]}
+                      tasks={server}
+                    />
+                  ),
+                },
+              ]}
+            />
+          </GridItem>
+          <GridItem xs={12} sm={12} md={6}>
+            <Card>
+              <CardHeader color="warning">
+                <h4 className={classes.cardTitleWhite}>Employees Stats</h4>
+                <p className={classes.cardCategoryWhite}>
+                  New employees on 15th September, 2016
+                </p>
+              </CardHeader>
+              <CardBody>
+                <Table
+                  tableHeaderColor="warning"
+                  tableHead={["ID", "Name", "Salary", "Country"]}
+                  tableData={[
+                    ["1", "Dakota Rice", "$36,738", "Niger"],
+                    ["2", "Minerva Hooper", "$23,789", "Curaçao"],
+                    ["3", "Sage Rodriguez", "$56,142", "Netherlands"],
+                    ["4", "Philip Chaney", "$38,735", "Korea, South"],
+                  ]}
+                />
+              </CardBody>
+            </Card>
+          </GridItem>
         </GridContainer>
       </div>
     );
@@ -280,7 +354,11 @@ class Dashboard extends React.Component {
 }
 
 Dashboard.propTypes = {
-  classes: PropTypes.object.isRequired
+  classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(dashboardStyle)(Dashboard);
+export default withStyles(dashboardStyle)(Dashboard)
+// export default connect(
+//   null,
+//   mapDispatchToProps
+// )(withStyles(dashboardStyle)(Dashboard));

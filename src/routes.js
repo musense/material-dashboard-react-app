@@ -13,6 +13,7 @@ import Login from "@material-ui/icons/LockOpen";
 import DashboardPage from "views/Dashboard/Dashboard.jsx";
 import UserProfile from "views/UserProfile/UserProfile.jsx";
 import TableList from "views/TableList/TableList.jsx";
+import IEditor from "views/IEditor/IEditor.jsx";
 import Typography from "views/Typography/Typography.jsx";
 import Icons from "views/Icons/Icons.jsx";
 // import Maps from "views/Maps/Maps.jsx";
@@ -47,6 +48,14 @@ const dashboardRoutes = [
     rtlName: "قائمة الجدول",
     icon: "content_paste",
     component: TableList,
+    layout: "/admin"
+  },
+  {
+    path: "/editor",
+    name: "IEditor",
+    rtlName: "قائمة الجدول",
+    icon: "content_paste",
+    component: IEditor,
     layout: "/admin"
   },
   // {

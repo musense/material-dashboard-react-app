@@ -13,7 +13,9 @@ import {
   UPDATE_TAG,
   DELETE_TAG,
 } from "../../actions/GetTagsAction";
+import { errorMessage } from "./../../reducers/errorMessage";
 import { useSelector, useDispatch } from "react-redux";
+import CustomModal from '../CustomModal/CustomModal'
 
 function CustomTable({ ...props }) {
   const { tableData } = props;
@@ -29,49 +31,51 @@ function CustomTable({ ...props }) {
   const [selectedTag, setSelectedTag] = useState(nullTag);
   const [origSelectedTag, setOrigSelectedTag] = useState(nullTag);
   const [fixedClasses, setFixedClasses] = useState("dropdown");
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const tableHead = ["ID", "Name", "ShowOnPage", "TaggedNumber"];
 
   const dispatch = useDispatch();
-  const addTagSuccess = useSelector(
-    (state) => state.getTagReducer.errorMessage === "add tag successfully"
+
+  const returnMessage = useSelector(
+    (state) => state.getTagReducer.errorMessage
   );
-  const updateTagSuccess = useSelector(
-    (state) => state.getTagReducer.errorMessage === "update tag successfully"
-  );
-  const deleteTagSuccess = useSelector(
-    (state) => state.getTagReducer.errorMessage === "delete tag successfully"
-  );
-  const addTagFail = useSelector(
-    (state) => state.getTagReducer.errorMessage === "add tag fail!"
-  );
-  const updateTagFail = useSelector(
-    (state) => state.getTagReducer.errorMessage === "update tag fail!"
-  );
-  const deleteTagFail = useSelector(
-    (state) => state.getTagReducer.errorMessage === "delete tag fail!"
-  );
+  let successMessages = [],
+    failMessages = [],
+    finishMessages = [];
   const [selectedID, setSelectedID] = useState(-1);
+  Object.keys(errorMessage)
+    .filter((key) => key.endsWith("Success"))
+    .map((successKey) => {
+      console.log(`Success message: ${errorMessage[successKey]}`);
+      successMessages.push(errorMessage[successKey]);
+    });
+  Object.keys(errorMessage)
+    .filter((key) => key.endsWith("Fail"))
+    .map((failKey) => {
+      console.log(`Fail message: ${errorMessage[failKey]}`);
+      failMessages.push(errorMessage[failKey]);
+    });
+  Object.keys(errorMessage)
+    .filter((key) => key.endsWith("Finish"))
+    .map((finishKey) => {
+      console.log(`Finish message: ${errorMessage[finishKey]}`);
+      finishMessages.push(errorMessage[finishKey]);
+    });
 
   useEffect(() => {
-    // console.group("Table useEffect tableData");
-    // console.table(tableData);
-    // console.groupEnd("Table useEffect tableData ");
-    if (addTagSuccess || updateTagSuccess || deleteTagSuccess)
+    console.group("Table useEffect tableData");
+    console.table(tableData);
+    console.log(`returnMessage: ${returnMessage}`);
+    console.groupEnd("Table useEffect tableData ");
+    if (successMessages.includes(returnMessage))
       dispatch({ type: REQUEST_TAG });
     // TODO: popup window
-    if (addTagFail || updateTagFail || deleteTagFail)
+    if (failMessages.includes(returnMessage))
       console.error("!!!SERVER ERROR!!!");
+    if (finishMessages.includes(returnMessage)) closeModal();
 
     setTagList(tableData);
-  }, [
-    addTagSuccess,
-    updateTagSuccess,
-    deleteTagSuccess,
-    addTagFail,
-    updateTagFail,
-    deleteTagFail,
-    tableData,
-  ]);
+  }, [returnMessage, tableData]);
   const setTag = (tag) =>
     setSelectedTag({
       id: tag.id,
@@ -80,7 +84,6 @@ function CustomTable({ ...props }) {
       taggedNumber: tag.taggedNumber,
     });
 
-    
   const handleRowClick = (e) => {
     // TODO: popup confirm window
     console.group(`handleRowClick selectedID`);
@@ -127,6 +130,7 @@ function CustomTable({ ...props }) {
       },
     });
 
+    openModal();
     setSelectedTagEmpty();
     setIsCreate(true);
   }
@@ -155,6 +159,7 @@ function CustomTable({ ...props }) {
       },
     });
 
+    openModal();
     setTag(selectedTag);
   }
 
@@ -175,6 +180,7 @@ function CustomTable({ ...props }) {
         data: selectedID,
       },
     });
+    openModal();
   }
 
   const setSelectedTagEmpty = () => setSelectedTag(nullTag);
@@ -217,8 +223,17 @@ function CustomTable({ ...props }) {
     setSelectedTag(changedTag);
   }
 
+  function openModal() {
+    setIsModalOpen(true);
+  }
+  function closeModal() {
+    setIsModalOpen(false);
+  }
   return (
     <div>
+      <CustomModal
+        isModalOpen={isModalOpen}
+      />
       <FixedPlugin
         handleFixedClick={handleFixedClick}
         fixedClasses={fixedClasses}

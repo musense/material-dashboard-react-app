@@ -35,7 +35,7 @@ function* GetTagList() {
         const tagList = yield response.data;
         yield put({
             type: REQUEST_TAG_SUCCESS,
-            payload: tagList
+            payload: tagList,
         })
     } catch (error) {
         yield put({

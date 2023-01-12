@@ -13,7 +13,7 @@ import {
     UPDATE_SELECTED_TAG_SUCCESS,
     DELETED_SELECTED_TAG_SUCCESS,
 } from '../actions/GetTagsAction';
-// import TAG from '../model/tags';
+import { errorMessage } from './errorMessage';
 
 const nullTag = {
     id: "-1",
@@ -35,38 +35,38 @@ const getTagReducer = (state = initialState, action) => {
         case ADD_TAG_SUCCESS:
             return {
                 ...state,
-                errorMessage: 'add tag successfully'
+                errorMessage: errorMessage.addSuccess
             }
         case UPDATE_TAG_SUCCESS:
             return {
                 ...state,
-                errorMessage: 'update tag successfully'
+                errorMessage: errorMessage.updateSuccess
             }
         case DELETE_TAG_SUCCESS:
             return {
                 ...state,
-                errorMessage: 'delete tag successfully'
+                errorMessage: errorMessage.deleteSuccess
             }
         case ADD_TAG_FAIL:
             return {
                 ...state,
-                errorMessage: 'add tag fail!'
+                errorMessage: errorMessage.addFail
             }
         case UPDATE_TAG_FAIL:
             return {
                 ...state,
-                errorMessage: 'update tag fail!'
+                errorMessage: errorMessage.updateFail
             }
         case DELETE_TAG_FAIL:
             return {
                 ...state,
-                errorMessage: 'delete tag fail!'
+                errorMessage: errorMessage.deletefail
             }
         case REQUEST_TAG_SUCCESS:
             return {
                 ...state,
                 tagList: action.payload,
-                errorMessage: null
+                errorMessage: errorMessage.getFinish
             }
         case GET_SELECTED_TAG_SUCCESS:
             return {

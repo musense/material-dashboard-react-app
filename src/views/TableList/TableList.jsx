@@ -1,4 +1,4 @@
-import React, { useEffect } from "react"; // useEffect
+import React, { useEffect, useState } from "react"; // useEffect
 // @material-ui/core components
 import withStyles from "@material-ui/core/styles/withStyles";
 // core components
@@ -10,8 +10,7 @@ import CardHeader from "components/Card/CardHeader.jsx";
 import CardBody from "components/Card/CardBody.jsx";
 import { useSelector, useDispatch } from "react-redux";
 import { REQUEST_TAG, GET_TAG_REQUEST } from "../../actions/GetTagsAction";
-import Skeleton from "react-loading-skeleton";
-import "react-loading-skeleton/dist/skeleton.css";
+import CustomModal from "../../components/CustomModal/CustomModal";
 
 const styles = {
   cardCategoryWhite: {
@@ -45,13 +44,18 @@ const styles = {
 
 function TableList(props) {
   const dispatch = useDispatch();
-
+  const [isModalOpen, setIsModalOpen] = useState(true);
   const tableData = useSelector((state) => state.getTagReducer.tagList);
+  const returnMessage = useSelector(
+    (state) => state.getTagReducer.errorMessage
+  );
   // console.group("TableList");
   // console.log(tableData);
   // console.table(tableData);
   // console.groupEnd("TableList ");
   useEffect(() => {
+    if (returnMessage === "get tag finish") setIsModalOpen(false);
+
     dispatch({ type: REQUEST_TAG });
     // console.group("TableList useEffect");
     // console.table(tableData);
@@ -79,14 +83,7 @@ function TableList(props) {
                 tableData={tableData}
               />
             ) : (
-              <Skeleton
-                count={1}
-                xs={12}
-                sm={12}
-                md={12}
-                height={40}
-                circle={false}
-              />
+              <CustomModal isModalOpen={isModalOpen} />
             )}
           </CardBody>
         </Card>

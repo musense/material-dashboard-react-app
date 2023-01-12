@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect } from "react"; // useEffect
 // @material-ui/core components
 import withStyles from "@material-ui/core/styles/withStyles";
 // core components
@@ -8,9 +8,9 @@ import Table from "components/Table/Table.jsx";
 import Card from "components/Card/Card.jsx";
 import CardHeader from "components/Card/CardHeader.jsx";
 import CardBody from "components/Card/CardBody.jsx";
-
-// import { useSelector, useDispatch } from "react-redux";
-// import { GET_TAG_REQUEST } from "../../actions/GetTagsAction";
+import axios from "axios";
+import { useSelector, useDispatch } from "react-redux";
+import { REQUEST_TAG, GET_TAG_REQUEST } from "../../actions/GetTagsAction";
 
 const styles = {
   cardCategoryWhite: {
@@ -43,9 +43,22 @@ const styles = {
 };
 
 function TableList(props) {
+  const dispatch = useDispatch();
 
+  const tableData = useSelector((state) => state.getTagReducer.tagList);
+  // console.group("TableList");
+  // console.log(tableData);
+  // console.table(tableData);
+  // console.groupEnd("TableList ");
+  useEffect(() => {
+    dispatch({ type: REQUEST_TAG });
+    // console.group("TableList useEffect");
+    // console.table(tableData);
+    // console.groupEnd("TableList useEffect ");
+  }, []);
 
   const { classes } = props;
+
   return (
     <GridContainer>
       <GridItem xs={12} sm={12} md={12}>
@@ -57,12 +70,16 @@ function TableList(props) {
             </p>
           </CardHeader>
           <CardBody>
-            <Table
-              tableHeaderColor="primary"
-              // tableHead={["Name", "Country", "City", "Salary"]}
-              tableHead={["ID", "Name", "ShowOnPage", "TaggedNumber"]}
-              // tableData={tagList}
-            />
+            {tableData ? (
+              <Table
+                tableHeaderColor="primary"
+                // tableHead={["Name", "Country", "City", "Salary"]}
+                tableHead={["ID", "Name", "ShowOnPage", "TaggedNumber"]}
+                tableData={tableData}
+              />
+            ) : null
+            // TODO: <loading Child component />
+            }
           </CardBody>
         </Card>
       </GridItem>

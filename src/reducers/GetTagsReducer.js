@@ -1,4 +1,6 @@
 import {
+    ADD_TAG_SUCCESS,
+    REQUEST_TAG_SUCCESS,
     GET_TAG_SUCCESS,
     GET_TAG_FAIL,
     GET_TAG_REQUEST,
@@ -6,7 +8,7 @@ import {
     UPDATE_SELECTED_TAG_SUCCESS,
     DELETED_SELECTED_TAG_SUCCESS,
 } from '../actions/GetTagsAction';
-import TAG from '../model/tags';
+// import TAG from '../model/tags';
 
 const nullTag = {
     id: "-1",
@@ -16,15 +18,26 @@ const nullTag = {
 };
 
 const initialState = {
-    tagList: TAG,
-    selectedTag: nullTag,
+    tagList: null,
+    selectedTag: null,
     selectedIndex: -1,
     errorMessage: null
 }
 
 const getTagReducer = (state = initialState, action) => {
-    // console.log(`action.payload: ${JSON.stringify(action.payload)}`)
+    // console.log(`action: ${JSON.stringify(action)}`)
     switch (action.type) {
+        case ADD_TAG_SUCCESS:
+            return {
+                ...state,
+                errorMessage: 'add tag successfully'
+            }
+        case REQUEST_TAG_SUCCESS:
+            return {
+                ...state,
+                tagList: action.payload,
+                errorMessage: null
+            }
         case GET_SELECTED_TAG_SUCCESS:
             return {
                 ...state,
@@ -46,7 +59,7 @@ const getTagReducer = (state = initialState, action) => {
                         errorMessage: 'nothing to update!!!'
                     }
                 }
-                
+
                 const uTagList = state.tagList.map((t, index) =>
                     index == state.selectedIndex ?
                         [
@@ -80,7 +93,7 @@ const getTagReducer = (state = initialState, action) => {
             return { ...state, tagList: action.payload, errorMessage: null }
         case GET_TAG_FAIL:
             return { ...state, errorMessage: action.payload }
-        case GET_TAG_REQUEST:
+        // case GET_TAG_REQUEST:
         default:
             return { ...state }
     }

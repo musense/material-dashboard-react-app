@@ -1,3 +1,12 @@
+export const REQUEST_TAG = "REQUEST_TAG";
+export const REQUEST_TAG_SUCCESS = "REQUEST_TAG_SUCCESS";
+export const REQUEST_TAG_FAIL = "REQUEST_TAG_FAIL";
+
+export const ADD_TAG = "ADD_TAG";
+export const ADD_TAG_SUCCESS = "ADD_TAG_SUCCESS";
+export const ADD_TAG_FAIL = "ADD_TAG_FAIL";
+
+
 export const GET_TAG_REQUEST = "GET_TAG_REQUEST";
 export const GET_TAG_SUCCESS = "GET_TAG_SUCCESS";
 export const TAG_RESPONSE = "TAG_RESPONSE";

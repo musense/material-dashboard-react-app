@@ -49,13 +49,11 @@ const styles = {
   },
 };
 export const FixedPlugin = (props) => {
-  // const inputLayout = useMemo(() => <></>, [
-  //   id,
-  //   name,
-  //   showOnPage,
-  //   taggedNumber,
-  // ]);
   const [classes, setClasses] = useState("dropdown show");
+
+  // console.group('FixedPlugin props')
+  // console.table(props);
+  // console.groupEnd('FixedPlugin props ')
 
   return (
     <div
@@ -86,28 +84,28 @@ export const FixedPlugin = (props) => {
                     justifyContent="space-evenly"
                     alignItems="flex-start"
                   >
-                    <label for="id">ID</label>
+                    <label htmlFor="id">ID</label>
                     <input
                       type="text"
                       id="id"
                       value={props.id}
                       onChange={props.handleIDChange}
                     />
-                    <label for="name">Name</label>
+                    <label htmlFor="name">Name</label>
                     <input
                       type="text"
                       id="name"
                       value={props.name}
                       onChange={props.handleNameChange}
                     />
-                    <label for="showOnPage">ShowOnPage</label>
+                    <label htmlFor="showOnPage">ShowOnPage</label>
                     <input
                       type="text"
                       id="showOnPage"
                       value={props.showOnPage}
                       onChange={props.handleShowOnPageChange}
                     />
-                    <label for="taggedNumber">TaggedNumber</label>
+                    <label htmlFor="taggedNumber">TaggedNumber</label>
                     <input
                       type="text"
                       id="taggedNumber"
@@ -121,7 +119,11 @@ export const FixedPlugin = (props) => {
             </GridItem>
           </GridContainer>
           {props.isCreate ? (
-            <button type="button" value="button" onClick={props.createEmptyTag}>
+            <button
+              type="button"
+              value="button"
+              onClick={props.handleCreateTag}
+            >
               CREATE
             </button>
           ) : (

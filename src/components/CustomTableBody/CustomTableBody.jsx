@@ -15,7 +15,7 @@ function CustomTableBody({ ...props }) {
           onClick={props.handleRowClick}
           id={rowIndex + "_Row"}
           hover={true}
-          selected={rowIndex == props.selectedIndex}
+          selected={tag.id == props.selectedID}
         >
           <TableCell key={`${rowIndex}_tagID`}>{tag.id}</TableCell>
           <TableCell key={`${rowIndex}_tagName`}>{tag.name}</TableCell>

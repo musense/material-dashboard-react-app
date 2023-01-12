@@ -7,6 +7,9 @@ import {
     UPDATE_TAG,
     UPDATE_TAG_SUCCESS,
     UPDATE_TAG_FAIL,
+    DELETE_TAG,
+    DELETE_TAG_SUCCESS,
+    DELETE_TAG_FAIL,
     GET_TAG_REQUEST,
     GET_TAG_SUCCESS,
     GET_TAG_FAIL,
@@ -92,6 +95,30 @@ function* UpdateTag(payload) {
     }
 }
 
+// DELETE
+function* DeleteTag(payload) {
+    try {
+        console.group('DeleteTag!!! YA!! payload.data')
+        console.table(payload.data);
+        console.groupEnd('DeleteTag!!! YA!! payload.data');
+        const response = yield axios.delete(`http://localhost:4200/tags/${payload.data}`);
+        const responseData = yield response.data;
+        console.group('DeleteTag responseData')
+        console.table(responseData)
+        console.groupEnd('DeleteTag responseData')
+        yield put({
+            type: DELETE_TAG_SUCCESS,
+            payload: null
+        })
+    } catch (error) {
+        yield put({
+            type: DELETE_TAG_FAIL,
+            errorMessage: error.message,
+            payload: null
+        })
+    }
+}
+
 function* reGetTagList() {
     yield GetTagList()
 }
@@ -111,12 +138,20 @@ function* watchUpdateTagSaga() {
     }
 }
 
+function* watchDeleteTagSaga() {
+    while (true) {
+        const { payload } = yield take(DELETE_TAG)
+        yield DeleteTag(payload)
+    }
+}
+
 function* mySaga() {
     yield all([
         takeEvery(ADD_TAG_SUCCESS, reGetTagList),
         takeEvery(REQUEST_TAG, GetTagList),
         watchUpdateTagSaga(),
         watchAddTagSaga(),
+        watchDeleteTagSaga(),
     ])
 }
 

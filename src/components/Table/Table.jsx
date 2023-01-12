@@ -1,16 +1,18 @@
 import React, { useState, useEffect } from "react";
-import PropTypes from "prop-types";
 // @material-ui/core components
-import withStyles from "@material-ui/core/styles/withStyles";
 import Table from "@material-ui/core/Table";
-import TableHead from "@material-ui/core/TableHead";
-import TableRow from "@material-ui/core/TableRow";
-import TableBody from "@material-ui/core/TableBody";
-import TableCell from "@material-ui/core/TableCell";
+// import TableHead from "@material-ui/core/TableHead";
+// import TableRow from "@material-ui/core/TableRow";
+// import TableCell from "@material-ui/core/TableCell";
 import { FixedPlugin } from "components/FixedPlugin/FixedPlugin.jsx";
-import tableStyle from "assets/jss/material-dashboard-react/components/tableStyle.jsx";
+import CustomTableHead from "../CustomTableHead/CustomTableHead";
 import CustomTableBody from "../CustomTableBody/CustomTableBody";
-import { REQUEST_TAG, ADD_TAG, UPDATE_TAG } from "../../actions/GetTagsAction";
+import {
+  REQUEST_TAG,
+  ADD_TAG,
+  UPDATE_TAG,
+  DELETE_TAG,
+} from "../../actions/GetTagsAction";
 import { useSelector, useDispatch } from "react-redux";
 
 function CustomTable({ ...props }) {
@@ -22,10 +24,13 @@ function CustomTable({ ...props }) {
     showOnPage: "",
     taggedNumber: "",
   };
-  const [tagList, setTagList] = useState(tableData); // mutable data
-
-  // const tableHeaderColor = "primary";
+  const [tagList, setTagList] = useState(tableData);
+  const [isCreate, setIsCreate] = useState(true);
+  const [selectedTag, setSelectedTag] = useState(nullTag);
+  const [origSelectedTag, setOrigSelectedTag] = useState(nullTag);
+  const [fixedClasses, setFixedClasses] = useState("dropdown");
   const tableHead = ["ID", "Name", "ShowOnPage", "TaggedNumber"];
+
   const dispatch = useDispatch();
   const addTagSuccess = useSelector(
     (state) => state.getTagReducer.errorMessage === "add tag successfully"
@@ -33,58 +38,66 @@ function CustomTable({ ...props }) {
   const updateTagSuccess = useSelector(
     (state) => state.getTagReducer.errorMessage === "update tag successfully"
   );
+  const deleteTagSuccess = useSelector(
+    (state) => state.getTagReducer.errorMessage === "delete tag successfully"
+  );
   const addTagFail = useSelector(
     (state) => state.getTagReducer.errorMessage === "add tag fail!"
   );
   const updateTagFail = useSelector(
     (state) => state.getTagReducer.errorMessage === "update tag fail!"
   );
-  const [selectedIndex, setSelectedIndex] = useState(-1);
+  const deleteTagFail = useSelector(
+    (state) => state.getTagReducer.errorMessage === "delete tag fail!"
+  );
+  const [selectedID, setSelectedID] = useState(-1);
 
   useEffect(() => {
     // console.group("Table useEffect tableData");
     // console.table(tableData);
     // console.groupEnd("Table useEffect tableData ");
-    if (addTagSuccess || updateTagSuccess) dispatch({ type: REQUEST_TAG });
+    if (addTagSuccess || updateTagSuccess || deleteTagSuccess)
+      dispatch({ type: REQUEST_TAG });
     // TODO: popup window
-    if (addTagFail || updateTagFail) console.error("!!!SERVER ERROR!!!");
+    if (addTagFail || updateTagFail || deleteTagFail)
+      console.error("!!!SERVER ERROR!!!");
 
     setTagList(tableData);
-  }, [addTagSuccess, updateTagSuccess, addTagFail, updateTagFail, tableData]);
-
-  const [isCreate, setIsCreate] = useState(true);
-
-  const [selectedTag, setSelectedTag] = useState(nullTag);
-  const [origSelectedTag, setOrigSelectedTag] = useState(nullTag);
-
-  const [fixedClasses, setFixedClasses] = useState("dropdown");
-
-  const handleRowClick = (e) => {
-    console.log(
-      `%chandleTagRowClick id: ${e.currentTarget.id.substring(0, 1)}`,
-      "color:red"
-    );
-    const selectedIndex = e.currentTarget.id.substring(0, 1);
-    const sTag = tagList.find((t, index) => index == selectedIndex);
-
-    setSelectedIndex(selectedIndex);
-    setTag(sTag);
-    setIsCreate(true);
-  };
-
-  const setTag = (tag) => {
+  }, [
+    addTagSuccess,
+    updateTagSuccess,
+    deleteTagSuccess,
+    addTagFail,
+    updateTagFail,
+    deleteTagFail,
+    tableData,
+  ]);
+  const setTag = (tag) =>
     setSelectedTag({
       id: tag.id,
       name: tag.name,
       showOnPage: tag.showOnPage,
       taggedNumber: tag.taggedNumber,
     });
-    setOrigSelectedTag({
-      id: tag.id,
-      name: tag.name,
-      showOnPage: tag.showOnPage,
-      taggedNumber: tag.taggedNumber,
-    });
+
+    
+  const handleRowClick = (e) => {
+    // TODO: popup confirm window
+    console.group(`handleRowClick selectedID`);
+    console.log(
+      `handleRowClick selectedID: ${e.currentTarget.children[0].innerText}`
+    );
+    console.groupEnd(`handleRowClick selectedID`);
+    const selectedID = e.currentTarget.children[0].innerText;
+    // TODO:
+    if (!selectedID || selectedID < 0) return;
+    const sTag = tagList.find((t) => t.id == selectedID);
+    // TODO:
+    if (!sTag) return;
+
+    setSelectedID(selectedID);
+    setTag(sTag);
+    setIsCreate(true);
   };
 
   function handleFixedClick() {
@@ -101,6 +114,7 @@ function CustomTable({ ...props }) {
     // console.table(selectedTag);
     // console.groupEnd("handleAddRow selectedTag");
     const sTag = Object.values(selectedTag);
+    // TODO:
     if (sTag.some((t) => !t)) return;
     const data = Object.assign({}, selectedTag);
     // console.group("handleAddRow data");
@@ -119,25 +133,24 @@ function CustomTable({ ...props }) {
 
   // PATCH
   function handleUpdateRow() {
-    if (selectedIndex < 0) return;
-    console.group("handleUpdateRow selectedTag");
-    console.table(selectedTag);
-    console.groupEnd("handleUpdateRow ");
-    console.group("handleUpdateRow origSelectedTag");
-    console.table(origSelectedTag);
-    console.groupEnd("handleUpdateRow ");
+    // TODO: add confirm window
+    // TODO:
+    if (selectedID < 0) return;
+    // console.group("handleUpdateRow selectedTag");
+    // console.table(selectedTag);
+    // console.groupEnd("handleUpdateRow ");
+    // console.group("handleUpdateRow origSelectedTag");
+    // console.table(origSelectedTag);
+    // console.groupEnd("handleUpdateRow ");
 
-    if (JSON.stringify(origSelectedTag) === JSON.stringify(selectedTag)) {
-      // console.log(`update row!!! nothing to update!!!`);
-      return;
-    }
+    // TODO:
+    if (JSON.stringify(origSelectedTag) === JSON.stringify(selectedTag)) return;
 
-    const _id = selectedTag._id;
+    // const _id = selectedTag._id;
     const data = Object.assign({}, selectedTag);
     dispatch({
       type: UPDATE_TAG,
       payload: {
-        _id,
         data,
       },
     });
@@ -147,46 +160,33 @@ function CustomTable({ ...props }) {
 
   // DELETE
   function handleDeleteRow() {
-    if (selectedIndex < 0) {
-      // console.log(`delete row!!! nothing to delete!!!`);
-      return;
-    }
-    const dTagList = [...tagList];
-    let isDeleted = false;
-
-    // console.log(
-    //   `delete row!!! selected row selectedTag.values: ${JSON.stringify(
-    //     Object.values(selectedTag)
-    //   )}`
-    // );
-    tagList.forEach((t, i) => {
-      if (isDeleted) return;
-      // console.log(
-      //   `delete row!!! selected tagList.forEach t: ${JSON.stringify(t)}`
-      // );
-      if (JSON.stringify(t) == JSON.stringify(Object.values(selectedTag))) {
-        dTagList.splice(selectedIndex, 1);
-        setTagList(dTagList);
-        setSelectedTag(nullTag);
-        setSelectedIndex(-1);
-        isDeleted = true;
-      }
+    // TODO: add confirm window
+    // console.group("handleDeleteRow selectedIndex");
+    // console.log(selectedID);
+    // console.groupEnd("handleDeleteRow ");
+    // TODO:
+    if (selectedID < 0) return;
+    // console.group("handleDeleteRow origSelectedTag");
+    // console.table(origSelectedTag);
+    // console.groupEnd("handleDeleteRow ");
+    dispatch({
+      type: DELETE_TAG,
+      payload: {
+        data: selectedID,
+      },
     });
   }
 
-  const setSelectedTagEmpty = () => {
-    setSelectedTag(nullTag);
-    setOrigSelectedTag(nullTag);
-  };
+  const setSelectedTagEmpty = () => setSelectedTag(nullTag);
 
   function handleCancel() {
     setSelectedTag(origSelectedTag);
     setOrigSelectedTag(origSelectedTag);
-    setSelectedIndex(selectedIndex);
+    setSelectedID(selectedID);
   }
 
   function handleCreateTag() {
-    setSelectedIndex(-1);
+    setSelectedID(-1);
     setSelectedTagEmpty();
     setIsCreate(false);
   }
@@ -218,7 +218,6 @@ function CustomTable({ ...props }) {
   }
 
   return (
-    // <div className={classes.tableResponsive}>
     <div>
       <FixedPlugin
         handleFixedClick={handleFixedClick}
@@ -238,20 +237,12 @@ function CustomTable({ ...props }) {
         handleDeleteRow={handleDeleteRow}
         handleCancel={handleCancel}
       />
-      {/* <Table className={classes.table}> */}
       <Table>
         {tagList ? (
           <>
-            <TableHead>
-              <TableRow>
-                {tableHead.map((prop, key) => (
-                  <TableCell key={key}>{prop}</TableCell>
-                ))}
-                <TableCell />
-              </TableRow>
-            </TableHead>
+            <CustomTableHead tableHead={tableHead} />
             <CustomTableBody
-              selectedIndex={selectedIndex}
+              selectedID={selectedID}
               handleRowClick={handleRowClick}
               tagList={tagList}
             />
@@ -262,24 +253,4 @@ function CustomTable({ ...props }) {
   );
 }
 
-// CustomTable.defaultProps = {
-//   tableHeaderColor: "gray",
-// };
-
-// CustomTable.propTypes = {
-//   // classes: PropTypes.object.isRequired,
-//   tableHeaderColor: PropTypes.oneOf([
-//     "warning",
-//     "primary",
-//     "danger",
-//     "success",
-//     "info",
-//     "rose",
-//     "gray",
-//   ]),
-//   tableHead: PropTypes.arrayOf(PropTypes.string),
-//   tableData: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.string)),
-// };
-
-// export default withStyles(tableStyle)(CustomTable);
 export default CustomTable;

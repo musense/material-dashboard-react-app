@@ -3,6 +3,8 @@ import {
     ADD_TAG_FAIL,
     UPDATE_TAG_SUCCESS,
     UPDATE_TAG_FAIL,
+    DELETE_TAG_SUCCESS,
+    DELETE_TAG_FAIL,
     REQUEST_TAG_SUCCESS,
     GET_TAG_SUCCESS,
     GET_TAG_FAIL,
@@ -40,6 +42,11 @@ const getTagReducer = (state = initialState, action) => {
                 ...state,
                 errorMessage: 'update tag successfully'
             }
+        case DELETE_TAG_SUCCESS:
+            return {
+                ...state,
+                errorMessage: 'delete tag successfully'
+            }
         case ADD_TAG_FAIL:
             return {
                 ...state,
@@ -49,6 +56,11 @@ const getTagReducer = (state = initialState, action) => {
             return {
                 ...state,
                 errorMessage: 'update tag fail!'
+            }
+        case DELETE_TAG_FAIL:
+            return {
+                ...state,
+                errorMessage: 'delete tag fail!'
             }
         case REQUEST_TAG_SUCCESS:
             return {

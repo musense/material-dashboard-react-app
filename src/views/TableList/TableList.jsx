@@ -8,7 +8,6 @@ import Table from "components/Table/Table.jsx";
 import Card from "components/Card/Card.jsx";
 import CardHeader from "components/Card/CardHeader.jsx";
 import CardBody from "components/Card/CardBody.jsx";
-import axios from "axios";
 import { useSelector, useDispatch } from "react-redux";
 import { REQUEST_TAG, GET_TAG_REQUEST } from "../../actions/GetTagsAction";
 

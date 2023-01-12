@@ -6,6 +6,10 @@ export const ADD_TAG = "ADD_TAG";
 export const ADD_TAG_SUCCESS = "ADD_TAG_SUCCESS";
 export const ADD_TAG_FAIL = "ADD_TAG_FAIL";
 
+export const UPDATE_TAG = "UPDATE_TAG";
+export const UPDATE_TAG_SUCCESS = "UPDATE_TAG_SUCCESS";
+export const UPDATE_TAG_FAIL = "UPDATE_TAG_FAIL";
+
 
 export const GET_TAG_REQUEST = "GET_TAG_REQUEST";
 export const GET_TAG_SUCCESS = "GET_TAG_SUCCESS";

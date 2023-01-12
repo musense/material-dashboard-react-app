@@ -4,23 +4,26 @@ import {
     ADD_TAG,
     ADD_TAG_SUCCESS,
     ADD_TAG_FAIL,
+    UPDATE_TAG,
+    UPDATE_TAG_SUCCESS,
+    UPDATE_TAG_FAIL,
     GET_TAG_REQUEST,
     GET_TAG_SUCCESS,
     GET_TAG_FAIL,
     GET_SELECTED_TAG_SUCCESS
 } from "../../actions/GetTagsAction";
 import * as APIList from './../apiList'
-import { call, put, select, takeEvery, take } from 'redux-saga/effects'
+import { call, put, select, takeEvery, take, all } from 'redux-saga/effects'
 import { headers } from "../../model/header"
 import Pagination from '../../model/pagination'
 import { LOGGER_CATCHERROR } from "../../actions/LoggerAction";
 import TAG from "../../model/tags";
-
 import axios from "axios";
 import { TAG_CATCHERROR } from './../../actions/GetTagsAction';
 
 const apiUrl = `${APIList.getTagList}`
 
+// GET
 function* GetTagList() {
     try {
         // console.log(`GetTagList!!! YA!!`)
@@ -40,20 +43,22 @@ function* GetTagList() {
     }
 }
 
-
-function* AddTag(tag) {
+// POST
+function* AddTag(payload) {
     try {
-        console.log(`AddTag!!! YA!! `)
-        const response = yield axios.post(`http://localhost:4200/tags/`, tag);
+        // console.group('AddTag!!! YA!! payload.data')
+        // console.table(payload.data);
+        // console.groupEnd('AddTag!!! YA!! payload.data');
+
+        const response = yield axios.post(`http://localhost:4200/tags/`, payload.data);
         const responseData = yield response.data;
-        console.log(`AddTag responseData: ${JSON.stringify(responseData)}`)
+        console.group('AddTag responseData')
+        console.table(responseData)
+        console.groupEnd('AddTag responseData')
         yield put({
             type: ADD_TAG_SUCCESS,
             payload: null
         })
-        // yield put({
-        //     type: REQUEST_TAG
-        // })
     } catch (error) {
         yield put({
             type: ADD_TAG_FAIL,
@@ -62,25 +67,57 @@ function* AddTag(tag) {
         })
     }
 }
-// function* watchSelectedTagClick() {
-//     yield takeEvery(GET_SELECTED_TAG_SUCCESS)
-//     yield put({
-//         type: TAG_UPDATE_PANEL_SHOW
-//     })
 
-// }
+// PATCH
+function* UpdateTag(payload) {
+    try {
+        // console.group('UpdateTag!!! YA!! payload.data')
+        // console.table(payload.data);
+        // console.groupEnd('UpdateTag!!! YA!! payload.data');
+        const response = yield axios.patch(`http://localhost:4200/tags/${payload.data.id}`, payload.data);
+        const responseData = yield response.data;
+        console.group('UpdateTag responseData')
+        console.table(responseData)
+        console.groupEnd('UpdateTag responseData')
+        yield put({
+            type: UPDATE_TAG_SUCCESS,
+            payload: null
+        })
+    } catch (error) {
+        yield put({
+            type: UPDATE_TAG_FAIL,
+            errorMessage: error.message,
+            payload: null
+        })
+    }
+}
+
 function* reGetTagList() {
     yield GetTagList()
 }
 
-function* mySaga() {
-    yield takeEvery(ADD_TAG_SUCCESS, reGetTagList)
-    yield takeEvery(REQUEST_TAG, GetTagList)
+
+function* watchAddTagSaga() {
     while (true) {
-        const { tag } = yield take(ADD_TAG)
-        console.log(`mySaga take(ADD_TAG): ${JSON.stringify(tag)}`)
-        yield AddTag(tag)
+        const { payload } = yield take(ADD_TAG)
+        yield AddTag(payload)
     }
+}
+
+function* watchUpdateTagSaga() {
+    while (true) {
+        const { payload } = yield take(UPDATE_TAG)
+        yield UpdateTag(payload)
+    }
+}
+
+function* mySaga() {
+    yield all([
+        takeEvery(ADD_TAG_SUCCESS, reGetTagList),
+        takeEvery(REQUEST_TAG, GetTagList),
+        watchUpdateTagSaga(),
+        watchAddTagSaga(),
+    ])
 }
 
 export default mySaga;

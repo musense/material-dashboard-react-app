@@ -10,7 +10,7 @@ import TableCell from "@material-ui/core/TableCell";
 import { FixedPlugin } from "components/FixedPlugin/FixedPlugin.jsx";
 import tableStyle from "assets/jss/material-dashboard-react/components/tableStyle.jsx";
 import CustomTableBody from "../CustomTableBody/CustomTableBody";
-import { REQUEST_TAG, ADD_TAG } from "../../actions/GetTagsAction";
+import { REQUEST_TAG, ADD_TAG, UPDATE_TAG } from "../../actions/GetTagsAction";
 import { useSelector, useDispatch } from "react-redux";
 
 function CustomTable({ ...props }) {
@@ -30,15 +30,27 @@ function CustomTable({ ...props }) {
   const addTagSuccess = useSelector(
     (state) => state.getTagReducer.errorMessage === "add tag successfully"
   );
+  const updateTagSuccess = useSelector(
+    (state) => state.getTagReducer.errorMessage === "update tag successfully"
+  );
+  const addTagFail = useSelector(
+    (state) => state.getTagReducer.errorMessage === "add tag fail!"
+  );
+  const updateTagFail = useSelector(
+    (state) => state.getTagReducer.errorMessage === "update tag fail!"
+  );
   const [selectedIndex, setSelectedIndex] = useState(-1);
 
   useEffect(() => {
     // console.group("Table useEffect tableData");
     // console.table(tableData);
     // console.groupEnd("Table useEffect tableData ");
+    if (addTagSuccess || updateTagSuccess) dispatch({ type: REQUEST_TAG });
+    // TODO: popup window
+    if (addTagFail || updateTagFail) console.error("!!!SERVER ERROR!!!");
+
     setTagList(tableData);
-    if (addTagSuccess == true) dispatch({ type: REQUEST_TAG });
-  }, [addTagSuccess, tableData]);
+  }, [addTagSuccess, updateTagSuccess, addTagFail, updateTagFail, tableData]);
 
   const [isCreate, setIsCreate] = useState(true);
 
@@ -58,14 +70,6 @@ function CustomTable({ ...props }) {
     setSelectedIndex(selectedIndex);
     setTag(sTag);
     setIsCreate(true);
-
-    // dispatch({
-    //   type: GET_SELECTED_TAG_SUCCESS,
-    //   payload: {
-    //     selectedIndex: e.currentTarget.id.substring(0, 1),
-    //   },
-    // });
-    // handelRowSelected = true
   };
 
   const setTag = (tag) => {
@@ -93,13 +97,20 @@ function CustomTable({ ...props }) {
 
   // POST
   function handleAddRow() {
-    console.table(selectedTag);
+    // console.group("handleAddRow selectedTag");
+    // console.table(selectedTag);
+    // console.groupEnd("handleAddRow selectedTag");
     const sTag = Object.values(selectedTag);
     if (sTag.some((t) => !t)) return;
-
+    const data = Object.assign({}, selectedTag);
+    // console.group("handleAddRow data");
+    // console.table(data);
+    // console.groupEnd("handleAddRow data");
     dispatch({
       type: ADD_TAG,
-      tag: selectedTag,
+      payload: {
+        data,
+      },
     });
 
     setSelectedTagEmpty();
@@ -109,23 +120,29 @@ function CustomTable({ ...props }) {
   // PATCH
   function handleUpdateRow() {
     if (selectedIndex < 0) return;
-
-    // console.table(origSelectedTag);
-    // console.table(selectedTag);
+    console.group("handleUpdateRow selectedTag");
+    console.table(selectedTag);
+    console.groupEnd("handleUpdateRow ");
+    console.group("handleUpdateRow origSelectedTag");
+    console.table(origSelectedTag);
+    console.groupEnd("handleUpdateRow ");
 
     if (JSON.stringify(origSelectedTag) === JSON.stringify(selectedTag)) {
       // console.log(`update row!!! nothing to update!!!`);
       return;
     }
 
-    const sTag = Object.values(selectedTag);
-    const uTagList = tagList.map((t, index) =>
-      index == selectedIndex ? sTag : t
-    );
+    const _id = selectedTag._id;
+    const data = Object.assign({}, selectedTag);
+    dispatch({
+      type: UPDATE_TAG,
+      payload: {
+        _id,
+        data,
+      },
+    });
 
-    // console.log(`update row!!! selected row uTagList: ${uTagList}`);
-    setTag(sTag);
-    setTagList(uTagList);
+    setTag(selectedTag);
   }
 
   // DELETE

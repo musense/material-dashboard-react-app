@@ -10,6 +10,8 @@ import CardHeader from "components/Card/CardHeader.jsx";
 import CardBody from "components/Card/CardBody.jsx";
 import { useSelector, useDispatch } from "react-redux";
 import { REQUEST_TAG, GET_TAG_REQUEST } from "../../actions/GetTagsAction";
+import Skeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
 
 const styles = {
   cardCategoryWhite: {
@@ -76,9 +78,16 @@ function TableList(props) {
                 tableHead={["ID", "Name", "ShowOnPage", "TaggedNumber"]}
                 tableData={tableData}
               />
-            ) : null
-            // TODO: <loading Child component />
-            }
+            ) : (
+              <Skeleton
+                count={1}
+                xs={12}
+                sm={12}
+                md={12}
+                height={40}
+                circle={false}
+              />
+            )}
           </CardBody>
         </Card>
       </GridItem>

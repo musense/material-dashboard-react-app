@@ -20,6 +20,7 @@
     "react-dom": "16.8.1",
     "react-github-button": "^0.1.11",
     "react-google-maps": "9.4.5",
+    "react-loading-skeleton": "3.1.0",
     "react-redux": "^8.0.5",
     "react-router-dom": "4.3.1",
     "react-scripts": "2.1.5",

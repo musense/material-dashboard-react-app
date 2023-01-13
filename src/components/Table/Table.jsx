@@ -1,38 +1,24 @@
-import React, {
-  useState,
-  // useEffect, useCallback
-} from "react";
-import PropTypes from "prop-types";
+import React, { useState, useEffect } from "react";
 // @material-ui/core components
-import withStyles from "@material-ui/core/styles/withStyles";
 import Table from "@material-ui/core/Table";
-import TableHead from "@material-ui/core/TableHead";
-import TableRow from "@material-ui/core/TableRow";
-import TableBody from "@material-ui/core/TableBody";
-import TableCell from "@material-ui/core/TableCell";
-// import Checkbox from "@material-ui/core/Checkbox";
-// import Check from "@material-ui/icons/Check";
-// import GridItem from "components/Grid/GridItem.jsx";
-// import CustomInput from "components/CustomInput/CustomInput.jsx";
-// import Edit from "@material-ui/icons/Edit";
-// import IconButton from "@material-ui/core/IconButton";
-// import Tooltip from "@material-ui/core/Tooltip";
-// import Close from "@material-ui/icons/Close";
+// import TableHead from "@material-ui/core/TableHead";
+// import TableRow from "@material-ui/core/TableRow";
+// import TableCell from "@material-ui/core/TableCell";
 import { FixedPlugin } from "components/FixedPlugin/FixedPlugin.jsx";
-// core components
-import tableStyle from "assets/jss/material-dashboard-react/components/tableStyle.jsx";
-// import { GET_SELECTED_TAG_SUCCESS } from "../../actions/GetTagsAction";
-// import { useDispatch, useSelector } from "react-redux";
-import TAG from "./../../model/tags";
+import CustomTableHead from "../CustomTableHead/CustomTableHead";
+import CustomTableBody from "../CustomTableBody/CustomTableBody";
+import {
+  REQUEST_TAG,
+  ADD_TAG,
+  UPDATE_TAG,
+  DELETE_TAG,
+} from "../../actions/GetTagsAction";
+import { errorMessage } from "./../../reducers/errorMessage";
+import { useSelector, useDispatch } from "react-redux";
+import CustomModal from '../CustomModal/CustomModal'
 
 function CustomTable({ ...props }) {
-  const {
-    classes,
-    tableHead,
-    // tableData,
-    tableHeaderColor,
-    // checkedIndexes,
-  } = props;
+  const { tableData } = props;
 
   const nullTag = {
     id: "",
@@ -40,166 +26,188 @@ function CustomTable({ ...props }) {
     showOnPage: "",
     taggedNumber: "",
   };
-
+  const [tagList, setTagList] = useState(tableData);
   const [isCreate, setIsCreate] = useState(true);
-
-  const [tableData, setTableData] = useState(TAG); // original data
-
-  const [tagList, setTagList] = useState(tableData); // mutable data
   const [selectedTag, setSelectedTag] = useState(nullTag);
   const [origSelectedTag, setOrigSelectedTag] = useState(nullTag);
-
-  const [errors, setErrors] = useState({ username: "" });
-  const [email, setEmail] = useState();
-
-  const [image, setImage] = useState();
-  const [color, setColor] = useState();
   const [fixedClasses, setFixedClasses] = useState("dropdown");
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const tableHead = ["ID", "Name", "ShowOnPage", "TaggedNumber"];
 
-  const [selectedIndex, setSelectedIndex] = useState(-1);
+  const dispatch = useDispatch();
 
-  const handleTagRowClick = (e) => {
-    // console.log(`handleTagRowClick id: ${e.currentTarget.id.substring(0, 1)}`);
-    const selectedIndex = e.currentTarget.id.substring(0, 1);
-    const sTag = tagList.filter((t, index) => index == selectedIndex).flat();
-    // console.log(`handleTagRowClick setSelectedTag: ${JSON.stringify(sTag)}`);
-    setSelectedIndex(selectedIndex);
-    setTagInArray(sTag);
-    setIsCreate(true);
-    // dispatch({
-    //   type: GET_SELECTED_TAG_SUCCESS,
-    //   payload: {
-    //     selectedIndex: e.currentTarget.id.substring(0, 1),
-    //   },
-    // });
-    // handelRowSelected = true
-  };
+  const returnMessage = useSelector(
+    (state) => state.getTagReducer.errorMessage
+  );
+  let successMessages = [],
+    failMessages = [],
+    finishMessages = [];
+  const [selectedID, setSelectedID] = useState(-1);
+  Object.keys(errorMessage)
+    .filter((key) => key.endsWith("Success"))
+    .map((successKey) => {
+      console.log(`Success message: ${errorMessage[successKey]}`);
+      successMessages.push(errorMessage[successKey]);
+    });
+  Object.keys(errorMessage)
+    .filter((key) => key.endsWith("Fail"))
+    .map((failKey) => {
+      console.log(`Fail message: ${errorMessage[failKey]}`);
+      failMessages.push(errorMessage[failKey]);
+    });
+  Object.keys(errorMessage)
+    .filter((key) => key.endsWith("Finish"))
+    .map((finishKey) => {
+      console.log(`Finish message: ${errorMessage[finishKey]}`);
+      finishMessages.push(errorMessage[finishKey]);
+    });
 
-  const setTagInArray = (tag) => {
+  useEffect(() => {
+    console.group("Table useEffect tableData");
+    console.table(tableData);
+    console.log(`returnMessage: ${returnMessage}`);
+    console.groupEnd("Table useEffect tableData ");
+    if (successMessages.includes(returnMessage))
+      dispatch({ type: REQUEST_TAG });
+    // TODO: popup window
+    if (failMessages.includes(returnMessage))
+      console.error("!!!SERVER ERROR!!!");
+    if (finishMessages.includes(returnMessage)) closeModal();
+
+    setTagList(tableData);
+  }, [returnMessage, tableData]);
+  const setTag = (tag) =>
     setSelectedTag({
-      id: tag[0],
-      name: tag[1],
-      showOnPage: tag[2],
-      taggedNumber: tag[3],
+      id: tag.id,
+      name: tag.name,
+      showOnPage: tag.showOnPage,
+      taggedNumber: tag.taggedNumber,
     });
-    setOrigSelectedTag({
-      id: tag[0],
-      name: tag[1],
-      showOnPage: tag[2],
-      taggedNumber: tag[3],
-    });
-  };
 
-  // const handleImageClick = (image) => {
-  //   setImage(image);
-  // };
-  // const handleColorClick = (color) => {
-  //   setColor(color);
-  // };
+  const handleRowClick = (e) => {
+    // TODO: popup confirm window
+    console.group(`handleRowClick selectedID`);
+    console.log(
+      `handleRowClick selectedID: ${e.currentTarget.children[0].innerText}`
+    );
+    console.groupEnd(`handleRowClick selectedID`);
+    const selectedID = e.currentTarget.children[0].innerText;
+    // TODO:
+    if (!selectedID || selectedID < 0) return;
+    const sTag = tagList.find((t) => t.id == selectedID);
+    // TODO:
+    if (!sTag) return;
+
+    setSelectedID(selectedID);
+    setTag(sTag);
+    setIsCreate(true);
+  };
 
   function handleFixedClick() {
-    // console.log(`fixedClasses: ${fixedClasses}`);
     if (fixedClasses === "dropdown") {
       setFixedClasses("dropdown show");
     } else {
       setFixedClasses("dropdown");
     }
   }
+
+  // POST
   function handleAddRow() {
-    // console.log(`add row!!! add row : ${JSON.stringify(selectedTag)}`);
+    // console.group("handleAddRow selectedTag");
+    // console.table(selectedTag);
+    // console.groupEnd("handleAddRow selectedTag");
     const sTag = Object.values(selectedTag);
-    if (sTag.some((t) => !t)) {
-      // console.log(`add row!!! add row : ${"required content!!!"}`);
-      return;
-    }
-    const nowTagList = [...tagList].concat([sTag]);
-    // console.log(
-    //   `add row!!! add row nowTagList : ${JSON.stringify(nowTagList)}`
-    // );
+    // TODO:
+    if (sTag.some((t) => !t)) return;
+    const data = Object.assign({}, selectedTag);
+    // console.group("handleAddRow data");
+    // console.table(data);
+    // console.groupEnd("handleAddRow data");
+    dispatch({
+      type: ADD_TAG,
+      payload: {
+        data,
+      },
+    });
+
+    openModal();
     setSelectedTagEmpty();
-    setTagList(nowTagList);
     setIsCreate(true);
   }
+
+  // PATCH
   function handleUpdateRow() {
-    // console.log(`update row!!! selected row index: ${selectedIndex}`);
-    if (selectedIndex < 0) {
-      // console.log(`update row!!! nothing to update!!!`);
-      return;
-    }
-    // console.log(
-    //   `update row!!! selected row origSelectedTag: ${JSON.stringify(
-    //     origSelectedTag
-    //   )}`
-    // );
-    // console.log(
-    //   `update row!!! selected row selectedTag: ${JSON.stringify(selectedTag)}`
-    // );
+    // TODO: add confirm window
+    // TODO:
+    if (selectedID < 0) return;
+    // console.group("handleUpdateRow selectedTag");
+    // console.table(selectedTag);
+    // console.groupEnd("handleUpdateRow ");
+    // console.group("handleUpdateRow origSelectedTag");
+    // console.table(origSelectedTag);
+    // console.groupEnd("handleUpdateRow ");
 
-    if (JSON.stringify(origSelectedTag) === JSON.stringify(selectedTag)) {
-      // console.log(`update row!!! nothing to update!!!`);
-      return;
-    }
+    // TODO:
+    if (JSON.stringify(origSelectedTag) === JSON.stringify(selectedTag)) return;
 
-    const sTag = Object.values(selectedTag);
-    const uTagList = tagList.map((t, index) =>
-      index == selectedIndex ? sTag : t
-    );
+    // const _id = selectedTag._id;
+    const data = Object.assign({}, selectedTag);
+    dispatch({
+      type: UPDATE_TAG,
+      payload: {
+        data,
+      },
+    });
 
-    // console.log(`update row!!! selected row uTagList: ${uTagList}`);
-    setTagInArray(sTag);
-    setTagList(uTagList);
+    openModal();
+    setTag(selectedTag);
   }
 
-  const setSelectedTagEmpty = () => {
-    setSelectedTag(nullTag);
-    setOrigSelectedTag(nullTag);
-  };
+  // DELETE
+  function handleDeleteRow() {
+    // TODO: add confirm window
+    // console.group("handleDeleteRow selectedIndex");
+    // console.log(selectedID);
+    // console.groupEnd("handleDeleteRow ");
+    // TODO:
+    if (selectedID < 0) return;
+    // console.group("handleDeleteRow origSelectedTag");
+    // console.table(origSelectedTag);
+    // console.groupEnd("handleDeleteRow ");
+    dispatch({
+      type: DELETE_TAG,
+      payload: {
+        data: selectedID,
+      },
+    });
+    openModal();
+  }
+
+  const setSelectedTagEmpty = () => setSelectedTag(nullTag);
+
   function handleCancel() {
     setSelectedTag(origSelectedTag);
     setOrigSelectedTag(origSelectedTag);
-    setSelectedIndex(selectedIndex);
+    setSelectedID(selectedID);
   }
 
-  function createEmptyTag() {
-    setSelectedIndex(-1);
+  function handleCreateTag() {
+    setSelectedID(-1);
     setSelectedTagEmpty();
     setIsCreate(false);
   }
-  function handleDeleteRow() {
-    if (selectedIndex < 0) {
-      // console.log(`delete row!!! nothing to delete!!!`);
-      return;
-    }
-    const dTagList = [...tagList];
-    let isDeleted = false;
-
-    // console.log(
-    //   `delete row!!! selected row selectedTag.values: ${JSON.stringify(
-    //     Object.values(selectedTag)
-    //   )}`
-    // );
-    tagList.forEach((t, i) => {
-      if (isDeleted) return;
-      // console.log(
-      //   `delete row!!! selected tagList.forEach t: ${JSON.stringify(t)}`
-      // );
-      if (JSON.stringify(t) == JSON.stringify(Object.values(selectedTag))) {
-        dTagList.splice(selectedIndex, 1);
-        setTagList(dTagList);
-        setSelectedTag(nullTag);
-        setSelectedIndex(-1);
-        isDeleted = true;
-      }
-    });
-  }
 
   function handleIDChange(e) {
-    const changedTag = Object.assign({}, selectedTag, { id: e.target.value });
+    const changedTag = Object.assign({}, selectedTag, {
+      id: e.target.value,
+    });
     setSelectedTag(changedTag);
   }
 
   function handleNameChange(e) {
-    const changedTag = Object.assign({}, selectedTag, { name: e.target.value });
+    const changedTag = Object.assign({}, selectedTag, {
+      name: e.target.value,
+    });
     setSelectedTag(changedTag);
   }
   function handleShowOnPageChange(e) {
@@ -215,8 +223,17 @@ function CustomTable({ ...props }) {
     setSelectedTag(changedTag);
   }
 
+  function openModal() {
+    setIsModalOpen(true);
+  }
+  function closeModal() {
+    setIsModalOpen(false);
+  }
   return (
-    <div className={classes.tableResponsive}>
+    <div>
+      <CustomModal
+        isModalOpen={isModalOpen}
+      />
       <FixedPlugin
         handleFixedClick={handleFixedClick}
         fixedClasses={fixedClasses}
@@ -224,121 +241,31 @@ function CustomTable({ ...props }) {
         name={selectedTag.name}
         showOnPage={selectedTag.showOnPage}
         taggedNumber={selectedTag.taggedNumber}
+        isCreate={isCreate}
         handleIDChange={handleIDChange}
         handleNameChange={handleNameChange}
         handleShowOnPageChange={handleShowOnPageChange}
         handleTaggedNumberChange={handleTaggedNumberChange}
-        isCreate={isCreate}
-        createEmptyTag={createEmptyTag}
+        handleCreateTag={handleCreateTag}
         handleAddRow={handleAddRow}
         handleUpdateRow={handleUpdateRow}
         handleDeleteRow={handleDeleteRow}
         handleCancel={handleCancel}
       />
-      <Table className={classes.table}>
-        {tableHead !== undefined ? (
-          <TableHead className={classes[tableHeaderColor + "TableHeader"]}>
-            <TableRow>
-              {/* <TableCell /> */}
-              {tableHead.map((prop, key) => {
-                return (
-                  <TableCell
-                    className={classes.tableCell + " " + classes.tableHeadCell}
-                    key={key}
-                  >
-                    {prop}
-                  </TableCell>
-                );
-              })}
-              <TableCell />
-            </TableRow>
-          </TableHead>
+      <Table>
+        {tagList ? (
+          <>
+            <CustomTableHead tableHead={tableHead} />
+            <CustomTableBody
+              selectedID={selectedID}
+              handleRowClick={handleRowClick}
+              tagList={tagList}
+            />
+          </>
         ) : null}
-        <TableBody>
-          {tagList.map((prop, key) => {
-            return (
-              <>
-                <TableRow
-                  key={key}
-                  onClick={handleTagRowClick}
-                  // onMouseOver={handleTagRowOver}
-                  id={key + "_Row"}
-                  hover={true}
-                  selected={key == selectedIndex}
-                >
-                  {prop.map((prop, key) => {
-                    return (
-                      <TableCell className={classes.tableCell} key={key}>
-                        {prop}
-                      </TableCell>
-                    );
-                  })}
-                  {/* <TableCell className={classes.tableActions}>
-                    <Tooltip
-                      id="tooltip-top"
-                      title="Edit Task"
-                      placement="top"
-                      classes={{ tooltip: classes.tooltip }}
-                    >
-                      <IconButton
-                        aria-label="Edit"
-                        className={classes.tableActionButton}
-                      >
-                        <Edit
-                          id={key + "_Edit"}
-                          className={
-                            classes.tableActionButtonIcon + " " + classes.edit
-                          }
-                          onClick={onEdit}
-                        />
-                      </IconButton>
-                    </Tooltip>
-                    <Tooltip
-                      id="tooltip-top-start"
-                      title="Remove"
-                      placement="top"
-                      classes={{ tooltip: classes.tooltip }}
-                    >
-                      <IconButton
-                        aria-label="Close"
-                        className={classes.tableActionButton}
-                      >
-                        <Close
-                          className={
-                            classes.tableActionButtonIcon + " " + classes.close
-                          }
-                          onclick={onClose}
-                        />
-                      </IconButton>
-                    </Tooltip>
-                  </TableCell> */}
-                </TableRow>
-              </>
-            );
-          })}
-        </TableBody>
       </Table>
     </div>
   );
 }
 
-CustomTable.defaultProps = {
-  tableHeaderColor: "gray",
-};
-
-CustomTable.propTypes = {
-  classes: PropTypes.object.isRequired,
-  tableHeaderColor: PropTypes.oneOf([
-    "warning",
-    "primary",
-    "danger",
-    "success",
-    "info",
-    "rose",
-    "gray",
-  ]),
-  tableHead: PropTypes.arrayOf(PropTypes.string),
-  tableData: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.string)),
-};
-
-export default withStyles(tableStyle)(CustomTable);
+export default CustomTable;

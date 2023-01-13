@@ -1,4 +1,11 @@
 import {
+    ADD_TAG_SUCCESS,
+    ADD_TAG_FAIL,
+    UPDATE_TAG_SUCCESS,
+    UPDATE_TAG_FAIL,
+    DELETE_TAG_SUCCESS,
+    DELETE_TAG_FAIL,
+    REQUEST_TAG_SUCCESS,
     GET_TAG_SUCCESS,
     GET_TAG_FAIL,
     GET_TAG_REQUEST,
@@ -6,7 +13,7 @@ import {
     UPDATE_SELECTED_TAG_SUCCESS,
     DELETED_SELECTED_TAG_SUCCESS,
 } from '../actions/GetTagsAction';
-import TAG from '../model/tags';
+import { errorMessage } from './errorMessage';
 
 const nullTag = {
     id: "-1",
@@ -16,15 +23,51 @@ const nullTag = {
 };
 
 const initialState = {
-    tagList: TAG,
-    selectedTag: nullTag,
+    tagList: null,
+    selectedTag: null,
     selectedIndex: -1,
     errorMessage: null
 }
 
 const getTagReducer = (state = initialState, action) => {
-    // console.log(`action.payload: ${JSON.stringify(action.payload)}`)
+    // console.log(`action: ${JSON.stringify(action)}`)
     switch (action.type) {
+        case ADD_TAG_SUCCESS:
+            return {
+                ...state,
+                errorMessage: errorMessage.addSuccess
+            }
+        case UPDATE_TAG_SUCCESS:
+            return {
+                ...state,
+                errorMessage: errorMessage.updateSuccess
+            }
+        case DELETE_TAG_SUCCESS:
+            return {
+                ...state,
+                errorMessage: errorMessage.deleteSuccess
+            }
+        case ADD_TAG_FAIL:
+            return {
+                ...state,
+                errorMessage: errorMessage.addFail
+            }
+        case UPDATE_TAG_FAIL:
+            return {
+                ...state,
+                errorMessage: errorMessage.updateFail
+            }
+        case DELETE_TAG_FAIL:
+            return {
+                ...state,
+                errorMessage: errorMessage.deletefail
+            }
+        case REQUEST_TAG_SUCCESS:
+            return {
+                ...state,
+                tagList: action.payload,
+                errorMessage: errorMessage.getFinish
+            }
         case GET_SELECTED_TAG_SUCCESS:
             return {
                 ...state,
@@ -46,7 +89,7 @@ const getTagReducer = (state = initialState, action) => {
                         errorMessage: 'nothing to update!!!'
                     }
                 }
-                
+
                 const uTagList = state.tagList.map((t, index) =>
                     index == state.selectedIndex ?
                         [
@@ -80,7 +123,7 @@ const getTagReducer = (state = initialState, action) => {
             return { ...state, tagList: action.payload, errorMessage: null }
         case GET_TAG_FAIL:
             return { ...state, errorMessage: action.payload }
-        case GET_TAG_REQUEST:
+        // case GET_TAG_REQUEST:
         default:
             return { ...state }
     }

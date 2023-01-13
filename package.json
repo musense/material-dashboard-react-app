@@ -10,7 +10,7 @@
     "@ckeditor/ckeditor5-react": "4.0.0",
     "@material-ui/core": "4.12.4",
     "@material-ui/icons": "3.0.2",
-    "axios": "^0.18.0",
+    "axios": "^1.2.2",
     "chartist": "0.10.1",
     "ckeditor5-custom-build": "0.0.6",
     "classnames": "2.2.6",
@@ -24,6 +24,8 @@
     "react-dom": "16.8.1",
     "react-github-button": "^0.1.11",
     "react-google-maps": "9.4.5",
+    "react-loading-skeleton": "3.1.0",
+    "react-modal": "3.16.1",
     "react-redux": "^8.0.5",
     "react-router-dom": "4.3.1",
     "react-scripts": "2.1.5",
@@ -72,6 +74,7 @@
     "not op_mini all"
   ],
   "devDependencies": {
+    "@types/react-modal": "^3.13.1",
     "@types/redux-logger": "^3.0.9"
   }
 }

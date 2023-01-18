@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"; // useEffect
+import React, { useEffect, useRef, useState } from "react"; // useEffect
 // @material-ui/core components
 import withStyles from "@material-ui/core/styles/withStyles";
 // core components
@@ -15,10 +15,10 @@ import CustomModal from "../../components/CustomModal/CustomModal";
 const styles = {
   cardCategoryWhite: {
     "&,& a,& a:hover,& a:focus": {
-      color       : "rgba(255,255,255,.62)",
-      margin      : "0",
-      fontSize    : "14px",
-      marginTop   : "0",
+      color: "rgba(255,255,255,.62)",
+      margin: "0",
+      fontSize: "14px",
+      marginTop: "0",
       marginBottom: "0",
     },
     "& a,& a:hover,& a:focus": {
@@ -26,16 +26,16 @@ const styles = {
     },
   },
   cardTitleWhite: {
-    color         : "#FFFFFF",
-    marginTop     : "0px",
-    minHeight     : "auto",
-    fontWeight    : "300",
-    fontFamily    : "'Roboto', 'Helvetica', 'Arial', sans-serif",
-    marginBottom  : "3px",
+    color: "#FFFFFF",
+    marginTop: "0px",
+    minHeight: "auto",
+    fontWeight: "300",
+    fontFamily: "'Roboto', 'Helvetica', 'Arial', sans-serif",
+    marginBottom: "3px",
     textDecoration: "none",
-    "& small"     : {
-      color     : "#777",
-      fontSize  : "65%",
+    "& small": {
+      color: "#777",
+      fontSize: "65%",
       fontWeight: "400",
       lineHeight: "1",
     },
@@ -43,25 +43,50 @@ const styles = {
 };
 
 function TableList(props) {
+  const { classes } = props;
+
   const dispatch = useDispatch();
   const [isModalOpen, setIsModalOpen] = useState(true);
   const tableData = useSelector((state) => state.getTagReducer.tagList);
   const returnMessage = useSelector(
     (state) => state.getTagReducer.errorMessage
   );
+
+  const mounted = useRef();
+  const selectedIDRef = useRef(null);
+
   useEffect(() => {
-    if (returnMessage === "get tag finish") setIsModalOpen(false);
+    console.group("TableList useEffect");
+    console.table(tableData);
+    console.log(`returnMessage: ${returnMessage}`);
+    console.groupEnd("TableList useEffect ");
+    if (!mounted.current) {
+      //componentDidMount
+      selectedIDRef.current = -1;
+      mounted.current = true;
+      dispatch({ type: REQUEST_TAG });
+    } else {
+      //componentDidUpdate
+      if (returnMessage && returnMessage.indexOf("successfully") !== -1) {
+        if (returnMessage.indexOf("update") === -1) {
+          selectedIDRef.current = -1;
+        }
+        closeModal();
+      }
+    }
+    return () => {};
+  }, [returnMessage]);
 
-    dispatch({ type: REQUEST_TAG });
-    // console.group("TableList useEffect");
-    // console.table(tableData);
-    // console.groupEnd("TableList useEffect ");
-  }, []);
-
-  const { classes } = props;
+  function openModal() {
+    setIsModalOpen(true);
+  }
+  function closeModal() {
+    setIsModalOpen(false);
+  }
 
   return (
     <GridContainer>
+    <CustomModal ariaHideApp={false} isModalOpen={isModalOpen} />
       <GridItem xs={12} sm={12} md={12}>
         <Card>
           <CardHeader color="primary">
@@ -76,10 +101,11 @@ function TableList(props) {
                 tableHeaderColor="primary"
                 tableHead={["ID", "Name", "ShowOnPage", "TaggedNumber"]}
                 tableData={tableData}
+                openModal={openModal}
+                closeModal={closeModal}
+                selectedIDRef={selectedIDRef}
               />
-            ) : (
-              <CustomModal isModalOpen={isModalOpen} />
-            )}
+            ) : null}
           </CardBody>
         </Card>
       </GridItem>

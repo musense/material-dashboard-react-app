@@ -12,6 +12,9 @@ import {
     GET_SELECTED_TAG_SUCCESS,
     UPDATE_SELECTED_TAG_SUCCESS,
     DELETED_SELECTED_TAG_SUCCESS,
+    REQUEST_TAG,
+    UPDATE_TAG,
+    DELETE_TAG,
 } from '../actions/GetTagsAction';
 import { errorMessage } from './errorMessage';
 
@@ -30,7 +33,9 @@ const initialState = {
 }
 
 const getTagReducer = (state = initialState, action) => {
-    // console.log(`action: ${JSON.stringify(action)}`)
+    console.group(`getTagReducer action`)
+    console.table(action)
+    console.groupEnd(`getTagReducer action`)
     switch (action.type) {
         case ADD_TAG_SUCCESS:
             return {
@@ -40,11 +45,13 @@ const getTagReducer = (state = initialState, action) => {
         case UPDATE_TAG_SUCCESS:
             return {
                 ...state,
+                tagList: action.payload,
                 errorMessage: errorMessage.updateSuccess
             }
         case DELETE_TAG_SUCCESS:
             return {
                 ...state,
+                tagList: action.payload,
                 errorMessage: errorMessage.deleteSuccess
             }
         case ADD_TAG_FAIL:
@@ -60,7 +67,7 @@ const getTagReducer = (state = initialState, action) => {
         case DELETE_TAG_FAIL:
             return {
                 ...state,
-                errorMessage: errorMessage.deletefail
+                errorMessage: errorMessage.deleteFail
             }
         case REQUEST_TAG_SUCCESS:
             return {
@@ -103,7 +110,7 @@ const getTagReducer = (state = initialState, action) => {
                     tagList: uTagList,
                     selectedTag: nullTag,
                     selectedIndex: state.selectedIndex,
-                    errorMessage: 'updated sucessfully'
+                    errorMessage: 'updated successfully'
                 }
             }
         case DELETED_SELECTED_TAG_SUCCESS:
@@ -116,7 +123,7 @@ const getTagReducer = (state = initialState, action) => {
                     tagList: oTagList,
                     selectedTag: nullTag,
                     selectedIndex: -1,
-                    errorMessage: 'deleted sucessfully'
+                    errorMessage: 'deleted sucecssfully'
                 }
             }
         case GET_TAG_SUCCESS:
@@ -124,6 +131,14 @@ const getTagReducer = (state = initialState, action) => {
         case GET_TAG_FAIL:
             return { ...state, errorMessage: action.payload }
         // case GET_TAG_REQUEST:
+
+        case REQUEST_TAG:
+        case UPDATE_TAG:
+        case DELETE_TAG:
+            return {
+                ...state,
+                errorMessage: null
+            }
         default:
             return { ...state }
     }

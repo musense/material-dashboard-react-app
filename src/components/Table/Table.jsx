@@ -1,24 +1,14 @@
 import React, { useState, useEffect } from "react";
 // @material-ui/core components
 import Table from "@material-ui/core/Table";
-// import TableHead from "@material-ui/core/TableHead";
-// import TableRow from "@material-ui/core/TableRow";
-// import TableCell from "@material-ui/core/TableCell";
 import { FixedPlugin } from "components/FixedPlugin/FixedPlugin.jsx";
 import CustomTableHead from "../CustomTableHead/CustomTableHead";
 import CustomTableBody from "../CustomTableBody/CustomTableBody";
-import {
-  REQUEST_TAG,
-  ADD_TAG,
-  UPDATE_TAG,
-  DELETE_TAG,
-} from "../../actions/GetTagsAction";
-import { errorMessage } from "./../../reducers/errorMessage";
-import { useSelector, useDispatch } from "react-redux";
-import CustomModal from "../CustomModal/CustomModal";
+import { ADD_TAG, UPDATE_TAG, DELETE_TAG } from "../../actions/GetTagsAction";
+import { useDispatch } from "react-redux";
 
 function CustomTable({ ...props }) {
-  const { tableData, tableHead } = props;
+  const { tableData, tableHead, openModal, closeModal, selectedIDRef } = props;
 
   const nullTag = {
     id: "",
@@ -26,50 +16,27 @@ function CustomTable({ ...props }) {
     showOnPage: "",
     taggedNumber: "",
   };
-  const [tagList, setTagList] = useState(tableData);
+  const [showList, setShowList] = useState(tableData);
   const [isCreate, setIsCreate] = useState(true);
   const [selectedTag, setSelectedTag] = useState(nullTag);
   const [origSelectedTag, setOrigSelectedTag] = useState(nullTag);
   const [fixedClasses, setFixedClasses] = useState("dropdown");
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  // const tableHead = ["ID", "Name", "ShowOnPage", "TaggedNumber"];
+  const [selectedID, setSelectedID] = useState(selectedIDRef.current);
 
   const dispatch = useDispatch();
 
-  const returnMessage = useSelector(
-    (state) => state.getTagReducer.errorMessage
-  );
-  let successMessages = [],
-    failMessages = [],
-    finishMessages = [];
-  const [selectedID, setSelectedID] = useState(-1);
-
-  const filterErrorMessagesAndReturn = (
-    errorMsgs,
-    filterType,
-    reduceMessages
-  ) =>
-    (reduceMessages = Object.keys(errorMsgs)
-      .filter((key) => key.endsWith(filterType))
-      .reduce((acc, cur) => [...acc, cur], []));
-
-  filterErrorMessagesAndReturn(errorMessage, "Success", successMessages);
-  filterErrorMessagesAndReturn(errorMessage, "Fail", failMessages);
-  filterErrorMessagesAndReturn(errorMessage, "Finish", finishMessages);
-
   useEffect(() => {
-    // console.group("Table useEffect tableData");
-    // console.table(tableData);
-    // console.groupEnd("Table useEffect tableData ");
-    if (successMessages.includes(returnMessage))
-      dispatch({ type: REQUEST_TAG });
-    // TODO: popup window
-    if (failMessages.includes(returnMessage))
-      console.error("!!!SERVER ERROR!!!");
-    if (finishMessages.includes(returnMessage)) closeModal();
+    console.group("Table useEffect tableData");
+    if (selectedIDRef.current === -1) {
+      console.log(`selectedIDRef.current: ${selectedIDRef.current}`);
+      setSelectedID(selectedIDRef.current);
+    }
+    console.table(tableData);
+    console.groupEnd("Table useEffect tableData ");
 
-    setTagList(tableData);
-  }, [returnMessage, tableData]);
+    setShowList(tableData);
+  }, [tableData, selectedIDRef.current]);
+
   const setTag = (tag) =>
     setSelectedTag({
       id: tag.id,
@@ -80,18 +47,21 @@ function CustomTable({ ...props }) {
 
   const handleRowClick = (e) => {
     // TODO: popup confirm window
-    console.group(`handleRowClick selectedID`);
-    console.log(
-      `handleRowClick selectedID: ${e.currentTarget.children[0].innerText}`
-    );
-    console.groupEnd(`handleRowClick selectedID`);
-    const selectedID = e.currentTarget.children[0].innerText;
+    const selectedID = e.currentTarget.id;
     // TODO:
-    if (!selectedID || selectedID < 0) return;
-    const sTag = tagList.find((t) => t.id == selectedID);
+    if (selectedID < 0) return;
+    const sTag = showList.find((t, rowIndex) => rowIndex == selectedID);
+    console.group(`handleRowClick selectedID`);
+    console.log(`handleRowClick sTag: ${JSON.stringify(sTag)}`);
+    console.groupEnd(`handleRowClick selectedID`);
     // TODO:
     if (!sTag) return;
-
+    selectedIDRef.current = selectedID;
+    console.log(
+      `CustomTable handleRowClick selectedIDRef.current: ${
+        selectedIDRef.current
+      }`
+    );
     setSelectedID(selectedID);
     setTag(sTag);
     setIsCreate(true);
@@ -134,13 +104,6 @@ function CustomTable({ ...props }) {
     // TODO: add confirm window
     // TODO:
     if (selectedID < 0) return;
-    // console.group("handleUpdateRow selectedTag");
-    // console.table(selectedTag);
-    // console.groupEnd("handleUpdateRow ");
-    // console.group("handleUpdateRow origSelectedTag");
-    // console.table(origSelectedTag);
-    // console.groupEnd("handleUpdateRow ");
-
     // TODO:
     if (JSON.stringify(origSelectedTag) === JSON.stringify(selectedTag)) return;
 
@@ -160,18 +123,12 @@ function CustomTable({ ...props }) {
   // DELETE
   function handleDeleteRow() {
     // TODO: add confirm window
-    // console.group("handleDeleteRow selectedIndex");
-    // console.log(selectedID);
-    // console.groupEnd("handleDeleteRow ");
     // TODO:
     if (selectedID < 0) return;
-    // console.group("handleDeleteRow origSelectedTag");
-    // console.table(origSelectedTag);
-    // console.groupEnd("handleDeleteRow ");
     dispatch({
       type: DELETE_TAG,
       payload: {
-        data: selectedID,
+        data: selectedTag.id,
       },
     });
     openModal();
@@ -217,15 +174,8 @@ function CustomTable({ ...props }) {
     setSelectedTag(changedTag);
   }
 
-  function openModal() {
-    setIsModalOpen(true);
-  }
-  function closeModal() {
-    setIsModalOpen(false);
-  }
   return (
     <div>
-      <CustomModal isModalOpen={isModalOpen} />
       <FixedPlugin
         handleFixedClick={handleFixedClick}
         fixedClasses={fixedClasses}
@@ -245,13 +195,13 @@ function CustomTable({ ...props }) {
         handleCancel={handleCancel}
       />
       <Table>
-        {tagList ? (
+        {showList ? (
           <>
             <CustomTableHead tableHead={tableHead} />
             <CustomTableBody
               selectedID={selectedID}
               handleRowClick={handleRowClick}
-              tagList={tagList}
+              showList={showList}
             />
           </>
         ) : null}

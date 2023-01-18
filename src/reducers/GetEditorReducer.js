@@ -10,18 +10,21 @@ import {
     REQUEST_EDITOR_TITLE_LIST_SUCCESS,
     REQUEST_EDITOR_TITLE_LIST_FAIL,
 } from '../actions/GetEditorAction';
+import { REQUEST_TAG_STAGE } from '../actions/GetTagsAction';
 import { errorMessage } from './errorMessage';
 
 const initialState = {
-    _id         : null,
-    id          : null,
-    title       : null,
-    content     : null,
+    _id: null,
+    id: null,
+    title: null,
+    content: null,
     errorMessage: null,
-    titleList   : []
+    titleList: []
 }
 const getEditorReducer = (state = initialState, action) => {
-    console.log(`action: ${JSON.stringify(action)}`)
+    console.group(`getEditorReducer action`)
+    console.table(action)
+    console.groupEnd(`getEditorReducer action`)
     switch (action.type) {
         case ADD_EDITOR_SUCCESS:
             return {
@@ -36,9 +39,8 @@ const getEditorReducer = (state = initialState, action) => {
         case REQUEST_EDITOR_TITLE_LIST_SUCCESS:
             return {
                 ...state,
-                titleList   : action.payload,
-                // errorMessage: errorMessage.getFinish
-                errorMessage: 'get editor finish'
+                titleList: action.payload,
+                errorMessage: errorMessage.addSuccess
             }
         case REQUEST_EDITOR_TITLE_LIST_FAIL:
             return {

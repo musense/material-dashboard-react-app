@@ -13,7 +13,8 @@ import {
     GET_TAG_REQUEST,
     GET_TAG_SUCCESS,
     GET_TAG_FAIL,
-    GET_SELECTED_TAG_SUCCESS
+    GET_SELECTED_TAG_SUCCESS,
+    REQUEST_TAG_STAGE
 } from "../../actions/GetTagsAction";
 import * as APIList from './../apiList'
 import { call, put, select, takeEvery, take, all } from 'redux-saga/effects'
@@ -78,13 +79,13 @@ function* UpdateTag(payload) {
         // console.table(payload.data);
         // console.groupEnd('UpdateTag!!! YA!! payload.data');
         const response = yield axios.patch(`http://localhost:4200/tags/${payload.data.id}`, payload.data);
-        const responseData = yield response.data;
+        const tagList = yield response.data;
         console.group('UpdateTag responseData')
-        console.table(responseData)
+        console.table(tagList)
         console.groupEnd('UpdateTag responseData')
         yield put({
             type: UPDATE_TAG_SUCCESS,
-            payload: null
+            payload: tagList
         })
     } catch (error) {
         yield put({
@@ -102,13 +103,13 @@ function* DeleteTag(payload) {
         console.table(payload.data);
         console.groupEnd('DeleteTag!!! YA!! payload.data');
         const response = yield axios.delete(`http://localhost:4200/tags/${payload.data}`);
-        const responseData = yield response.data;
+        const tagList = yield response.data;
         console.group('DeleteTag responseData')
-        console.table(responseData)
+        console.table(tagList)
         console.groupEnd('DeleteTag responseData')
         yield put({
             type: DELETE_TAG_SUCCESS,
-            payload: null
+            payload: tagList
         })
     } catch (error) {
         yield put({
@@ -123,10 +124,16 @@ function* reGetTagList() {
     yield GetTagList()
 }
 
+function* setErrorMessageNull() {
+    yield put({
+        type: REQUEST_TAG_STAGE
+    })
+}
 
 function* watchAddTagSaga() {
     while (true) {
         const { payload } = yield take(ADD_TAG)
+        // yield setErrorMessageNull()
         yield AddTag(payload)
     }
 }
@@ -134,6 +141,7 @@ function* watchAddTagSaga() {
 function* watchUpdateTagSaga() {
     while (true) {
         const { payload } = yield take(UPDATE_TAG)
+        // yield setErrorMessageNull()
         yield UpdateTag(payload)
     }
 }
@@ -141,6 +149,7 @@ function* watchUpdateTagSaga() {
 function* watchDeleteTagSaga() {
     while (true) {
         const { payload } = yield take(DELETE_TAG)
+        // yield setErrorMessageNull()
         yield DeleteTag(payload)
     }
 }

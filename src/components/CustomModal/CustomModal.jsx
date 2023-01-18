@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from "react";
 import Modal from "react-modal";
 const customStyles = {
   content: {
@@ -12,6 +12,9 @@ const customStyles = {
 };
 
 function CustomModal({ ...props }) {
+  useEffect(() => {
+    Modal.setAppElement("body");
+  }, []);
   return (
     <Modal isOpen={props.isModalOpen} style={customStyles}>
       <div> Loading... </div>

@@ -15,10 +15,10 @@ import {
 } from "../../actions/GetTagsAction";
 import { errorMessage } from "./../../reducers/errorMessage";
 import { useSelector, useDispatch } from "react-redux";
-import CustomModal from '../CustomModal/CustomModal'
+import CustomModal from "../CustomModal/CustomModal";
 
 function CustomTable({ ...props }) {
-  const { tableData } = props;
+  const { tableData, tableHead } = props;
 
   const nullTag = {
     id: "",
@@ -32,7 +32,7 @@ function CustomTable({ ...props }) {
   const [origSelectedTag, setOrigSelectedTag] = useState(nullTag);
   const [fixedClasses, setFixedClasses] = useState("dropdown");
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const tableHead = ["ID", "Name", "ShowOnPage", "TaggedNumber"];
+  // const tableHead = ["ID", "Name", "ShowOnPage", "TaggedNumber"];
 
   const dispatch = useDispatch();
 
@@ -43,30 +43,24 @@ function CustomTable({ ...props }) {
     failMessages = [],
     finishMessages = [];
   const [selectedID, setSelectedID] = useState(-1);
-  Object.keys(errorMessage)
-    .filter((key) => key.endsWith("Success"))
-    .map((successKey) => {
-      console.log(`Success message: ${errorMessage[successKey]}`);
-      successMessages.push(errorMessage[successKey]);
-    });
-  Object.keys(errorMessage)
-    .filter((key) => key.endsWith("Fail"))
-    .map((failKey) => {
-      console.log(`Fail message: ${errorMessage[failKey]}`);
-      failMessages.push(errorMessage[failKey]);
-    });
-  Object.keys(errorMessage)
-    .filter((key) => key.endsWith("Finish"))
-    .map((finishKey) => {
-      console.log(`Finish message: ${errorMessage[finishKey]}`);
-      finishMessages.push(errorMessage[finishKey]);
-    });
+
+  const filterErrorMessagesAndReturn = (
+    errorMsgs,
+    filterType,
+    reduceMessages
+  ) =>
+    (reduceMessages = Object.keys(errorMsgs)
+      .filter((key) => key.endsWith(filterType))
+      .reduce((acc, cur) => [...acc, cur], []));
+
+  filterErrorMessagesAndReturn(errorMessage, "Success", successMessages);
+  filterErrorMessagesAndReturn(errorMessage, "Fail", failMessages);
+  filterErrorMessagesAndReturn(errorMessage, "Finish", finishMessages);
 
   useEffect(() => {
-    console.group("Table useEffect tableData");
-    console.table(tableData);
-    console.log(`returnMessage: ${returnMessage}`);
-    console.groupEnd("Table useEffect tableData ");
+    // console.group("Table useEffect tableData");
+    // console.table(tableData);
+    // console.groupEnd("Table useEffect tableData ");
     if (successMessages.includes(returnMessage))
       dispatch({ type: REQUEST_TAG });
     // TODO: popup window
@@ -231,9 +225,7 @@ function CustomTable({ ...props }) {
   }
   return (
     <div>
-      <CustomModal
-        isModalOpen={isModalOpen}
-      />
+      <CustomModal isModalOpen={isModalOpen} />
       <FixedPlugin
         handleFixedClick={handleFixedClick}
         fixedClasses={fixedClasses}

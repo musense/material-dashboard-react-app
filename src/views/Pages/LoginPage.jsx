@@ -1,6 +1,6 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
-import axios from "axios";
+// import axios from "axios";
 
 // @material-ui/core components
 import withStyles from "@material-ui/core/styles/withStyles";
@@ -24,56 +24,66 @@ import CardHeader from "components/Card/CardHeader.jsx";
 import CardFooter from "components/Card/CardFooter.jsx";
 
 import loginPageStyle from "assets/jss/material-dashboard-react/views/loginPageStyle.jsx";
+import { useSelector, useDispatch } from "react-redux";
+import { LOGIN_USER } from "./../../actions/GetUserAction";
 
-const { REACT_APP_SERVER_URL } = process.env;
+function LoginPage({ ...props }) {
+  const { classes } = props;
 
-class LoginPage extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      checked: [],
-      errors: {}
-    };
+  const [checked, setChecked] = useState([]);
+  const [errors, setErrors] = useState({});
+  const [email, setEmail] = useState(null);
+
+  const dispatch = new useDispatch();
+  const returnMessage =
+    "" + useSelector((state) => state.getUserReducer.errorMessage);
+  function checkLoginSuccess(message) {
+    if (message.indexOf("upper case") > -1) {
+      console.log(`useEffect register 密碼最少需一碼為大寫字母!`);
+      return;
+    } else if (message.indexOf("lower case") > -1) {
+      console.log(`useEffect register 密碼最少需一碼為小寫字母!`);
+      return;
+    } else if (message.indexOf("at least 8 characters") > -1) {
+      console.log(`useEffect register 密碼最少為8碼!`);
+      return;
+    } else if (message.indexOf("login successfully") > -1) {
+      // TODO: redirect
+      // redirect to dashboard page...
+    }
   }
-  login = async e => {
-    e.preventDefault();
+  useEffect(() => {
+    // console.log(`useEffect login returnMessage: ${returnMessage}`);
+    // console.log(`useEffect login checked: ${checked}`);
+    checkLoginSuccess(returnMessage);
+  }, [returnMessage, checked]);
 
-    const { history } = this.props;
+  // TODO: add rememberMe
+  const login = (e) => {
+    e.preventDefault();
 
     const fields = ["username", "password"];
     const formElements = e.target.elements;
 
     const formValues = fields
-      .map(field => ({
-        [field]: formElements.namedItem(field).value
+      .map((field) => ({
+        [field]: formElements.namedItem(field).value,
       }))
       .reduce((current, next) => ({ ...current, ...next }));
 
-    let loginRequest;
-    try {
-      loginRequest = await axios.post(
-        `http://${REACT_APP_SERVER_URL}/login`,
-        {
-          ...formValues
-        },
-        {
-          withCredentials: true
-        }
-      );
-    } catch ({ response }) {
-      loginRequest = response;
-    }
-    const { data: loginRequestData } = loginRequest;
-    if (loginRequestData.success) {
-      return history.push("/dashboard");
-    }
-
-    this.setState({
-      errors: loginRequestData.messages && loginRequestData.messages.errors
+    console.group(`login!!!`);
+    console.table(formValues);
+    console.groupEnd(`login!!!`);
+    dispatch({
+      type: LOGIN_USER,
+      payload: {
+        email: formValues.email,
+        // username,
+        password: formValues.password,
+      },
     });
   };
-  handleToggle = value => {
-    const { checked } = this.state;
+  const handleToggle = (value) => {
     const currentIndex = checked.indexOf(value);
     const newChecked = [...checked];
 
@@ -83,137 +93,131 @@ class LoginPage extends React.Component {
       newChecked.splice(currentIndex, 1);
     }
 
-    this.setState({
-      checked: newChecked
-    });
+    setChecked(newChecked);
   };
-  render() {
-    const { classes } = this.props;
-    const { errors } = this.state;
-    return (
-      <div className={classes.container}>
-        <GridContainer justify="center">
-          <GridItem xs={12} sm={8}>
-            <h4 className={classes.textCenter} style={{ marginTop: 0 }}>
-              Log in to see how you can speed up your web development with out
-              of the box CRUD for #User Management and more.{" "}
-            </h4>
-          </GridItem>
-        </GridContainer>
-        <GridContainer justify="center">
-          <GridItem xs={12} sm={6} md={4}>
-            <form onSubmit={this.login}>
-              <Card className={classes[this.state.cardAnimaton]}>
-                <CardHeader
-                  className={`${classes.cardHeader} ${classes.textCenter}`}
-                  color="primary"
-                >
-                  <h4 className={classes.cardTitle}>Log in</h4>
-                  <div className={classes.socialLine}>
-                    {[
-                      "fa fa-facebook-square",
-                      "fa fa-twitter",
-                      "fa fa-google-plus"
-                    ].map((prop, key) => {
-                      return (
-                        <Button
-                          color="transparent"
-                          justIcon
-                          key={key}
-                          className={classes.customButtonClass}
-                        >
-                          <i className={prop} />
-                        </Button>
-                      );
-                    })}
-                  </div>
-                </CardHeader>
-                <CardBody>
-                  <p
-                    className={`${classes.textCenter} ${classes.checkboxLabel}`}
-                  >
-                    Or Sign in with <strong>admin@material.com</strong> and the
-                    password <strong>secret</strong>{" "}
-                  </p>
-                  <CustomInput
-                    labelText="Email..."
-                    id="email"
-                    error={errors.username || errors.invalidEmailOrPassword}
-                    formControlProps={{
-                      fullWidth: true,
-                      className: classes.formControlClassName
-                    }}
-                    inputProps={{
-                      required: true,
-                      name: "username",
-                      endAdornment: (
-                        <InputAdornment position="end">
-                          <Email className={classes.inputAdornmentIcon} />
-                        </InputAdornment>
-                      )
-                    }}
-                  />
-                  <CustomInput
-                    labelText="Password"
-                    id="password"
-                    error={errors.password || errors.invalidEmailOrPassword}
-                    formControlProps={{
-                      fullWidth: true,
-                      className: classes.formControlClassName
-                    }}
-                    inputProps={{
-                      type: "password",
-                      required: true,
-                      endAdornment: (
-                        <InputAdornment position="end">
-                          <Icon className={classes.inputAdornmentIcon}>
-                            lock_outline
-                          </Icon>
-                        </InputAdornment>
-                      )
-                    }}
-                  />
-                  <FormControlLabel
-                    classes={{
-                      root:
-                        classes.checkboxLabelControl +
-                        " " +
-                        classes.checkboxLabelControlClassName,
-                      label: classes.checkboxLabel
-                    }}
-                    control={
-                      <Checkbox
-                        tabIndex={-1}
-                        onClick={() => this.handleToggle(1)}
-                        checkedIcon={<Check className={classes.checkedIcon} />}
-                        icon={<Check className={classes.uncheckedIcon} />}
-                        classes={{
-                          checked: classes.checked,
-                          root: classes.checkRoot
-                        }}
-                      />
-                    }
-                    label={<span>Remember me</span>}
-                  />
-                </CardBody>
-                <CardFooter className={classes.justifyContentCenter}>
-                  <Button type="submit" color="primary" simple size="lg" block>
-                    Let's Go
-                  </Button>
-                </CardFooter>
-              </Card>
-            </form>
-          </GridItem>
-        </GridContainer>
-      </div>
-    );
-  }
+
+  return (
+    <div className={classes.container}>
+      {/* <GridContainer justify="center">
+        <GridItem xs={12} sm={8}>
+          <h4 className={classes.textCenter} style={{ marginTop: 0 }}>
+            Log in to see how you can speed up your web development with out of
+            the box CRUD for #User Management and more.{" "}
+          </h4>
+        </GridItem>
+      </GridContainer> */}
+      <GridContainer justify="center">
+        <GridItem xs={12} sm={6} md={4}>
+          <form onSubmit={login}>
+            {/* <Card className={classes[this.state.cardAnimaton]}> */}
+            <Card className={classes.cardAnimaton}>
+              <CardHeader
+                className={`${classes.cardHeader} ${classes.textCenter}`}
+                color="primary"
+              >
+                <h4 className={classes.cardTitle}>Log in</h4>
+                {/* <div className={classes.socialLine}>
+                  {[
+                    "fa fa-facebook-square",
+                    "fa fa-twitter",
+                    "fa fa-google-plus",
+                  ].map((prop, key) => {
+                    return (
+                      <Button
+                        color="transparent"
+                        justIcon
+                        key={key}
+                        className={classes.customButtonClass}
+                      >
+                        <i className={prop} />
+                      </Button>
+                    );
+                  })}
+                </div> */}
+              </CardHeader>
+              <CardBody>
+                {/* <p className={`${classes.textCenter} ${classes.checkboxLabel}`}>
+                  Or Sign in with <strong>admin@material.com</strong> and the
+                  password <strong>secret</strong>{" "}
+                </p> */}
+                <CustomInput
+                  labelText="Email..."
+                  id="email"
+                  error={errors.username || errors.invalidEmailOrPassword}
+                  formControlProps={{
+                    fullWidth: true,
+                    className: classes.formControlClassName,
+                  }}
+                  inputProps={{
+                    required: true,
+                    name: "username",
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <Email className={classes.inputAdornmentIcon} />
+                      </InputAdornment>
+                    ),
+                  }}
+                />
+                <CustomInput
+                  labelText="Password"
+                  id="password"
+                  error={errors.password || errors.invalidEmailOrPassword}
+                  formControlProps={{
+                    fullWidth: true,
+                    className: classes.formControlClassName,
+                  }}
+                  inputProps={{
+                    type: "password",
+                    required: true,
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <Icon className={classes.inputAdornmentIcon}>
+                          lock_outline
+                        </Icon>
+                      </InputAdornment>
+                    ),
+                  }}
+                />
+                <FormControlLabel
+                  classes={{
+                    root:
+                      classes.checkboxLabelControl +
+                      " " +
+                      classes.checkboxLabelControlClassName,
+                    label: classes.checkboxLabel,
+                  }}
+                  control={
+                    <Checkbox
+                      tabIndex={-1}
+                      onClick={() => handleToggle(1)}
+                      checkedIcon={<Check className={classes.checkedIcon} />}
+                      icon={<Check className={classes.uncheckedIcon} />}
+                      classes={{
+                        checked: classes.checked,
+                        root: classes.checkRoot,
+                      }}
+                    />
+                  }
+                  label={<span>Remember me</span>}
+                />
+              </CardBody>
+              <CardFooter className={classes.justifyContentCenter}>
+                <Button type="submit" color="primary" simple size="lg" block>
+                  Let's Go
+                </Button>
+              </CardFooter>
+            </Card>
+          </form>
+        </GridItem>
+      </GridContainer>
+    </div>
+  );
 }
 
 LoginPage.propTypes = {
   classes: PropTypes.object.isRequired,
   history: PropTypes.object,
-  errors: PropTypes.object
+  errors: PropTypes.object,
 };
 
 export default withStyles(loginPageStyle)(LoginPage);

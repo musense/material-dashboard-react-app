@@ -19,9 +19,13 @@ ReactDOM.render(
   <Provider store={store}>
     <Router history={hist}>
       <Switch>
-        <Route path="/admin" component={Admin} />
+        {/* prevent warning: Warning: Failed prop type: Invalid prop `component` of type `object` supplied to `Route`, expected `function`.  */}
+        <Route path="/admin" component={(props) => <Admin {...props} />} />
+        <Route path="/auth" component={(props) => <Auth {...props} />} />
+        <Route path="/rtl" component={(props) => <RTL {...props} />} />
+        {/* <Route path="/admin" component={Admin} />
         <Route path="/auth" component={Auth} />
-        <Route path="/rtl" component={RTL} />
+        <Route path="/rtl" component={RTL} /> */}
         <Redirect from="/" to="/admin/dashboard" />
       </Switch>
     </Router>

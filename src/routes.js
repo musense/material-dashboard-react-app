@@ -14,6 +14,7 @@ import DashboardPage from "views/Dashboard/Dashboard.jsx";
 import UserProfile from "views/UserProfile/UserProfile.jsx";
 import TableList from "views/TableList/TableList.jsx";
 import IEditor from "views/IEditor/IEditor.jsx";
+import EditorList from "views/EditorList/EditorList.jsx";
 import Typography from "views/Typography/Typography.jsx";
 import Icons from "views/Icons/Icons.jsx";
 // import Maps from "views/Maps/Maps.jsx";
@@ -51,12 +52,20 @@ const dashboardRoutes = [
     layout: "/admin"
   },
   {
-    path: "/editor",
-    name: "IEditor",
-    rtlName: "قائمة الجدول",
-    icon: "content_paste",
+    path     : "/editorList",
+    name     : "EditorList",
+    rtlName  : "قائمة الجدول",
+    icon     : "content_paste",
+    component: EditorList,
+    layout   : "/admin",
+  },
+  {
+    path     : "/ieditor",
+    name     : "IEditor",
+    rtlName  : "قائمة الجدول",
+    icon     : "content_paste",
     component: IEditor,
-    layout: "/admin"
+    layout   : "/admin",
   },
   // {
   //   path: "/typography",

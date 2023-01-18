@@ -32,9 +32,9 @@ const switchRoutes = (
         return (
           <Route
             path={prop.layout + prop.path}
-            component={props => {
+            component={(props) => {
               const Component = prop.component;
-              return <Component {...props} {...userInfo}/>
+              return <Component {...props} {...userInfo} />;
             }}
             key={key}
           />
@@ -52,22 +52,22 @@ class Dashboard extends React.Component {
       color: "blue",
       hasImage: true,
       fixedClasses: "dropdown show",
-      mobileOpen: false,      
+      mobileOpen: false,
     };
   }
-  // handleImageClick = image => {
-  //   this.setState({ image: image });
-  // };
-  // handleColorClick = color => {
-  //   this.setState({ color: color });
-  // };
-  // handleFixedClick = () => {
-  //   if (this.state.fixedClasses === "dropdown") {
-  //     this.setState({ fixedClasses: "dropdown show" });
-  //   } else {
-  //     this.setState({ fixedClasses: "dropdown" });
-  //   }
-  // };
+  handleImageClick = (image) => {
+    this.setState({ image: image });
+  };
+  handleColorClick = (color) => {
+    this.setState({ color: color });
+  };
+  handleFixedClick = () => {
+    if (this.state.fixedClasses === "dropdown") {
+      this.setState({ fixedClasses: "dropdown show" });
+    } else {
+      this.setState({ fixedClasses: "dropdown" });
+    }
+  };
   handleDrawerToggle = () => {
     this.setState({ mobileOpen: !this.state.mobileOpen });
   };
@@ -80,29 +80,31 @@ class Dashboard extends React.Component {
     }
   };
   // async componentDidMount() {
+  // componentDidMount() {
   //   const { history } = this.props;
 
   //   if (navigator.platform.indexOf("Win") > -1) {
-  //     const ps = new PerfectScrollbar(this.refs.mainPanel);
+  //     const ps = new PerfectScrollbar(this.ref.mainPanel);
   //   }
   //   window.addEventListener("resize", this.resizeFunction);
 
-  //   let getSessionRequest;
-  //   try {
-  //     getSessionRequest = await axios.get(
-  //       `http://${REACT_APP_SERVER_URL}/get-session`,
-  //       {
-  //         withCredentials: true
-  //       }
-  //     );
-  //   } catch ({ response }) {
-  //     getSessionRequest = response;
-  //   }
-  //   const { data: getSessionRequestData } = getSessionRequest;
-  //   if (getSessionRequestData.success) {
-  //     return userInfo = getSessionRequestData.userInfo;
-  //   }
-  //   return history.push("/auth/login-page");
+  // let getSessionRequest;
+  // try {
+  //   getSessionRequest = await axios.get(
+  //     `http://${REACT_APP_SERVER_URL}/get-session`,
+  //     {
+  //       withCredentials: true
+  //     }
+  //   );
+  // } catch ({ response }) {
+  //   getSessionRequest = response;
+  // }
+  // const { data: getSessionRequestData } = getSessionRequest;
+  // if (getSessionRequestData.success) {
+  //   return userInfo = getSessionRequestData.userInfo;
+  // }
+  // return history.push("/auth/login-page");
+  //   return;
   // }
   // componentDidUpdate(e) {
   //   if (e.history.location.pathname !== e.location.pathname) {
@@ -112,9 +114,9 @@ class Dashboard extends React.Component {
   //     }
   //   }
   // }
-  // componentWillUnmount() {
-  //   window.removeEventListener("resize", this.resizeFunction);
-  // }
+  componentWillUnmount() {
+    window.removeEventListener("resize", this.resizeFunction);
+  }
   render() {
     const { classes, ...rest } = this.props;
 
@@ -160,7 +162,7 @@ class Dashboard extends React.Component {
 }
 
 Dashboard.propTypes = {
-  classes: PropTypes.object.isRequired
+  classes: PropTypes.object.isRequired,
 };
 
 export default withStyles(dashboardStyle)(Dashboard);

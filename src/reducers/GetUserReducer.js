@@ -1,14 +1,6 @@
 import {
-    REGISTER_USER_SUCCESS,
-    REGISTER_USER_FAIL,
-    UPDATE_USER_SUCCESS,
-    UPDATE_USER_FAIL,
-    DELETE_USER_SUCCESS,
-    DELETE_USER_FAIL,
-    LOGIN_USER_SUCCESS,
-    LOGIN_USER_FAIL,
+    LOGIN_USER_FAIL, LOGIN_USER_SUCCESS, REGISTER_USER_FAIL, REGISTER_USER_SUCCESS
 } from '../actions/GetUserAction';
-import { errorMessage } from './errorMessage';
 
 const initialState = {
     email: null,

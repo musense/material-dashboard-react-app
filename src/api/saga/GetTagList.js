@@ -1,29 +1,9 @@
-import {
-    REQUEST_TAG,
-    REQUEST_TAG_SUCCESS,
-    ADD_TAG,
-    ADD_TAG_SUCCESS,
-    ADD_TAG_FAIL,
-    UPDATE_TAG,
-    UPDATE_TAG_SUCCESS,
-    UPDATE_TAG_FAIL,
-    DELETE_TAG,
-    DELETE_TAG_SUCCESS,
-    DELETE_TAG_FAIL,
-    GET_TAG_REQUEST,
-    GET_TAG_SUCCESS,
-    GET_TAG_FAIL,
-    GET_SELECTED_TAG_SUCCESS,
-    REQUEST_TAG_STAGE
-} from "../../actions/GetTagsAction";
-import * as APIList from './../apiList'
-import { call, put, select, takeEvery, take, all } from 'redux-saga/effects'
-import { headers } from "../../model/header"
-import Pagination from '../../model/pagination'
-import { LOGGER_CATCHERROR } from "../../actions/LoggerAction";
-import TAG from "../../model/tags";
 import axios from "axios";
-import { TAG_CATCHERROR } from './../../actions/GetTagsAction';
+import { all, put, take, takeEvery } from 'redux-saga/effects';
+import {
+    ADD_TAG, ADD_TAG_FAIL, ADD_TAG_SUCCESS, DELETE_TAG, DELETE_TAG_FAIL, DELETE_TAG_SUCCESS, GET_TAG_FAIL, REQUEST_TAG, REQUEST_TAG_STAGE, REQUEST_TAG_SUCCESS, UPDATE_TAG, UPDATE_TAG_FAIL, UPDATE_TAG_SUCCESS
+} from "../../actions/GetTagsAction";
+import * as APIList from './../apiList';
 
 const apiUrl = `${APIList.getTagList}`
 

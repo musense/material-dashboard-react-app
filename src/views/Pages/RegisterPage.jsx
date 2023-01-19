@@ -1,38 +1,39 @@
-import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
+import React, { useEffect, useState } from "react";
 // import axios from "axios";
 
 // @material-ui/core components
-import withStyles from "@material-ui/core/styles/withStyles";
-import InputAdornment from "@material-ui/core/InputAdornment";
-import Icon from "@material-ui/core/Icon";
 import Checkbox from "@material-ui/core/Checkbox";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
+import Icon from "@material-ui/core/Icon";
+import InputAdornment from "@material-ui/core/InputAdornment";
+import withStyles from "@material-ui/core/styles/withStyles";
 
 // @material-ui/icons
-import Email from "@material-ui/icons/Email";
 import Check from "@material-ui/icons/Check";
+import Email from "@material-ui/icons/Email";
 import Face from "@material-ui/icons/Face";
 
 // core components
-import GridContainer from "components/Grid/GridContainer.jsx";
-import GridItem from "components/Grid/GridItem.jsx";
-import CustomInput from "components/CustomInput/CustomInput.jsx";
-import Button from "components/CustomButtons/Button.jsx";
 import Card from "components/Card/Card.jsx";
 import CardBody from "components/Card/CardBody.jsx";
-import CardHeader from "components/Card/CardHeader.jsx";
 import CardFooter from "components/Card/CardFooter.jsx";
+import CardHeader from "components/Card/CardHeader.jsx";
+import Button from "components/CustomButtons/Button.jsx";
+import CustomInput from "components/CustomInput/CustomInput.jsx";
+import GridContainer from "components/Grid/GridContainer.jsx";
+import GridItem from "components/Grid/GridItem.jsx";
 
 import registerPageStyle from "assets/jss/material-dashboard-react/views/registerPageStyle.jsx";
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { REGISTER_USER } from "./../../actions/GetUserAction";
-import { redirect } from "react-router";
 
-function RegisterPage({ ...props }) {  const { classes } = props;
+function RegisterPage({ ...props }) {
+  const { classes } = props;
 
   const [checked, setChecked] = useState([]);
-  const [errors, setErrors] = useState({});
+  // const [errors, setErrors] = useState({});
+  const errors = {};
 
   const dispatch = new useDispatch();
   const returnMessage =

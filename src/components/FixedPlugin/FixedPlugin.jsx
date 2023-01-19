@@ -1,34 +1,13 @@
-import React, { useState } from "react";
 import classnames from "classnames";
-import GridItem from "components/Grid/GridItem.jsx";
-import GridContainer from "components/Grid/GridContainer.jsx";
-import CardBody from "components/Card/CardBody.jsx";
 import Card from "components/Card/Card.jsx";
+import CardBody from "components/Card/CardBody.jsx";
 import CardHeader from "components/Card/CardHeader.jsx";
-import CustomInput from "components/CustomInput/CustomInput.jsx";
-import { useDispatch, useSelector } from "react-redux";
-import {
-  UPDATE_SELECTED_TAG_SUCCESS,
-  DELETED_SELECTED_TAG_SUCCESS,
-} from "../../actions/GetTagsAction";
+import GridContainer from "components/Grid/GridContainer.jsx";
+import GridItem from "components/Grid/GridItem.jsx";
+import React, { useState } from "react";
 
-import { NavLink } from "react-router-dom";
-import {
-  FacebookShareButton,
-  TwitterShareButton,
-  FacebookIcon,
-  TwitterIcon,
-} from "react-share";
-import GitHubButton from "react-github-button";
-import PropTypes from "prop-types";
 // @material-ui/core components
-import withStyles from "@material-ui/core/styles/withStyles";
-import imagine1 from "assets/img/sidebar-1.jpg";
-import imagine2 from "assets/img/sidebar-2.jpg";
-import imagine3 from "assets/img/sidebar-3.jpg";
-import imagine4 from "assets/img/sidebar-4.jpg";
 
-import Button from "components/CustomButtons/Button.jsx";
 
 const styles = {
   cardCategoryWhite: {

@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react"; // useState
-import { CKEditor, CKEditorContext } from "@ckeditor/ckeditor5-react";
+import { CKEditor } from "@ckeditor/ckeditor5-react";
+import React, { useEffect, useState } from "react"; // useState
 // import Editor from "ckeditor5-custom-build/build/ckeditor";
 
 // import Context from "@ckeditor/ckeditor5-core/src/context";
@@ -9,26 +9,21 @@ import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 // import Italic from "@ckeditor/ckeditor5-basic-styles/src/italic";
 // import Essentials from "@ckeditor/ckeditor5-essentials/src/essentials";
 // import Paragraph from "@ckeditor/ckeditor5-paragraph/src/paragraph";
-import { useSelector, useDispatch } from "react-redux";
-import {
-  ADD_EDITOR,
-  REQUEST_EDITOR_BY_TITLE,
-} from "../../actions/GetEditorAction";
+import { useDispatch, useSelector } from "react-redux";
+import { REQUEST_EDITOR_BY_TITLE } from "../../actions/GetEditorAction";
 // import queryString from 'query-string'
 
-const editorConfiguration = {
-  toolbar: ["bold", "italic"],
-};
+// const editorConfiguration = {
+//   toolbar: ["bold", "italic"],
+// };
 
 function IEditor({ ...props }) {
-
-  const params   = new URLSearchParams(props.location.search);
+  const params = new URLSearchParams(props.location.search);
   const dispatch = useDispatch();
-  const id       = params.get("id");
+  const id = params.get("id");
 
-  const title   = useSelector((state) => state.getEditorReducer.title);
+  const title = useSelector((state) => state.getEditorReducer.title);
   const content = useSelector((state) => state.getEditorReducer.content);
-  
 
   const [data, setData] = useState(null);
 
@@ -53,7 +48,7 @@ function IEditor({ ...props }) {
     console.log(`IEditor data: ${data}`);
     console.groupEnd("IEditor useEffect data");
     console.log(`IEditor useEffect id: ${id}`);
-    
+
     dispatch({
       type: REQUEST_EDITOR_BY_TITLE,
       payload: {

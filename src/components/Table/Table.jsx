@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 // @material-ui/core components
 import Table from "@material-ui/core/Table";
 import { FixedPlugin } from "components/FixedPlugin/FixedPlugin.jsx";
-import CustomTableHead from "../CustomTableHead/CustomTableHead";
-import CustomTableBody from "../CustomTableBody/CustomTableBody";
-import { ADD_TAG, UPDATE_TAG, DELETE_TAG } from "../../actions/GetTagsAction";
 import { useDispatch } from "react-redux";
+import { ADD_TAG, DELETE_TAG, UPDATE_TAG } from "../../actions/GetTagsAction";
+import CustomTableBody from "../CustomTableBody/CustomTableBody";
+import CustomTableHead from "../CustomTableHead/CustomTableHead";
 
 function CustomTable({ ...props }) {
   const { tableData, tableHead, openModal, closeModal, selectedIDRef } = props;

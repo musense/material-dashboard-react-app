@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import TableCell from "@material-ui/core/TableCell";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
-import TableCell from "@material-ui/core/TableCell";
+import React from "react";
 
 function CustomTableHead({ ...props }) {
   const { tableHead } = props;
@@ -9,7 +9,7 @@ function CustomTableHead({ ...props }) {
     <TableHead>
       <TableRow>
         {tableHead.map((prop, key) => (
-          <TableCell key={key}>{prop}</TableCell>
+          <TableCell align="center" key={key}>{prop}</TableCell>
         ))}
         <TableCell />
       </TableRow>

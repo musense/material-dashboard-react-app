@@ -1,25 +1,8 @@
-import {
-    REQUEST_EDITOR,
-    REQUEST_EDITOR_SUCCESS,
-    REQUEST_EDITOR_FAIL,
-    ADD_EDITOR,
-    ADD_EDITOR_SUCCESS,
-    ADD_EDITOR_FAIL,
-    UPDATE_EDITOR,
-    UPDATE_EDITOR_SUCCESS,
-    UPDATE_EDITOR_FAIL,
-    DELETE_EDITOR,
-    DELETE_EDITOR_SUCCESS,
-    DELETE_EDITOR_FAIL,
-    REQUEST_EDITOR_BY_TITLE,
-    REQUEST_EDITOR_TITLE_LIST_SUCCESS,
-    REQUEST_EDITOR_TITLE_LIST_FAIL
-} from "../../actions/GetEditorAction";
-import * as APIList from '../apiList'
-import { call, put, select, takeEvery, take, all } from 'redux-saga/effects'
-import { headers } from "../../model/header"
-import Pagination from '../../model/pagination'
 import axios from "axios";
+import { all, put, take, takeEvery } from 'redux-saga/effects';
+import {
+    ADD_EDITOR, ADD_EDITOR_FAIL, ADD_EDITOR_SUCCESS, DELETE_EDITOR, DELETE_EDITOR_FAIL, DELETE_EDITOR_SUCCESS, REQUEST_EDITOR, REQUEST_EDITOR_BY_TITLE, REQUEST_EDITOR_FAIL, REQUEST_EDITOR_SUCCESS, REQUEST_EDITOR_TITLE_LIST_FAIL, REQUEST_EDITOR_TITLE_LIST_SUCCESS, UPDATE_EDITOR, UPDATE_EDITOR_FAIL, UPDATE_EDITOR_SUCCESS
+} from "../../actions/GetEditorAction";
 
 // const apiUrl = `${APIList.getEditorList}`
 

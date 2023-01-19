@@ -1,25 +1,23 @@
-import React from "react";
 import cx from "classnames";
 import PropTypes from "prop-types";
+import React from "react";
 import { NavLink } from "react-router-dom";
 
 // @material-ui/core components
-import withStyles from "@material-ui/core/styles/withStyles";
 import AppBar from "@material-ui/core/AppBar";
-import Toolbar from "@material-ui/core/Toolbar";
-import Hidden from "@material-ui/core/Hidden";
 import Drawer from "@material-ui/core/Drawer";
+import Hidden from "@material-ui/core/Hidden";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
+import withStyles from "@material-ui/core/styles/withStyles";
+import Toolbar from "@material-ui/core/Toolbar";
 
 // @material-ui/icons
 import Dashboard from "@material-ui/icons/Dashboard";
+import Fingerprint from "@material-ui/icons/Fingerprint";
 import Menu from "@material-ui/icons/Menu";
 import PersonAdd from "@material-ui/icons/PersonAdd";
-import Fingerprint from "@material-ui/icons/Fingerprint";
-import LockOpen from "@material-ui/icons/LockOpen";
-import MonetizationOn from "@material-ui/icons/MonetizationOn";
 
 // core components
 import Button from "components/CustomButtons/Button";

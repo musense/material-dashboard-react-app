@@ -1,19 +1,15 @@
 /* eslint-disable */
-import React from "react";
 import PropTypes from "prop-types";
-import { Switch, Route, Redirect } from "react-router-dom";
-import axios from "axios";
+import React from "react";
+import { Route, Switch } from "react-router-dom";
 // creates a beautiful scrollbar
-import PerfectScrollbar from "perfect-scrollbar";
 import "perfect-scrollbar/css/perfect-scrollbar.css";
 // @material-ui/core components
 import withStyles from "@material-ui/core/styles/withStyles";
 // core components
-import Navbar from "components/Navbars/Navbar.jsx";
 import Footer from "components/Footer/Footer.jsx";
+import Navbar from "components/Navbars/Navbar.jsx";
 import Sidebar from "components/Sidebar/Sidebar.jsx";
-// import FixedPlugin from "components/FixedPlugin/FixedPlugin.jsx";
-
 import routes from "routes.js";
 
 import dashboardStyle from "assets/jss/material-dashboard-react/layouts/dashboardStyle.jsx";

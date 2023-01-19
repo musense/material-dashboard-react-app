@@ -1,21 +1,9 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 // @material-ui/core components
 import Table from "@material-ui/core/Table";
-// import TableHead from "@material-ui/core/TableHead";
-// import TableRow from "@material-ui/core/TableRow";
-// import TableCell from "@material-ui/core/TableCell";
-// import { FixedPlugin } from "components/FixedPlugin/FixedPlugin.jsx";
-import CustomTableHead from "../CustomTableHead/CustomTableHead";
+import { useDispatch } from "react-redux";
 import CustomTableBody from "../CustomTableBody/CustomTableBody";
-import {
-  REQUEST_EDITOR,
-  ADD_EDITOR,
-  UPDATE_EDITOR,
-  DELETE_EDITOR,
-} from "../../actions/GetEditorAction";
-import { errorMessage } from "../../reducers/errorMessage";
-import { useSelector, useDispatch } from "react-redux";
-import CustomModal from "../CustomModal/CustomModal";
+import CustomTableHead from "../CustomTableHead/CustomTableHead";
 
 function CustomEditorTable({ ...props }) {
   const { tableData, tableHead, openModal, closeModal, selectedIDRef } = props;

@@ -1,24 +1,8 @@
-import {
-    LOGIN_USER,
-    LOGIN_USER_SUCCESS,
-    LOGIN_USER_FAIL,
-    REGISTER_USER,
-    REGISTER_USER_SUCCESS,
-    REGISTER_USER_FAIL,
-    UPDATE_USER,
-    UPDATE_USER_SUCCESS,
-    UPDATE_USER_FAIL,
-    DELETE_USER,
-    DELETE_USER_SUCCESS,
-    DELETE_USER_FAIL,
-} from "../../actions/GetUserAction";
-import * as APIList from '../apiList'
-import { call, put, select, takeEvery, take, all } from 'redux-saga/effects'
-import { headers } from "../../model/header"
-import Pagination from '../../model/pagination'
-import { LOGGER_CATCHERROR } from "../../actions/LoggerAction";
 import axios from "axios";
-import { USER_CATCHERROR } from '../../actions/GetUserAction';
+import { all, put, take } from 'redux-saga/effects';
+import {
+    DELETE_USER, DELETE_USER_FAIL, DELETE_USER_SUCCESS, LOGIN_USER, LOGIN_USER_FAIL, LOGIN_USER_SUCCESS, REGISTER_USER, REGISTER_USER_FAIL, REGISTER_USER_SUCCESS, UPDATE_USER, UPDATE_USER_FAIL, UPDATE_USER_SUCCESS
+} from "../../actions/GetUserAction";
 
 // const apiUrl = `${APIList.getUserList}`
 

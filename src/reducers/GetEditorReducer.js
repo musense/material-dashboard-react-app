@@ -1,16 +1,6 @@
 import {
-    ADD_EDITOR_SUCCESS,
-    ADD_EDITOR_FAIL,
-    UPDATE_EDITOR_SUCCESS,
-    UPDATE_EDITOR_FAIL,
-    DELETE_EDITOR_SUCCESS,
-    DELETE_EDITOR_FAIL,
-    REQUEST_EDITOR_SUCCESS,
-    REQUEST_EDITOR_FAIL,
-    REQUEST_EDITOR_TITLE_LIST_SUCCESS,
-    REQUEST_EDITOR_TITLE_LIST_FAIL,
+    ADD_EDITOR_FAIL, ADD_EDITOR_SUCCESS, DELETE_EDITOR, REQUEST_EDITOR, REQUEST_EDITOR_FAIL, REQUEST_EDITOR_SUCCESS, REQUEST_EDITOR_TITLE_LIST_FAIL, REQUEST_EDITOR_TITLE_LIST_SUCCESS, UPDATE_EDITOR
 } from '../actions/GetEditorAction';
-import { REQUEST_TAG_STAGE } from '../actions/GetTagsAction';
 import { errorMessage } from './errorMessage';
 
 const initialState = {
@@ -40,12 +30,12 @@ const getEditorReducer = (state = initialState, action) => {
             return {
                 ...state,
                 titleList: action.payload,
-                errorMessage: errorMessage.addSuccess
+                errorMessage: errorMessage.getFinish
             }
         case REQUEST_EDITOR_TITLE_LIST_FAIL:
             return {
                 ...state,
-                errorMessage: errorMessage.getFinish
+                errorMessage: errorMessage.getFail
             }
         case REQUEST_EDITOR_SUCCESS:
             return {
@@ -59,6 +49,13 @@ const getEditorReducer = (state = initialState, action) => {
             return {
                 ...state,
                 errorMessage: errorMessage.getFinish
+            }
+        case REQUEST_EDITOR:
+        case UPDATE_EDITOR:
+        case DELETE_EDITOR:
+            return {
+                ...state,
+                errorMessage: null
             }
         default:
             return { ...state }

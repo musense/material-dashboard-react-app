@@ -1,15 +1,15 @@
-import React, { useEffect, useRef, useState } from "react"; // useEffect
+import React, { useEffect, useRef, useState } from "react";
 // @material-ui/core components
 import withStyles from "@material-ui/core/styles/withStyles";
 // core components
-import GridItem from "components/Grid/GridItem.jsx";
-import GridContainer from "components/Grid/GridContainer.jsx";
-import Table from "components/Table/Table.jsx";
 import Card from "components/Card/Card.jsx";
-import CardHeader from "components/Card/CardHeader.jsx";
 import CardBody from "components/Card/CardBody.jsx";
-import { useSelector, useDispatch } from "react-redux";
-import { REQUEST_TAG, GET_TAG_REQUEST } from "../../actions/GetTagsAction";
+import CardHeader from "components/Card/CardHeader.jsx";
+import GridContainer from "components/Grid/GridContainer.jsx";
+import GridItem from "components/Grid/GridItem.jsx";
+import Table from "components/Table/Table.jsx";
+import { useDispatch, useSelector } from "react-redux";
+import { REQUEST_TAG } from "../../actions/GetTagsAction";
 import CustomModal from "../../components/CustomModal/CustomModal";
 
 const styles = {
@@ -86,7 +86,7 @@ function TableList(props) {
 
   return (
     <GridContainer>
-    <CustomModal ariaHideApp={false} isModalOpen={isModalOpen} />
+      <CustomModal ariaHideApp={false} isModalOpen={isModalOpen} />
       <GridItem xs={12} sm={12} md={12}>
         <Card>
           <CardHeader color="primary">

@@ -1,18 +1,16 @@
-import React, { useState, useEffect, useRef } from "react"; // useState
-import { useSelector, useDispatch } from "react-redux";
-import CustomModal from "../../components/CustomModal/CustomModal";
-import IEditor from "../IEditor/IEditor";
-import { REQUEST_EDITOR } from "../../actions/GetEditorAction";
-import ReactDOM from "react-dom";
-import { BrowserRouter, NavLink, Route, Switch, Link } from "react-router-dom";
+import React, { useEffect, useRef, useState } from "react"; // useState
+// @material-ui/core components
 import { withStyles } from "@material-ui/styles";
-
-import GridItem from "components/Grid/GridItem.jsx";
-import GridContainer from "components/Grid/GridContainer.jsx";
-import CustomEditorTable from "components/CustomEditorTable/CustomEditorTable.jsx";
+// core components
 import Card from "components/Card/Card.jsx";
-import CardHeader from "components/Card/CardHeader.jsx";
 import CardBody from "components/Card/CardBody.jsx";
+import CardHeader from "components/Card/CardHeader.jsx";
+import CustomEditorTable from "components/CustomEditorTable/CustomEditorTable.jsx";
+import GridContainer from "components/Grid/GridContainer.jsx";
+import GridItem from "components/Grid/GridItem.jsx";
+import { useDispatch, useSelector } from "react-redux";
+import { REQUEST_EDITOR } from "../../actions/GetEditorAction";
+import CustomModal from "../../components/CustomModal/CustomModal";
 
 const styles = {
   cardCategoryWhite: {
@@ -57,13 +55,6 @@ function EditorList(props) {
   const mounted = useRef();
   const selectedIDRef = useRef(null);
 
-  // console.log(`EditorList useEffect titleList: ${JSON.stringify(titleList)}`);
-  useEffect(() => {
-    if (returnMessage === "get editor finish") setIsModalOpen(false);
-
-    dispatch({ type: REQUEST_EDITOR });
-  }, []);
-
   useEffect(() => {
     console.group("EditorList useEffect");
     console.table(titleList);
@@ -97,36 +88,29 @@ function EditorList(props) {
     <GridContainer>
       <CustomModal ariaHideApp={false} isModalOpen={isModalOpen} />
       <GridItem xs={12} sm={12} md={12}>
-        <CardHeader color="primary">
-          <h4 className={classes.cardTitleWhite}>Editor List</h4>
-          <p className={classes.cardCategoryWhite}>
-            Here is a subtitle for this editor list
-          </p>
-        </CardHeader>
+        <Card>
+          <CardHeader color="primary">
+            <h4 className={classes.cardTitleWhite}>Editor List</h4>
+            <p className={classes.cardCategoryWhite}>
+              Here is a subtitle for this editor list
+            </p>
+          </CardHeader>
+          <CardBody>
+            {titleList ? (
+              <CustomEditorTable
+                tableHeaderColor="primary"
+                tableHead={["ID", "Title"]}
+                tableData={titleList}
+                openModal={openModal}
+                closeModal={closeModal}
+                selectedIDRef={selectedIDRef}
+              />
+            ) : null}
+          </CardBody>
+        </Card>
       </GridItem>
-      <CardBody>
-        {titleList ? (
-          <CustomEditorTable
-            tableHeaderColor="primary"
-            tableHead={["ID", "Title"]}
-            tableData={titleList}
-            openModal={openModal}
-            closeModal={closeModal}
-            selectedIDRef={selectedIDRef}
-          />
-        ) : null}
-      </CardBody>
-      {/* <NavLink to={`/editor/editorPage`}>{"editorPage"}</NavLink> */}
     </GridContainer>
   );
 }
 
 export default withStyles(styles)(EditorList);
-
-// {
-//   titleList
-//     ? titleList.map((t, index) => (
-//         <Link to={`/admin/ieditor?id=${t._id}`}>{t.title}</Link>
-//       ))
-//     : null;
-// }

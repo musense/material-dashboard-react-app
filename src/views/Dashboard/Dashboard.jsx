@@ -46,10 +46,6 @@ class Dashboard extends React.Component {
     value: 0,
   };
 
-  // componentWillMount() {
-  //   this.props.REQUEST_TAG_SUCCESS();
-  // }
-
   handleChange = (event, value) => {
     this.setState({ value });
   };

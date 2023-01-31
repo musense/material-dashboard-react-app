@@ -10,10 +10,6 @@ import {
 function* UserLogin(payload) {
     const { email, password } = payload
     try {
-        console.group(`UserLogin!!! YA!!`)
-        console.table(payload)
-        console.groupEnd(`UserLogin!!! YA!!`)
-
         const response = yield axios.post("http://localhost:4200/user/login", {
             email, password
         });

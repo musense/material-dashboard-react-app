@@ -1,4 +1,4 @@
-import React from "react";
+import React,{useEffect} from "react";
 import classNames from "classnames";
 import PropTypes from "prop-types";
 // @material-ui/core components
@@ -15,12 +15,14 @@ import RTLNavbarLinks from "./RTLNavbarLinks.jsx";
 import Button from "components/CustomButtons/Button.jsx";
 
 import headerStyle from "assets/jss/material-dashboard-react/components/headerStyle.jsx";
+import { useLocation } from "react-router-dom";
 
 function Header({ ...props }) {
+  const location = useLocation()
   function makeBrand() {
     var name;
     props.routes.map((prop, key) => {
-      if (prop.layout + prop.path === props.location.pathname) {
+      if (prop.layout + prop.path === location.pathname) {
         name = props.rtlActive ? prop.rtlName : prop.name;
       }
       return null;
@@ -29,7 +31,7 @@ function Header({ ...props }) {
   }
   const { classes, color } = props;
   const appBarClasses = classNames({
-    [" " + classes[color]]: color
+    [" " + classes[color]]: color,
   });
   return (
     <AppBar className={classes.appBar + appBarClasses}>
@@ -37,11 +39,15 @@ function Header({ ...props }) {
         <div className={classes.flex}>
           {/* Here we create navbar brand, based on route name */}
           <Button color="transparent" href="#" className={classes.title}>
-            {makeBrand()}
+            {/* {makeBrand()} */}
           </Button>
         </div>
         <Hidden smDown implementation="css">
-          {props.rtlActive ? <RTLNavbarLinks /> : <AdminNavbarLinks {...props} />}
+          {props.rtlActive ? (
+            <RTLNavbarLinks />
+          ) : (
+            <AdminNavbarLinks {...props} />
+          )}
         </Hidden>
         <Hidden mdUp implementation="css">
           <IconButton
@@ -59,7 +65,7 @@ function Header({ ...props }) {
 
 Header.propTypes = {
   classes: PropTypes.object.isRequired,
-  color: PropTypes.oneOf(["primary", "info", "success", "warning", "danger"])
+  color: PropTypes.oneOf(["purple", "blue", "green", "orange", "red"]),
 };
 
 export default withStyles(headerStyle)(Header);

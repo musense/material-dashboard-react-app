@@ -59,7 +59,7 @@ const dashboardRoutes = [
     icon     : "content_paste",
     component: IEditor,
     layout   : "/admin",
-    
+    hide: true
   },
   // {
   //   path: "/typography",

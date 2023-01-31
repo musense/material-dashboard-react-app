@@ -54,12 +54,7 @@ function EditorList(props) {
 
   const mounted = useRef();
   const selectedIDRef = useRef(null);
-
   useEffect(() => {
-    console.group("EditorList useEffect");
-    console.table(titleList);
-    console.log(`returnMessage: ${returnMessage}`);
-    console.groupEnd("EditorList useEffect ");
     if (!mounted.current) {
       //componentDidMount
       selectedIDRef.current = -1;

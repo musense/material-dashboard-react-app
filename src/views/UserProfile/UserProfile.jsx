@@ -14,7 +14,8 @@ import CardAvatar from "components/Card/CardAvatar.jsx";
 import CardBody from "components/Card/CardBody.jsx";
 import CardFooter from "components/Card/CardFooter.jsx";
 
-import avatar from "assets/img/faces/marc.jpg";
+// import avatar from "assets/img/faces/marc.jpg";
+import avatar from "assets/img/scaredseal.jpeg";
 
 const styles = {
   cardCategoryWhite: {
@@ -35,7 +36,7 @@ const styles = {
   }
 };
 
-const { REACT_APP_SERVER_URL } = process.env;
+// const { REACT_APP_SERVER_URL } = process.env;
 
 class UserProfile extends React.Component {
   constructor(props) {
@@ -43,42 +44,42 @@ class UserProfile extends React.Component {
     this.state = {
       errors: {}
     };
-    this.updateProfile = this.updateProfile.bind(this);
+    // this.updateProfile = this.updateProfile.bind(this);
   }
-  async updateProfile(e) {
-    e.preventDefault();
+  // async updateProfile(e) {
+    // e.preventDefault();
 
-    const fields = ["name", "username"];
-    const formElements = e.target.elements;
-    const formValues = fields
-      .map(field => ({
-        [field]: formElements.namedItem(field).value
-      }))
-      .reduce((current, next) => ({ ...current, ...next }));
+    // const fields = ["name", "username"];
+    // const formElements = e.target.elements;
+    // const formValues = fields
+    //   .map(field => ({
+    //     [field]: formElements.namedItem(field).value
+    //   }))
+    //   .reduce((current, next) => ({ ...current, ...next }));
 
-    let registerRequest;
-    try {
-      registerRequest = await axios.post(
-        `http://${REACT_APP_SERVER_URL}/profile/update-profile-info`,
-        {
-          ...formValues
-        },
-        {
-          withCredentials: true
-        }
-      );
-    } catch ({ response }) {
-      registerRequest = response;
-    }
-    const { data: registerRequestData } = registerRequest;
+    // let registerRequest;
+    // try {
+    //   registerRequest = await axios.post(
+    //     `http://${REACT_APP_SERVER_URL}/profile/update-profile-info`,
+    //     {
+    //       ...formValues
+    //     },
+    //     {
+    //       withCredentials: true
+    //     }
+    //   );
+    // } catch ({ response }) {
+    //   registerRequest = response;
+    // }
+    // const { data: registerRequestData } = registerRequest;
 
-    if (!registerRequestData.success) {
-      this.setState({
-        errors:
-          registerRequestData.messages && registerRequestData.messages.errors
-      });
-    }
-  }
+    // if (!registerRequestData.success) {
+    //   this.setState({
+    //     errors:
+    //       registerRequestData.messages && registerRequestData.messages.errors
+    //   });
+  //   }
+  // }
   render() {
     const { classes, name, email } = this.props;
     const { errors } = this.state;
@@ -144,8 +145,8 @@ class UserProfile extends React.Component {
                 </a>
               </CardAvatar>
               <CardBody profile>
-                <h6 className={classes.cardCategory}>CEO / CO-FOUNDER</h6>
-                <h4 className={classes.cardTitle}>Alec Thompson</h4>
+                <h6 className={classes.cardCategory}>Web Developer</h6>
+                <h4 className={classes.cardTitle}>Wilson Wan</h4>
                 <p className={classes.description}>
                   Don't be scared of the truth because we need to restart the
                   human foundation in truth And I love you like Kanye loves

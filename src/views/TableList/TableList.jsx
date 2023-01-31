@@ -56,10 +56,6 @@ function TableList(props) {
   const selectedIDRef = useRef(null);
 
   useEffect(() => {
-    console.group("TableList useEffect");
-    console.table(tableData);
-    console.log(`returnMessage: ${returnMessage}`);
-    console.groupEnd("TableList useEffect ");
     if (!mounted.current) {
       //componentDidMount
       selectedIDRef.current = -1;

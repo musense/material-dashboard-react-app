@@ -10,8 +10,6 @@ const apiUrl = `${APIList.getTagList}`
 // GET
 function* GetTagList() {
     try {
-        // console.log(`GetTagList!!! YA!!`)
-
         const response = yield axios.get("http://localhost:4200/tags");
         const tagList = yield response.data;
         yield put({

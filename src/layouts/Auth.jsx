@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { Switch, Route } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 
 // @material-ui/core components
 import withStyles from "@material-ui/core/styles/withStyles";
@@ -17,7 +17,7 @@ import register from "assets/img/register.jpeg";
 import login from "assets/img/login.jpeg";
 
 const switchRoutes = (
-  <Switch>
+  <Routes>
     {routes.map((prop, key) => {
       if (prop.layout === "/auth") {
         return (
@@ -30,7 +30,7 @@ const switchRoutes = (
       }
       return null;
     })}
-  </Switch>
+  </Routes>
 );
 
 class Pages extends React.Component {

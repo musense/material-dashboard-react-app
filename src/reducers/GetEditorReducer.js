@@ -12,9 +12,6 @@ const initialState = {
     titleList: []
 }
 const getEditorReducer = (state = initialState, action) => {
-    console.group(`getEditorReducer action`)
-    console.table(action)
-    console.groupEnd(`getEditorReducer action`)
     switch (action.type) {
         case ADD_EDITOR_SUCCESS:
             return {

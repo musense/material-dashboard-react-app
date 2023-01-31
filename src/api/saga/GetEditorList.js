@@ -9,8 +9,6 @@ import {
 // GET
 function* GetEditorTitleList() {
     try {
-        console.log(`GetEditorList!!! YA!!`)
-
         const response   = yield axios.get("http://localhost:4200/editor/title");
         const titleList = yield response.data;
         yield put({
@@ -79,7 +77,7 @@ function* UpdateEditor(payload) {
         // console.group('UpdateEditor!!! YA!! payload.data')
         // console.table(payload.data);
         // console.groupEnd('UpdateEditor!!! YA!! payload.data');
-        const response = yield axios.patch(`http://localhost:4200/editor/${payload.data.id}`, payload.data);
+        const response = yield axios.patch(`http://localhost:4200/editor/${payload.id}`, payload.data);
         const responseData = yield response.data;
         console.group('UpdateEditor responseData')
         console.table(responseData)

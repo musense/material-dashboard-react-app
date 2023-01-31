@@ -51,27 +51,27 @@ const headerStyle = theme => ({
   appResponsive: {
     top: "8px"
   },
-  primary: {
+  purple: {
     backgroundColor: primaryColor[0],
     color: whiteColor,
     ...defaultBoxShadow
   },
-  info: {
+  blue: {
     backgroundColor: infoColor[0],
     color: whiteColor,
     ...defaultBoxShadow
   },
-  success: {
+  green: {
     backgroundColor: successColor[0],
     color: whiteColor,
     ...defaultBoxShadow
   },
-  warning: {
+  orange: {
     backgroundColor: warningColor[0],
     color: whiteColor,
     ...defaultBoxShadow
   },
-  danger: {
+  red: {
     backgroundColor: dangerColor[0],
     color: whiteColor,
     ...defaultBoxShadow

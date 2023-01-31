@@ -62,7 +62,6 @@ class HeaderLinks extends React.Component {
       history.push('/auth/login-page');
     }
   }
-
   render() {
     const { classes } = this.props;
     const { open, profilePopupOpen } = this.state;

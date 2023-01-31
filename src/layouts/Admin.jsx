@@ -1,7 +1,7 @@
 /* eslint-disable */
 import PropTypes from "prop-types";
-import React from "react";
-import { Route, Switch } from "react-router-dom";
+import React, { useState, useEffect, useRef } from "react";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 // creates a beautiful scrollbar
 import "perfect-scrollbar/css/perfect-scrollbar.css";
 // @material-ui/core components
@@ -15,14 +15,14 @@ import routes from "routes.js";
 import dashboardStyle from "assets/jss/material-dashboard-react/layouts/dashboardStyle.jsx";
 
 import image from "assets/img/sidebar-2.jpg";
-// import logo from "assets/img/reactlogo.png";
 import logo from "assets/img/scaredseal.jpeg";
+import { Link, Outlet } from "react-router-dom";
+import PerfectScrollbar from "perfect-scrollbar";
 
-// const { REACT_APP_SERVER_URL } = process.env;
 let userInfo = {};
 
 const switchRoutes = (
-  <Switch>
+  <Routes>
     {routes.map((prop, key) => {
       if (prop.layout === "/admin") {
         return (
@@ -37,44 +37,69 @@ const switchRoutes = (
         );
       }
     })}
-  </Switch>
+  </Routes>
 );
 
-class Dashboard extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      image: image,
-      color: "blue",
-      hasImage: true,
-      fixedClasses: "dropdown show",
-      mobileOpen: false,
-    };
-  }
-  handleImageClick = (image) => {
-    this.setState({ image: image });
+function Dashboard({ ...props }) {
+  const { classes, ...rest } = props;
+  const [image, setImage] = useState(image);
+  const [color, setColor] = useState("purple");
+  const [hasImage, setHasImage] = useState(true);
+  const [fixedClasses, setFixedClasses] = useState("dropdown show");
+  const [mobileOpen, setMobileOpen] = useState(false);
+
+  const mainPanel = useRef(null);
+
+  const handleImageClick = (image) => {
+    setImage(image);
   };
-  handleColorClick = (color) => {
-    this.setState({ color: color });
+  const handleColorClick = (color) => {
+    setColor(color);
   };
-  handleFixedClick = () => {
-    if (this.state.fixedClasses === "dropdown") {
-      this.setState({ fixedClasses: "dropdown show" });
+  const handleFixedClick = () => {
+    if (fixedClasses === "dropdown") {
+      setFixedClasses("dropdown show");
     } else {
-      this.setState({ fixedClasses: "dropdown" });
+      setFixedClasses("dropdown");
     }
   };
-  handleDrawerToggle = () => {
-    this.setState({ mobileOpen: !this.state.mobileOpen });
+  const handleDrawerToggle = () => {
+    setMobileOpen((preMobileOpen) => !preMobileOpen);
   };
-  getRoute() {
-    return this.props.location.pathname !== "/admin/maps";
+  function getRoute() {
+    return props.location && props.location.pathname !== "/admin/maps";
   }
-  resizeFunction = () => {
+  const resizeFunction = () => {
     if (window.innerWidth >= 960) {
-      this.setState({ mobileOpen: false });
+      setMobileOpen(false);
     }
   };
+  const getAgentPlatform = () => {
+    return navigator
+      ? navigator.userAgentData
+        ? navigator.userAgentData.platform
+        : navigator.platform
+      : "unknown";
+  };
+  useEffect(() => {
+    if (mainPanel.current === null) {
+      //componentDidMount
+      mainPanel.current = classes.mainPanel;
+      if (getAgentPlatform().indexOf("Win") > -1) {
+        const ps = new PerfectScrollbar(mainPanel);
+      }
+      window.addEventListener("resize", resizeFunction);
+    } else {
+      //componentDidUpdate
+    }
+    console.group("Admin props");
+    console.dir(props);
+    console.groupEnd("Admin props");
+    return () => {
+      //componentWillUnmount
+      window.removeEventListener("resize", resizeFunction);
+    };
+  }, []);
   // async componentDidMount() {
   // componentDidMount() {
   //   const { history } = this.props;
@@ -110,55 +135,45 @@ class Dashboard extends React.Component {
   //     }
   //   }
   // }
-  componentWillUnmount() {
-    window.removeEventListener("resize", this.resizeFunction);
-  }
-  render() {
-    const { classes, ...rest } = this.props;
+  // componentWillUnmount() {
+  //   window.removeEventListener("resize", this.resizeFunction);
+  // }
+  // const { classes, ...rest } = this.props;
 
-    return (
+  return (
+    <>
       <div className={classes.wrapper}>
         <Sidebar
           routes={routes}
           logoText={"Scared Seal"}
           logo={logo}
-          image={this.state.image}
-          handleDrawerToggle={this.handleDrawerToggle}
-          open={this.state.mobileOpen}
-          color={this.state.color}
+          image={image}
+          handleDrawerToggle={handleDrawerToggle}
+          open={mobileOpen}
+          color={color}
           {...rest}
         />
-        <div className={classes.mainPanel} ref="mainPanel">
+        <div className={classes.mainPanel} ref={mainPanel}>
           <Navbar
             routes={routes}
-            handleDrawerToggle={this.handleDrawerToggle}
+            handleDrawerToggle={handleDrawerToggle}
+            color={color}
             {...rest}
           />
           {/* On the /maps route we want the map to be on full screen - this is not possible if the content and conatiner classes are present because they have some paddings which would make the map smaller */}
-          {this.getRoute() ? (
-            <div className={classes.content}>
-              <div className={classes.container}>{switchRoutes}</div>
+          <div className={classes.content}>
+            <div className={classes.container}>
+              <Outlet />
             </div>
-          ) : (
-            <div className={classes.map}>{switchRoutes}</div>
-          )}
-          {this.getRoute() ? <Footer /> : null}
-          {/* <FixedPlugin
-            handleImageClick={this.handleImageClick}
-            handleColorClick={this.handleColorClick}
-            bgColor={this.state["color"]}
-            bgImage={this.state["image"]}
-            handleFixedClick={this.handleFixedClick}
-            fixedClasses={this.state.fixedClasses}
-          /> */}
+          </div>
+          {/* <Footer /> */}
         </div>
       </div>
-    );
-  }
+    </>
+  );
 }
 
-Dashboard.propTypes = {
-  classes: PropTypes.object.isRequired,
-};
-
+// Dashboard.propTypes = {
+//   classes: PropTypes.object.isRequired,
+// };
 export default withStyles(dashboardStyle)(Dashboard);

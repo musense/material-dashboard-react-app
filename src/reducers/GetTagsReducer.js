@@ -18,9 +18,6 @@ const initialState = {
 }
 
 const getTagReducer = (state = initialState, action) => {
-    console.group(`getTagReducer action`)
-    console.table(action)
-    console.groupEnd(`getTagReducer action`)
     switch (action.type) {
         case ADD_TAG_SUCCESS:
             return {

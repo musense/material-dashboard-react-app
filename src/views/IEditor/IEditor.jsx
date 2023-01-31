@@ -1,54 +1,45 @@
-import { CKEditor } from "@ckeditor/ckeditor5-react";
-import React, { useEffect, useState } from "react"; // useState
-// import Editor from "ckeditor5-custom-build/build/ckeditor";
-
-// import Context from "@ckeditor/ckeditor5-core/src/context";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
-// import ClassicEditor from "@ckeditor/ckeditor5-editor-classic/src/classiceditor";
-// import Bold from "@ckeditor/ckeditor5-basic-styles/src/bold";
-// import Italic from "@ckeditor/ckeditor5-basic-styles/src/italic";
-// import Essentials from "@ckeditor/ckeditor5-essentials/src/essentials";
-// import Paragraph from "@ckeditor/ckeditor5-paragraph/src/paragraph";
+import { CKEditor } from "@ckeditor/ckeditor5-react";
+import React, { useEffect, useState } from "react";
+
 import { useDispatch, useSelector } from "react-redux";
 import { REQUEST_EDITOR_BY_TITLE } from "../../actions/GetEditorAction";
-// import queryString from 'query-string'
+import { useParams, useNavigate } from "react-router-dom";
 
-// const editorConfiguration = {
-//   toolbar: ["bold", "italic"],
-// };
-
-function IEditor({ ...props }) {
-  const params = new URLSearchParams(props.location.search);
+function IEditor({ props }) {
+  const { id } = useParams();
+  const navigate = useNavigate();
   const dispatch = useDispatch();
-  const id = params.get("id");
 
   const title = useSelector((state) => state.getEditorReducer.title);
   const content = useSelector((state) => state.getEditorReducer.content);
 
   const [data, setData] = useState(null);
-
   function handleUpdateData() {
-    console.log(`handleUpdateData data: ${data}`);
-
-    // const title =''
-    // const content =''
+    if (data === null) {
+      console.log(`nothing to update!!!`);
+      return;
+    }
+    console.group(`handleUpdateData`);
+    console.log(id);
+    console.log(data);
+    console.groupEnd(`handleUpdateData`);
     // dispatch({
-    //   type: REQUEST_EDITOR_BY_TITLE,
+    //   type: UPDATE_EDITOR,
     //   payload: {
     //     id,
+    //     data,
     //   },
     // });
+  }
+  function handleGoBack() {
+    setData(null);
+    navigate(-1);
   }
 
   const setDataContent = `<h1>${title}</h1>${content}`;
 
   useEffect(() => {
-    console.group("IEditor useEffect data");
-    console.log(`IEditor id: ${id}`);
-    console.log(`IEditor data: ${data}`);
-    console.groupEnd("IEditor useEffect data");
-    console.log(`IEditor useEffect id: ${id}`);
-
     dispatch({
       type: REQUEST_EDITOR_BY_TITLE,
       payload: {
@@ -63,9 +54,10 @@ function IEditor({ ...props }) {
         <CKEditor
           editor={ClassicEditor}
           data={setDataContent}
-          onReady={(editor) => {
+          onReady={( editor) => {
+            // console.log(editor);
             // You can store the "editor" and use when it is needed.
-            //   console.log("Editor is ready to use!", editor);
+              console.log("Editor is ready to use!", editor);
           }}
           onChange={(event, editor) => {
             const data = editor.getData();
@@ -81,6 +73,7 @@ function IEditor({ ...props }) {
         />
       ) : null}
       <button onClick={() => handleUpdateData()}>Update Data</button>
+      <button onClick={() => handleGoBack()}>Go Back</button>
     </div>
   );
 }

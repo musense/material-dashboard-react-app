@@ -26,14 +26,9 @@ function CustomTable({ ...props }) {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    console.group("Table useEffect tableData");
-    if (selectedIDRef.current === -1) {
-      console.log(`selectedIDRef.current: ${selectedIDRef.current}`);
-      setSelectedID(selectedIDRef.current);
-    }
-    console.table(tableData);
-    console.groupEnd("Table useEffect tableData ");
-
+    console.group(`CustomTable showList`)
+    console.log(showList)
+    console.groupEnd(`CustomTable showList`)
     setShowList(tableData);
   }, [tableData, selectedIDRef.current]);
 
@@ -51,17 +46,9 @@ function CustomTable({ ...props }) {
     // TODO:
     if (selectedID < 0) return;
     const sTag = showList.find((t, rowIndex) => rowIndex == selectedID);
-    console.group(`handleRowClick selectedID`);
-    console.log(`handleRowClick sTag: ${JSON.stringify(sTag)}`);
-    console.groupEnd(`handleRowClick selectedID`);
     // TODO:
     if (!sTag) return;
     selectedIDRef.current = selectedID;
-    console.log(
-      `CustomTable handleRowClick selectedIDRef.current: ${
-        selectedIDRef.current
-      }`
-    );
     setSelectedID(selectedID);
     setTag(sTag);
     setIsCreate(true);
@@ -77,16 +64,10 @@ function CustomTable({ ...props }) {
 
   // POST
   function handleAddRow() {
-    // console.group("handleAddRow selectedTag");
-    // console.table(selectedTag);
-    // console.groupEnd("handleAddRow selectedTag");
     const sTag = Object.values(selectedTag);
     // TODO:
     if (sTag.some((t) => !t)) return;
     const data = Object.assign({}, selectedTag);
-    // console.group("handleAddRow data");
-    // console.table(data);
-    // console.groupEnd("handleAddRow data");
     dispatch({
       type: ADD_TAG,
       payload: {
@@ -107,7 +88,6 @@ function CustomTable({ ...props }) {
     // TODO:
     if (JSON.stringify(origSelectedTag) === JSON.stringify(selectedTag)) return;
 
-    // const _id = selectedTag._id;
     const data = Object.assign({}, selectedTag);
     dispatch({
       type: UPDATE_TAG,

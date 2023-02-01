@@ -54,9 +54,9 @@ function* AddEditor(payload) {
         // console.table(responseData)
         // console.groupEnd('AddEditor responseData')
 
-        console.group('AddEditor responseData test')
-        console.table(payload.data)
-        console.groupEnd('AddEditor responseData test')
+        // console.group('AddEditor responseData test')
+        // console.table(payload.data)
+        // console.groupEnd('AddEditor responseData test')
         yield put({
             type   : ADD_EDITOR_SUCCESS,
             payload: payload.data
@@ -74,9 +74,9 @@ function* AddEditor(payload) {
 // PATCH
 function* UpdateEditor(payload) {
     try {
-        // console.group('UpdateEditor!!! YA!! payload.data')
-        // console.table(payload.data);
-        // console.groupEnd('UpdateEditor!!! YA!! payload.data');
+        console.group('UpdateEditor!!! YA!! payload')
+        console.table(payload);
+        console.groupEnd('UpdateEditor!!! YA!! payload');
         const response = yield axios.patch(`http://localhost:4200/editor/${payload.id}`, payload.data);
         const responseData = yield response.data;
         console.group('UpdateEditor responseData')

@@ -14,7 +14,7 @@ function App() {
     const navigate = useNavigate()
 
     useEffect(() => {
-        navigate('/admin/dashboard')
+        navigate('/admin/editorList/63c0fb31981677eeb7bb1c29')
     }, []);
     
     return (

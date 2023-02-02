@@ -90,7 +90,11 @@ export const editorConfig = {
             },
         ],
     },
+    table: {
+        contentToolbar: ['tableColumn', 'tableRow', 'mergeTableCells']
+    },
     toolbar: [
+        'insertTable',
         "heading",
         "|",
         "bold",

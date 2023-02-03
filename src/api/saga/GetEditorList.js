@@ -9,34 +9,34 @@ import {
 // GET
 function* GetEditorTitleList() {
     try {
-        const response   = yield axios.get("http://localhost:4200/editor/title");
+        const response = yield axios.get("http://localhost:4200/editor/title");
         const titleList = yield response.data;
         yield put({
-            type   : REQUEST_EDITOR_TITLE_LIST_SUCCESS,
+            type: REQUEST_EDITOR_TITLE_LIST_SUCCESS,
             payload: titleList,
         })
     } catch (error) {
         yield put({
-            type        : REQUEST_EDITOR_TITLE_LIST_FAIL,
+            type: REQUEST_EDITOR_TITLE_LIST_FAIL,
             errorMessage: error.message,
-            payload     : null
+            payload: null
         })
     }
 }
 function* GetEditorByID(dispatch) {
     const { id } = dispatch.payload
     try {
-        const response = yield axios.get(`http://localhost:4200/editor/page?id=${id}`);
-        const editor   = yield response.data;
+        const response = yield axios.get(`http://localhost:4200/editor/${id}`);
+        const editor = yield response.data;
         yield put({
-            type   : REQUEST_EDITOR_SUCCESS,
+            type: REQUEST_EDITOR_SUCCESS,
             payload: editor,
         })
     } catch (error) {
         yield put({
-            type        : REQUEST_EDITOR_FAIL,
+            type: REQUEST_EDITOR_FAIL,
             errorMessage: error.message,
-            payload     : null
+            payload: null
         })
     }
 }
@@ -58,15 +58,15 @@ function* AddEditor(payload) {
         // console.table(payload.data)
         // console.groupEnd('AddEditor responseData test')
         yield put({
-            type   : ADD_EDITOR_SUCCESS,
+            type: ADD_EDITOR_SUCCESS,
             payload: payload.data
         })
-        
+
     } catch (error) {
         yield put({
-            type        : ADD_EDITOR_FAIL,
+            type: ADD_EDITOR_FAIL,
             errorMessage: error.message,
-            payload     : null
+            payload: null
         })
     }
 }

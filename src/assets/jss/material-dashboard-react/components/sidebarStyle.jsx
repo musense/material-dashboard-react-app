@@ -87,7 +87,7 @@ const sidebarStyle = (theme) => ({
     textDecoration: "none",
     backgroundColor: "transparent",
     "&,&:hover": {
-      color: blackColor,
+      color: whiteColor,
     },
   },
   logoLinkRTL: {
@@ -145,7 +145,7 @@ const sidebarStyle = (theme) => ({
     display: "block",
     textDecoration: "none",
     "&:hover,&:focus,&:visited,&": {
-      color: blackColor,
+      color: whiteColor,
     },
   },
   itemLink: {
@@ -168,7 +168,7 @@ const sidebarStyle = (theme) => ({
     marginRight: "15px",
     textAlign: "center",
     verticalAlign: "middle",
-    color: "rgba(" + hexToRgb(blackColor) + ", 0.8)",
+    color: "rgba(" + hexToRgb(whiteColor) + ", 0.8)",
   },
   itemIconRTL: {
     marginRight: "3px",
@@ -180,7 +180,7 @@ const sidebarStyle = (theme) => ({
     margin: "0",
     lineHeight: "30px",
     fontSize: "14px",
-    color: blackColor,
+    color: whiteColor,
   },
   itemTextRTL: {
     textAlign: "right",
@@ -202,7 +202,7 @@ const sidebarStyle = (theme) => ({
       "0 12px 20px -10px rgba(" +
       hexToRgb(infoColor[0]) +
       ",.28), 0 4px 20px 0 rgba(" +
-      hexToRgb(blackColor) +
+      hexToRgb(whiteColor) +
       ",.12), 0 7px 8px -5px rgba(" +
       hexToRgb(infoColor[0]) +
       ",.2)",
@@ -212,7 +212,7 @@ const sidebarStyle = (theme) => ({
         "0 12px 20px -10px rgba(" +
         hexToRgb(infoColor[0]) +
         ",.28), 0 4px 20px 0 rgba(" +
-        hexToRgb(blackColor) +
+        hexToRgb(whiteColor) +
         ",.12), 0 7px 8px -5px rgba(" +
         hexToRgb(infoColor[0]) +
         ",.2)",
@@ -224,7 +224,7 @@ const sidebarStyle = (theme) => ({
       "0 12px 20px -10px rgba(" +
       hexToRgb(successColor[0]) +
       ",.28), 0 4px 20px 0 rgba(" +
-      hexToRgb(blackColor) +
+      hexToRgb(whiteColor) +
       ",.12), 0 7px 8px -5px rgba(" +
       hexToRgb(successColor[0]) +
       ",.2)",
@@ -234,7 +234,7 @@ const sidebarStyle = (theme) => ({
         "0 12px 20px -10px rgba(" +
         hexToRgb(successColor[0]) +
         ",.28), 0 4px 20px 0 rgba(" +
-        hexToRgb(blackColor) +
+        hexToRgb(whiteColor) +
         ",.12), 0 7px 8px -5px rgba(" +
         hexToRgb(successColor[0]) +
         ",.2)",
@@ -246,7 +246,7 @@ const sidebarStyle = (theme) => ({
       "0 12px 20px -10px rgba(" +
       hexToRgb(warningColor[0]) +
       ",.28), 0 4px 20px 0 rgba(" +
-      hexToRgb(blackColor) +
+      hexToRgb(whiteColor) +
       ",.12), 0 7px 8px -5px rgba(" +
       hexToRgb(warningColor[0]) +
       ",.2)",
@@ -256,7 +256,7 @@ const sidebarStyle = (theme) => ({
         "0 12px 20px -10px rgba(" +
         hexToRgb(warningColor[0]) +
         ",.28), 0 4px 20px 0 rgba(" +
-        hexToRgb(blackColor) +
+        hexToRgb(whiteColor) +
         ",.12), 0 7px 8px -5px rgba(" +
         hexToRgb(warningColor[0]) +
         ",.2)",
@@ -268,7 +268,7 @@ const sidebarStyle = (theme) => ({
       "0 12px 20px -10px rgba(" +
       hexToRgb(dangerColor[0]) +
       ",.28), 0 4px 20px 0 rgba(" +
-      hexToRgb(blackColor) +
+      hexToRgb(whiteColor) +
       ",.12), 0 7px 8px -5px rgba(" +
       hexToRgb(dangerColor[0]) +
       ",.2)",
@@ -278,7 +278,7 @@ const sidebarStyle = (theme) => ({
         "0 12px 20px -10px rgba(" +
         hexToRgb(dangerColor[0]) +
         ",.28), 0 4px 20px 0 rgba(" +
-        hexToRgb(blackColor) +
+        hexToRgb(whiteColor) +
         ",.12), 0 7px 8px -5px rgba(" +
         hexToRgb(dangerColor[0]) +
         ",.2)",

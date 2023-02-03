@@ -21,7 +21,8 @@ function CustomInput({ ...props }) {
     labelProps,
     inputProps,
     error,
-    success
+    success,
+    onInputChange
   } = props;
 
   const labelClasses = classNames({
@@ -51,6 +52,7 @@ function CustomInput({ ...props }) {
         </InputLabel>
       ) : null}
       <Input
+        onChange={onInputChange}
         classes={{
           root: marginTop,
           disabled: classes.disabled,

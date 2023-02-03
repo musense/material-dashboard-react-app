@@ -1,69 +1,73 @@
-import PropTypes from "prop-types";
-import React, { useEffect, useState } from "react";
+import PropTypes from 'prop-types';
+import React, { useEffect, useState } from 'react';
 // import axios from "axios";
 
 // @material-ui/core components
-import Checkbox from "@material-ui/core/Checkbox";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import Icon from "@material-ui/core/Icon";
-import InputAdornment from "@material-ui/core/InputAdornment";
-import withStyles from "@material-ui/core/styles/withStyles";
+import Checkbox from '@material-ui/core/Checkbox';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Icon from '@material-ui/core/Icon';
+import InputAdornment from '@material-ui/core/InputAdornment';
+import withStyles from '@material-ui/core/styles/withStyles';
 
 // @material-ui/icons
-import Check from "@material-ui/icons/Check";
-import Email from "@material-ui/icons/Email";
+import Check from '@material-ui/icons/Check';
+import Email from '@material-ui/icons/Email';
 
 // core components
-import Card from "components/Card/Card.jsx";
-import CardBody from "components/Card/CardBody.jsx";
-import CardFooter from "components/Card/CardFooter.jsx";
-import CardHeader from "components/Card/CardHeader.jsx";
-import Button from "components/CustomButtons/Button.jsx";
-import CustomInput from "components/CustomInput/CustomInput.jsx";
-import GridContainer from "components/Grid/GridContainer.jsx";
-import GridItem from "components/Grid/GridItem.jsx";
+import Card from 'components/Card/Card.jsx';
+import CardBody from 'components/Card/CardBody.jsx';
+import CardFooter from 'components/Card/CardFooter.jsx';
+import CardHeader from 'components/Card/CardHeader.jsx';
+import Button from 'components/CustomButtons/Button.jsx';
+import CustomInput from 'components/CustomInput/CustomInput.jsx';
+import GridContainer from 'components/Grid/GridContainer.jsx';
+import GridItem from 'components/Grid/GridItem.jsx';
 
-import loginPageStyle from "assets/jss/material-dashboard-react/views/loginPageStyle.jsx";
-import { useDispatch, useSelector } from "react-redux";
-import { LOGIN_USER } from "./../../actions/GetUserAction";
+import loginPageStyle from 'assets/jss/material-dashboard-react/views/loginPageStyle.jsx';
+import { useDispatch, useSelector } from 'react-redux';
+import { LOGIN_USER } from './../../actions/GetUserAction';
+import { useNavigate } from 'react-router-dom';
 
-function LoginPage({ ...props }) {
+function LoginPage(props) {
   const { classes } = props;
 
   const [checked, setChecked] = useState([]);
-  // const [errors, setErrors] = useState({});
-  const errors = {}
-  // const [email, setEmail] = useState(null);
-
+  const [password, setPassword] = useState(null);
+  const [showPassword, setShowPassword] = useState(false);
+  const errors = {};
+  const navigate = useNavigate()
   const dispatch = new useDispatch();
   const returnMessage =
-    "" + useSelector((state) => state.getUserReducer.errorMessage);
-  function checkLoginSuccess(message) {
-    if (message.indexOf("upper case") > -1) {
-      console.log(`useEffect register 密碼最少需一碼為大寫字母!`);
-      return;
-    } else if (message.indexOf("lower case") > -1) {
-      console.log(`useEffect register 密碼最少需一碼為小寫字母!`);
-      return;
-    } else if (message.indexOf("at least 8 characters") > -1) {
-      console.log(`useEffect register 密碼最少為8碼!`);
-      return;
-    } else if (message.indexOf("login successfully") > -1) {
-      // TODO: redirect
-      // redirect to dashboard page...
-    }
-  }
+  '' + useSelector((state) => state.getUserReducer.errorMessage);
+
+  // function checkLoginSuccess(message) {
+  //   if (message.indexOf('upper case') > -1) {
+  //     console.log(`useEffect register 密碼最少需一碼為大寫字母!`);
+  //     return;
+  //   } else if (message.indexOf('lower case') > -1) {
+  //     console.log(`useEffect register 密碼最少需一碼為小寫字母!`);
+  //     return;
+  //   } else if (message.indexOf('at least 8 characters') > -1) {
+  //     console.log(`useEffect register 密碼最少為8碼!`);
+  //     return;
+  //   } else if (message.indexOf('login successfully') > -1) {
+  //     // TODO: redirect
+  //     // redirect to dashboard page...
+  //   }
+  // }
   useEffect(() => {
-    // console.log(`useEffect login returnMessage: ${returnMessage}`);
-    // console.log(`useEffect login checked: ${checked}`);
-    checkLoginSuccess(returnMessage);
+    console.log(`useEffect login returnMessage: ${returnMessage}`);
+    console.log(`useEffect login checked: ${checked}`);
+    if (returnMessage.indexOf('login successfully') > -1) {
+      navigate('/admin/dashboard')
+    }
   }, [returnMessage, checked]);
 
   // TODO: add rememberMe
   const login = (e) => {
     e.preventDefault();
 
-    const fields = ["username", "password"];
+    const fields = ['username', 'password'];
     const formElements = e.target.elements;
 
     const formValues = fields
@@ -78,11 +82,14 @@ function LoginPage({ ...props }) {
     dispatch({
       type: LOGIN_USER,
       payload: {
-        email: formValues.email,
+        username: formValues.username,
         // username,
         password: formValues.password,
       },
     });
+  };
+  const onInputChange = (e) => {
+    setPassword(e.target.value);
   };
   const handleToggle = (value) => {
     const currentIndex = checked.indexOf(value);
@@ -107,43 +114,21 @@ function LoginPage({ ...props }) {
           </h4>
         </GridItem>
       </GridContainer> */}
-      <GridContainer justify="center">
+      <GridContainer justify='center'>
         <GridItem xs={12} sm={6} md={4}>
           <form onSubmit={login}>
             {/* <Card className={classes[this.state.cardAnimaton]}> */}
             <Card className={classes.cardAnimaton}>
               <CardHeader
                 className={`${classes.cardHeader} ${classes.textCenter}`}
-                color="primary"
+                color='primary'
               >
                 <h4 className={classes.cardTitle}>Log in</h4>
-                {/* <div className={classes.socialLine}>
-                  {[
-                    "fa fa-facebook-square",
-                    "fa fa-twitter",
-                    "fa fa-google-plus",
-                  ].map((prop, key) => {
-                    return (
-                      <Button
-                        color="transparent"
-                        justIcon
-                        key={key}
-                        className={classes.customButtonClass}
-                      >
-                        <i className={prop} />
-                      </Button>
-                    );
-                  })}
-                </div> */}
               </CardHeader>
               <CardBody>
-                {/* <p className={`${classes.textCenter} ${classes.checkboxLabel}`}>
-                  Or Sign in with <strong>admin@material.com</strong> and the
-                  password <strong>secret</strong>{" "}
-                </p> */}
                 <CustomInput
-                  labelText="Email..."
-                  id="email"
+                  labelText='Email...'
+                  id='email'
                   error={errors.username || errors.invalidEmailOrPassword}
                   formControlProps={{
                     fullWidth: true,
@@ -151,27 +136,28 @@ function LoginPage({ ...props }) {
                   }}
                   inputProps={{
                     required: true,
-                    name: "username",
+                    name: 'username',
                     endAdornment: (
-                      <InputAdornment position="end">
+                      <InputAdornment position='end'>
                         <Email className={classes.inputAdornmentIcon} />
                       </InputAdornment>
                     ),
                   }}
                 />
                 <CustomInput
-                  labelText="Password"
-                  id="password"
+                  labelText='Password'
+                  id='password'
                   error={errors.password || errors.invalidEmailOrPassword}
                   formControlProps={{
                     fullWidth: true,
                     className: classes.formControlClassName,
                   }}
+                  onInputChange={onInputChange}
                   inputProps={{
-                    type: "password",
+                    type: showPassword ? null : 'password',
                     required: true,
                     endAdornment: (
-                      <InputAdornment position="end">
+                      <InputAdornment position='end'>
                         <Icon className={classes.inputAdornmentIcon}>
                           lock_outline
                         </Icon>
@@ -183,7 +169,7 @@ function LoginPage({ ...props }) {
                   classes={{
                     root:
                       classes.checkboxLabelControl +
-                      " " +
+                      ' ' +
                       classes.checkboxLabelControlClassName,
                     label: classes.checkboxLabel,
                   }}
@@ -203,7 +189,7 @@ function LoginPage({ ...props }) {
                 />
               </CardBody>
               <CardFooter className={classes.justifyContentCenter}>
-                <Button type="submit" color="primary" simple size="lg" block>
+                <Button type='submit' color='primary' simple size='lg' block>
                   Let's Go
                 </Button>
               </CardFooter>

@@ -8,15 +8,20 @@ import Dashboard from 'views/Dashboard/Dashboard.jsx';
 import TableList from 'views/TableList/TableList.jsx'
 import EditorList from 'views/EditorList/EditorList.jsx'
 import IEditor from 'views/IEditor/IEditor.jsx'
-import UserProfile from './views/UserProfile/UserProfile';
+import UserProfile from 'views/UserProfile/UserProfile';
+import LoginPage from 'views/Pages/LoginPage';
+import RegisterPage from 'views/Pages/RegisterPage';
+
 
 function App() {
     const navigate = useNavigate()
 
     useEffect(() => {
-        navigate('/admin/editorList/63c0fb31981677eeb7bb1c29')
+        // navigate('/auth/register-page')
+        // navigate('/auth/login-page')
+        navigate('/admin/dashboard')
     }, []);
-    
+
     return (
         <>
             <div className='App'>
@@ -30,7 +35,10 @@ function App() {
                             <Route path=":id" element={<IEditor />} />
                         </Route>
                     </Route>
-                    <Route path="auth" render={(props) => <Auth {...props} />} />
+                    <Route path="auth" element={<Auth />}>
+                        <Route path="login-page" element={<LoginPage />} />
+                        <Route path="register-page" element={<RegisterPage />} />
+                    </Route>
                     <Route path="rtl" render={(props) => <RTL {...props} />} />
                     {/* w/ useEffect navigate, in order to redirect */}
                     <Route path="/" render={(props) => <Dashboard {...props} />} />

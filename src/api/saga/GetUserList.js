@@ -8,10 +8,10 @@ import {
 
 // LOGIN
 function* UserLogin(payload) {
-    const { email, password } = payload
+    const { username, password } = payload
     try {
         const response = yield axios.post("http://localhost:4200/user/login", {
-            email, password
+            username, password
         });
         const user = yield response.data;
         yield put({

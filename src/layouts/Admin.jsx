@@ -14,45 +14,26 @@ import routes from "routes.js";
 
 import dashboardStyle from "assets/jss/material-dashboard-react/layouts/dashboardStyle.jsx";
 
-import image from "assets/img/sidebar-2.jpg";
+import image from "assets/img/sidebar-1.jpg";
 import logo from "assets/img/scaredseal.jpeg";
 import { Link, Outlet } from "react-router-dom";
 import PerfectScrollbar from "perfect-scrollbar";
 
 let userInfo = {};
 
-const switchRoutes = (
-  <Routes>
-    {routes.map((prop, key) => {
-      if (prop.layout === "/admin") {
-        return (
-          <Route
-            path={prop.layout + prop.path}
-            component={(props) => {
-              const Component = prop.component;
-              return <Component {...props} {...userInfo} />;
-            }}
-            key={key}
-          />
-        );
-      }
-    })}
-  </Routes>
-);
-
 function Dashboard({ ...props }) {
   const { classes, ...rest } = props;
-  const [image, setImage] = useState(image);
-  const [color, setColor] = useState("purple");
+  // const [image, setImage] = useState(image);
+  const [color, setColor] = useState("orange");
   const [hasImage, setHasImage] = useState(true);
   const [fixedClasses, setFixedClasses] = useState("dropdown show");
   const [mobileOpen, setMobileOpen] = useState(false);
 
   const mainPanel = useRef(null);
 
-  const handleImageClick = (image) => {
-    setImage(image);
-  };
+  // const handleImageClick = (image) => {
+  //   setImage(image);
+  // };
   const handleColorClick = (color) => {
     setColor(color);
   };
@@ -92,9 +73,9 @@ function Dashboard({ ...props }) {
     } else {
       //componentDidUpdate
     }
-    console.group("Admin props");
-    console.dir(props);
-    console.groupEnd("Admin props");
+    // console.group("Admin props");
+    // console.dir(props);
+    // console.groupEnd("Admin props");
     return () => {
       //componentWillUnmount
       window.removeEventListener("resize", resizeFunction);

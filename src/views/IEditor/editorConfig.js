@@ -94,16 +94,25 @@ export const editorConfig = {
         contentToolbar: ['tableColumn', 'tableRow', 'mergeTableCells']
     },
     toolbar: [
-        'insertTable',
         "heading",
         "|",
         "bold",
         "italic",
-        "underline",
         "link",
         "bulletedList",
         "numberedList",
+        "|",
+        "outdent",
+        "indent",
+        "|",
+        "uploadImage",
         "blockQuote",
-        "highlight",
+        "insertTable",
+        "mediaEmbed",
+        "undo",
+        "redo",
     ],
 };
+
+
+

@@ -1,7 +1,7 @@
-import React, { useId }  from "react";
-import TableBody from "@material-ui/core/TableBody";
-import TableCell from "@material-ui/core/TableCell";
-import TableRow from "@material-ui/core/TableRow";
+import React, { useId } from 'react';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableRow from '@material-ui/core/TableRow';
 
 function CustomTableBody({ ...props }) {
   // const id = useId();
@@ -9,7 +9,7 @@ function CustomTableBody({ ...props }) {
   return (
     <TableBody>
       {showList.map((show, row) => {
-        console.log(`CustomTableBody show: ${show}`)
+        console.log(`CustomTableBody show: ${show}`);
         return (
           <TableRow
             key={row}
@@ -19,8 +19,8 @@ function CustomTableBody({ ...props }) {
             selected={row == selectedID}
           >
             {Object.keys(show).map((key, i) => {
-              if (key === "_id") return;
-              return <TableCell> {[show[key]]}</TableCell>;
+              if (key === '_id') return;
+              return <TableCell align='center'> {[show[key]]}</TableCell>;
             })}
           </TableRow>
         );

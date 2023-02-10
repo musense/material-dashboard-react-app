@@ -4,15 +4,16 @@ import {
     DELETE_USER, DELETE_USER_FAIL, DELETE_USER_SUCCESS, LOGIN_USER, LOGIN_USER_FAIL, LOGIN_USER_SUCCESS, REGISTER_USER, REGISTER_USER_FAIL, REGISTER_USER_SUCCESS, UPDATE_USER, UPDATE_USER_FAIL, UPDATE_USER_SUCCESS
 } from "../../actions/GetUserAction";
 
-// const apiUrl = `${APIList.getUserList}`
+const apiUrl = `${process.env.REACT_APP_SERVER_URL}`
 
 // LOGIN
 function* UserLogin(payload) {
     const { username, password } = payload
     try {
-        const response = yield axios.post("http://localhost:4200/user/login", {
-            username, password
-        });
+        const response = yield axios.post(`${apiUrl}/login`
+            , {
+                username, password
+            });
         const user = yield response.data;
         yield put({
             type: LOGIN_USER_SUCCESS,
@@ -40,7 +41,7 @@ function* UserRegister(payload) {
         console.table({ password });
         console.groupEnd('UserRegister!!! YA!! payload.data');
 
-        const response = yield axios.post(`http://localhost:4200/user/register`, {
+        const response = yield axios.post(`${apiUrl}/user/register`, {
             username, email, password
         }).catch((error) => {
             console.dir(error)
@@ -79,7 +80,7 @@ function* UserUpdate(payload) {
         // console.group('UpdateUser!!! YA!! payload.data')
         // console.table(payload.data);
         // console.groupEnd('UpdateUser!!! YA!! payload.data');
-        const response = yield axios.patch(`http://localhost:4200/user/${payload.data.id}`, payload.data);
+        const response = yield axios.patch(`${apiUrl}/user/${payload.data.id}`, payload.data);
         const responseData = yield response.data;
         console.group('UpdateUser responseData')
         console.table(responseData)
@@ -104,7 +105,7 @@ function* UserDelete(payload) {
         console.group('DeleteUser!!! YA!! payload.data')
         console.table(payload.data);
         console.groupEnd('DeleteUser!!! YA!! payload.data');
-        const response = yield axios.delete(`http://localhost:4200/user/${payload.data}`);
+        const response = yield axios.delete(`${apiUrl}/user/${payload.data}`);
         const responseData = yield response.data;
         console.group('DeleteUser responseData')
         console.table(responseData)

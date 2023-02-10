@@ -5,12 +5,12 @@ import {
 } from "../../actions/GetTagsAction";
 import * as APIList from './../apiList';
 
-const apiUrl = `${APIList.getTagList}`
+const apiUrl = `${process.env.REACT_APP_SERVER_URL}`
 
 // GET
 function* GetTagList() {
     try {
-        const response = yield axios.get("http://localhost:4200/tags");
+        const response = yield axios.get(`${apiUrl}/tags`);
         const tagList = yield response.data;
         yield put({
             type: REQUEST_TAG_SUCCESS,
@@ -32,7 +32,7 @@ function* AddTag(payload) {
         // console.table(payload.data);
         // console.groupEnd('AddTag!!! YA!! payload.data');
 
-        const response = yield axios.post(`http://localhost:4200/tags/`, payload.data);
+        const response = yield axios.post(`${apiUrl}/tags/`, payload.data);
         const responseData = yield response.data;
         console.group('AddTag responseData')
         console.table(responseData)
@@ -56,7 +56,7 @@ function* UpdateTag(payload) {
         // console.group('UpdateTag!!! YA!! payload.data')
         // console.table(payload.data);
         // console.groupEnd('UpdateTag!!! YA!! payload.data');
-        const response = yield axios.patch(`http://localhost:4200/tags/${payload.data.id}`, payload.data);
+        const response = yield axios.patch(`${apiUrl}/tags/${payload.data.id}`, payload.data);
         const tagList = yield response.data;
         console.group('UpdateTag responseData')
         console.table(tagList)
@@ -80,7 +80,7 @@ function* DeleteTag(payload) {
         console.group('DeleteTag!!! YA!! payload.data')
         console.table(payload.data);
         console.groupEnd('DeleteTag!!! YA!! payload.data');
-        const response = yield axios.delete(`http://localhost:4200/tags/${payload.data}`);
+        const response = yield axios.delete(`${apiUrl}/tags/${payload.data}`);
         const tagList = yield response.data;
         console.group('DeleteTag responseData')
         console.table(tagList)

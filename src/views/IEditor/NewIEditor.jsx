@@ -5,69 +5,52 @@ import { editorConfig } from './editorConfig.js';
 import React, { useEffect, useRef, useState } from 'react';
 
 import { useDispatch, useSelector } from 'react-redux';
-import {
-  ADD_EDITOR,
-  REQUEST_EDITOR_BY_TITLE,
-  UPDATE_EDITOR,
-} from '../../actions/GetEditorAction';
-import { useParams, useNavigate } from 'react-router-dom';
+import { ADD_EDITOR } from '../../actions/GetEditorAction';
+import { useNavigate } from 'react-router-dom';
 import CustomModal from '../../components/CustomModal/CustomModal.jsx';
 
-function IEditor({ props }) {
-  const { id } = useParams();
-
+function NewIEditor({ props }) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const title = useSelector((state) => state.getEditorReducer.title);
-  const content = useSelector((state) => state.getEditorReducer.content);
+  const _id = useSelector((state) => state.getEditorReducer._id);
   const returnMessage = useSelector(
     (state) => state.getEditorReducer.errorMessage
   );
   const [contentData, setContentData] = useState('');
   const [newTitle, setNewTitle] = useState('');
-  const [isModalOpen, setIsModalOpen] = useState(true);
-  const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
-
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [newID, setNewID] = useState('');
+  const editorRef = useRef();
   useEffect(() => {
-    setNewTitle(title);
-    if (
-      returnMessage &&
-      (returnMessage.indexOf('get successfully') !== -1 ||
-        returnMessage.indexOf('update successfully') !== -1)
-    ) {
-      setIsModalOpen(false);
-      setIsUpdateModalOpen(false);
+    if (editorRef.current === null) {
+      editorRef.current = 1;
+    } else {
+      if (
+        returnMessage &&
+        (returnMessage.indexOf('get successfully') !== -1 ||
+          returnMessage.indexOf('add successfully') !== -1)
+      ) {
+        setIsModalOpen(false);
+        setIsAddModalOpen(false);
+      }
+      setNewID(_id);
+      if (newID) {
+        navigate(`/admin/editorList/edit/${_id}`);
+      }
     }
-    if (id) {
-      dispatch({
-        type: REQUEST_EDITOR_BY_TITLE,
-        payload: {
-          data: {
-            id,
-          },
-        },
-      });
-    }
-  }, [title, returnMessage]);
+  }, [newID, returnMessage]);
 
-  function handleUpdateData() {
+  function handleAddData() {
     if (contentData === '' || newTitle === '') {
-      console.log(`nothing to update!!!`);
+      console.log(`nothing to add!!!`);
       return;
     }
-    if (
-      JSON.stringify(contentData) === JSON.stringify(content) &&
-      title === newTitle
-    ) {
-      console.log(`nothing changed!!!`);
-      return;
-    }
-    setIsUpdateModalOpen(true);
+    setIsAddModalOpen(true);
     dispatch({
-      type: UPDATE_EDITOR,
+      type: ADD_EDITOR,
       payload: {
-        id,
         data: {
           title: newTitle,
           content: contentData,
@@ -84,7 +67,7 @@ function IEditor({ props }) {
 
   return (
     <div className='App'>
-      <div className='iEditor-Title-Container' key={id}>
+      <div className='iEditor-Title-Container'>
         <label htmlFor='title'>Title</label>
         <input
           name='title'
@@ -94,29 +77,28 @@ function IEditor({ props }) {
         />
       </div>
       <CKEditor
+        ref={editorRef}
         editor={ClassicEditor}
         config={editorConfig}
-        data={content}
+        data={contentData}
         onReady={(editor) => {
           // console.log('Editor is ready to use!', editor);
-          const data = editor.getData();
-          setContentData(data);
         }}
         onChange={(event, editor) => {
           const data = editor.getData();
           setContentData(data);
         }}
       />
-      <button onClick={() => handleUpdateData()}>Update Data</button>
+      <button onClick={() => handleAddData()}>Add Data</button>
       <button onClick={() => handleGoBack()}>Go Back</button>
       <CustomModal ariaHideApp={false} isModalOpen={isModalOpen} />
       <CustomModal
         ariaHideApp={false}
-        isModalOpen={isUpdateModalOpen}
-        text={'update successfully'}
+        isModalOpen={isAddModalOpen}
+        text={'add successfully'}
       />
     </div>
   );
 }
 
-export default IEditor;
+export default NewIEditor;

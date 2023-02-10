@@ -72,7 +72,7 @@ body {
 
 blockquote footer:before,
 blockquote small:before {
-  content: "\2014 \00A0";
+  content: '\2014 \00A0';
 }
 
 small {
@@ -127,7 +127,7 @@ h3,
 h4,
 h5,
 h6 {
-  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+  font-family: 'Roboto', 'Helvetica', 'Arial', sans-serif;
   font-weight: 300;
   line-height: 1.5em;
 }
@@ -165,11 +165,11 @@ button:active,
 button:focus,
 button:hover,
 button::-moz-focus-inner,
-input[type="reset"]::-moz-focus-inner,
-input[type="button"]::-moz-focus-inner,
-input[type="submit"]::-moz-focus-inner,
+input[type='reset']::-moz-focus-inner,
+input[type='button']::-moz-focus-inner,
+input[type='submit']::-moz-focus-inner,
 select::-moz-focus-inner,
-input[type="file"] > input[type="button"]::-moz-focus-inner {
+input[type='file'] > input[type='button']::-moz-focus-inner {
   outline: 0 !important;
 }
 
@@ -236,13 +236,13 @@ footer ul li a:hover {
     top: 0;
     left: auto;
     right: 260px;
-    content: "";
+    content: '';
     z-index: 9999;
     overflow-x: hidden;
   }
 }
 .fixed-plugin {
-  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+  font-family: 'Roboto', 'Helvetica', 'Arial', sans-serif;
   font-weight: 300;
   line-height: 1.5em;
   position: fixed;
@@ -479,7 +479,7 @@ footer ul li a:hover {
 
 .fixed-plugin .dropdown .dropdown-menu:before,
 .fixed-plugin .dropdown .dropdown-menu:after {
-  content: "";
+  content: '';
   display: inline-block;
   position: absolute;
   top: 46px;
@@ -534,7 +534,13 @@ footer ul li a:hover {
 
 .fixed-plugin .gh-btn {
   background-color: #eee;
-  background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, #fcfcfc), color-stop(100%, #eee));
+  background-image: -webkit-gradient(
+    linear,
+    left top,
+    left bottom,
+    color-stop(0, #fcfcfc),
+    color-stop(100%, #eee)
+  );
   background-image: -webkit-linear-gradient(top, #fcfcfc 0, #eee 100%);
   background-image: -moz-linear-gradient(top, #fcfcfc 0, #eee 100%);
   background-image: -ms-linear-gradient(top, #fcfcfc 0, #eee 100%);
@@ -549,7 +555,13 @@ footer ul li a:hover {
 .fixed-plugin .gh-btn:focus {
   text-decoration: none;
   background-color: #ddd;
-  background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, #eee), color-stop(100%, #ddd));
+  background-image: -webkit-gradient(
+    linear,
+    left top,
+    left bottom,
+    color-stop(0, #eee),
+    color-stop(100%, #ddd)
+  );
   background-image: -webkit-linear-gradient(top, #eee 0, #ddd 100%);
   background-image: -moz-linear-gradient(top, #eee 0, #ddd 100%);
   background-image: -ms-linear-gradient(top, #eee 0, #ddd 100%);
@@ -586,7 +598,7 @@ footer ul li a:hover {
 
 .fixed-plugin .gh-count:hover,
 .fixed-plugin .gh-count:focus {
-  color: #4183C4;
+  color: #4183c4;
 }
 
 .fixed-plugin .gh-count:before,
@@ -606,4 +618,39 @@ footer ul li a:hover {
   margin-top: -4px;
   border-width: 4px 4px 4px 0;
   border-right-color: #fafafa;
+}
+
+.iEditor-Title-Container {
+  color: rgba(0, 0, 0, 0.87);
+  width: 100%;
+  border: 0;
+  display: flex;
+  position: relative;
+  min-width: 0;
+  word-wrap: break-word;
+  font-size: 0.875rem;
+  margin-top: 30px;
+  background: #fff;
+  box-shadow: 0 1px 4px 0 rgb(0 0 0 / 14%);
+  margin-bottom: 30px;
+  border-radius: 0px;
+  flex-direction: column;
+}
+.iEditor-Title-Container label,
+.iEditor-Title-Container input {
+  font-size: 2em;
+  line-height: 2;
+  color: black;
+  padding-left: 10px;
+}
+
+.EditorList-Button-Container {
+  display: flex;
+  flex-direction: row;
+}
+.HideDeleteButton {
+  display: none;
+}
+.ShowDeleteButton {
+  display: inline-block;
 }

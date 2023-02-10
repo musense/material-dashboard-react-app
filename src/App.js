@@ -8,6 +8,7 @@ import Dashboard from 'views/Dashboard/Dashboard.jsx';
 import TableList from 'views/TableList/TableList.jsx'
 import EditorList from 'views/EditorList/EditorList.jsx'
 import IEditor from 'views/IEditor/IEditor.jsx'
+import NewIEditor from 'views/IEditor/NewIEditor.jsx'
 import UserProfile from 'views/UserProfile/UserProfile';
 import LoginPage from 'views/Pages/LoginPage';
 import RegisterPage from 'views/Pages/RegisterPage';
@@ -19,7 +20,9 @@ function App() {
     useEffect(() => {
         // navigate('/auth/register-page')
         // navigate('/auth/login-page')
-        navigate('/admin/dashboard')
+        // navigate('/admin/dashboard')
+        // navigate('/admin/editorList/edit/63e1c1517d10512e547703b7')
+        navigate('/admin/editorList')
     }, []);
 
     return (
@@ -32,7 +35,8 @@ function App() {
                         <Route path="table" element={<TableList />} />
                         <Route path="editorList" >
                             <Route index element={<EditorList />} />
-                            <Route path=":id" element={<IEditor />} />
+                            <Route path="edit/new" element={<NewIEditor />} />
+                            <Route path="edit/:id" element={<IEditor />} />
                         </Route>
                     </Route>
                     <Route path="auth" element={<Auth />}>

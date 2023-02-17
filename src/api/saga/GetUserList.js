@@ -41,7 +41,7 @@ function* UserRegister(payload) {
         console.table({ password });
         console.groupEnd('UserRegister!!! YA!! payload.data');
 
-        const response = yield axios.post(`${apiUrl}/user/register`, {
+        const response = yield axios.post(`${apiUrl}/register`, {
             username, email, password
         }).catch((error) => {
             console.dir(error)

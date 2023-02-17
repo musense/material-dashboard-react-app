@@ -39,25 +39,7 @@ function LoginPage(props) {
   const dispatch = new useDispatch();
   const returnMessage =
   '' + useSelector((state) => state.getUserReducer.errorMessage);
-
-  // function checkLoginSuccess(message) {
-  //   if (message.indexOf('upper case') > -1) {
-  //     console.log(`useEffect register 密碼最少需一碼為大寫字母!`);
-  //     return;
-  //   } else if (message.indexOf('lower case') > -1) {
-  //     console.log(`useEffect register 密碼最少需一碼為小寫字母!`);
-  //     return;
-  //   } else if (message.indexOf('at least 8 characters') > -1) {
-  //     console.log(`useEffect register 密碼最少為8碼!`);
-  //     return;
-  //   } else if (message.indexOf('login successfully') > -1) {
-  //     // TODO: redirect
-  //     // redirect to dashboard page...
-  //   }
-  // }
   useEffect(() => {
-    console.log(`useEffect login returnMessage: ${returnMessage}`);
-    console.log(`useEffect login checked: ${checked}`);
     if (returnMessage.indexOf('login successfully') > -1) {
       navigate('/admin/dashboard')
     }
@@ -76,9 +58,6 @@ function LoginPage(props) {
       }))
       .reduce((current, next) => ({ ...current, ...next }));
 
-    console.group(`login!!!`);
-    console.table(formValues);
-    console.groupEnd(`login!!!`);
     dispatch({
       type: LOGIN_USER,
       payload: {

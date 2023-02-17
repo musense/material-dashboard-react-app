@@ -9,7 +9,6 @@ function CustomTableBody({ ...props }) {
   return (
     <TableBody>
       {showList.map((show, row) => {
-        console.log(`CustomTableBody show: ${show}`);
         return (
           <TableRow
             key={row}

@@ -10,7 +10,6 @@ const initialState = {
 }
 
 const getUserReducer = (state = initialState, action) => {
-    // console.log(`action: ${JSON.stringify(action)}`)
     switch (action.type) {
         case REGISTER_USER_SUCCESS:
             return {

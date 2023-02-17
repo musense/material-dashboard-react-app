@@ -52,27 +52,14 @@ function HeaderLinks(props) {
     setProfilePopupOpen(false);
   };
 
-  // const handleResize = (e) => {
-  //   console.log(`window.innerWidth: ${window.innerWidth}`);
-  // };
-
   useEffect(() => {
     // window.addEventListener('resize', handleResize);
-    // console.group('Admin Navbar Links anchorEl');
-    // console.log(anchorEl);
-    // console.groupEnd('Admin Navbar Links anchorEl');
     return () => {
       // window.removeEventListener('resize', handleResize);
     };
   }, [anchorEl, window.innerWidth]);
 
-  // const handleClick = (e) => {
-  //   console.log(e.target.value);
-  //   setProfilePopupOpen((prevProfilePopupOpen) => !prevProfilePopupOpen);
-  // };
-
   const logout = () => {
-    console.log(`logout!!!`);
     dispatch({
       type: LOGOUT_USER,
     });

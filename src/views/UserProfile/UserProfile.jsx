@@ -59,7 +59,6 @@ function UserProfile(props) {
       }))
       .reduce((current, next) => ({ ...current, ...next }));
 
-    console.log(formValues);
   };
 
   return (

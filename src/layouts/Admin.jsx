@@ -73,9 +73,6 @@ function Dashboard({ ...props }) {
     } else {
       //componentDidUpdate
     }
-    // console.group("Admin props");
-    // console.dir(props);
-    // console.groupEnd("Admin props");
     return () => {
       //componentWillUnmount
       window.removeEventListener("resize", resizeFunction);

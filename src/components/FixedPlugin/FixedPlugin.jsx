@@ -30,10 +30,6 @@ const styles = {
 export const FixedPlugin = (props) => {
   const [classes, setClasses] = useState("dropdown show");
 
-  // console.group('FixedPlugin props')
-  // console.table(props);
-  // console.groupEnd('FixedPlugin props ')
-
   return (
     <div
       className={classnames(

@@ -76,11 +76,6 @@ const Sidebar = ({ ...props }) => {
       </a>
     </div>
   );
-  useEffect(() => {
-    // console.group("Sidebar props");
-    // console.dir(props);
-    // console.groupEnd("Sidebar props");
-  }, []);
   return (
     <div>
       <Hidden mdUp implementation='css'>

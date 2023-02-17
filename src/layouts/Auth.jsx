@@ -33,7 +33,6 @@ function Pages({ ...props }) {
 
   const getActiveRoute = (routes) => {
     let activeRoute = 'Default Brand Text';
-    console.log(location.pathname);
 
     for (let i = 0; i < routes.length; i++) {
       if (location.pathname.indexOf(routes[i].layout + routes[i].path) !== -1) {

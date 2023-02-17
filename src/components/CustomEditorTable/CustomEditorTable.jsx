@@ -42,37 +42,13 @@ function CustomEditorTable({ ...props }) {
       name: editor.name,
     });
 
-  // const handleRowClick = useCallback((e) => {
-  //   // TODO: popup confirm window
-  //   const selectedID = e.currentTarget.id;
-  //   // TODO:
-  //   // if (selectedID < 0) return;
-  //   const sEditor = showList.find((t, rowIndex) => rowIndex == selectedID);
-  //   // TODO:
-  //   // if (!sEditor) return;
-  //   console.log(sEditor);
-
-  //   // console.log(showList[selectedID]);
-  //   // showList.map((show, index) => {
-  //   //   console.log(show);
-  //   //   console.log(showList[index]);
-  //   // });
-
-  //   selectedIDRef.current = selectedID;
-
-  //   setSelectedID(selectedID);
-  //   // setEditor(sEditor);
-  // }, []);
-
   const handleRowClick = (e) => {
     const sEditor = showList.find(
       (t, rowIndex) => rowIndex == e.currentTarget.id
     );
-    console.log(sEditor);
     // selectedIDRef.current = sEditor._id;
 
     const selectedID = sEditor._id;
-    console.log(selectedID);
     setSelectedID(selectedID);
     selectedIDRef.current = selectedID;
   };

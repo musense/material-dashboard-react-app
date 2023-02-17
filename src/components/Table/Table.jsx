@@ -26,9 +26,6 @@ function CustomTable({ ...props }) {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    console.group(`CustomTable showList`)
-    console.log(showList)
-    console.groupEnd(`CustomTable showList`)
     setShowList(tableData);
   }, [tableData, selectedIDRef.current]);
 

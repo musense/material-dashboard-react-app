@@ -28,15 +28,9 @@ function* GetTagList() {
 // POST
 function* AddTag(payload) {
     try {
-        // console.group('AddTag!!! YA!! payload.data')
-        // console.table(payload.data);
-        // console.groupEnd('AddTag!!! YA!! payload.data');
 
         const response = yield axios.post(`${apiUrl}/tags/`, payload.data);
         const responseData = yield response.data;
-        console.group('AddTag responseData')
-        console.table(responseData)
-        console.groupEnd('AddTag responseData')
         yield put({
             type: ADD_TAG_SUCCESS,
             payload: null
@@ -53,14 +47,8 @@ function* AddTag(payload) {
 // PATCH
 function* UpdateTag(payload) {
     try {
-        // console.group('UpdateTag!!! YA!! payload.data')
-        // console.table(payload.data);
-        // console.groupEnd('UpdateTag!!! YA!! payload.data');
         const response = yield axios.patch(`${apiUrl}/tags/${payload.data.id}`, payload.data);
         const tagList = yield response.data;
-        console.group('UpdateTag responseData')
-        console.table(tagList)
-        console.groupEnd('UpdateTag responseData')
         yield put({
             type: UPDATE_TAG_SUCCESS,
             payload: tagList
@@ -77,14 +65,8 @@ function* UpdateTag(payload) {
 // DELETE
 function* DeleteTag(payload) {
     try {
-        console.group('DeleteTag!!! YA!! payload.data')
-        console.table(payload.data);
-        console.groupEnd('DeleteTag!!! YA!! payload.data');
         const response = yield axios.delete(`${apiUrl}/tags/${payload.data}`);
         const tagList = yield response.data;
-        console.group('DeleteTag responseData')
-        console.table(tagList)
-        console.groupEnd('DeleteTag responseData')
         yield put({
             type: DELETE_TAG_SUCCESS,
             payload: tagList

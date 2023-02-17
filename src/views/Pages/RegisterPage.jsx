@@ -31,7 +31,6 @@ import { useNavigate } from 'react-router-dom';
 
 function RegisterPage(props) {
   const { classes } = props;
-  // console.log(props);
   const [checked, setChecked] = useState([]);
   const errors = {};
   const navigate = useNavigate()
@@ -40,8 +39,6 @@ function RegisterPage(props) {
     '' + useSelector((state) => state.getUserReducer.errorMessage);
 
   useEffect(() => {
-    console.log(`useEffect register returnMessage: ${returnMessage}`);
-    console.log(`useEffect register checked: ${checked}`);
 
     if (returnMessage.indexOf('upper case') > -1)
       console.log(`useEffect register 密碼最少需一碼為大寫字母!`);

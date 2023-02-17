@@ -63,7 +63,6 @@ function EditorList(props) {
   );
   const mounted = useRef();
   const selectedIDRef = useRef(null);
-  console.log(selectedIDRef.current);
   useEffect(() => {
     if (!mounted.current) {
       //componentDidMount
@@ -92,16 +91,11 @@ function EditorList(props) {
     setIsModalOpen(false);
   }
   function onSelectEditorClick() {
-    console.log('Click');
     setIsRowLink((prevIsRowLink) => !prevIsRowLink);
   }
   function onDeleteEditorClick() {
-    console.log('Click');
-    console.log(selectedIDRef.current);
     const ids = [selectedIDRef.current];
 
-    // console.log(id)
-    console.log(ids);
     dispatch({
       type: DELETE_EDITOR,
       payload: {
@@ -113,7 +107,6 @@ function EditorList(props) {
   }
 
   function onAddNewEditor() {
-    console.log('Click');
     dispatch({ type: INITIAL_EDITOR });
     navigate('/admin/editorList/edit/new');
   }

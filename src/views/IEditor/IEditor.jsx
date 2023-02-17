@@ -53,14 +53,12 @@ function IEditor({ props }) {
 
   function handleUpdateData() {
     if (contentData === '' || newTitle === '') {
-      console.log(`nothing to update!!!`);
       return;
     }
     if (
       JSON.stringify(contentData) === JSON.stringify(content) &&
       title === newTitle
     ) {
-      console.log(`nothing changed!!!`);
       return;
     }
     setIsUpdateModalOpen(true);
@@ -98,7 +96,6 @@ function IEditor({ props }) {
         config={editorConfig}
         data={content}
         onReady={(editor) => {
-          // console.log('Editor is ready to use!', editor);
           const data = editor.getData();
           setContentData(data);
         }}

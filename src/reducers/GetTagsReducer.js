@@ -68,7 +68,6 @@ const getTagReducer = (state = initialState, action) => {
             }
         case UPDATE_SELECTED_TAG_SUCCESS:
             {
-                console.log(`=======UPDATE_SELECTED_TAG_SUCCESS=======`)
                 const sTag = state.tagList.filter((t, index) =>
                     index == state.selectedIndex
                 ).flat()
@@ -86,7 +85,6 @@ const getTagReducer = (state = initialState, action) => {
                         ]
                         : t
                 )
-                console.log(`UPDATE_SELECTED_TAG_SUCCESS oTagList: ${JSON.stringify(uTagList)}`)
                 return {
                     ...state,
                     tagList: uTagList,
@@ -99,7 +97,6 @@ const getTagReducer = (state = initialState, action) => {
             {
                 const oTagList = state.tagList;
                 oTagList.splice(state.selectedIndex, 1)
-                console.log(`DELETED_SELECTED_TAG_SUCCESS oTagList: ${oTagList}`)
                 return {
                     ...state,
                     tagList: oTagList,

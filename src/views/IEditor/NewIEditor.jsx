@@ -44,7 +44,6 @@ function NewIEditor({ props }) {
 
   function handleAddData() {
     if (contentData === '' || newTitle === '') {
-      console.log(`nothing to add!!!`);
       return;
     }
     setIsAddModalOpen(true);

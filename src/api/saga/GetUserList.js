@@ -1,20 +1,18 @@
-import axios from "axios";
+
 import { all, put, take } from 'redux-saga/effects';
 import {
     DELETE_USER, DELETE_USER_FAIL, DELETE_USER_SUCCESS, LOGIN_USER, LOGIN_USER_FAIL, LOGIN_USER_SUCCESS, REGISTER_USER, REGISTER_USER_FAIL, REGISTER_USER_SUCCESS, UPDATE_USER, UPDATE_USER_FAIL, UPDATE_USER_SUCCESS
 } from "../../actions/GetUserAction";
+import { instance } from "./AxiosInstance";
 
-const apiUrl = `${process.env.REACT_APP_SERVER_URL}`
 
 // LOGIN
 function* UserLogin(payload) {
     const { username, password } = payload
     try {
-        const response = yield axios.post(`${apiUrl}/login`
-            , {
-                username, password
-            });
-        const user = yield response.data;
+        const response = yield instance.post(`/login`, { username, password });
+        const data = yield response;
+        const user = data.data;
         yield put({
             type: LOGIN_USER_SUCCESS,
             errorMessage: 'login successfully',
@@ -34,7 +32,7 @@ function* UserRegister(payload) {
     const { username, email, password } = payload
     try {
 
-        const response = yield axios.post(`${apiUrl}/register`, {
+        const response = yield instance.post(`/register`, {
             username, email, password
         }).catch((error) => {
             throw new Error(error.response.data.message)
@@ -65,7 +63,7 @@ function* UserRegister(payload) {
 // PATCH
 function* UserUpdate(payload) {
     try {
-        const response = yield axios.patch(`${apiUrl}/user/${payload.data.id}`, payload.data);
+        const response = yield instance.patch(`/user/${payload.data.id}`, payload.data);
         const responseData = yield response.data;
         yield put({
             type: UPDATE_USER_SUCCESS,
@@ -84,7 +82,7 @@ function* UserUpdate(payload) {
 // not implemented
 function* UserDelete(payload) {
     try {
-        const response = yield axios.delete(`${apiUrl}/user/${payload.data}`);
+        const response = yield instance.delete(`/user/${payload.data}`);
         const responseData = yield response.data;
         yield put({
             type: DELETE_USER_SUCCESS,

@@ -1,15 +1,13 @@
-import axios from "axios";
 import { all, put, take, takeEvery } from 'redux-saga/effects';
 import {
     ADD_EDITOR, ADD_EDITOR_FAIL, ADD_EDITOR_SUCCESS, DELETE_EDITOR, DELETE_EDITOR_FAIL, DELETE_EDITOR_SUCCESS, REQUEST_EDITOR, REQUEST_EDITOR_BY_TITLE, REQUEST_EDITOR_FAIL, REQUEST_EDITOR_SUCCESS, REQUEST_EDITOR_TITLE_LIST_FAIL, REQUEST_EDITOR_TITLE_LIST_SUCCESS, UPDATE_EDITOR, UPDATE_EDITOR_FAIL, UPDATE_EDITOR_SUCCESS
 } from "../../actions/GetEditorAction";
-
-const apiUrl = `${process.env.REACT_APP_SERVER_URL}`
+import { instance } from "./AxiosInstance";
 
 // GET
 function* GetEditorTitleList() {
     try {
-        const response = yield axios.get(`${apiUrl}/editor/title`);
+        const response = yield instance.get(`/editor/title`);
         const titleList = yield response.data;
         yield put({
             type: REQUEST_EDITOR_TITLE_LIST_SUCCESS,
@@ -25,7 +23,7 @@ function* GetEditorTitleList() {
 }
 function* GetEditorByTitle(payload) {
     try {
-        const response = yield axios.get(`${apiUrl}/editor/${payload.data.id}`);
+        const response = yield instance.get(`/editor/${payload.data.id}`);
         const responseData = yield response.data;
         yield put({
             type: REQUEST_EDITOR_SUCCESS,
@@ -43,7 +41,7 @@ function* GetEditorByTitle(payload) {
 // POST
 function* AddEditor(payload) {
     try {
-        const response = yield axios.post(`${apiUrl}/editor`, payload.data);
+        const response = yield instance.post(`/editor`, payload.data);
         const responseData = yield response.data;
         yield put({
             type: ADD_EDITOR_SUCCESS,
@@ -62,7 +60,7 @@ function* AddEditor(payload) {
 // PATCH
 function* UpdateEditor(payload) {
     try {
-        const response = yield axios.patch(`${apiUrl}/editor/${payload.id}`, payload.data);
+        const response = yield instance.patch(`/editor/${payload.id}`, payload.data);
         const responseData = yield response.data;
         yield put({
             type: UPDATE_EDITOR_SUCCESS,
@@ -79,7 +77,7 @@ function* UpdateEditor(payload) {
 // DELETE
 function* DeleteEditor(payload) {
     try {
-        const response = yield axios.delete(`${apiUrl}/editor/bunchDeleteByIds`, {
+        const response = yield instance.delete(`/editor/bunchDeleteByIds`, {
             "ids": payload.data.ids
         });
         const responseData = yield response.data;

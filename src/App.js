@@ -19,10 +19,10 @@ function App() {
 
     useEffect(() => {
         // navigate('/auth/register-page')
-        // navigate('/auth/login-page')
+        navigate('/auth/login-page')
         // navigate('/admin/dashboard')
         // navigate('/admin/editorList/edit/63e1c1517d10512e547703b7')
-        navigate('/admin/editorList')
+        // navigate('/admin/editorList')
     }, []);
 
     return (
@@ -43,7 +43,7 @@ function App() {
                         <Route path="login-page" element={<LoginPage />} />
                         <Route path="register-page" element={<RegisterPage />} />
                     </Route>
-                    <Route path="rtl" render={(props) => <RTL {...props} />} />
+                    {/* <Route path="rtl" render={(props) => <RTL {...props} />} /> */}
                     {/* w/ useEffect navigate, in order to redirect */}
                     <Route path="/" render={(props) => <Dashboard {...props} />} />
                 </Routes>

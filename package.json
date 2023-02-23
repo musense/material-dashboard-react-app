@@ -52,7 +52,7 @@
   },
   "scripts": {
     "start": "yarn pm2 start",
-    "start:dev": "react-scripts start",
+    "start:dev": "set PORT=80 && react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",

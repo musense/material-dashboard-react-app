@@ -17,6 +17,7 @@ import {
 import CustomModal from '../../components/CustomModal/CustomModal';
 import Button from 'components/CustomButtons/Button';
 import { Outlet, useNavigate, Link } from 'react-router-dom';
+import { REQUEST_TAG } from '../../actions/GetTagsAction';
 
 const styles = {
   cardCategoryWhite: {
@@ -55,6 +56,14 @@ function EditorList(props) {
   const dispatch = useDispatch();
   const [isModalOpen, setIsModalOpen] = useState(true);
   const titleList = useSelector((state) => state.getEditorReducer.titleList);
+
+  console.log(
+    '🚀 ~ file: EditorList.jsx:59 ~ EditorList ~ titleList:',
+    titleList
+  );
+  const tableHead =
+    titleList && titleList.length > 0 && Object.keys(titleList[0]);
+
   const [addEditorDisabled, setAddEditorDisabled] = useState(false);
 
   const [isRowLink, setIsRowLink] = useState(true);
@@ -68,9 +77,8 @@ function EditorList(props) {
       //componentDidMount
       selectedIDRef.current = -1;
       mounted.current = true;
-      dispatch({
-        type: REQUEST_EDITOR,
-      });
+      dispatch({ type: REQUEST_EDITOR });
+      dispatch({ type: REQUEST_TAG });
     } else {
       //componentDidUpdate
       if (returnMessage && returnMessage.indexOf('successfully') !== -1) {
@@ -106,8 +114,12 @@ function EditorList(props) {
     });
   }
 
-  function onAddNewEditor() {
+  function initialEditorState(){
+
     dispatch({ type: INITIAL_EDITOR });
+  }
+  function onAddNewEditor() {
+    initialEditorState()
     navigate('/admin/editorList/edit/new');
   }
   return (
@@ -122,14 +134,15 @@ function EditorList(props) {
             </p>
           </CardHeader>
           <CardBody>
-            {titleList ? (
+            {titleList && titleList.length > 0 ? (
               <>
                 <CustomEditorTable
                   tableHeaderColor='primary'
-                  tableHead={['ID', 'Title', 'Last Update']}
+                  tableHead={tableHead}
                   tableData={titleList}
                   openModal={openModal}
                   closeModal={closeModal}
+                  initialEditorState={initialEditorState}
                   selectedIDRef={selectedIDRef}
                   isRowLink={isRowLink}
                 />
@@ -150,16 +163,16 @@ function EditorList(props) {
                       Delete Editor
                     </Button>
                   </div>
-                  <Button
-                    color='info'
-                    disabled={addEditorDisabled}
-                    onClick={() => onAddNewEditor()}
-                  >
-                    Add New Editor
-                  </Button>
                 </div>
               </>
             ) : null}
+            <Button
+              color='info'
+              disabled={addEditorDisabled}
+              onClick={() => onAddNewEditor()}
+            >
+              Add New Editor
+            </Button>
           </CardBody>
         </Card>
       </GridItem>

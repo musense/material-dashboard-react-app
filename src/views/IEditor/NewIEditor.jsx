@@ -3,17 +3,20 @@ import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import { editorConfig } from './editorConfig.js';
 
 import React, { useEffect, useRef, useState } from 'react';
+import Select from 'react-select';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { ADD_EDITOR } from '../../actions/GetEditorAction';
 import { useNavigate } from 'react-router-dom';
 import CustomModal from '../../components/CustomModal/CustomModal.jsx';
+import styles from './../../assets/css/ieditor.module.css';
 
 function NewIEditor({ props }) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const _id = useSelector((state) => state.getEditorReducer._id);
+  const tagList = useSelector((state) => state.getTagReducer.tagList);
   const returnMessage = useSelector(
     (state) => state.getEditorReducer.errorMessage
   );
@@ -22,7 +25,12 @@ function NewIEditor({ props }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [newID, setNewID] = useState('');
+  const [chosenTags, setChosenTags] = useState('');
   const editorRef = useRef();
+
+  const options =
+    tagList && tagList.map((tag) => ({ value: tag._id, label: tag.name }));
+
   useEffect(() => {
     if (editorRef.current === null) {
       editorRef.current = 1;
@@ -53,6 +61,7 @@ function NewIEditor({ props }) {
         data: {
           title: newTitle,
           content: contentData,
+          tags: chosenTags,
         },
       },
     });
@@ -63,9 +72,22 @@ function NewIEditor({ props }) {
     setNewTitle('');
     navigate('/admin/editorList');
   }
-
+  function handleItemsChosen(itemArray) {
+    const chosenTagNames = itemArray.map((item) => item.label);
+    setChosenTags(chosenTagNames)
+  }
   return (
     <div className='App'>
+      <Select
+        options={options}
+        onChange={(itemArray) => handleItemsChosen(itemArray)}
+        isMulti={true}
+        closeMenuOnSelect={false}
+        //TODO: add tags default selected
+        // defaultValue={}
+        className={styles['editor-select']}
+      />
+
       <div className='iEditor-Title-Container'>
         <label htmlFor='title'>Title</label>
         <input

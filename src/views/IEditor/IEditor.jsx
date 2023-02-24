@@ -2,16 +2,17 @@ import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import { editorConfig } from './editorConfig.js';
 
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import Select from 'react-select';
 
 import { useDispatch, useSelector } from 'react-redux';
 import {
-  ADD_EDITOR,
   REQUEST_EDITOR_BY_TITLE,
   UPDATE_EDITOR,
 } from '../../actions/GetEditorAction';
 import { useParams, useNavigate } from 'react-router-dom';
 import CustomModal from '../../components/CustomModal/CustomModal.jsx';
+import styles from './../../assets/css/ieditor.module.css';
 
 function IEditor({ props }) {
   const { id } = useParams();
@@ -21,6 +22,9 @@ function IEditor({ props }) {
 
   const title = useSelector((state) => state.getEditorReducer.title);
   const content = useSelector((state) => state.getEditorReducer.content);
+  const tags = useSelector((state) => state.getEditorReducer.tags);
+  const tagList = useSelector((state) => state.getTagReducer.tagList);
+
   const returnMessage = useSelector(
     (state) => state.getEditorReducer.errorMessage
   );
@@ -28,6 +32,11 @@ function IEditor({ props }) {
   const [newTitle, setNewTitle] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(true);
   const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
+  const [chosenTags, setChosenTags] = useState('');
+  const [defaultTags, setDefaultTags] = useState(null);
+
+  const options =
+    tagList && tagList.map((tag) => ({ value: tag._id, label: tag.name }));
 
   useEffect(() => {
     setNewTitle(title);
@@ -39,6 +48,7 @@ function IEditor({ props }) {
       setIsModalOpen(false);
       setIsUpdateModalOpen(false);
     }
+
     if (id) {
       dispatch({
         type: REQUEST_EDITOR_BY_TITLE,
@@ -49,16 +59,35 @@ function IEditor({ props }) {
         },
       });
     }
+    if (tags) {
+      mapTagNameToTags(tags, tagList);
+    }
+
+    return () => {};
   }, [title, returnMessage]);
 
+  function mapTagNameToTags(tagNames, tagList) {
+    const mappedTags = tagList
+      .filter((tag) => {
+        if (tagNames.includes(tag.name)) {
+          return true;
+        } else {
+          return false;
+        }
+      })
+      .map((tag) => ({ value: tag._id, label: tag.name }));
+
+    setDefaultTags(mappedTags);
+  }
   function handleUpdateData() {
-    if (contentData === '' || newTitle === '') {
-      return;
-    }
-    if (
-      JSON.stringify(contentData) === JSON.stringify(content) &&
-      title === newTitle
-    ) {
+    const tagChanged =
+      JSON.stringify(chosenTags) === JSON.stringify(defaultTags);
+    const contentChanged =
+      JSON.stringify(contentData) === JSON.stringify(content);
+    const titleChanged = title === newTitle;
+
+    if (tagChanged && contentChanged && titleChanged) {
+      console.log('nothing changed!!!');
       return;
     }
     setIsUpdateModalOpen(true);
@@ -69,19 +98,31 @@ function IEditor({ props }) {
         data: {
           title: newTitle,
           content: contentData,
+          tags: chosenTags,
         },
       },
     });
   }
 
   function handleGoBack() {
-    setContentData('');
-    setNewTitle('');
     navigate('/admin/editorList');
   }
-
+  function handleItemsChosen(itemArray) {
+    const chosenTagNames = itemArray.map((item) => item.label);
+    setChosenTags(chosenTagNames);
+  }
   return (
     <div className='App'>
+      {defaultTags ? (
+        <Select
+          options={options}
+          onChange={(itemArray) => handleItemsChosen(itemArray)}
+          isMulti={true}
+          closeMenuOnSelect={false}
+          defaultValue={defaultTags}
+          className={styles['editor-select']}
+        />
+      ) : null}
       <div className='iEditor-Title-Container' key={id}>
         <label htmlFor='title'>Title</label>
         <input

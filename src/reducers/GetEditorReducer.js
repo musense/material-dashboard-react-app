@@ -8,6 +8,7 @@ const initialState = {
     id: null,
     title: null,
     content: null,
+    tags: null,
     errorMessage: null,
     titleList: []
 }
@@ -54,6 +55,7 @@ const getEditorReducer = (state = initialState, action) => {
                 id: action.payload.id,
                 title: action.payload.title,
                 content: action.payload.content,
+                tags: action.payload.tags,
                 errorMessage: errorMessage.getFinish
             }
         case REQUEST_EDITOR_FAIL:

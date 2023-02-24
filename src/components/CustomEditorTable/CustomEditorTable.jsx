@@ -11,6 +11,7 @@ function CustomEditorTable({ ...props }) {
     tableHead,
     openModal,
     closeModal,
+    initialEditorState,
     selectedIDRef,
     isRowLink,
   } = props;
@@ -43,6 +44,7 @@ function CustomEditorTable({ ...props }) {
     });
 
   const handleRowClick = (e) => {
+    initialEditorState()
     const sEditor = showList.find(
       (t, rowIndex) => rowIndex == e.currentTarget.id
     );

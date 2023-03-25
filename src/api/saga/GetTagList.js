@@ -11,9 +11,16 @@ function* GetTagList() {
     try {
         const response = yield instance.get(`/tags`);
         const tagList = yield response.data;
+        console.log("🚀 ~ file: GetTagList.js:14 ~ function*GetTagList ~ tagList:", tagList)
+        const tagMapped = tagList.map(tag => ({
+            name: tag.name,
+            createdAt: tag.createdAt,
+            taggedNumber: tag.taggedNumber,
+            forceTrend: tag.forceTrend,
+        }))
         yield put({
             type: REQUEST_TAG_SUCCESS,
-            payload: tagList,
+            payload: tagMapped,
         })
     } catch (error) {
         yield put({

@@ -1,9 +1,12 @@
-import React, { useId } from 'react';
+import React from 'react';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
+import CustomInput from '../CustomInput/CustomInput';
+import styles from './../../assets/css/customTableBody.module.css';
 
 function CustomTableBody({ ...props }) {
+  console.log('🚀 ~ file: CustomTableBody.jsx:7 ~ styles:', styles);
   // const id = useId();
   const { showList, handleRowClick, selectedID } = props;
   return (
@@ -19,7 +22,30 @@ function CustomTableBody({ ...props }) {
           >
             {Object.keys(show).map((key, i) => {
               if (key === '_id') return;
-              return <TableCell align='center'> {[show[key]]}</TableCell>;
+              if (show[key] === null) {
+                return (
+                  <td className={styles['custom-td']} key={i}>
+                    <CustomInput
+                      key={i}
+                      labelText={key}
+                      id={key}
+                      // error={errors.name}
+                      formControlProps={{
+                        fullWidth: false,
+                      }}
+                      inputProps={{
+                        required: true,
+                        name: key,
+                      }}
+                    />
+                  </td>
+                );
+              }
+              return (
+                <TableCell key={i} align='center'>
+                  {show[key]}
+                </TableCell>
+              );
             })}
           </TableRow>
         );

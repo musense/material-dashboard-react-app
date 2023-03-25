@@ -115,7 +115,6 @@ function EditorList(props) {
   }
 
   function initialEditorState(){
-
     dispatch({ type: INITIAL_EDITOR });
   }
   function onAddNewEditor() {

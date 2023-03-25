@@ -4,10 +4,10 @@ import {
 import { errorMessage } from './errorMessage';
 
 const nullTag = {
-    id: "-1",
-    name: "",
-    showOnPage: "false",
-    taggedNumber: "0",
+    name: "-1",
+    createdAt: "",
+    taggedNumber: "false",
+    forceTrend: "0",
 };
 
 const initialState = {

@@ -10,7 +10,7 @@ const initialState = {
     content: null,
     tags: null,
     errorMessage: null,
-    titleList: []
+    titleList: null
 }
 const getEditorReducer = (state = initialState, action) => {
     switch (action.type) {
@@ -21,7 +21,9 @@ const getEditorReducer = (state = initialState, action) => {
                 id: null,
                 title: null,
                 content: null,
+                tags: null,
                 errorMessage: null,
+                titleList: null
             }
 
         case ADD_EDITOR_SUCCESS:

@@ -8,9 +8,10 @@ function CustomTableHead({ ...props }) {
   return (
     <TableHead>
       <TableRow>
-        {tableHead.map((prop, key) => (
-          <TableCell align="center" key={key}>{prop}</TableCell>
-        ))}
+        {tableHead.map((head, key) => {
+          if (head === '_id') return
+          return <TableCell align="center" key={key}>{head}</TableCell>
+        })}
         <TableCell />
       </TableRow>
     </TableHead>

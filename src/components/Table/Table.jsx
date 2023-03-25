@@ -1,41 +1,29 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState } from 'react';
 // @material-ui/core components
-import Table from "@material-ui/core/Table";
-import { FixedPlugin } from "components/FixedPlugin/FixedPlugin.jsx";
-import { useDispatch } from "react-redux";
-import { ADD_TAG, DELETE_TAG, UPDATE_TAG } from "../../actions/GetTagsAction";
-import CustomTableBody from "../CustomTableBody/CustomTableBody";
-import CustomTableHead from "../CustomTableHead/CustomTableHead";
+import Table from '@material-ui/core/Table';
+import { FixedPlugin } from 'components/FixedPlugin/FixedPlugin.jsx';
+import { useDispatch } from 'react-redux';
+import { ADD_TAG, DELETE_TAG, UPDATE_TAG } from '../../actions/GetTagsAction';
+import CustomTableBody from '../CustomTableBody/CustomTableBody';
+import CustomTableHead from '../CustomTableHead/CustomTableHead';
 
 function CustomTable({ ...props }) {
-  const { tableData, tableHead, openModal, closeModal, selectedIDRef } = props;
+  const { showList, tableHead, openModal, closeModal, selectedIDRef } = props;
 
-  const nullTag = {
-    id: "",
-    name: "",
-    showOnPage: "",
-    taggedNumber: "",
-  };
-  const [showList, setShowList] = useState(tableData);
+  // const [showList, setShowList] = useState(tableData);
   const [isCreate, setIsCreate] = useState(true);
-  const [selectedTag, setSelectedTag] = useState(nullTag);
-  const [origSelectedTag, setOrigSelectedTag] = useState(nullTag);
-  const [fixedClasses, setFixedClasses] = useState("dropdown");
+
+  const [selectedTag, setSelectedTag] = useState(null);
+  const [origSelectedTag, setOrigSelectedTag] = useState(null);
+
+  const [fixedClasses, setFixedClasses] = useState('dropdown');
   const [selectedID, setSelectedID] = useState(selectedIDRef.current);
 
   const dispatch = useDispatch();
 
   useEffect(() => {
-    setShowList(tableData);
-  }, [tableData, selectedIDRef.current]);
-
-  const setTag = (tag) =>
-    setSelectedTag({
-      id: tag.id,
-      name: tag.name,
-      showOnPage: tag.showOnPage,
-      taggedNumber: tag.taggedNumber,
-    });
+    // setShowList(tableData);
+  }, [selectedIDRef.current]);
 
   const handleRowClick = (e) => {
     // TODO: popup confirm window
@@ -47,15 +35,15 @@ function CustomTable({ ...props }) {
     if (!sTag) return;
     selectedIDRef.current = selectedID;
     setSelectedID(selectedID);
-    setTag(sTag);
+    setSelectedTag(sTag);
     setIsCreate(true);
   };
 
   function handleFixedClick() {
-    if (fixedClasses === "dropdown") {
-      setFixedClasses("dropdown show");
+    if (fixedClasses === 'dropdown') {
+      setFixedClasses('dropdown show');
     } else {
-      setFixedClasses("dropdown");
+      setFixedClasses('dropdown');
     }
   }
 
@@ -94,7 +82,7 @@ function CustomTable({ ...props }) {
     });
 
     openModal();
-    setTag(selectedTag);
+    setSelectedTag(selectedTag);
   }
 
   // DELETE
@@ -111,7 +99,7 @@ function CustomTable({ ...props }) {
     openModal();
   }
 
-  const setSelectedTagEmpty = () => setSelectedTag(nullTag);
+  const setSelectedTagEmpty = () => setSelectedTag(null);
 
   function handleCancel() {
     setSelectedTag(origSelectedTag);
@@ -125,52 +113,31 @@ function CustomTable({ ...props }) {
     setIsCreate(false);
   }
 
-  function handleIDChange(e) {
-    const changedTag = Object.assign({}, selectedTag, {
-      id: e.target.value,
-    });
-    setSelectedTag(changedTag);
-  }
+  function handleChange(e) {
+    console.log(e.target.value);
 
-  function handleNameChange(e) {
-    const changedTag = Object.assign({}, selectedTag, {
-      name: e.target.value,
-    });
-    setSelectedTag(changedTag);
-  }
-  function handleShowOnPageChange(e) {
-    const changedTag = Object.assign({}, selectedTag, {
-      showOnPage: e.target.value,
-    });
-    setSelectedTag(changedTag);
-  }
-  function handleTaggedNumberChange(e) {
-    const changedTag = Object.assign({}, selectedTag, {
-      taggedNumber: e.target.value,
-    });
-    setSelectedTag(changedTag);
+    
+    // const changedTag = Object.assign({}, selectedTag, {
+    //   name: e.target.value,
+    // });
+    // setSelectedTag(changedTag);
   }
 
   return (
     <div>
-      <FixedPlugin
+     {selectedTag? <FixedPlugin
         handleFixedClick={handleFixedClick}
         fixedClasses={fixedClasses}
-        id={selectedTag.id}
-        name={selectedTag.name}
-        showOnPage={selectedTag.showOnPage}
-        taggedNumber={selectedTag.taggedNumber}
+        tableHead={tableHead}
+        selectedTag={selectedTag}
         isCreate={isCreate}
-        handleIDChange={handleIDChange}
-        handleNameChange={handleNameChange}
-        handleShowOnPageChange={handleShowOnPageChange}
-        handleTaggedNumberChange={handleTaggedNumberChange}
-        handleCreateTag={handleCreateTag}
+        handleChange={handleChange}
         handleAddRow={handleAddRow}
         handleUpdateRow={handleUpdateRow}
         handleDeleteRow={handleDeleteRow}
         handleCancel={handleCancel}
-      />
+        handleCreateTag={handleCreateTag}
+      />:null}
       <Table>
         {showList ? (
           <>

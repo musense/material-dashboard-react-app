@@ -1,32 +1,32 @@
 /* eslint-disable */
-import PropTypes from "prop-types";
-import React, { useState, useEffect, useRef } from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import PropTypes from 'prop-types';
+import React, { useState, useEffect, useRef } from 'react';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 // creates a beautiful scrollbar
-import "perfect-scrollbar/css/perfect-scrollbar.css";
+import 'perfect-scrollbar/css/perfect-scrollbar.css';
 // @material-ui/core components
-import withStyles from "@material-ui/core/styles/withStyles";
+import withStyles from '@material-ui/core/styles/withStyles';
 // core components
-import Footer from "components/Footer/Footer.jsx";
-import Navbar from "components/Navbars/Navbar.jsx";
-import Sidebar from "components/Sidebar/Sidebar.jsx";
-import routes from "routes.js";
+import Footer from 'components/Footer/Footer.jsx';
+import Navbar from 'components/Navbars/Navbar.jsx';
+import Sidebar from 'components/Sidebar/Sidebar.jsx';
+import routes from 'routes.js';
 
-import dashboardStyle from "assets/jss/material-dashboard-react/layouts/dashboardStyle.jsx";
+import dashboardStyle from 'assets/jss/material-dashboard-react/layouts/dashboardStyle.jsx';
 
-import image from "assets/img/sidebar-1.jpg";
-import logo from "assets/img/scaredseal.jpeg";
-import { Link, Outlet } from "react-router-dom";
-import PerfectScrollbar from "perfect-scrollbar";
+import image from 'assets/img/sidebar-1.jpg';
+import logo from 'assets/img/scaredseal.jpeg';
+import { Link, Outlet } from 'react-router-dom';
+import PerfectScrollbar from 'perfect-scrollbar';
 
 let userInfo = {};
 
 function Dashboard({ ...props }) {
   const { classes, ...rest } = props;
   // const [image, setImage] = useState(image);
-  const [color, setColor] = useState("orange");
+  const [color, setColor] = useState('orange');
   const [hasImage, setHasImage] = useState(true);
-  const [fixedClasses, setFixedClasses] = useState("dropdown show");
+  const [fixedClasses, setFixedClasses] = useState('dropdown show');
   const [mobileOpen, setMobileOpen] = useState(false);
 
   const mainPanel = useRef(null);
@@ -34,21 +34,22 @@ function Dashboard({ ...props }) {
   // const handleImageClick = (image) => {
   //   setImage(image);
   // };
+
   const handleColorClick = (color) => {
     setColor(color);
   };
   const handleFixedClick = () => {
-    if (fixedClasses === "dropdown") {
-      setFixedClasses("dropdown show");
+    if (fixedClasses === 'dropdown') {
+      setFixedClasses('dropdown show');
     } else {
-      setFixedClasses("dropdown");
+      setFixedClasses('dropdown');
     }
   };
   const handleDrawerToggle = () => {
     setMobileOpen((preMobileOpen) => !preMobileOpen);
   };
   function getRoute() {
-    return props.location && props.location.pathname !== "/admin/maps";
+    return props.location && props.location.pathname !== '/admin/maps';
   }
   const resizeFunction = () => {
     if (window.innerWidth >= 960) {
@@ -60,22 +61,23 @@ function Dashboard({ ...props }) {
       ? navigator.userAgentData
         ? navigator.userAgentData.platform
         : navigator.platform
-      : "unknown";
+      : 'unknown';
   };
+
   useEffect(() => {
     if (mainPanel.current === null) {
       //componentDidMount
       mainPanel.current = classes.mainPanel;
-      if (getAgentPlatform().indexOf("Win") > -1) {
+      if (getAgentPlatform().indexOf('Win') > -1) {
         const ps = new PerfectScrollbar(mainPanel);
       }
-      window.addEventListener("resize", resizeFunction);
+      window.addEventListener('resize', resizeFunction);
     } else {
       //componentDidUpdate
     }
     return () => {
       //componentWillUnmount
-      window.removeEventListener("resize", resizeFunction);
+      window.removeEventListener('resize', resizeFunction);
     };
   }, []);
   // async componentDidMount() {
@@ -123,7 +125,7 @@ function Dashboard({ ...props }) {
       <div className={classes.wrapper}>
         <Sidebar
           routes={routes}
-          logoText={"Scared Seal"}
+          logoText={'Scared Seal'}
           logo={logo}
           image={image}
           handleDrawerToggle={handleDrawerToggle}

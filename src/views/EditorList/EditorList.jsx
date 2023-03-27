@@ -5,6 +5,7 @@ import { withStyles } from '@material-ui/styles';
 import Card from 'components/Card/Card.jsx';
 import CardBody from 'components/Card/CardBody.jsx';
 import CardHeader from 'components/Card/CardHeader.jsx';
+import CardFooter from 'components/Card/CardFooter.jsx';
 import CustomEditorTable from 'components/CustomEditorTable/CustomEditorTable.jsx';
 import GridContainer from 'components/Grid/GridContainer.jsx';
 import GridItem from 'components/Grid/GridItem.jsx';
@@ -89,7 +90,7 @@ function EditorList(props) {
       }
     }
 
-    return () => {};
+    return () => { };
   }, [returnMessage]);
 
   function openModal() {
@@ -114,7 +115,7 @@ function EditorList(props) {
     });
   }
 
-  function initialEditorState(){
+  function initialEditorState() {
     dispatch({ type: INITIAL_EDITOR });
   }
   function onAddNewEditor() {
@@ -123,7 +124,7 @@ function EditorList(props) {
   }
   return (
     <GridContainer>
-      <CustomModal ariaHideApp={false} isModalOpen={isModalOpen} />
+      {/* <CustomModal ariaHideApp={false} isModalOpen={isModalOpen} /> */}
       <GridItem xs={12} sm={12} md={12}>
         <Card>
           <CardHeader color='primary'>

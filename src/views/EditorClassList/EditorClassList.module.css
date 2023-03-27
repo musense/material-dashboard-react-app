@@ -1,0 +1,107 @@
+label {
+  font-size: 1rem;
+}
+
+input {
+  display: block;
+  width: 100%;
+  height: 1.8rem;
+  line-height: 1;
+  padding: 0 0.5rem;
+  box-sizing: border-box;
+}
+
+input[type='button'],
+input[type='submit'] {
+  display: block;
+  width: 100%;
+  cursor: pointer;
+}
+h4 {
+  text-align: center;
+}
+
+form[name='class-form'] > div {
+  display: flex;
+  flex-direction: row;
+  gap: 4rem;
+  margin-top: 1.5rem;
+}
+form[name='class-form'] > div > input:last-child {
+  background-color: darkviolet;
+  color: white;
+  border: none;
+}
+form[name='class-form'] > div > input:last-child:hover {
+  background-color: violet;
+}
+
+.editor-container {
+  height: 800px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.editor-left-wrapper,
+.editor-right-wrapper {
+  height: 100%;
+  /* background-color: azure; */
+}
+.editor-left-wrapper {
+  width: 400px;
+}
+
+.editor-right-wrapper {
+  width: 1200px;
+}
+
+.editor-table-wrapper {
+  /* background-color: hotpink; */
+}
+
+.editor-table-header,
+.editor-table-body > div {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+  align-items: center;
+  height: 2.5rem;
+}
+.editor-table-body > div:nth-child(even) {
+  background-color: #ddd;
+}
+.editor-table-body > div:hover {
+  background-color: #eee;
+}
+
+.editor-table-header {
+  background-color: #ddd;
+  color: #333;
+  font-weight: bold;
+}
+
+.editor-table-header > div,
+.editor-table-body > div > div {
+  text-align: center;
+  overflow-x: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.editor-table-header > div:first-child,
+.editor-table-body > div > div:first-child,
+.editor-table-header > div:last-child,
+.editor-table-body > div > div:last-child {
+  flex-basis: 100px;
+}
+.editor-table-header > div:nth-child(2),
+.editor-table-body > div > div:nth-child(2),
+.editor-table-header > div:nth-child(4),
+.editor-table-body > div > div:nth-child(4) {
+  flex-basis: 300px;
+}
+.editor-table-header > div:nth-child(3),
+.editor-table-body > div > div:nth-child(3) {
+  flex-basis: 500px;
+}

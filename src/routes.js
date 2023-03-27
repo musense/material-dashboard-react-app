@@ -18,6 +18,7 @@ import UserProfile from "views/UserProfile/UserProfile.jsx";
 // core components/views for Auth layout
 import LoginPage from "views/Pages/LoginPage.jsx";
 import RegisterPage from "views/Pages/RegisterPage.jsx";
+import EditorClassList from "./views/EditorClassList/EditorClassList";
 
 const dashboardRoutes = [
   {
@@ -50,6 +51,14 @@ const dashboardRoutes = [
     rtlName  : "قائمة الجدول",
     icon     : "content_paste",
     component: EditorList,
+    layout   : "/admin",
+  },
+  {
+    path     : "/editorClassList",
+    name     : "文章分類管理",
+    rtlName  : "قائمة الجدول",
+    icon     : "content_paste",
+    component: EditorClassList,
     layout   : "/admin",
   },
   {

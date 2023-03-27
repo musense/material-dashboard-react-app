@@ -25,6 +25,7 @@
     "axios": "^1.2.2",
     "chartist": "0.10.1",
     "classnames": "2.2.6",
+    "crypto-js": "4.1.1",
     "history": "4.7.2",
     "perfect-scrollbar": "1.4.0",
     "pm2": "^5.2.2",
@@ -94,6 +95,7 @@
     "@babel/helper-compilation-targets": "7.19.3",
     "@babel/helper-create-class-features-plugin": "7.19.0",
     "@babel/helper-module-transforms": "7.19.6",
+    "@types/crypto-js": "^4.1.1",
     "@types/react-modal": "^3.13.1",
     "@types/redux-logger": "^3.0.9"
   }

@@ -12,6 +12,7 @@ import NewIEditor from 'views/IEditor/NewIEditor.jsx'
 import UserProfile from 'views/UserProfile/UserProfile';
 import LoginPage from 'views/Pages/LoginPage';
 import RegisterPage from 'views/Pages/RegisterPage';
+import EditorClassList from './views/EditorClassList/EditorClassList';
 
 
 function App() {
@@ -20,10 +21,9 @@ function App() {
     useEffect(() => {
         // navigate('/auth/register-page')
         // navigate('/auth/login-page')
-        // navigate('/admin/dashboard')
-        // navigate('/admin/editorList/edit/63e1c1517d10512e547703b7')
         // navigate('/admin/editorList')
-        navigate('/admin/table')
+        navigate('/admin/editorClassList')
+        // navigate('/admin/table')
     }, []);
 
     return (
@@ -34,6 +34,7 @@ function App() {
                         <Route path="dashboard" element={<Dashboard />} />
                         <Route path="user" element={<UserProfile />} />
                         <Route path="table" element={<TableList />} />
+                        <Route path="editorClassList" element={<EditorClassList />} />
                         <Route path="editorList" >
                             <Route index element={<EditorList />} />
                             <Route path="edit/new" element={<NewIEditor />} />

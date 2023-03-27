@@ -9,8 +9,6 @@ function CustomEditorTable({ ...props }) {
   const {
     tableData,
     tableHead,
-    openModal,
-    closeModal,
     initialEditorState,
     selectedIDRef,
     isRowLink,

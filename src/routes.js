@@ -39,7 +39,7 @@ const dashboardRoutes = [
   },
   {
     path: "/table",
-    name: "Table List",
+    name: "標籤管理",
     rtlName: "قائمة الجدول",
     icon: "content_paste",
     component: TableList,
@@ -47,7 +47,7 @@ const dashboardRoutes = [
   },
   {
     path     : "/editorList",
-    name     : "EditorList",
+    name     : "文章列表",
     rtlName  : "قائمة الجدول",
     icon     : "content_paste",
     component: EditorList,

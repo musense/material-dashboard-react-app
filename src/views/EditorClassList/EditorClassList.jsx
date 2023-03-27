@@ -178,7 +178,7 @@ function EditorClassList() {
                                     <label htmlFor="keyword">keyword</label>
                                     <input type="text" required id="keyword" name='keyword' />
                                     <label htmlFor="custom-url">自訂網址</label>
-                                    <input type="text" required id="custom-url" name='custom-url' />
+                                    <input type="text" name='custom-url' />
                                     <div>
                                         {isEditing && <input type='button' value='儲存' onClick={() => onSave()} />}
                                         {!isEditing && <input type='button' value='清空' onClick={reset} />}
@@ -200,25 +200,24 @@ function EditorClassList() {
                             </CardHeader>
                             <CardBody>
                                 <form name='view-class-form' className={styles['editor-table-wrapper']} onSubmit={onBunchDelete}>
-                                    <div className={styles['editor-table-header']}>
-                                        <div> <input type='submit' value='批次刪除' /> </div>
-                                        <div>分類名稱</div>
-                                        <div>分類網址</div>
-                                        <div>分類上層</div>
-                                        <div></div>
+                                    <div className={`${styles['editor-table-form']} ${styles['editor-table-header']}`}>
+                                        <div>
+                                            <div> <input type='submit' value='批次刪除' /> </div>
+                                            <div>分類名稱</div>
+                                            <div>分類網址</div>
+                                            <div>分類上層</div>
+                                        </div>
                                     </div>
-                                    <div className={styles['editor-table-body']}>
+                                    <div className={`${styles['editor-table-form']} ${styles['editor-table-body']}`}>
                                         {
                                             editorClassList && editorClassList.length > 0 && editorClassList.map((editorClass, index) => {
                                                 console.log("🚀 ~ file: EditorClassList.jsx:186 ~ editorClassList&&editorClassList.length>0&&editorClassList.map ~ editorClassList:", editorClassList)
 
                                                 return <div key={index} onClick={() => onEdit(editorClass)}>
                                                     <div><input type='checkbox' name={editorClass._id} onClick={checkEditorClassRow} /></div>
-                                                    {/* <div><input type='button' value='編輯' onClick={() => onEdit(editorClass)} /></div> */}
                                                     <div>{editorClass.classification}</div>
                                                     <div>{editorClass['custom-url']}</div>
                                                     <div>{editorClass['parent-class']}</div>
-                                                    {/* <div><input type='button' value='刪除' onClick={() => onDelete(editorClass._id)} /></div> */}
                                                 </div>
                                             })
                                         }

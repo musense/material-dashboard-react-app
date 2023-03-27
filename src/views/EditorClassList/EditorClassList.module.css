@@ -37,7 +37,6 @@ form[name='class-form'] > div > input:last-child:hover {
 }
 
 .editor-container {
-  height: 800px;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -60,11 +59,13 @@ form[name='class-form'] > div > input:last-child:hover {
   /* background-color: hotpink; */
 }
 
-.editor-table-header,
+
+.editor-table-header > div,
 .editor-table-body > div {
   display: flex;
   flex-direction: row;
   gap: 1rem;
+  justify-content: space-between;
   align-items: center;
   height: 2.5rem;
 }
@@ -81,27 +82,20 @@ form[name='class-form'] > div > input:last-child:hover {
   font-weight: bold;
 }
 
-.editor-table-header > div,
-.editor-table-body > div > div {
+.editor-table-form > div > div {
   text-align: center;
   overflow-x: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
 }
 
-.editor-table-header > div:first-child,
-.editor-table-body > div > div:first-child,
-.editor-table-header > div:last-child,
-.editor-table-body > div > div:last-child {
+.editor-table-form > div > div:first-child {
   flex-basis: 100px;
 }
-.editor-table-header > div:nth-child(2),
-.editor-table-body > div > div:nth-child(2),
-.editor-table-header > div:nth-child(4),
-.editor-table-body > div > div:nth-child(4) {
+.editor-table-form > div > div:nth-child(2),
+.editor-table-form > div > div:nth-child(4) {
   flex-basis: 300px;
 }
-.editor-table-header > div:nth-child(3),
-.editor-table-body > div > div:nth-child(3) {
+.editor-table-form > div > div:nth-child(3) {
   flex-basis: 500px;
 }

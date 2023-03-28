@@ -1,7 +1,3 @@
-label {
-  font-size: 1rem;
-}
-
 input {
   display: block;
   width: 100%;
@@ -11,29 +7,12 @@ input {
   box-sizing: border-box;
 }
 
-input[type='button'],
-input[type='submit'] {
-  display: block;
-  width: 100%;
-  cursor: pointer;
-}
-h4 {
-  text-align: center;
-}
 
 form[name='class-form'] > div {
   display: flex;
   flex-direction: row;
   gap: 4rem;
   margin-top: 1.5rem;
-}
-form[name='class-form'] > div > input:last-child {
-  background-color: darkviolet;
-  color: white;
-  border: none;
-}
-form[name='class-form'] > div > input:last-child:hover {
-  background-color: violet;
 }
 
 .editor-container {
@@ -60,8 +39,7 @@ form[name='class-form'] > div > input:last-child:hover {
 }
 
 
-.editor-table-header > div,
-.editor-table-body > div {
+.view-form > div {
   display: flex;
   flex-direction: row;
   gap: 1rem;
@@ -82,20 +60,19 @@ form[name='class-form'] > div > input:last-child:hover {
   font-weight: bold;
 }
 
-.editor-table-form > div > div {
+.view-form > div > div {
   text-align: center;
   overflow-x: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
 }
-
-.editor-table-form > div > div:first-child {
+.view-form > div > div:first-child {
   flex-basis: 100px;
 }
-.editor-table-form > div > div:nth-child(2),
-.editor-table-form > div > div:nth-child(4) {
+.view-form > div > div:nth-child(2),
+.view-form > div > div:nth-child(4) {
   flex-basis: 300px;
 }
-.editor-table-form > div > div:nth-child(3) {
+.view-form > div > div:nth-child(3) {
   flex-basis: 500px;
 }

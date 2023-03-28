@@ -166,17 +166,17 @@ function EditorClassList() {
                             </CardHeader>
                             <CardBody>
                                 <form name='class-form' onSubmit={onAddNewEditor}>
-                                    <input type="hidden" id="_id" name='_id' />
+                                    <input type="hidden" name='_id' />
                                     <label htmlFor="classification">分類名稱</label>
-                                    <input type="text" required id="classification" name='classification' />
+                                    <input type="text" name='classification' />
                                     <label htmlFor="parent-class">上層分類</label>
-                                    <input type="text" required id="parent-class" name='parent-class' />
+                                    <input type="text" name='parent-class' />
                                     <label htmlFor="title">title</label>
-                                    <input type="text" required id="title" name='title' />
+                                    <input type="text" name='title' />
                                     <label htmlFor="description">description</label>
-                                    <input type="text" required id="description" name='description' />
+                                    <input type="text" name='description' />
                                     <label htmlFor="keyword">keyword</label>
-                                    <input type="text" required id="keyword" name='keyword' />
+                                    <input type="text" name='keyword' />
                                     <label htmlFor="custom-url">自訂網址</label>
                                     <input type="text" name='custom-url' />
                                     <div>
@@ -200,25 +200,26 @@ function EditorClassList() {
                             </CardHeader>
                             <CardBody>
                                 <form name='view-class-form' className={styles['editor-table-wrapper']} onSubmit={onBunchDelete}>
-                                    <div className={`${styles['editor-table-form']} ${styles['editor-table-header']}`}>
-                                        <div>
+                                    <div data-attr="data-header" className={`${styles['view-form']} ${styles['editor-table-header']}`}>
+                                        <div data-attr="data-header-row">
                                             <div> <input type='submit' value='批次刪除' /> </div>
                                             <div>分類名稱</div>
                                             <div>分類網址</div>
                                             <div>分類上層</div>
                                         </div>
                                     </div>
-                                    <div className={`${styles['editor-table-form']} ${styles['editor-table-body']}`}>
+                                    <div data-attr="data-body" className={`${styles['view-form']} ${styles['editor-table-body']}`}>
                                         {
                                             editorClassList && editorClassList.length > 0 && editorClassList.map((editorClass, index) => {
                                                 console.log("🚀 ~ file: EditorClassList.jsx:186 ~ editorClassList&&editorClassList.length>0&&editorClassList.map ~ editorClassList:", editorClassList)
 
-                                                return <div key={index} onClick={() => onEdit(editorClass)}>
-                                                    <div><input type='checkbox' name={editorClass._id} onClick={checkEditorClassRow} /></div>
-                                                    <div>{editorClass.classification}</div>
-                                                    <div>{editorClass['custom-url']}</div>
-                                                    <div>{editorClass['parent-class']}</div>
-                                                </div>
+                                                return (
+                                                    <div data-attr="data-body-row" key={index} onClick={() => onEdit(editorClass)}>
+                                                        <div><input type='checkbox' name={editorClass._id} onClick={checkEditorClassRow} /></div>
+                                                        <div>{editorClass.classification}</div>
+                                                        <div>{editorClass['custom-url']}</div>
+                                                        <div>{editorClass['parent-class']}</div>
+                                                    </div>)
                                             })
                                         }
                                     </div>

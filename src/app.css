@@ -1,0 +1,40 @@
+html,
+body {
+  margin: 0;
+}
+
+h4 {
+  text-align: center;
+}
+
+label {
+  font-size: 1rem;
+}
+
+input[type='button'],
+input[type='submit'] {
+  display: block;
+  width: min(10rem, 100%);
+  cursor: pointer;
+}
+
+div > input[type='submit'],
+div > input[type='button'] {
+  margin: 0 auto;
+}
+input[type='submit'] {
+  background-color: darkviolet;
+  color: white;
+  border: none;
+}
+input[type='submit']:hover {
+  background-color: violet;
+}
+
+.container{
+    width: 100%;
+}
+
+.wrapper{
+    width: 100%;
+}

@@ -13,7 +13,7 @@ import UserProfile from 'views/UserProfile/UserProfile';
 import LoginPage from 'views/Pages/LoginPage';
 import RegisterPage from 'views/Pages/RegisterPage';
 import EditorClassList from './views/EditorClassList/EditorClassList';
-
+import './app.css'
 
 function App() {
     const navigate = useNavigate()
@@ -21,8 +21,8 @@ function App() {
     useEffect(() => {
         // navigate('/auth/register-page')
         // navigate('/auth/login-page')
-        // navigate('/admin/editorList')
-        navigate('/admin/editorClassList')
+        navigate('/admin/editorList')
+        // navigate('/admin/editorClassList')
         // navigate('/admin/table')
     }, []);
 

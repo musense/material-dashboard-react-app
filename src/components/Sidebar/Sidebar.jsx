@@ -20,7 +20,8 @@ const Sidebar = ({ ...props }) => {
   // verifies if routeName is the one active (in browser input)
   const location = useLocation();
   function activeRoute(routeName) {
-    return location.pathname.indexOf(routeName) > -1;
+    // return location.pathname.indexOf(routeName) > -1;
+    return location.pathname === routeName;
   }
   const { classes, color, logo, image, logoText, routes } = props;
   const links = (

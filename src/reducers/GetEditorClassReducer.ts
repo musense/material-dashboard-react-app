@@ -2,15 +2,64 @@ import * as GetClassAction from '../actions/GetClassAction';
 import { errorMessage } from './errorMessage';
 import sha256 from 'crypto-js/sha256'
 
-const defaultEditorClass = {
-    _id: sha256('defaultEditorClass.title').toString(),
-    classification: 'default-class',
-    'parent-class': '',
-    title: 'default-class',
-    description: 'default-class',
-    keyword: 'default-class',
-    'custom-url': 'default-class',
+export interface EditorClass {
+    _id: string;
+    classification: string;
+    'parent-class': string | undefined;
+    title: string | undefined;
+    description: string | undefined;
+    keywords: string | undefined;
+    'custom-url': string | undefined;
 }
+
+const defaultEditorClass: EditorClass = {
+    _id: sha256('uncategorized').toString(),
+    classification: 'uncategorized',
+    'parent-class': undefined,
+    title: undefined,
+    description: undefined,
+    keywords: undefined,
+    'custom-url': undefined,
+}
+
+const editorClassList = [
+    {
+        _id: sha256('test-class-1').toString(),
+        classification: 'test-class-1',
+        'parent-class': undefined,
+        title: undefined,
+        description: undefined,
+        keywords: undefined,
+        'custom-url': undefined,
+    },
+    {
+        _id: sha256('test-class-class-2-2').toString(),
+        classification: 'test-class-class-2-2',
+        'parent-class': 'hot',
+        title: undefined,
+        description: undefined,
+        keywords: undefined,
+        'custom-url': undefined,
+    },
+    {
+        _id: sha256('test-class2-class-2-2').toString(),
+        classification: 'test-class2-class-2-2',
+        'parent-class': 'hot',
+        title: undefined,
+        description: undefined,
+        keywords: undefined,
+        'custom-url': undefined,
+    },
+    {
+        _id: sha256('test-class5-class-2-5').toString(),
+        classification: 'test-class5-class-2-5',
+        'parent-class': 'recommend',
+        title: undefined,
+        description: undefined,
+        keywords: undefined,
+        'custom-url': undefined,
+    },
+]
 
 const emptyEditorClass = {
     _id: '',
@@ -18,16 +67,23 @@ const emptyEditorClass = {
     'parent-class': '',
     title: '',
     description: '',
-    keyword: '',
+    keywords: '',
     'custom-url': '',
 }
 
-const initialState = {
-    editorClassList: [],
+const initialState: {
+    editorClassList: EditorClass[];
+    editorClass    : EditorClass;
+    errorMessage   : String | null;
+} = {
+    editorClassList: [
+        defaultEditorClass,
+        ...editorClassList
+    ],
     editorClass: emptyEditorClass,
     errorMessage: null
 }
-const getEditorClassReducer = (state = initialState, action) => {
+const getEditorClassReducer = (state = initialState, action: { type: any; payload: { data: any; }; }) => {
     console.log(action);
 
     switch (action.type) {

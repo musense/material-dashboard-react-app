@@ -12,7 +12,7 @@ import {
 } from '../../actions/GetEditorAction';
 import { useParams, useNavigate } from 'react-router-dom';
 import CustomModal from '../../components/CustomModal/CustomModal.jsx';
-import styles from './../../assets/css/ieditor.module.css';
+import styles from './IEditor.module.css';
 
 function IEditor({ props }) {
   const { id } = useParams();

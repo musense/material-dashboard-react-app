@@ -24,7 +24,7 @@ const dashboardRoutes = [
   {
     path: "/dashboard",
     name: "Dashboard",
-    rtlName: "لوحة القيادة",
+      // rtlName: "لوحة القيادة",
     icon: Dashboard,
     component: DashboardPage,
     layout: "/admin"
@@ -32,7 +32,7 @@ const dashboardRoutes = [
   {
     path: "/user",
     name: "User Profile",
-    rtlName: "ملف تعريفي للمستخدم",
+    // rtlName: "ملف تعريفي للمستخدم",
     icon: Person,
     component: UserProfile,
     layout: "/admin"
@@ -40,7 +40,7 @@ const dashboardRoutes = [
   {
     path: "/table",
     name: "標籤管理",
-    rtlName: "قائمة الجدول",
+    // rtlName: "قائمة الجدول",
     icon: "content_paste",
     component: TableList,
     layout: "/admin"
@@ -48,7 +48,7 @@ const dashboardRoutes = [
   {
     path     : "/editorList",
     name     : "文章列表",
-    rtlName  : "قائمة الجدول",
+    // rtlName  : "قائمة الجدول",
     icon     : "content_paste",
     component: EditorList,
     layout   : "/admin",
@@ -56,72 +56,24 @@ const dashboardRoutes = [
   {
     path     : "/editorClassList",
     name     : "文章分類管理",
-    rtlName  : "قائمة الجدول",
+    // rtlName  : "قائمة الجدول",
     icon     : "content_paste",
     component: EditorClassList,
     layout   : "/admin",
   },
   {
-    path     : "/ieditor",
-    name     : "IEditor",
-    rtlName  : "قائمة الجدول",
+    path     : "/editorList/edit/new",
+    name     : "新增文章",
+    // rtlName  : "قائمة الجدول",
     icon     : "content_paste",
     component: IEditor,
     layout   : "/admin",
-    hide: true
+    hide: false
   },
-  // {
-  //   path: "/typography",
-  //   name: "Typography",
-  //   rtlName: "طباعة",
-  //   icon: LibraryBooks,
-  //   component: Typography,
-  //   layout: "/admin"
-  // },
-  // {
-  //   path: "/icons",
-  //   name: "Icons",
-  //   rtlName: "الرموز",
-  //   icon: BubbleChart,
-  //   component: Icons,
-  //   layout: "/admin"
-  // },
-  // {
-  //   path: "/maps",
-  //   name: "Maps",
-  //   rtlName: "خرائط",
-  //   icon: LocationOn,
-  //   component: Maps,
-  //   layout: "/admin"
-  // },
-  // {
-  //   path: "/notifications",
-  //   name: "Notifications",
-  //   rtlName: "إخطارات",
-  //   icon: Notifications,
-  //   component: NotificationsPage,
-  //   layout: "/admin"
-  // },
-  // {
-  //   path: "/upgrade-to-pro",
-  //   name: "Upgrade To PRO",
-  //   rtlName: "التطور للاحترافية",
-  //   icon: Unarchive,
-  //   component: UpgradeToPro,
-  //   layout: "/admin"
-  // },
-  // {
-  //   path: "/rtl-page",
-  //   name: "RTL Support",
-  //   rtlName: "پشتیبانی از راست به چپ",
-  //   icon: Language,
-  //   component: RTLPage,
-  //   layout: "/rtl"
-  // },
-  {
+    {
     path: "/login-page",
     name: "Login Page",
-    rtlName: "پشتیبانی از راست به چپ",
+    // rtlName: "پشتیبانی از راست به چپ",
     icon: Login,
     component: LoginPage,
     layout: "/auth"
@@ -129,7 +81,7 @@ const dashboardRoutes = [
   {
     path: "/register-page",
     name: "Register Page",
-    rtlName: "پشتیبانی از راست به چپ",
+    // rtlName: "پشتیبانی از راست به چپ",
     icon: Register,
     component: RegisterPage,
     layout: "/auth"

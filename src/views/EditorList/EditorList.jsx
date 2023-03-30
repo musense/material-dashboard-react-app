@@ -382,36 +382,3 @@ function EditorList() {
 
 
 export default EditorList;
-
-
-
-              // <>
-              //   <CustomEditorTable
-              //     tableHeaderColor='primary'
-              //     tableHead={tableHead}
-              //     tableData={titleList}
-              //     openModal={openModal}
-              //     closeModal={closeModal}
-              //     initialEditorState={initialEditorState}
-              //     selectedIDRef={selectedIDRef}
-              //     isRowLink={isRowLink}
-              //   />
-              //   <div className={'EditorList-Button-Container'}>
-              //     <Button color='info' onClick={() => onSelectEditorClick()}>
-              //       {isRowLink ? 'Select Editor' : 'Cancel Select'}
-              //     </Button>
-              //     <div
-              //       className={
-              //         isRowLink ? 'HideDeleteButton' : 'ShowDeleteButton'
-              //       }
-              //     >
-              //       <Button
-              //         color='danger'
-              //         disabled={addEditorDisabled}
-              //         onClick={() => onDeleteEditorClick()}
-              //       >
-              //         Delete Editor
-              //       </Button>
-              //     </div>
-              //   </div>
-              // </>

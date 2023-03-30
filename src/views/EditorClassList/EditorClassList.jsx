@@ -58,7 +58,7 @@ function EditorClassList() {
         form.elements['parent-class'].value = editorClass['parent-class']
         form.elements['title'].value = editorClass.title
         form.elements['description'].value = editorClass.description
-        form.elements['keyword'].value = editorClass.keyword
+        form.elements['keywords'].value = editorClass.keywords
         form.elements['custom-url'].value = editorClass['custom-url']
     }
     setFormData(editorClass)
@@ -175,8 +175,8 @@ function EditorClassList() {
                                     <input type="text" name='title' />
                                     <label htmlFor="description">description</label>
                                     <input type="text" name='description' />
-                                    <label htmlFor="keyword">keyword</label>
-                                    <input type="text" name='keyword' />
+                                    <label htmlFor="keywords">keywords</label>
+                                    <input type="text" name='keywords' />
                                     <label htmlFor="custom-url">自訂網址</label>
                                     <input type="text" name='custom-url' />
                                     <div>

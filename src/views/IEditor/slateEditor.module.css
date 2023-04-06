@@ -1,0 +1,73 @@
+[data-slate-editor]>*+* {
+    margin-top: 1em;
+}
+
+.fancy {
+    background-color: rgb(218, 225, 255);
+    padding: 40px;
+    font-size: 20px;
+    min-height: 150px;
+    outline: 3px dashed rgb(0, 94, 128);
+    border-radius: 20px;
+    outline-offset: -20px;
+    white-space: pre-wrap;
+}
+
+button {
+    border: unset;
+    outline: unset;
+    padding: 0;
+    margin: 0 0.5rem;
+    font-weight: bold;
+    color: rgb(204, 204, 204);
+    background: transparent;
+    cursor: pointer;
+}
+
+.active {
+    color: black;
+}
+
+p {
+    margin: 0;
+}
+
+blockquote {
+    border-left: 2px solid #ddd;
+    margin-left: 0;
+    margin-right: 0;
+    padding-left: 10px;
+    color: #aaa;
+    font-style: italic;
+}
+
+:not(pre)>code {
+    font-family: monospace;
+    background-color: #eee;
+    padding: 3px;
+}
+
+ul {
+    display: block;
+    list-style-type: disc;
+    margin-block-start: 1em;
+    margin-block-end: 1em;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
+    padding-inline-start: 40px;
+}
+
+ol {
+    display: block;
+    list-style-type: decimal;
+    margin-block-start: 1em;
+    margin-block-end: 1em;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
+    padding-inline-start: 40px;
+}
+
+li {
+    display: list-item;
+    text-align: -webkit-match-parent;
+}

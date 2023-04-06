@@ -1,7 +1,7 @@
 import PropTypes from "prop-types";
 import React from "react";
 // react plugin for creating charts
-import ChartistGraph from "react-chartist";
+// import ChartistGraph from "react-chartist";
 // @material-ui/core
 import Icon from "@material-ui/core/Icon";
 import withStyles from "@material-ui/core/styles/withStyles";
@@ -137,13 +137,13 @@ class Dashboard extends React.Component {
           <GridItem xs={12} sm={12} md={4}>
             <Card chart>
               <CardHeader color="success">
-                <ChartistGraph
+                {/* <ChartistGraph
                   className="ct-chart"
                   data={dailySalesChart.data}
                   type="Line"
                   options={dailySalesChart.options}
                   listener={dailySalesChart.animation}
-                />
+                /> */}
               </CardHeader>
               <CardBody>
                 <h4 className={classes.cardTitle}>Daily Sales</h4>
@@ -164,14 +164,14 @@ class Dashboard extends React.Component {
           <GridItem xs={12} sm={12} md={4}>
             <Card chart>
               <CardHeader color="warning">
-                <ChartistGraph
+                {/* <ChartistGraph
                   className="ct-chart"
                   data={emailsSubscriptionChart.data}
                   type="Bar"
                   options={emailsSubscriptionChart.options}
                   responsiveOptions={emailsSubscriptionChart.responsiveOptions}
                   listener={emailsSubscriptionChart.animation}
-                />
+                /> */}
               </CardHeader>
               <CardBody>
                 <h4 className={classes.cardTitle}>Email Subscriptions</h4>
@@ -189,13 +189,13 @@ class Dashboard extends React.Component {
           <GridItem xs={12} sm={12} md={4}>
             <Card chart>
               <CardHeader color="danger">
-                <ChartistGraph
+                {/* <ChartistGraph
                   className="ct-chart"
                   data={completedTasksChart.data}
                   type="Line"
                   options={completedTasksChart.options}
                   listener={completedTasksChart.animation}
-                />
+                /> */}
               </CardHeader>
               <CardBody>
                 <h4 className={classes.cardTitle}>Completed Tasks</h4>

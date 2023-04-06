@@ -1,7 +1,3 @@
-import { CKEditor } from '@ckeditor/ckeditor5-react';
-import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
-import { editorConfig } from './editorConfig.js';
-
 import React, { useEffect, useState } from 'react';
 import Select from 'react-select';
 
@@ -132,7 +128,7 @@ function IEditor({ props }) {
           value={newTitle}
         />
       </div>
-      <CKEditor
+      {/* <CKEditor
         editor={ClassicEditor}
         config={editorConfig}
         data={content}
@@ -143,8 +139,8 @@ function IEditor({ props }) {
         onChange={(event, editor) => {
           const data = editor.getData();
           setContentData(data);
-        }}
-      />
+        }} 
+      /> */}
       <button onClick={() => handleUpdateData()}>Update Data</button>
       <button onClick={() => handleGoBack()}>Go Back</button>
       <CustomModal ariaHideApp={false} isModalOpen={isModalOpen} />

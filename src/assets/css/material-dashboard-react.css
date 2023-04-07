@@ -631,17 +631,21 @@ footer ul li a:hover {
   font-size: 0.875rem;
   /* margin-top: 30px; */
   background: #fff;
-  box-shadow: 0 1px 4px 0 rgb(0 0 0 / 14%);
+  /* box-shadow: 0 1px 4px 0 rgb(0 0 0 / 14%); */
   margin-bottom: 30px;
   border-radius: 0px;
   flex-direction: column;
 }
-.iEditor-Title-Container label,
-.iEditor-Title-Container input {
-  font-size: 2em;
-  line-height: 2;
+.iEditor-Title-Container label{
+  font-size: 2rem;
   color: black;
-  padding-left: 10px;
+}
+.iEditor-Title-Container input {
+  font-size: 2rem;
+  line-height: 1;
+  color: black;
+  padding: 0 10px;
+  height: 3rem;;
 }
 
 .EditorList-Button-Container {

@@ -79,3 +79,4 @@ export const Icon = React.forwardRef((
         vertical-align: text-bottom;`)}>{icon}</span>
 )
 )
+

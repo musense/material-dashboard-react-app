@@ -73,8 +73,8 @@ const emptyEditorClass = {
 
 const initialState: {
     editorClassList: EditorClass[];
-    editorClass    : EditorClass;
-    errorMessage   : String | null;
+    editorClass: EditorClass;
+    errorMessage: String | null;
 } = {
     editorClassList: [
         defaultEditorClass,
@@ -110,11 +110,13 @@ const getEditorClassReducer = (state = initialState, action: { type: any; payloa
                 ...state,
                 editorClassList:
                     state.editorClassList
-                        .filter(editorClass => editorClass._id === action.payload.data._id)
-                        .map(editorClass => ({
-                            ...editorClass,
-                            ...action.payload.data
-                        }))
+                        .map(editorClass => {
+                            if (editorClass._id !== action.payload.data._id) return editorClass
+                            return {
+                                ...editorClass,
+                                ...action.payload.data
+                            }
+                        })
                 ,
                 editorClass: emptyEditorClass,
                 errorMessage: errorMessage.updateSuccess

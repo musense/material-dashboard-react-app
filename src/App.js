@@ -22,9 +22,9 @@ function App() {
         // navigate('/auth/register-page')
         // navigate('/auth/login-page')
         // navigate('/admin/editorList')
-        // navigate('/admin/editorClassList')
+        navigate('/admin/editorClassList')
         // navigate('/admin/table')
-        navigate('/admin/editorList/edit/new')
+        // navigate('/admin/editorList/edit/new')
     }, []);
 
     return (

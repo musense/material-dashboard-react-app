@@ -18,7 +18,7 @@ function EditorClassList() {
     const formRef = useRef(null);
     const dispatch = useDispatch();
     const [isEditing, setIsEditing] = useState(false);
-    const checkedToDeleteMap = new Map()
+    const checkedToDeleteMapRef = useRef(new Map())
     const [isModalOpen, setIsModalOpen] = useState(true);
 
     const editorClassList = useSelector((state) => state.getEditorClassReducer.editorClassList);
@@ -32,18 +32,18 @@ function EditorClassList() {
     }
     useEffect(() => {
         if (formRef.current === null) {
-            formRef.current = document.getElementsByName('class-form')[0]
-            console.log("🚀 ~ file: EditorClassList.jsx:43 ~ useEffect ~ formRef.current:", formRef.current)
+            // formRef.current = document.getElementsByName('class-form')[0]
+           
             getForm()
             const submitBtn = document.getElementById('class-form-submit');
             submitBtn.addEventListener('keydown', keyDownEventHandler)
 
         }
+        console.log("🚀 ~ file: EditorClassList.jsx:43 ~ useEffect ~ formRef.current:", formRef.current)
         return () => {
             const submitBtn = document.getElementById('class-form-submit');
             submitBtn.removeEventListener('keydown', keyDownEventHandler)
         }
-
     }, [formRef]);
 
     function getForm() {
@@ -79,17 +79,13 @@ function EditorClassList() {
         const formData = new FormData(form);
         console.log(Object.fromEntries(formData));
         const editedClassData = Object.fromEntries(formData);
+        console.log("🚀 ~ file: EditorClassList.jsx:82 ~ onSave ~ editedClassData:", editedClassData)
         dispatch({
             type: GetClassAction.EDIT_SAVING_CLASS,
             payload: {
-                data: {
-                    ...editedClassData,
-                },
+                data: editedClassData                
             },
         });
-
-        console.log("🚀 ~ file: EditorClassList.jsx:83 ~ save ~ save:")
-
         setIsEditing(false)
         form.reset()
 
@@ -117,6 +113,7 @@ function EditorClassList() {
     }
 
     function onEdit(editorClass) {
+        
         setIsEditing(true)
         console.log(editorClass);
         // return
@@ -133,7 +130,7 @@ function EditorClassList() {
     function onBunchDelete(e) {
         e.preventDefault()
         const deleteIds = []
-        for (const [key, value] of checkedToDeleteMap.entries()) {
+        for (const [key, value] of checkedToDeleteMapRef.current.entries()) {
             if (!value) continue
             deleteIds.push(key)
         }
@@ -151,8 +148,8 @@ function EditorClassList() {
 
     function checkEditorClassRow(e) {
         e.stopPropagation();
-        checkedToDeleteMap.set(e.target.name, e.target.checked)
-        console.log("🚀 ~ file: EditorClassList.jsx:164 ~ checkEditorClassRow ~ checkedToDeleteMap:", checkedToDeleteMap)
+        checkedToDeleteMapRef.current.set(e.target.name, e.target.checked)
+        console.log("🚀 ~ file: EditorClassList.jsx:164 ~ checkEditorClassRow ~ checkedToDeleteMapRef.current:", checkedToDeleteMapRef.current)
     }
     return (
         <div className={styles['editor-container']}>
@@ -165,7 +162,7 @@ function EditorClassList() {
                                 <h4>新增</h4>
                             </CardHeader>
                             <CardBody>
-                                <form name='class-form' onSubmit={onAddNewEditor}>
+                                <form ref={formRef} name='class-form' onSubmit={onAddNewEditor}>
                                     <input type="hidden" name='_id' />
                                     <label htmlFor="classification">分類名稱</label>
                                     <input type="text" name='classification' />

@@ -38,14 +38,26 @@ function* GetEditorByTitle(payload) {
     }
 }
 
+function* generateID() {
+    let id = 0;
+    while (true) {
+        yield id++;
+    }
+}
+const idGenerator = generateID();
 // POST
 function* AddEditor(payload) {
+
     try {
-        const response = yield instance.post(`/editor`, payload.data);
-        const responseData = yield response.data;
+        const _id = idGenerator.next().value;
+        console.log("🚀 ~ file: GetEditorList.js:53 ~ function*AddEditor ~ _id:", _id)
+        // const response = yield instance.post(`/editor`, payload.data);
+        localStorage.setItem(`content_${_id}`, JSON.stringify(payload.data));
+        const response = localStorage.getItem(`content_${_id}`)
+        // const responseData = yield response.data;
         yield put({
             type: ADD_EDITOR_SUCCESS,
-            payload: responseData
+            payload: response
         })
 
     } catch (error) {

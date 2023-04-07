@@ -128,19 +128,7 @@ function IEditor({ props }) {
           value={newTitle}
         />
       </div>
-      {/* <CKEditor
-        editor={ClassicEditor}
-        config={editorConfig}
-        data={content}
-        onReady={(editor) => {
-          const data = editor.getData();
-          setContentData(data);
-        }}
-        onChange={(event, editor) => {
-          const data = editor.getData();
-          setContentData(data);
-        }} 
-      /> */}
+   
       <button onClick={() => handleUpdateData()}>Update Data</button>
       <button onClick={() => handleGoBack()}>Go Back</button>
       <CustomModal ariaHideApp={false} isModalOpen={isModalOpen} />

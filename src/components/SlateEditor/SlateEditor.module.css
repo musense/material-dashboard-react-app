@@ -2,15 +2,14 @@
     margin-top: 1em;
 }
 
-.fancy {
-    background-color: rgb(218, 225, 255);
-    padding: 40px;
-    font-size: 20px;
-    min-height: 150px;
-    outline: 3px dashed rgb(0, 94, 128);
-    border-radius: 20px;
-    outline-offset: -20px;
-    white-space: pre-wrap;
+[data-slate-editor]>*:has(code)+*:has(code) {
+    margin-top: 0;
+}
+
+:not(pre)>code {
+    font-family: monospace;
+    background-color: #eee;
+    padding: 3px;
 }
 
 button {
@@ -41,11 +40,6 @@ blockquote {
     font-style: italic;
 }
 
-:not(pre)>code {
-    font-family: monospace;
-    background-color: #eee;
-    padding: 3px;
-}
 
 ul {
     display: block;

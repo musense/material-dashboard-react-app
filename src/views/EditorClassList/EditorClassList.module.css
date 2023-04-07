@@ -47,6 +47,10 @@ form[name='class-form'] > div {
   align-items: center;
   height: 2.5rem;
 }
+
+.editor-table-body > div{
+  cursor: pointer;
+}
 .editor-table-body > div:nth-child(even) {
   background-color: #ddd;
 }

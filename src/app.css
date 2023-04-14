@@ -11,18 +11,34 @@ label {
   font-size: 1rem;
 }
 
-:where(input[type='button'],
-  input[type='submit']) {
+:where(
+  input[type='submit']
+  input[type='reset'],
+  input[type='button'],
+  ) {
   padding: 0;
   display: block;
   width: min(10rem, 100%);
   cursor: pointer;
+  /* cursor: pointer; */
 }
 
-/* label:has(+ input[type='checkbox']) {
-  display: inline-block;
-  flex: 1;
-} */
+div>input[type='submit'],
+div>input[type='reset'],
+div>input[type='button'] {
+  margin: 0 auto;
+  padding: 0;
+  cursor: pointer;
+}
+input[type='submit'] {
+  background-color: darkviolet;
+  color: white;
+  border: none;
+}
+
+input[type='submit']:hover {
+  background-color: violet;
+}
 input[type='checkbox'] {
   padding: 0;
   margin: 0;
@@ -34,21 +50,7 @@ input[type='file'] {
   margin: 0;
 }
 
-div>input[type='submit'],
-div>input[type='button'] {
-  margin: 0 auto;
-  padding: 0;
-}
 
-input[type='submit'] {
-  background-color: darkviolet;
-  color: white;
-  border: none;
-}
-
-input[type='submit']:hover {
-  background-color: violet;
-}
 
 .container {
   width: 100%;

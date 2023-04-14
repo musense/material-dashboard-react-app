@@ -37,7 +37,7 @@ function* UserRegister(payload) {
         }).catch((error) => {
             throw new Error(error.response.data.message)
         });
-        const responseData = yield response.data;
+        const responseData = yield response.data.data;
         yield put({
             type: REGISTER_USER_SUCCESS,
             errorMessage: responseData.errorMessage,
@@ -64,7 +64,7 @@ function* UserRegister(payload) {
 function* UserUpdate(payload) {
     try {
         const response = yield instance.patch(`/user/${payload.data.id}`, payload.data);
-        const responseData = yield response.data;
+        const responseData = yield response.data.data;
         yield put({
             type: UPDATE_USER_SUCCESS,
             payload: null
@@ -83,7 +83,7 @@ function* UserUpdate(payload) {
 function* UserDelete(payload) {
     try {
         const response = yield instance.delete(`/user/${payload.data}`);
-        const responseData = yield response.data;
+        const responseData = yield response.data.data;
         yield put({
             type: DELETE_USER_SUCCESS,
             payload: null

@@ -3,20 +3,23 @@ form[name='editor-list-form'] {
   flex-direction: row;
   gap: 4rem;
 }
-form[name='editor-list-form'] > div {
+
+form[name='editor-list-form']>div {
   flex: 1;
 }
 
-form[name='view-editor-list-form'] > div {
+form[name='view-editor-list-form']>div {
   display: flex;
   /* flex-direction: row; */
   gap: 0.5rem;
   margin-top: 1.5rem;
 }
+
 .view-form {
   position: relative;
 }
-.view-form > div {
+
+.view-form>div {
   display: flex;
   gap: 1rem;
   justify-content: space-between;
@@ -28,11 +31,12 @@ form[name='view-editor-list-form'] > div {
 .view-editor-list-header {
   flex-direction: row;
 }
+
 /* .view-editor-list-header > div {
   cursor: pointer;
   user-select: none;
 } */
-.view-form > div > div {
+.view-form>div>div {
   text-align: center;
   overflow-x: hidden;
   white-space: nowrap;
@@ -45,24 +49,26 @@ form[name='view-editor-list-form'] > div {
   position: relative;
 }
 
-.view-editor-image-container:has(> img) {
-  height: 100%;
-  overflow: hidden;
-}
 
-.view-editor-image-container > img {
+
+.view-editor-image-container>img {
   height: 100%;
   width: 100%;
   object-fit: cover;
 }
+.view-editor-image-container + div>a {
+  position: inherit;
+}
 
-.view-editor-list-body > div {
+.view-editor-list-body>div {
   cursor: pointer;
 }
-.view-editor-list-body > div:nth-child(even) {
+
+.view-editor-list-body>div:nth-child(even) {
   background-color: #ddd;
 }
-.view-editor-list-body > div:hover {
+
+.view-editor-list-body>div:hover {
   background-color: #eee;
 }
 
@@ -70,11 +76,12 @@ form[name='view-editor-list-form'] > div {
   flex-direction: column;
 }
 
-.view-editor-list-body > div > div:last-child {
+.view-editor-list-body>div>div:last-child {
   display: flex;
   flex-direction: column;
 }
-.view-editor-list-body > div > div:last-child > span:first-child {
+
+.view-editor-list-body>div>div:last-child>span:first-child {
   font-weight: bolder;
 }
 
@@ -84,4 +91,12 @@ form[name='view-editor-list-form'] > div {
 
 .not-published-yet {
   color: red;
+}
+
+.class-cell {
+  display: flex;
+  flex-direction: row;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  justify-content: center;
 }

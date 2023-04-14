@@ -8,7 +8,7 @@ input {
 }
 
 
-form[name='class-form'] > div {
+.left-button-container {
   display: flex;
   flex-direction: row;
   gap: 4rem;
@@ -26,6 +26,7 @@ form[name='class-form'] > div {
   height: 100%;
   /* background-color: azure; */
 }
+
 .editor-left-wrapper {
   width: 400px;
 }
@@ -39,7 +40,7 @@ form[name='class-form'] > div {
 }
 
 
-.view-form > div {
+.view-form>div {
   display: flex;
   flex-direction: row;
   gap: 1rem;
@@ -48,13 +49,15 @@ form[name='class-form'] > div {
   height: 2.5rem;
 }
 
-.editor-table-body > div{
+.editor-table-body>div {
   cursor: pointer;
 }
-.editor-table-body > div:nth-child(even) {
+
+.editor-table-body>div:nth-child(even) {
   background-color: #ddd;
 }
-.editor-table-body > div:hover {
+
+.editor-table-body>div:hover {
   background-color: #eee;
 }
 
@@ -64,19 +67,22 @@ form[name='class-form'] > div {
   font-weight: bold;
 }
 
-.view-form > div > div {
+.view-form>div>div {
   text-align: center;
   overflow-x: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
 }
-.view-form > div > div:first-child {
+
+.view-form>div>div:first-child {
   flex-basis: 100px;
 }
-.view-form > div > div:nth-child(2),
-.view-form > div > div:nth-child(4) {
+
+.view-form>div>div:nth-child(2),
+.view-form>div>div:nth-child(4) {
   flex-basis: 300px;
 }
-.view-form > div > div:nth-child(3) {
+
+.view-form>div>div:nth-child(3) {
   flex-basis: 500px;
 }

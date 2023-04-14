@@ -2,6 +2,8 @@ import { all } from "redux-saga/effects";
 import GetEditorList from "./GetEditorList";
 import GetTagList from "./GetTagList";
 import GetUserList from "./GetUserList";
+import GetClassList from "./GetClassList";
+
 // import GetStreamRoomList from "./GetStreamRoomList";
 // import LiveGuestInfo from "./LiveGuestInfo";
 // import AppGetUrlAsync from "./AppGetUrlAsync";
@@ -12,6 +14,7 @@ function* rootSaga() {
       GetTagList(),
       GetEditorList(),
       GetUserList(),
+      GetClassList(),
       // GetStreamRoomList(),
       // LiveGuestInfo(),
       // AppGetUrlAsync(),

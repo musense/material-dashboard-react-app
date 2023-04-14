@@ -8,7 +8,7 @@ export interface Tag {
     title?: string;
     description?: string;
     keywords?: string;
-    ['custom-url']?: string;
+    customUrl?: string;
     sorting?: number;
     ['popular-tag']?: boolean;
     ['page-views']?: number;
@@ -28,7 +28,7 @@ const tagList: Tag[] = [
         title: 'test-title',
         description: 'test-description',
         keywords: 'test-keywords',
-        ['custom-url']: undefined,
+        customUrl: undefined,
         sorting: 0,
         ['popular-tag']: false,
         ['page-views']: 0,
@@ -41,7 +41,7 @@ const tagList: Tag[] = [
         title: 'test-title',
         description: 'test-description',
         keywords: 'test-keywords',
-        ['custom-url']: undefined,
+        customUrl: undefined,
         sorting: 1,
         ['popular-tag']: false,
         ['page-views']: 0,
@@ -54,7 +54,7 @@ const tagList: Tag[] = [
         title: 'test-title',
         description: 'test-description',
         keywords: 'test-keywords',
-        ['custom-url']: undefined,
+        customUrl: undefined,
         sorting: 6,
         ['popular-tag']: false,
         ['page-views']: 0,
@@ -67,7 +67,7 @@ const tagList: Tag[] = [
         title: 'test-title',
         description: 'test-description',
         keywords: 'test-keywords',
-        ['custom-url']: undefined,
+        customUrl: undefined,
         sorting: 8,
         ['popular-tag']: false,
         ['page-views']: 0,
@@ -80,7 +80,7 @@ const tagList: Tag[] = [
         title: 'test-title',
         description: 'test-description',
         keywords: 'test-keywords',
-        ['custom-url']: undefined,
+        customUrl: undefined,
         sorting: 10,
         ['popular-tag']: false,
         ['page-views']: 0,
@@ -93,7 +93,7 @@ const tagList: Tag[] = [
         title: 'test-title',
         description: 'test-description',
         keywords: 'test-keywords',
-        ['custom-url']: undefined,
+        customUrl: undefined,
         sorting: 20,
         ['popular-tag']: false,
         ['page-views']: 0,
@@ -106,7 +106,7 @@ const tagList: Tag[] = [
         title: 'test-title',
         description: 'test-description',
         keywords: 'test-keywords',
-        ['custom-url']: undefined,
+        customUrl: undefined,
         sorting: 8,
         ['popular-tag']: false,
         ['page-views']: 0,
@@ -222,7 +222,6 @@ const getTagReducer = (state = initialState, action) => {
             return { ...state, errorMessage: action.payload }
         // case GetTagsAction.GET_TAG_REQUEST:
 
-        case GetTagsAction.REQUEST_TAG:
         case GetTagsAction.UPDATE_TAG:
         case GetTagsAction.DELETE_TAG:
             return {

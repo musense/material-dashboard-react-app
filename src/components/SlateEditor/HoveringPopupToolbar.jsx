@@ -5,7 +5,7 @@ import { Portal, Menu, Button, Icon } from './components'
 import { css } from '@emotion/css'
 import { CustomEditor } from './CustomEditor'
 
-export default function HoveringToolbar() {
+export default function HoveringPopupToolbar() {
     const ref = useRef()
     const editor = useSlate()
     const inFocus = useFocused()

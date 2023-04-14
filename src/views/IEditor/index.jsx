@@ -1,30 +1,24 @@
 import React, { useEffect, useRef, useState } from 'react';
 
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
 import CustomModal from '../../components/CustomModal/CustomModal.jsx';
 
-import ContentEditorForm from "./ContentEditorForm"
-import DetailForm from "./DetailForm"
-import * as GetEditorAction from './../../actions/GetEditorAction.js';
+import ContentEditorForm from "./ContentEditorForm.jsx"
+import DetailForm from "./DetailForm.jsx"
+import * as GetEditorAction from '../../actions/GetEditorAction.js';
 
 
 function NewIEditor({ props }) {
-  const navigate = useNavigate();
+
   const dispatch = useDispatch();
 
-  const initialValue = React.useMemo(
-    () =>
-      JSON.parse(localStorage.getItem('content')) || [
-        {
-          type: 'paragraph',
-          children: [{ text: '' }],
-        },
-      ],
-    []
-  )
-  const newTitleRef = useRef('');
-  const editorContentRef = React.useRef(initialValue)
+  const initialValue = [
+    {
+      type: 'paragraph',
+      children: [{ text: '' }],
+    },
+  ]
+
   const returnMessage = useSelector(
     (state) => state.getEditorReducer.errorMessage
   );
@@ -37,9 +31,14 @@ function NewIEditor({ props }) {
 
   const bannerRef = useRef();
   const thumbnailRef = useRef();
+  const imageAltTextRef = useRef();
+  const imageUrlRef = useRef(undefined);
+  const imageNameRef = useRef(undefined);
+  const customUrlRef = useRef();
+  const newTitleRef = useRef('');
+  const editorContentRef = useRef(initialValue)
 
   useEffect(() => {
-
 
     if (
       returnMessage &&
@@ -52,7 +51,6 @@ function NewIEditor({ props }) {
 
   }, [returnMessage]);
 
-
   function onEditorSave(e) {
     e.preventDefault();
     const form = e.target;
@@ -64,18 +62,18 @@ function NewIEditor({ props }) {
     // Object.fromEntries(formData)
     const formDataObject = Object.fromEntries(formData)
     console.log("🚀 ~ file: NewIEditor.jsx:66 ~ onEditorSave ~ formDataObject:", formDataObject)
-    
+
     let tempData = Object.assign(
       {},
       // formDataObject,
       {
         tags: tagArray,
         classification: classArray,
-        'web-header': {
+        webHeader: {
           title: formDataObject.title,
           description: formDataObject.description,
           keywords: formDataObject.keywords,
-          href: formDataObject['custom-url'],
+          href: formDataObject.customUrl,
         },
         content: {
           title: newTitleRef.current.value,   //文章標題
@@ -84,21 +82,24 @@ function NewIEditor({ props }) {
         media: {
           banner: bannerRef.current,        // main-image
           thumbnail: thumbnailRef.current,  // thumbnail
-          // film: formDataObject['film-url'],
+          altText: imageAltTextRef.current.value === ''
+            ? newTitleRef.current.value
+            : imageAltTextRef.current.value,  // alt-text
         },
-        'set-top': formDataObject['set-to-top-checkbox'] ? true: false,
-        hide: formDataObject['hide-switch-checkbox'] ? true: false,
+        setTop: formDataObject['set-to-top-checkbox']
+          ? true
+          : false,
+        hide: formDataObject['hide-switch-checkbox']
+          ? true
+          : false,
       }
     )
 
     delete tempData['upload-image'];
 
-    console.log(
-      '🚀 ~ file: NewIEditor.jsx:84 ~ onEditorSave ~ tempData:',
-      tempData
-    );
+    console.log('🚀 ~ file: NewIEditor.jsx:84 ~ onEditorSave ~ tempData:', tempData);
 
-      return
+    // return
     dispatch({
       type: GetEditorAction.ADD_EDITOR,
       payload: {
@@ -120,6 +121,10 @@ function NewIEditor({ props }) {
           <DetailForm
             bannerRef={bannerRef}
             thumbnailRef={thumbnailRef}
+            imageAltTextRef={imageAltTextRef}
+            imageUrlRef={imageUrlRef}
+            imageNameRef={imageNameRef}
+            customUrlRef={customUrlRef}
             onEditorSave={onEditorSave}
             setTagArray={setTagArray}
             setClassArray={setClassArray}

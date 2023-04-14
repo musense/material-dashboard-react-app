@@ -9,7 +9,6 @@ import GridContainer from 'components/Grid/GridContainer.jsx';
 import GridItem from 'components/Grid/GridItem.jsx';
 import Table from 'components/Table/Table.jsx';
 import { useDispatch, useSelector } from 'react-redux';
-import { REQUEST_TAG } from '../../actions/GetTagsAction';
 import CustomModal from '../../components/CustomModal/CustomModal';
 import Button from 'components/CustomButtons/Button';
 
@@ -68,7 +67,6 @@ function TableList(props) {
       //componentDidMount
       selectedIDRef.current = -1;
       mounted.current = true;
-      dispatch({ type: REQUEST_TAG });
     } else {
       //componentDidUpdate
       if (returnMessage && returnMessage.indexOf('successfully') !== -1) {

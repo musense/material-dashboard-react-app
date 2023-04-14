@@ -1,10 +1,11 @@
-import React, { MouseEventHandler } from 'react';
-import {
+import React, { MouseEventHandler, useEffect, useMemo } from 'react';
+import Select, {
+  ActionMeta,
   components,
   MultiValueGenericProps,
   MultiValueProps,
   OnChangeValue,
-  Props,
+  Props
 } from 'react-select';
 import {
   SortableContainer,
@@ -15,10 +16,15 @@ import {
 } from 'react-sortable-hoc';
 import Createable from 'react-select/creatable';
 
+export interface CategoryProps{
+  readonly _id: string;
+  readonly name: string;
+}
 export interface SelectProps {
   readonly value: string;
   readonly label: string;
   readonly isDisabled?: boolean;
+  readonly __isNew__?: boolean;
 }
 function arrayMove<T>(array: readonly T[], from: number, to: number) {
   const slicedArray = array.slice();
@@ -49,33 +55,51 @@ const SortableSelect = SortableContainer(Createable) as React.ComponentClass<
   Props<SelectProps, true> & SortableContainerProps
 >;
 
-export default function MultiSelectSort({options, setSelectedItems}) {
-    const [selected, setSelected] = React.useState<readonly SelectProps[]>([]);
+export default function MultiSelectSort({ 
+  isMulti = true,
+  options,
+  setSelectedItems,
+  selectedItems=[]
+    })  {
+    const [selected, setSelected] = React.useState<readonly SelectProps[]>();
+    const [value, setValue] = React.useState<SelectProps>();
 
-    const onChange = (selectedOptions: OnChangeValue<SelectProps, true>) => {
+      useEffect(() => {
+        setSelected(selectedItems)
+      },[selectedItems])
+
+    const onChange = (
+      selectedOptions: OnChangeValue<SelectProps, true>
+      ) => {
       setSelected(selectedOptions)
       setSelectedItems(selectedOptions)
     };
-
+    const onSingleChange = (
+      newValue: SelectProps,
+      actionMeta: ActionMeta<SelectProps>
+    ) => {
+      setValue(newValue)
+      setSelectedItems([newValue])
+    }
     const onSortEnd: SortEndHandler = ({ oldIndex, newIndex }) => {
       const newValue = arrayMove(selected, oldIndex, newIndex);
       setSelected(newValue);
       setSelectedItems(newValue)
-      console.log('Values sorted:',newValue.map((i) => i.value));
+      // console.log('Values sorted:',newValue.map((i) => i.value));
     };
 
-  return (
-    // <div style={{position:'relative', zIndex: 99999}}>
+    if (isMulti) {
+      return (
       <SortableSelect
+        isMulti
         useDragHandle
         // react-sortable-hoc props:
         axis='xy'
         onSortEnd = { onSortEnd }
-        distance={4}
+        distance={10}
         // small fix for https://github.com/clauderic/react-sortable-hoc/pull/352:
         getHelperDimensions={({ node }) => node.getBoundingClientRect()}
         // react-select props:
-        isMulti
         options={options}
         value         = { selected }
         onChange      = { onChange }
@@ -90,7 +114,33 @@ export default function MultiSelectSort({options, setSelectedItems}) {
           MultiValueLabel: SortableMultiValueLabel,
         }}
         closeMenuOnSelect={false}
-      />
-    // </div>
-  );
+      />)
+    } else {
+      return (
+        <Select
+         // react-sortable-hoc props:
+        //  axis='xy'
+        //  distance={10}
+         // small fix for https://github.com/clauderic/react-sortable-hoc/pull/352:
+        //  getHelperDimensions={({ node }) => node.getBoundingClientRect()}
+         // react-select props:
+         options    ={options}
+         isClearable={true}
+         isSearchable={true}
+        //  value         = { selected }
+         value         = { value }
+         onChange      = { onSingleChange }
+         styles={{
+            menuPortal: base => ({ ...base, zIndex: 9999 }),
+            menu: base => ({
+              ...base, 
+              zIndex: 99999,
+              color: 'black',
+             }),
+         }}
+        //  closeMenuOnSelect={true}
+       />
+      )
+    }
+  
 }

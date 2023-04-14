@@ -3,21 +3,44 @@ import MultiTagSelectSort from '../../components/MultiSelectSort/MultiTagSelectS
 import MultiClassSelectSort from '../../components/MultiSelectSort/MultiClassSelectSort';
 import { fetchYoutubeInfo } from './youtube';
 import styles from './IEditor.module.css';
+import { css, cx } from '@emotion/css';
 
 export default function DetailForm({
     bannerRef,
     thumbnailRef,
+    imageAltTextRef,
+    imageUrlRef,
+    imageNameRef,
+    customUrlRef,
     onEditorSave,
     setTagArray,
-    setClassArray
+    setClassArray,
+    selectedTags = [],
+    selectedClassifications = []
 }) {
 
-
-    const [imageUrl, setImageUrl] = useState(undefined);
-    const [imageName, setImageName] = useState(undefined);
-    const [customUrl, setCustomUrl] = useState('');
+    const [customUrl, setCustomUrl] = useState();
+    const [imageUrl, setImageUrl] = useState();
+    const [imageName, setImageName] = useState();
 
     const mediaHelperFunc = {
+        previewImage(e) {
+            this.removeFilm();
+            const image = e.target.files[0];
+            if (image) {
+                setImageName(image.name)
+                setImageUrl(URL.createObjectURL(image))
+
+                bannerRef.current = URL.createObjectURL(image);
+                thumbnailRef.current = null;
+            }
+        },
+        removeImage() {
+            setImageUrl(undefined)
+            setImageName(undefined)
+            imageUrlRef.current = undefined
+            imageNameRef.current = undefined
+        },
         async previewFilm() {
             this.removeImage();
             const filmUrl = document.getElementsByName('film-url')[0].value;
@@ -28,114 +51,124 @@ export default function DetailForm({
                 filmUrl.length
             );
             const youtubeInfo = await fetchYoutubeInfo(youtubeID);
+            console.log("🚀 ~ file: DetailForm.jsx:32 ~ previewFilm ~ youtubeInfo:", youtubeInfo)
 
             if (youtubeInfo) {
                 const imageWrapper = document.getElementById('preview-image-wrapper');
                 imageWrapper.innerHTML = youtubeInfo.html;
-                // setFilmHTML(youtubeInfo.html)
-                // setFilmThumbnail(youtubeInfo.thumbnail_url)
                 bannerRef.current = youtubeInfo.html;
                 thumbnailRef.current = youtubeInfo.thumbnail_url;
             }
         },
         removeFilm() {
-            // setFilmUrl(undefined);
-            // setFilmName(undefined)
-            // setFilmThumbnail(undefined)
-            // setFilmHTML(undefined)
             document.getElementsByName('film-url')[0].value = null;
             const imageWrapper = document.getElementById('preview-image-wrapper');
             imageWrapper.innerHTML = null;
         },
-        removeImage() {
-            setImageUrl(undefined);
-            setImageName(undefined);
-        },
-        previewImage(e) {
-            this.removeFilm();
-            const image = e.target.files[0];
-            if (image) {
-                setImageName(image.name);
-                setImageUrl(URL.createObjectURL(image));
-                bannerRef.current = URL.createObjectURL(image);
-                thumbnailRef.current = null;
-            }
-        }
     }
 
-
-    function UploadImage({ styles }) {
-        return (
-            <div className={`${styles['upload-wrapper']}`}>
-                <div>
-                    <label htmlFor='alt-text'>選取圖片</label>
-                    {/* <input type='text' name='alt-text' className='image-group' /> */}
-                </div>
-                <div>
-                    <label htmlFor='upload-image'>
-                        上傳圖片
-                        <input
-                            id='upload-image'
-                            type='file'
-                            name='upload-image'
-                            accept='image/png, image/jpeg'
-                            onChange={(e) => mediaHelperFunc.previewImage(e)}
-                            className='image-group'
-                        />
-                    </label>
-                    <input
-                        type='button'
-                        name='remove-image'
-                        value='刪除圖片'
-                        onClick={() => mediaHelperFunc.removeImage()}
-                        className='image-group'
-                    />
-                </div>
-            </div>
-        );
-    }
-    function UploadYoutube({ styles }) {
-        return (
-            <div className={`${styles['upload-wrapper']} `}>
-                <div>
-                    <label htmlFor='film-url'>影片連結</label>
-                    <input
-                        type='text'
-                        name='film-url'
-                        className='film-group'
-                    />
-                </div>
-                <div>
-                    <label htmlFor='film-url-preview'>
-                        選取影片
-                        <input
-                            id='film-url-preview'
-                            type='button'
-                            name='film-url-preview'
-                            onClick={() => mediaHelperFunc.previewFilm()}
-                            className='film-group'
-                        />
-                    </label>
-                    <input
-                        type='button'
-                        name='remove-image'
-                        value='刪除影片'
-                        onClick={() => mediaHelperFunc.removeFilm()}
-                        className='film-group'
-                    />
-                </div>
-            </div>
-        );
-    }
+    // function UploadImage({ styles }) {
+    //     return (
+    //         <div className={`${styles['upload-wrapper']}`}>
+    //             <div>
+    //                 <label htmlFor='alt-text'>選取圖片</label>
+    //                 <input
+    //                     ref={imageAltTextRef}
+    //                     type='text' name='alt-text'
+    //                     id='detail-form-alt-text'
+    //                     placeholder={'替代文字'}
+    //                     className={cx(
+    //                         'image-group',
+    //                         css`
+    //                         ::placeholder{
+    //                             color: lightgray;
+    //                         }
+    //                             `
+    //                     )}
+    //                 />
+    //             </div>
+    //             <div>
+    //                 <label htmlFor='upload-image'>
+    //                     上傳圖片
+    //                     <input
+    //                         id='upload-image'
+    //                         type='file'
+    //                         name='upload-image'
+    //                         accept='image/png, image/jpeg'
+    //                         onChange={(e) => mediaHelperFunc.previewImage(e)}
+    //                         className='image-group'
+    //                     />
+    //                 </label>
+    //                 <input
+    //                     type='button'
+    //                     name='remove-image'
+    //                     value='刪除圖片'
+    //                     onClick={() => mediaHelperFunc.removeImage()}
+    //                     className='image-group'
+    //                 />
+    //             </div>
+    //         </div>
+    //     );
+    // }
+    // function UploadYoutube({ styles }) {
+    //     return (
+    //         <div className={`${styles['upload-wrapper']} `}>
+    //             <div>
+    //                 <label htmlFor='film-url'>影片連結</label>
+    //                 <input
+    //                     type='text'
+    //                     name='film-url'
+    //                     id='detail-form-film-url'
+    //                     placeholder={'影片連結'}
+    //                     className={cx(
+    //                         'film-group',
+    //                         css`
+    //                         ::placeholder{
+    //                             color: lightgray;
+    //                         }
+    //                             `
+    //                     )} />
+    //                 {/* <input type='text' name='alt-text-2' placeholder={'替代文字'}
+    //                     className={cx(
+    //                         'film-group',
+    //                         css`
+    //                         ::placeholder{
+    //                             color: lightgray;
+    //                         }
+    //                             `
+    //                     )} /> */}
+    //             </div>
+    //             <div>
+    //                 <label htmlFor='film-url-preview'>
+    //                     選取影片
+    //                     <input
+    //                         id='film-url-preview'
+    //                         type='button'
+    //                         name='film-url-preview'
+    //                         onClick={() => mediaHelperFunc.previewFilm()}
+    //                         className='film-group'
+    //                     />
+    //                 </label>
+    //                 <input
+    //                     type='button'
+    //                     name='remove-image'
+    //                     value='刪除影片'
+    //                     onClick={() => mediaHelperFunc.removeFilm()}
+    //                     className='film-group'
+    //                 />
+    //             </div>
+    //         </div>
+    //     );
+    // }
     function PreviewMedia({ styles }) {
         return (
             <div
                 id='preview-image-wrapper'
                 className={styles['preview-image-wrapper']}
-                data-attr={imageName}
+                data-attr={imageName || imageNameRef.current}
                 style={
-                    imageUrl && {
-                        backgroundImage: `url(${imageUrl})`,
+                    (imageUrl || imageUrlRef.current) && {
+                        backgroundImage: `url(${imageUrl || imageUrlRef.current})`,
                         backgroundColor: 'initial',
                     }
                 }
@@ -148,22 +181,26 @@ export default function DetailForm({
             <form name='ieditor-detail-form' onSubmit={onEditorSave}>
                 <div className={styles['input-group']}>
                     <label htmlFor='title'>title</label>
-                    <input type='text' name='title' />
+                    <input type='text' name='title' id='detail-form-title' />
                 </div>
                 <div className={styles['input-group']}>
                     <label htmlFor='description'>description</label>
-                    <input type='text' name='description' />
+                    <input type='text' name='description' id='detail-form-description' />
                 </div>
                 <div className={styles['input-group']}>
                     <label htmlFor='keywords'>keywords</label>
-                    <input type='text' name='keywords' />
+                    <input type='text' name='keywords' id='detail-form-keywords' />
                 </div>
                 <div className={styles['input-group']}>
                     <label htmlFor='custom-url'>自訂網址</label>
                     <input
                         type='text'
-                        name='custom-url'
-                        onChange={(e) => setCustomUrl(e.target.value)}
+                        name='customUrl'
+                        id='detail-form-customUrl'
+                        onChange={(e) => {
+                            setCustomUrl(e.target.value)
+                            customUrlRef.current = e.target.value
+                        }}
                     />
                 </div>
                 <div className={styles['input-group']}>
@@ -171,25 +208,110 @@ export default function DetailForm({
                     <input
                         type='text'
                         name='real-url'
-                        value={`https://kashinobi.com/${customUrl}`}
+                        value={`https://kashinobi.com/${customUrl || customUrlRef.current}`}
                         readOnly
                         disabled
                     />
                 </div>
                 <div className={styles['input-group']}>
                     <label htmlFor='tags'>新增標籤</label>
-                    <MultiTagSelectSort setSelectedItems={setTagArray} />
+                    {!selectedTags && <MultiTagSelectSort setSelectedItems={setTagArray} />}
+                    {selectedTags && <MultiTagSelectSort setSelectedItems={setTagArray} selectedItems={selectedTags} />}
                 </div>
                 <div className={styles['input-group']}>
                     <label htmlFor='classification'>分類</label>
-                    <MultiClassSelectSort setSelectedItems={setClassArray} />
+                    {!selectedClassifications && <MultiClassSelectSort setSelectedItems={setClassArray} />}
+                    {selectedClassifications && <MultiClassSelectSort setSelectedItems={setClassArray} selectedItems={selectedClassifications} />}
                 </div>
                 <div className={styles['image-upload-container']}>
 
-                    <UploadImage styles={styles} />
-
-                    <UploadYoutube styles={styles} />
-
+                    {/* <UploadImage styles={styles} /> */}
+                    <div className={`${styles['upload-wrapper']}`}>
+                        <div>
+                            <label htmlFor='alt-text'>選取圖片</label>
+                            <input
+                                ref={imageAltTextRef}
+                                type='text' name='alt-text'
+                                id='detail-form-altText'
+                                placeholder={'替代文字'}
+                                className={cx(
+                                    'image-group',
+                                    css`
+                            ::placeholder{
+                                color: lightgray;
+                            }
+                                `
+                                )}
+                            />
+                        </div>
+                        <div>
+                            <label htmlFor='upload-image'>
+                                上傳圖片
+                                <input
+                                    id='upload-image'
+                                    type='file'
+                                    name='upload-image'
+                                    accept='image/png, image/jpeg'
+                                    onChange={(e) => mediaHelperFunc.previewImage(e)}
+                                    className='image-group'
+                                />
+                            </label>
+                            <input
+                                type='button'
+                                name='remove-image'
+                                value='刪除圖片'
+                                onClick={() => mediaHelperFunc.removeImage()}
+                                className='image-group'
+                            />
+                        </div>
+                    </div>
+                    {/* <UploadYoutube styles={styles} /> */}
+                    <div className={`${styles['upload-wrapper']} `}>
+                        <div>
+                            <label htmlFor='film-url'>影片連結</label>
+                            <input
+                                type='text'
+                                name='film-url'
+                                id='detail-form-film-url'
+                                placeholder={'影片連結'}
+                                className={cx(
+                                    'film-group',
+                                    css`
+                            ::placeholder{
+                                color: lightgray;
+                            }
+                                `
+                                )} />
+                            {/* <input type='text' name='alt-text-2' placeholder={'替代文字'}
+                        className={cx(
+                            'film-group',
+                            css`
+                            ::placeholder{
+                                color: lightgray;
+                            }
+                                `
+                        )} /> */}
+                        </div>
+                        <div>
+                            <label htmlFor='film-url-preview'>
+                                選取影片
+                                <input
+                                    id='film-url-preview'
+                                    type='button'
+                                    name='film-url-preview'
+                                    onClick={() => mediaHelperFunc.previewFilm()}
+                                    className='film-group'
+                                />
+                            </label>
+                            <input
+                                type='button'
+                                name='remove-image'
+                                value='刪除影片'
+                                onClick={() => mediaHelperFunc.removeFilm()}
+                                className='film-group'
+                            />
+                        </div>
+                    </div>
                     <PreviewMedia styles={styles} />
                 </div>
                 <div className={styles['input-group']}>
@@ -197,6 +319,7 @@ export default function DetailForm({
                     <input
                         type='checkbox'
                         name='set-to-top-checkbox'
+                        id='detail-form-setTop'
                         className={styles['custom-switch']}
                     />
                 </div>
@@ -205,6 +328,7 @@ export default function DetailForm({
                     <input
                         type='checkbox'
                         name='hide-switch-checkbox'
+                        id='detail-form-hide'
                         className={styles['custom-switch']}
                     />
                 </div>

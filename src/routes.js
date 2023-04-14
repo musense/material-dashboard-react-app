@@ -7,18 +7,13 @@ import Register from "@material-ui/icons/GroupAdd";
 import Login from "@material-ui/icons/LockOpen";
 // core components/views for Admin layout
 import DashboardPage from "views/Dashboard/Dashboard.jsx";
-import EditorList from "views/EditorList/EditorList.jsx";
-import IEditor from "views/IEditor/IEditor.jsx";
+import EditorList from "views/EditorList";
+import IEditor from "views/IEditor/[id]";
 import TableList from "views/TableList/TableList.jsx";
 import UserProfile from "views/UserProfile/UserProfile.jsx";
-// import Maps from "views/Maps/Maps.jsx";
-// import UpgradeToPro from "views/UpgradeToPro/UpgradeToPro.jsx";
-// core components/views for RTL layout
-// import RTLPage from "views/RTLPage/RTLPage.jsx";
-// core components/views for Auth layout
 import LoginPage from "views/Pages/LoginPage.jsx";
 import RegisterPage from "views/Pages/RegisterPage.jsx";
-import EditorClassList from "./views/EditorClassList/EditorClassList";
+import EditorClassList from "./views/EditorClassList";
 
 const dashboardRoutes = [
   {
@@ -62,7 +57,7 @@ const dashboardRoutes = [
     layout   : "/admin",
   },
   {
-    path     : "/editorList/edit/new",
+    path     : "/editorList/new",
     name     : "新增文章",
     // rtlName  : "قائمة الجدول",
     icon     : "content_paste",

@@ -6,6 +6,7 @@ export default function ContentEditorForm({
   editorContentRef
 }) {
 
+
   return (
     <>
       <div className='iEditor-Title-Container'>
@@ -13,6 +14,7 @@ export default function ContentEditorForm({
         <input
           ref={newTitleRef}
           name='title'
+          id='content-editor-title'
           type='text'
         />
       </div>

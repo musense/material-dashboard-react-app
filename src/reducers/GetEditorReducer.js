@@ -14,7 +14,7 @@ const titleViewList = [
         'is-recommend': true,
         'context-title': '',
         'context': '',
-        classification: 'test-class-1',
+        classifications: 'test-class-1',
         // thumbnail: {
         //     src: 'static/media/register.jpeg',
         //     alt: 'register'
@@ -39,7 +39,7 @@ const titleViewList = [
         'is-recommend': true,
         'context-title': '',
         'context': '',
-        classification: 'test-class-class-2-2',
+        classifications: 'test-class-class-2-2',
         thumbnail: {
             src: 'https://images.unsplash.com/photo-1575936123452-b67c3203c357?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80',
             alt: 'camera woman'
@@ -64,7 +64,7 @@ const titleViewList = [
         'is-recommend': true,
         'context-title': '',
         'context': '',
-        classification: 'test-class-class-2-2',
+        classifications: 'test-class-class-2-2',
         // thumbnail: {
         //     src: 'static/media/cover.jpeg',
         //     alt: 'cover'
@@ -89,7 +89,7 @@ const titleViewList = [
         'is-recommend': true,
         'context-title': '',
         'context': '',
-        classification: 'test-class2-class-2-2',
+        classifications: 'test-class2-class-2-2',
         // thumbnail: {
         //     src: 'static/media/cover.jpeg',
         //     alt: 'cover'
@@ -114,7 +114,7 @@ const titleViewList = [
         'is-recommend': true,
         'context-title': '',
         'context': '',
-        classification: 'test-class5-class-2-5',
+        classifications: 'test-class5-class-2-5',
         thumbnail: {
             src: 'https://images.unsplash.com/photo-1679926820639-56c6f62e516e?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80',
             alt: 'director'
@@ -131,14 +131,30 @@ const titleViewList = [
 
 const initialState = {
     _id: null,
-    id: null,
-    title: null,
-    content: null,
+    content: {
+        title: null,
+        content: null,
+    },
     tags: null,
+    classifications: null,
+    webHeader: {
+        title: null,
+        description: null,
+        keywords: null,
+        customUrl: null,
+    },
+    media: {
+        banner: null,
+        thumbnail: null,
+        altText: null,
+    },
+    setTop: null,
+    hide: null,
+    titleList: null,
     errorMessage: null,
-    titleList: titleViewList
 }
 const getEditorReducer = (state = initialState, action) => {
+    // console.log("🚀 ~ file: GetEditorReducer.js:157 ~ getEditorReducer ~ action:", action)
     switch (action.type) {
         case GetEditorAction.INITIAL_EDITOR:
             return {
@@ -180,10 +196,27 @@ const getEditorReducer = (state = initialState, action) => {
         case GetEditorAction.REQUEST_EDITOR_SUCCESS:
             return {
                 ...state,
-                id: action.payload.id,
+                _id: action.payload._id,
                 title: action.payload.title,
-                content: action.payload.content,
+                content: {
+                    title: action.payload.content.title,
+                    content: action.payload.content.content,
+                },
                 tags: action.payload.tags,
+                classifications: action.payload.classifications,
+                webHeader: {
+                    title: action.payload.webHeader.title,
+                    description: action.payload.webHeader.description,
+                    keywords: action.payload.webHeader.keywords,
+                    customUrl: action.payload.webHeader.customUrl,
+                },
+                media: {
+                    banner: action.payload.media.banner,
+                    thumbnail: action.payload.media.thumbnail,
+                    altText: action.payload.media.altText,
+                },
+                setTop: action.payload.setTop || false,
+                hide: action.payload.hide || false,
                 errorMessage: errorMessage.getFinish
             }
         case GetEditorAction.REQUEST_EDITOR_FAIL:

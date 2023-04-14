@@ -6,13 +6,13 @@
     margin-top: 0;
 }
 
-:not(pre)>code {
+[data-slate-editor] :not(pre)>code {
     font-family: monospace;
     background-color: #eee;
     padding: 3px;
 }
 
-button {
+[data-slate-editor] button {
     border: unset;
     outline: unset;
     padding: 0;
@@ -23,15 +23,15 @@ button {
     cursor: pointer;
 }
 
-.active {
+[data-slate-editor] .active {
     color: black;
 }
 
-p {
+[data-slate-editor] p {
     margin: 0;
 }
 
-blockquote {
+[data-slate-editor] blockquote {
     border-left: 2px solid #ddd;
     margin-left: 0;
     margin-right: 0;
@@ -41,7 +41,7 @@ blockquote {
 }
 
 
-ul {
+[data-slate-editor] ul {
     display: block;
     list-style-type: disc;
     margin-block-start: 1em;
@@ -51,7 +51,7 @@ ul {
     padding-inline-start: 40px;
 }
 
-ol {
+[data-slate-editor] ol {
     display: block;
     list-style-type: decimal;
     margin-block-start: 1em;
@@ -61,7 +61,7 @@ ol {
     padding-inline-start: 40px;
 }
 
-li {
+[data-slate-editor] li {
     display: list-item;
     text-align: -webkit-match-parent;
 }

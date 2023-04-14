@@ -1,7 +1,5 @@
 import { all, put, take, takeEvery } from 'redux-saga/effects';
-import {
-    ADD_TAG, ADD_TAG_FAIL, ADD_TAG_SUCCESS, DELETE_TAG, DELETE_TAG_FAIL, DELETE_TAG_SUCCESS, GET_TAG_FAIL, REQUEST_TAG, REQUEST_TAG_STAGE, REQUEST_TAG_SUCCESS, UPDATE_TAG, UPDATE_TAG_FAIL, UPDATE_TAG_SUCCESS
-} from "../../actions/GetTagsAction";
+import * as GetTagsAction from "../../actions/GetTagsAction";
 import { instance } from "./AxiosInstance";
 
 
@@ -10,21 +8,21 @@ import { instance } from "./AxiosInstance";
 function* GetTagList() {
     try {
         const response = yield instance.get(`/tags`);
-        const tagList = yield response.data;
-        console.log("🚀 ~ file: GetTagList.js:14 ~ function*GetTagList ~ tagList:", tagList)
+        const tagList = yield response.data.data;
+        // console.log("🚀 ~ file: GetTagList.js:14 ~ function*GetTagList ~ tagList:", tagList)
         const tagMapped = tagList.map(tag => ({
+            _id: tag._id,
             name: tag.name,
-            createdAt: tag.createdAt,
-            taggedNumber: tag.taggedNumber,
-            forceTrend: tag.forceTrend,
         }))
+        // console.log("🚀 ~ file: GetTagList.js:19 ~ tagMapped ~ tagMapped:", tagMapped)
+        // return
         yield put({
-            type: REQUEST_TAG_SUCCESS,
+            type: GetTagsAction.REQUEST_TAG_SUCCESS,
             payload: tagMapped,
         })
     } catch (error) {
         yield put({
-            type: GET_TAG_FAIL,
+            type: GetTagsAction.GET_TAG_FAIL,
             errorMessage: error.message,
             payload: null
         })
@@ -36,14 +34,14 @@ function* AddTag(payload) {
     try {
 
         const response = yield instance.post(`/tags/`, payload.data);
-        const responseData = yield response.data;
+        const responseData = yield response.data.data;
         yield put({
-            type: ADD_TAG_SUCCESS,
+            type: GetTagsAction.ADD_TAG_SUCCESS,
             payload: null
         })
     } catch (error) {
         yield put({
-            type: ADD_TAG_FAIL,
+            type: GetTagsAction.ADD_TAG_FAIL,
             errorMessage: error.message,
             payload: null
         })
@@ -54,14 +52,14 @@ function* AddTag(payload) {
 function* UpdateTag(payload) {
     try {
         const response = yield instance.patch(`/tags/${payload.data.id}`, payload.data);
-        const tagList = yield response.data;
+        const tagList = yield response.data.data;
         yield put({
-            type: UPDATE_TAG_SUCCESS,
+            type: GetTagsAction.UPDATE_TAG_SUCCESS,
             payload: tagList
         })
     } catch (error) {
         yield put({
-            type: UPDATE_TAG_FAIL,
+            type: GetTagsAction.UPDATE_TAG_FAIL,
             errorMessage: error.message,
             payload: null
         })
@@ -72,14 +70,14 @@ function* UpdateTag(payload) {
 function* DeleteTag(payload) {
     try {
         const response = yield instance.delete(`/tags/${payload.data}`);
-        const tagList = yield response.data;
+        const tagList = yield response.data.data;
         yield put({
-            type: DELETE_TAG_SUCCESS,
+            type: GetTagsAction.DELETE_TAG_SUCCESS,
             payload: tagList
         })
     } catch (error) {
         yield put({
-            type: DELETE_TAG_FAIL,
+            type: GetTagsAction.DELETE_TAG_FAIL,
             errorMessage: error.message,
             payload: null
         })
@@ -92,13 +90,13 @@ function* reGetTagList() {
 
 function* setErrorMessageNull() {
     yield put({
-        type: REQUEST_TAG_STAGE
+        type: GetTagsAction.REQUEST_TAG_STAGE
     })
 }
 
 function* watchAddTagSaga() {
     while (true) {
-        const { payload } = yield take(ADD_TAG)
+        const { payload } = yield take(GetTagsAction.ADD_TAG)
         // yield setErrorMessageNull()
         yield AddTag(payload)
     }
@@ -106,7 +104,7 @@ function* watchAddTagSaga() {
 
 function* watchUpdateTagSaga() {
     while (true) {
-        const { payload } = yield take(UPDATE_TAG)
+        const { payload } = yield take(GetTagsAction.UPDATE_TAG)
         // yield setErrorMessageNull()
         yield UpdateTag(payload)
     }
@@ -114,7 +112,7 @@ function* watchUpdateTagSaga() {
 
 function* watchDeleteTagSaga() {
     while (true) {
-        const { payload } = yield take(DELETE_TAG)
+        const { payload } = yield take(GetTagsAction.DELETE_TAG)
         // yield setErrorMessageNull()
         yield DeleteTag(payload)
     }
@@ -122,8 +120,8 @@ function* watchDeleteTagSaga() {
 
 function* mySaga() {
     yield all([
-        takeEvery(ADD_TAG_SUCCESS, reGetTagList),
-        takeEvery(REQUEST_TAG, GetTagList),
+        takeEvery(GetTagsAction.ADD_TAG_SUCCESS, reGetTagList),
+        takeEvery(GetTagsAction.REQUEST_TAG, GetTagList),
         watchUpdateTagSaga(),
         watchAddTagSaga(),
         watchDeleteTagSaga(),

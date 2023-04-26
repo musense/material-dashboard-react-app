@@ -10,30 +10,30 @@ import EditorListBody from "./EditorListBody";
 import CustomModal from '../../components/CustomModal/CustomModal.jsx';
 import * as GetEditorAction from "../../actions/GetEditorAction";
 import * as GetClassAction from "../../actions/GetClassAction";
+import { reDispatchMessage } from './../../reducers/errorMessage';
+
+
 function EditorList() {
 
-
-  // const navigate = useNavigate();
   const dispatch = useDispatch();
-  useEffect(() => {
+  const returnMessage = useSelector(state => state.getEditorReducer.errorMessage);
+  console.log("🚀 ~ file: index.jsx:20 ~ EditorList ~ returnMessage:", returnMessage)
 
+  useEffect(() => {
+      if (reDispatchMessage.includes(returnMessage)) {
+          dispatch({ type: GetEditorAction.REQUEST_EDITOR })
+      }
+  }, [returnMessage]);
+
+  useEffect(() => {
     dispatch({ type: GetEditorAction.REQUEST_EDITOR });
     dispatch({ type: GetClassAction.REQUEST_All_CLASS_LIST });
-
   }, [])
 
   // const titleList = useSelector((state) => state.getEditorReducer.titleList);
   const [isModalOpen, setIsModalOpen] = useState(true);
 
 
-
-  // useMemo(() => {
-  //   setTitleViewList(titleList)
-  // }, [titleList])
-
-  const returnMessage = useSelector(
-    (state) => state.getEditorReducer.errorMessage
-  );
 
   function openModal() {
     setIsModalOpen(true);

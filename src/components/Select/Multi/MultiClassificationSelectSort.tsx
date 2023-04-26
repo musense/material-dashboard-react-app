@@ -2,9 +2,10 @@ import React, { useMemo, useState } from 'react';
 
 import { useSelector } from 'react-redux';
 
-import MultiSelectSort, { CategoryProps, SelectProps } from './MultiSelectSort';
+import { CategoryProps, SelectProps } from '../data';
+import MultiSelectSort from './base/MultiSelectSort';
 
-export default function SingleClassificationSelectSort({
+export default function MultiClassificationSelectSort({
   setSelectedItems,
   selectedItems,
 }) {
@@ -12,7 +13,7 @@ export default function SingleClassificationSelectSort({
     (state: { getClassReducer: { classifications: CategoryProps[] } }) =>
       state.getClassReducer.classifications
   );
-  // console.log("🚀 ~ file: SingleClassificationSelectSort.tsx:16 ~ classifications:", classifications)
+  // console.log("🚀 ~ file: MultiClassificationSelectSort.tsx:16 ~ classifications:", classifications)
 
   const [classOptions, setClassOptions] = useState<SelectProps[]>();
   useMemo(() => {
@@ -27,7 +28,6 @@ export default function SingleClassificationSelectSort({
 
   return (
     <MultiSelectSort
-      isMulti={false}
       options={classOptions}
       setSelectedItems={setSelectedItems}
       selectedItems={selectedItems}

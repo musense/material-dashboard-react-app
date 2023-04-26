@@ -1,0 +1,43 @@
+.view-form {
+    position: relative;
+}
+
+.view-form>div {
+    display: flex;
+    gap: 1rem;
+    justify-content: space-between;
+    align-items: center;
+    height: 6rem;
+    width: 100%;
+}
+
+.view-editor-list-header {
+    flex-direction: row;
+}
+
+.view-form>div>div {
+    text-align: center;
+    overflow-x: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    flex: 1;
+}
+
+.view-editor-list-header,
+.view-editor-list-body {
+    position: relative;
+}
+
+.list-container {
+    display: flex;
+    font-size: 18px;
+    background-color: #eee;
+    flex-direction: column;
+}
+
+.item-container {
+    background-color: #fff;
+    border: 1px solid black;
+    padding: 25px 70px;
+    margin: 15px 50px;
+}

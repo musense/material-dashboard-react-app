@@ -34,9 +34,14 @@ function NewIEditor({ props }) {
   const imageAltTextRef = useRef();
   const imageUrlRef = useRef(undefined);
   const imageNameRef = useRef(undefined);
-  const customUrlRef = useRef();
+  const customUrlRef = useRef('');
+
+  const idRef = useRef()
   const newTitleRef = useRef('');
   const editorContentRef = useRef(initialValue)
+
+  const tagArrayRef = useRef(null);
+  const classArrayRef = useRef(null);
 
   useEffect(() => {
 
@@ -55,55 +60,44 @@ function NewIEditor({ props }) {
     e.preventDefault();
     const form = e.target;
     const formData = new FormData(form);
-    console.log(newTitleRef.current.value);
-    console.log(editorContentRef.current);
-
-    // return
-    // Object.fromEntries(formData)
     const formDataObject = Object.fromEntries(formData)
-    console.log("🚀 ~ file: NewIEditor.jsx:66 ~ onEditorSave ~ formDataObject:", formDataObject)
 
-    let tempData = Object.assign(
-      {},
-      // formDataObject,
-      {
-        tags: tagArray,
-        classification: classArray,
-        webHeader: {
-          title: formDataObject.title,
-          description: formDataObject.description,
-          keywords: formDataObject.keywords,
-          href: formDataObject.customUrl,
-        },
-        content: {
-          title: newTitleRef.current.value,   //文章標題
-          content: editorContentRef.current   //文章內容
-        },
-        media: {
-          banner: bannerRef.current,        // main-image
-          thumbnail: thumbnailRef.current,  // thumbnail
-          altText: imageAltTextRef.current.value === ''
-            ? newTitleRef.current.value
-            : imageAltTextRef.current.value,  // alt-text
-        },
-        setTop: formDataObject['set-to-top-checkbox']
-          ? true
-          : false,
-        hide: formDataObject['hide-switch-checkbox']
-          ? true
-          : false,
-      }
-    )
-
-    delete tempData['upload-image'];
-
-    console.log('🚀 ~ file: NewIEditor.jsx:84 ~ onEditorSave ~ tempData:', tempData);
-
+    const tData = new Map()
+    
+    const webHeader = new Map()
+    webHeader.set('title', formDataObject.title)
+    webHeader.set('description', formDataObject.description)
+    webHeader.set('keywords', formDataObject.keywords)
+    webHeader.set('customUrl', formDataObject.customUrl)
+    tData.set('webHeader', webHeader) 
+    
+    const content = new Map()
+    content.set('title', newTitleRef.current.value)
+    content.set('content', editorContentRef.current)
+    tData.set('content', content)
+    if (content.get('title') === '') {
+      console.log('please add title!!!');
+      return
+    }
+    
+    const media = new Map()
+    media.set('banner', bannerRef.current)
+    media.set('thumbnail', thumbnailRef.current)
+    media.set('altText', imageAltTextRef.current.value)
+    tData.set('media', media)
+    
+    tData.set('hide', !!formDataObject.hideSwitch)
+    
+    tData.set('tags', tagArrayRef.current)
+    
+    tData.set('classifications', classArrayRef.current)
+    
+    console.log("🚀 ~ file: index.jsx:66 ~ onEditorSave ~ tData:", tData)
     // return
     dispatch({
       type: GetEditorAction.ADD_EDITOR,
       payload: {
-        data: tempData
+        data: tData
       },
     })
   }
@@ -125,9 +119,9 @@ function NewIEditor({ props }) {
             imageUrlRef={imageUrlRef}
             imageNameRef={imageNameRef}
             customUrlRef={customUrlRef}
+            tagArrayRef={tagArrayRef}
+            classArrayRef={classArrayRef}
             onEditorSave={onEditorSave}
-            setTagArray={setTagArray}
-            setClassArray={setClassArray}
           />
         </div>
         <CustomModal ariaHideApp={false} isModalOpen={isModalOpen} />

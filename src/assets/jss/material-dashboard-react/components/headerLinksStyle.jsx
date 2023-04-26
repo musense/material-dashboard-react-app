@@ -8,6 +8,16 @@ import dropdownStyle from "assets/jss/material-dashboard-react/dropdownStyle.jsx
 
 const headerLinksStyle = theme => ({
   ...dropdownStyle(theme),
+  appBar: {},
+  container: {},
+  flex:{},
+  title:{},
+  appResponsive:{},
+  purple:{},
+  blue:{},
+  green:{},
+  orange:{},
+  red:{},
   search: {
     "& > div": {
       marginTop: "0"

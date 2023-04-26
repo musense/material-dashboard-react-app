@@ -1,0 +1,32 @@
+.custom-switch {
+    --hide-switch-width: 2rem;
+    --hide-switch-height: calc(var(--hide-switch-width) / 2);
+    --custom-switch-transition-left: 0;
+    --custom-switch-transition-background-color: white;
+    position: relative;
+    appearance: none;
+    margin: 0;
+    padding: 0;
+    cursor: pointer;
+    width: var(--hide-switch-width);
+    height: var(--hide-switch-height);
+    background-color: lightgray;
+    border-radius: calc(var(--hide-switch-height) / 2);
+  }
+  
+  .custom-switch::before {
+    content: '';
+    display: block;
+    position: absolute;
+    width: calc(var(--hide-switch-width) / 2);
+    height: var(--hide-switch-height);
+    border-radius: 50%;
+    left: var(--custom-switch-transition-left);
+    background-color: var(--custom-switch-transition-background-color);
+    transition: all 0.2s ease-in-out;
+  }
+  
+  .custom-switch:checked::before {
+    --custom-switch-transition-left: calc(var(--hide-switch-width) / 2);
+    --custom-switch-transition-background-color: blueviolet;
+  }

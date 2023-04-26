@@ -48,7 +48,7 @@ function TableList(props) {
   const dispatch = useDispatch();
   const [isModalOpen, setIsModalOpen] = useState(true);
   const [addEditorDisabled, setAddEditorDisabled] = useState(false);
-  const tableData = useSelector((state) => state.getTagReducer.tagList);
+  const tableData = useSelector((state) => state.getTagsReducer.tagList);
 
   const [showList, setShowList] = useState(tableData);
   const tableHead = tableData && Object.keys(tableData[0]);
@@ -56,7 +56,7 @@ function TableList(props) {
   // console.log("🚀 ~ file: TableList.jsx:51 ~ TableList ~ tableData:", tableData)
 
   const returnMessage = useSelector(
-    (state) => state.getTagReducer.errorMessage
+    (state) => state.getTagsReducer.errorMessage
   );
 
   const mounted = useRef();

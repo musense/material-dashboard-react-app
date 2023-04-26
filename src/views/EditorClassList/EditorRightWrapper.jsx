@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 
 import { useDispatch, useSelector } from 'react-redux';
 import * as GetClassAction from '../../actions/GetClassAction';
@@ -9,22 +9,30 @@ import CardHeader from 'components/Card/CardHeader.jsx';
 import GridContainer from 'components/Grid/GridContainer.jsx';
 import GridItem from 'components/Grid/GridItem.jsx';
 import styles from './EditorClassList.module.css'
+import Button from '../../components/CustomButtons/Button';
 
 export default function EditorRightWrapper({ isLoading = true }) {
 
+    const [prevBtnDisable, setPrevBtnDisable] = useState(false);
+    const [nextBtnDisable, setNextBtnDisable] = useState(false);
+
     const dispatch = useDispatch();
     const checkedToDeleteMapRef = useRef(new Map())
-    // dispatch({
-    //     type: GetClassAction.REQUEST_CLASS_LIST
-    // })
-
-
     const editorClassList = useSelector((state) => state.getClassReducer.editorClassList);
+    const currentPage = useSelector((state) => state.getClassReducer.currentPage);
+    const totalCount = useSelector((state) => state.getClassReducer.totalCount);
 
-    useMemo(() => {
+    useEffect(() => {
+        if (currentPage === 1)
+            setPrevBtnDisable(true)
+        else
+            setPrevBtnDisable(false)
+        if (currentPage * 10 - totalCount >= 0 && currentPage * 10 - totalCount < 10)
+            setNextBtnDisable(true)
+        else
+            setNextBtnDisable(false)
+    }, [currentPage, totalCount]);
 
-        console.log("🚀 ~ file: EditorRightWrapper.jsx:32 ~ EditorRightWrapper ~ editorClassList:", editorClassList)
-    }, [editorClassList])
     function onBunchDelete(e) {
         e.preventDefault()
         const deleteIds = []
@@ -32,29 +40,25 @@ export default function EditorRightWrapper({ isLoading = true }) {
             if (!value) continue
             deleteIds.push(key)
         }
-        // console.log("🚀 ~ file: EditorClassList.jsx:142 ~ onDelete ~ deleteKeys:", deleteIds)
-        return
-        // Dino not implemented api yet            
+        console.log("🚀 ~ file: EditorClassList.jsx:142 ~ onDelete ~ deleteKeys:", deleteIds)
+        // return
+        console.log("🚀 ~ file: EditorClassList.jsx:43 ~ onBunchDelete ~ checkedToDeleteMapRef.current:", checkedToDeleteMapRef.current)
         dispatch({
             type: GetClassAction.BUNCH_DELETE_CLASS,
-            payload: {
-                data:
-                    deleteIds
-            },
+            payload: deleteIds
+
         });
+        // checkedToDeleteMapRef.current.clear()
         e.target.reset();
     }
 
     function checkEditorClassRow(e) {
         e.stopPropagation();
         checkedToDeleteMapRef.current.set(e.target.name, e.target.checked)
-        // console.log("🚀 ~ file: EditorClassList.jsx:164 ~ checkEditorClassRow ~ checkedToDeleteMapRef.current:", checkedToDeleteMapRef.current)
+        console.log("🚀 ~ file: EditorClassList.jsx:164 ~ checkEditorClassRow ~ checkedToDeleteMapRef.current:", checkedToDeleteMapRef.current)
     }
 
-    function onEdit(editorClass) {
-
-        // console.log(editorClass);
-        // return
+    function onEdit(editorClass) {        
         dispatch({
             type: GetClassAction.EDITING_CLASS,
             payload: {
@@ -62,9 +66,14 @@ export default function EditorRightWrapper({ isLoading = true }) {
 
             },
         });
-
     }
+    function onPageButtonClick(pageNumber) {
+        dispatch({
+            type: GetClassAction.REQUEST_CLASS_LIST,
+            payload: pageNumber
 
+        })
+    }
     return <div className={styles['editor-right-wrapper']}>
         <GridContainer>
             <GridItem xs={12} sm={12} md={12}>
@@ -74,6 +83,20 @@ export default function EditorRightWrapper({ isLoading = true }) {
                         <h4>分類排列</h4>
                     </CardHeader>
                     <CardBody>
+                        <Button
+                            color='info'
+                            disabled={prevBtnDisable}
+                            onClick={() => onPageButtonClick(currentPage - 1)}
+                        >
+                            上一頁
+                        </Button>
+                        <Button
+                            color='info'
+                            disabled={nextBtnDisable}
+                            onClick={() => onPageButtonClick(currentPage + 1)}
+                        >
+                            下一頁
+                        </Button>
                         <form name='view-class-form' className={styles['editor-table-wrapper']} onSubmit={onBunchDelete}>
                             <div data-attr="data-header" className={`${styles['view-form']} ${styles['editor-table-header']}`}>
                                 <div data-attr="data-header-row">
@@ -85,12 +108,10 @@ export default function EditorRightWrapper({ isLoading = true }) {
                             </div>
                             <div data-attr="data-body" className={`${styles['view-form']} ${styles['editor-table-body']}`}>
                                 {editorClassList && editorClassList.length > 0 && editorClassList.map((editorClass, index) => {
-                                    // console.log("🚀 ~ file: EditorClassList.jsx:186 ~ editorClassList&&editorClassList.length>0&&editorClassList.map ~ editorClassList:", editorClassList);
-
                                     return (
                                         <div data-attr="data-body-row" key={index} onClick={() => onEdit(editorClass)}>
                                             <div><input type='checkbox' name={editorClass._id} onClick={checkEditorClassRow} /></div>
-                                            <div>{editorClass.classification}</div>
+                                            <div>{editorClass.name}</div>
                                             <div>{editorClass.customUrl}</div>
                                             <div>{editorClass.parentClass}</div>
                                         </div>);

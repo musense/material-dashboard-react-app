@@ -8,3 +8,10 @@ export const errorMessage = {
     getFinish: 'get successfully',
     getFail: 'get fail!',
 }
+
+export const reDispatchMessage = [
+    // errorMessage.getFinish,
+    errorMessage.deleteSuccess,
+    errorMessage.updateSuccess,
+    errorMessage.addSuccess,
+]

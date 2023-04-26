@@ -1,5 +1,5 @@
 import React from "react";
-import ReactDOM from "react-dom";
+import ReactDOM from "react-dom/client";
 import { createBrowserHistory } from "history";
 import { BrowserRouter } from "react-router-dom";
 
@@ -11,11 +11,12 @@ import App from './App'
 const hist = createBrowserHistory();
 const store = configureStore();
 
-ReactDOM.render(
+const root = ReactDOM.createRoot(document.getElementById("root"));
+
+root.render(
   <Provider store={store}>
     <BrowserRouter history={hist}>
       <App />
     </BrowserRouter>
-  </Provider>,
-  document.getElementById("root")
+  </Provider>
 );

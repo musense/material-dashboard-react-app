@@ -17,25 +17,32 @@ import NewIEditor from 'views/IEditor'
 import UserProfile from 'views/UserProfile/UserProfile';
 import LoginPage from 'views/Pages/LoginPage';
 import RegisterPage from 'views/Pages/RegisterPage';
+import TagList from './views/TagList';
 import EditorClassList from './views/EditorClassList';
+import EditorManager from './views/EditorManager';
+import EditorManagerNews from "./views/EditorManager/EditorManagerNews";
+import EditorManagerHot from "./views/EditorManager/EditorManagerHot";
+import EditorManagerRecommend from "./views/EditorManager/EditorManagerRecommend";
 import './app.css'
 
 
 function App() {
     const dispatch = useDispatch()
-    
+
     const navigate = useNavigate()
 
 
     useEffect(() => {
-        dispatch({ type: GetClassAction.REQUEST_CLASS_LIST })
-        dispatch({ type: GetTagsAction.REQUEST_TAG })
+        // dispatch({ type: GetClassAction.REQUEST_CLASS_LIST })
         // navigate('/auth/register-page')
-        // navigate('/auth/login-page')
-        navigate('/admin/editorList')
+        navigate('/auth/login-page')
+        // navigate('/admin/editorList')
+        // navigate('/admin/tag')
         // navigate('/admin/editorClassList')
         // navigate('/admin/table')
         // navigate('/admin/editorList/new')
+        
+        // navigate('/admin/editorManager')
     }, []);
 
     return (
@@ -44,13 +51,20 @@ function App() {
                 <Routes>
                     <Route path="admin" element={<Admin />} >
                         <Route path="dashboard" element={<Dashboard />} />
-                        <Route path="user" element={<UserProfile />} />
                         <Route path="table" element={<TableList />} />
+                        <Route path="user" element={<UserProfile />} />
+                        <Route path="tag" element={<TagList />} />
                         <Route path="editorClassList" element={<EditorClassList />} />
+
                         <Route path="editorList" >
                             <Route index element={<EditorList />} />
                             <Route path="new" element={<NewIEditor />} />
                             <Route path=":id" element={<IEditor />} />
+                        </Route>
+                        <Route path="editorManager" element={<EditorManager />} >
+                            <Route path="news" element={<EditorManagerNews />} />
+                            <Route path="hot" element={<EditorManagerHot />} />
+                            <Route path="recommend" element={<EditorManagerRecommend />} />
                         </Route>
                     </Route>
                     <Route path="auth" element={<Auth />}>

@@ -1,47 +1,23 @@
-import React, { useRef, useState, useEffect } from 'react'; // useState
+import React, { useRef, useState } from 'react'; // useState
 import CardHeader from 'components/Card/CardHeader.jsx';
 
-import 'react-date-range/dist/styles.css'; // main style file
-import 'react-date-range/dist/theme/default.css'; // theme css file
-import * as locales from 'react-date-range/dist/locale';
-import { DateRange } from 'react-date-range';
 import * as GetEditorAction from '../../actions/GetEditorAction';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 
-import styles from './EditorList.module.css'
-import SingleClassificationSelectSort from '../../components/MultiSelectSort/SingleClassificationSelectSort';
+import SingleClassificationSelect from '../../components/Select/Single/SingleClassificationSelect';
+import DateSelector from '../../components/DateSelector/DateSelector';
+import { css } from '@emotion/css'
+import usePressEnterEventHandler from '../../hook/usePressEnterEventHandler';
 
 export default function EditorListHeader({ titleList, setTitleViewList }) {
 
     const dispatch = useDispatch();
     const submitRef = useRef(null);
     const dateRef = useRef(null);
-    const [selectedItems, setSelectedItems] = useState([]);
-    function keyDownEventHandler(e) {
-        const keyName = e.key;
-        if (keyName === 'Enter') {
-            e.target.submit()
-        }
-    }
-
-    useEffect(() => {
-        if (submitRef.current === null) {
-            submitRef.current.addEventListener('keydown', keyDownEventHandler)
-        } else {
-        }
-        return () => {
-            submitRef.current.removeEventListener('keydown', keyDownEventHandler)
-        }
-    }, [submitRef]);
-
-    const [dateRangeState, setDateRangeState] = useState([
-        {
-            startDate: new Date(),
-            endDate: null,
-            key: 'selection'
-        }
-    ]);
-
+    const [selectedItem, setSelectedItem] = useState(null);
+  
+    const classRef = useRef();
+    usePressEnterEventHandler(submitRef);
 
     function onSearchEditorList(e) {
         e.preventDefault()
@@ -50,93 +26,61 @@ export default function EditorListHeader({ titleList, setTitleViewList }) {
         const searchData = Object.assign(
             {},
             Object.fromEntries(formData),
-            { classification: selectedItems },
-            { createDate: dateRef.current }
+            { classification: classRef.current.label },
+            { createDate: dateRef.current.current() }
         );
         console.log("🚀 ~ file: EditorList.jsx:136 ~ onSearchEditorList ~ searchData:", searchData)
 
-
+        // return
         dispatch({
             type: GetEditorAction.SEARCH_EDITOR_LIST,
             payload: searchData
         })
         return
-        let tempViewList = [...titleList]
-
-        if (searchData.title) {
-            tempViewList = tempViewList
-                .filter(titleView => titleView.title.toLowerCase().includes(searchData.title.toLowerCase()))
-        }
-        if (searchData.classification) {
-            tempViewList = tempViewList
-                .filter(titleView => titleView.classification.toLowerCase().includes(searchData.classification.toLowerCase()))
-        }
-        if (searchData.createDate) {
-            searchData.createDate.startDate && (
-                tempViewList = tempViewList
-                    .filter(titleView =>
-                        (new Date(searchData.createDate.startDate)).getTime() <= (new Date(titleView.createAt)).getTime())
-            )
-            searchData.createDate.endDate && (
-                tempViewList = tempViewList
-                    .filter(titleView =>
-                        (new Date(searchData.createDate.endDate)).getTime() >= (new Date(titleView.createAt)).getTime())
-            )
-        }
-        setTitleViewList(tempViewList)
-    }
-    function handleDateSelect(item) {
-        dateRef.current = {
-            startDate: `${item.selection.startDate.toLocaleDateString()} 00:00:00`,
-            endDate: `${item.selection.endDate.toLocaleDateString()} 23:59:59`
-        }
-        setDateRangeState([item.selection])
     }
     function reset() {
-        // name='editor-list-form' 
         const form = document.getElementsByName('editor-list-form')[0];
         form.reset();
-        dateRef.current = {
-            startDate: null,
-            endDate: null
-        }
-        setDateRangeState([{
-            startDate: new Date(),
-            endDate: null,
-            key: 'selection'
-        }])
+        dateRef.current.reset()
     }
 
 
     return <CardHeader color='primary'>
         <h4>文章列表</h4>
         <form name='editor-list-form' onSubmit={onSearchEditorList}>
-            <div>
-                <label htmlFor="title">標題</label>
-                <input type="text" name='title' />
-            </div>
-            <div>
+            <div className={css`
+                    display: flex;
+                    flex-direction: column;
+                `}>
+                <div className={css`
+                    display: flex;
+                    flex-direction: column;
+                    gap: 1rem;
+                `}>
 
-                <label htmlFor="classification">分類</label>
-                {/* <input type="text" name='classification' /> */}
-                <SingleClassificationSelectSort
-                    setSelectedItems={setSelectedItems}
-                    selectedItems={selectedItems}
-                />
+                    <div className={css`
+                        width: 50%;
+                    `}>
+                        <label htmlFor="title">標題</label>
+                        <input type="text" name='title' />
+                    </div>
+                    <div className={css`
+                        width: 50%;
+                    `}>
+                        <label htmlFor="classification">分類</label>
+                        {/* <input type="text" name='classification' /> */}
+                        <SingleClassificationSelect
+                        classRef={classRef}
+                        />
+                    </div>
+                    <DateSelector ref={dateRef} />
+                </div>
             </div>
-            <div>
-
-                <label htmlFor="dateRange">日期</label>
-                <DateRange
-                    className={styles['date-range-selector']}
-                    name="dateRange"
-                    // editableDateInputs={true}
-                    moveRangeOnFirstSelection={false}
-                    ranges={dateRangeState}
-                    onChange={handleDateSelect}
-                    locale={locales['zhTW']} />
-            </div>
-            <div>
+            <div className={css`
+                display: flex;
+                flex-direction: row;
+                gap: 1rem;
+            `}>
                 <input ref={submitRef} type="submit" value="查詢" />
                 <input type='button' value='清空' onClick={reset} />
             </div>

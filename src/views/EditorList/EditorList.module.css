@@ -62,6 +62,7 @@ form[name='view-editor-list-form']>div {
 
 .view-editor-list-body>div {
   cursor: pointer;
+  height: fit-content;
 }
 
 .view-editor-list-body>div:nth-child(even) {

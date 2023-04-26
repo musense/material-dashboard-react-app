@@ -1,10 +1,10 @@
 import * as GetClassAction from '../actions/GetClassAction';
-import { SelectProps } from '../components/MultiSelectSort/MultiSelectSort';
+import { SelectProps } from '../components/Select/data';
 import { errorMessage } from './errorMessage';
 
 export interface EditorClass {
     _id: string;
-    classification: string;
+    name: string;
     parentClass: string | undefined;
     title: string | undefined;
     description: string | undefined;
@@ -30,18 +30,29 @@ const initialState: {
     editorClassList: EditorClass[];
     editorClass: EditorClass;
     errorMessage: String | null;
+    reset: string | null;
+    currentPage: number | null,
+    totalCount: number | null,
 } = {
     parentClassOptions: null,
     classifications: null,
     classList: new Map(),
-    editorClassList: [emptyEditorClass],
-    editorClass: emptyEditorClass,
-    errorMessage: null
+    editorClassList: null,
+    editorClass: null,
+    errorMessage: null,
+    currentPage: null,
+    totalCount: null,
+    reset: null
 }
-const getClassReducer = (state = initialState, action: { type: any; payload: { data: any; }; }) => {
+const getClassReducer = (state = initialState, action: { type: any; payload: { editorClassList: any; currentPage: any; totalCount: any; data: { _id: string; }; }; }) => {
     // console.log(action);
 
     switch (action.type) {
+        case GetClassAction.RESET_SELECTED_CLASS:
+            return {
+                ...state,
+                reset: action.payload,
+            }
         case GetClassAction.SET_PARENT_CLASS_OPTIONS:
             return {
                 ...state,
@@ -51,7 +62,9 @@ const getClassReducer = (state = initialState, action: { type: any; payload: { d
         case GetClassAction.REQUEST_CLASS_LIST_SUCCESS:
             return {
                 ...state,
-                editorClassList: action.payload,
+                editorClassList: action.payload.editorClassList,
+                currentPage: action.payload.currentPage,
+                totalCount: action.payload.totalCount,
                 errorMessage: errorMessage.getFinish
             }
         case GetClassAction.REQUEST_ALL_CLASS_LIST_SUCCESS:
@@ -81,7 +94,6 @@ const getClassReducer = (state = initialState, action: { type: any; payload: { d
             return {
                 ...state,
                 editorClass: action.payload.data,
-                errorMessage: errorMessage.updateSuccess
             }
         // case GetClassAction.EDIT_SAVING_CLASS:
         //     return {
@@ -103,14 +115,6 @@ const getClassReducer = (state = initialState, action: { type: any; payload: { d
             return {
                 ...state,
                 errorMessage: errorMessage.updateSuccess
-            }
-        case GetClassAction.BUNCH_DELETE_CLASS:
-            return {
-                ...state,
-                editorClassList:
-                    state.editorClassList
-                        .filter(editorClass => !action.payload.data.includes(editorClass._id)),
-                errorMessage: errorMessage.deleteSuccess
             }
         case GetClassAction.DELETE_CLASS:
             return {

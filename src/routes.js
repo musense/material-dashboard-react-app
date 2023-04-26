@@ -10,16 +10,20 @@ import DashboardPage from "views/Dashboard/Dashboard.jsx";
 import EditorList from "views/EditorList";
 import IEditor from "views/IEditor/[id]";
 import TableList from "views/TableList/TableList.jsx";
+import TagList from "views/TagList";
 import UserProfile from "views/UserProfile/UserProfile.jsx";
 import LoginPage from "views/Pages/LoginPage.jsx";
 import RegisterPage from "views/Pages/RegisterPage.jsx";
 import EditorClassList from "./views/EditorClassList";
+import EditorManager from "./views/EditorManager";
+import EditorManagerNews from "./views/EditorManager/EditorManagerNews";
+import EditorManagerHot from "./views/EditorManager/EditorManagerHot";
+import EditorManagerRecommend from "./views/EditorManager/EditorManagerRecommend";
 
 const dashboardRoutes = [
   {
     path: "/dashboard",
     name: "Dashboard",
-      // rtlName: "لوحة القيادة",
     icon: Dashboard,
     component: DashboardPage,
     layout: "/admin"
@@ -27,48 +31,81 @@ const dashboardRoutes = [
   {
     path: "/user",
     name: "User Profile",
-    // rtlName: "ملف تعريفي للمستخدم",
     icon: Person,
     component: UserProfile,
     layout: "/admin"
   },
+  // {
+  //   path: "/table",
+  //   name: "標籤管理",
+  //   icon: "content_paste",
+  //   component: TableList,
+  //   layout: "/admin"
+  // },
   {
-    path: "/table",
+    path: "/tag",
     name: "標籤管理",
-    // rtlName: "قائمة الجدول",
     icon: "content_paste",
-    component: TableList,
+    component: TagList,
     layout: "/admin"
   },
   {
-    path     : "/editorList",
-    name     : "文章列表",
-    // rtlName  : "قائمة الجدول",
-    icon     : "content_paste",
-    component: EditorList,
-    layout   : "/admin",
-  },
-  {
-    path     : "/editorClassList",
-    name     : "文章分類管理",
-    // rtlName  : "قائمة الجدول",
-    icon     : "content_paste",
+    path: "/editorClassList",
+    name: "文章分類管理",
+    icon: "content_paste",
     component: EditorClassList,
-    layout   : "/admin",
+    layout: "/admin",
   },
   {
-    path     : "/editorList/new",
-    name     : "新增文章",
-    // rtlName  : "قائمة الجدول",
-    icon     : "content_paste",
+    path: "/editorList",
+    name: "文章列表",
+    icon: "content_paste",
+    component: EditorList,
+    layout: "/admin",
+  },
+  {
+    path: "/editorList/new",
+    name: "新增文章",
+    icon: "content_paste",
     component: IEditor,
-    layout   : "/admin",
+    layout: "/admin",
     hide: false
   },
-    {
+  {
+    path: "/editorManager",
+    name: "文章管理",
+    icon: "content_paste",
+    component: EditorManager,
+    layout: "/admin",
+    hide: false
+  },
+  {
+    path: "/editorManager/news",
+    name: "文章管理",
+    icon: "content_paste",
+    component: EditorManagerNews,
+    layout: "/admin",
+    hide: true
+  },
+  {
+    path: "/editorManager/hot",
+    name: "文章管理",
+    icon: "content_paste",
+    component: EditorManagerHot,
+    layout: "/admin",
+    hide: true
+  },
+  {
+    path: "/editorManager/recommend",
+    name: "文章管理",
+    icon: "content_paste",
+    component: EditorManagerRecommend,
+    layout: "/admin",
+    hide: true
+  },
+  {
     path: "/login-page",
     name: "Login Page",
-    // rtlName: "پشتیبانی از راست به چپ",
     icon: Login,
     component: LoginPage,
     layout: "/auth"
@@ -76,7 +113,6 @@ const dashboardRoutes = [
   {
     path: "/register-page",
     name: "Register Page",
-    // rtlName: "پشتیبانی از راست به چپ",
     icon: Register,
     component: RegisterPage,
     layout: "/auth"

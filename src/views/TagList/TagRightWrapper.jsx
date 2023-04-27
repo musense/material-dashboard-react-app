@@ -139,7 +139,7 @@ function TagRightBody() {
     function onPageButtonClick(pageNumber) {
         dispatch({
             // type: GetTagsAction.REQUEST_TAG,
-            type: GetTagsAction.REQUEST_PAGE_TAG,
+            type: GetTagsAction.REQUEST_TAG,
             payload: pageNumber
 
         })
@@ -161,12 +161,12 @@ function TagRightBody() {
         console.log("🚀 ~ file: TagRightWrapper.jsx:142 ~ onDelete ~ deleteKeys:", deleteIds)
         // return
         console.log("🚀 ~ file: TagRightWrapper.jsx:43 ~ onBunchDelete ~ checkedToDeleteMapRef.current:", checkedToDeleteMapRef.current)
-        // dispatch({
-        //     type: GetTagsAction.BUNCH_DELETE_CLASS,
-        //     payload: deleteIds
+        dispatch({
+            type: GetTagsAction.BUNCH_DELETE_TAG,
+            payload: deleteIds
 
-        // });
-        // checkedToDeleteMapRef.current.clear()
+        });
+        checkedToDeleteMapRef.current.clear()
         e.target.reset();
     }
 

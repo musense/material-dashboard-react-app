@@ -56,10 +56,10 @@ function* GetTagList(payload = 1) {
     try {
 
         const response = yield instance.get(`/tags?limit=10&pageNumber=${payload}`);
-        // const { currentPage, totalCount, data: responseData } = yield response.data
-        // const tagList = toFrontendData(responseData)
+        const { currentPage, totalCount, data: responseData } = yield response.data
+        const tagList = toFrontendData(responseData)
         console.log("🚀 ~ file: GetTagList.js:44 ~ function*GetTagList ~ tagList:", tagList)
-        const tagList = yield response.data;
+        // const tagList = yield response.data;
         // console.log("🚀 ~ file: GetTagList.js:14 ~ function*GetTagList ~ tagList:", tagList)
 
         // console.log("🚀 ~ file: GetTagList.js:19 ~ tagMapped ~ tagMapped:", tagMapped)
@@ -68,10 +68,8 @@ function* GetTagList(payload = 1) {
             type: GetTagsAction.REQUEST_TAG_SUCCESS,
             payload: {
                 tagList,
-                // totalCount: parseInt(totalCount || 10),
-                // currentPage: parseInt(currentPage || 1),
-                totalCount: parseInt(tagList.length),
-                currentPage: parseInt(1),
+                totalCount: parseInt(totalCount || 10),
+                currentPage: parseInt(currentPage || 1),
             }
         })
     } catch (error) {
@@ -90,7 +88,7 @@ function* GetTagList(payload = 1) {
 function* SearchTag(payload) {
     try {
 
-        const nameString = payload.name ? `name=${payload.name}&` : ''
+        const nameString = payload.title ? `name=${payload.title}&` : ''
         const startDateString = payload.createDate
             ? payload.createDate.startDate
                 ? `startDate=${new Date(payload.createDate.startDate).getTime()}&`
@@ -101,7 +99,7 @@ function* SearchTag(payload) {
                 ? `endDate=${new Date(payload.createDate.endDate).getTime()}&`
                 : ''
             : ''
-        const response = yield instance.get(`/tags${nameString}${startDateString} ${endDateString}`);
+        const response = yield instance.get(`/tags?${nameString}${startDateString} ${endDateString}`);
         console.log("🚀 ~ file: GetEditorList.js:72 ~ function*SearchEditor ~ response:", response)
         const { currentPage, totalCount, data: responseData } = yield response.data
         console.log("🚀 ~ file: GetEditorList.js:72 ~ function*SearchEditor ~ responseData:", responseData)
@@ -129,7 +127,7 @@ function* AddTag(payload) {
     try {
         const requestDate = toBackendData(payload.data)
         console.log("🚀 ~ file: GetTagList.js:131 ~ function*AddTag ~ requestDate:", requestDate)
-        return
+        // return
         const response = yield instance.post(`/tags`, requestDate);
         const responseData = yield response.data;
         yield put({
@@ -171,11 +169,19 @@ function* UpdateTag(payload) {
 // DELETE
 function* DeleteTag(payload) {
     try {
-        const response = yield instance.delete(`/tags/${payload.data}`);
-        const tagList = yield response.data;
+        const data = {
+            'ids': payload
+        }
+        console.log("🚀 ~ file: GetTagList.js:175 ~ function*DeleteTag ~ data:", data)
+     
+        
+        const response = yield instance.delete(`/tags/bunchDeleteByIds`,{
+            "data": data
+        });
+        const responseData = yield response.data.data;
         yield put({
             type: GetTagsAction.DELETE_TAG_SUCCESS,
-            payload: tagList
+            payload: responseData
         })
     } catch (error) {
         yield put({
@@ -204,6 +210,13 @@ function* watchAddTagSaga() {
     }
 }
 
+function* watchSearchTagSaga() {
+    while (true) {
+        const { payload } = yield take(GetTagsAction.SEARCH_TAG_LIST)
+        yield SearchTag(payload)
+    }
+}
+
 function* watchUpdateTagSaga() {
     while (true) {
         const { payload } = yield take(GetTagsAction.EDIT_SAVING_TAG)
@@ -213,7 +226,7 @@ function* watchUpdateTagSaga() {
 
 function* watchDeleteTagSaga() {
     while (true) {
-        const { payload } = yield take(GetTagsAction.DELETE_TAG)
+        const { payload } = yield take(GetTagsAction.BUNCH_DELETE_TAG)
         yield DeleteTag(payload)
     }
 }
@@ -221,6 +234,7 @@ function* watchDeleteTagSaga() {
 function* mySaga() {
     yield all([
         // takeEvery(GetTagsAction.ADD_TAG_SUCCESS, reGetTagList),
+        watchSearchTagSaga(),
         watchGetTagListSaga(),
         watchUpdateTagSaga(),
         watchAddTagSaga(),

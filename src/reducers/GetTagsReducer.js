@@ -59,15 +59,6 @@ const getTagsReducer = (state = initialState, action) => {
                 totalCount: action.payload.totalCount,
                 errorMessage: errorMessage.getFinish
             }
-        case GetTagsAction.REQUEST_PAGE_TAG:
-            const start = (action.payload - 1) * 10;
-            const end = start + 10
-            return {
-                ...state,
-                showTagList: state.tagList.slice(start, end),
-                currentPage: action.payload
-            }
-
         // case GetTagsAction.GET_SELECTED_TAG_SUCCESS:
         //     return {
         //         ...state,

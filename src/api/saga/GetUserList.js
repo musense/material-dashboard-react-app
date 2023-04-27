@@ -4,6 +4,7 @@ import {
     DELETE_USER, DELETE_USER_FAIL, DELETE_USER_SUCCESS, LOGIN_USER, LOGIN_USER_FAIL, LOGIN_USER_SUCCESS, REGISTER_USER, REGISTER_USER_FAIL, REGISTER_USER_SUCCESS, UPDATE_USER, UPDATE_USER_FAIL, UPDATE_USER_SUCCESS
 } from "../../actions/GetUserAction";
 import { instance } from "./AxiosInstance";
+import { errorMessage } from '../../reducers/errorMessage';
 
 
 // LOGIN
@@ -11,8 +12,7 @@ function* UserLogin(payload) {
     const { username, password } = payload
     try {
         const response = yield instance.post(`/login`, { username, password });
-        const data = yield response;
-        const user = data.data;
+        const user = yield response.data;
         yield put({
             type: LOGIN_USER_SUCCESS,
             errorMessage: 'login successfully',
@@ -37,11 +37,11 @@ function* UserRegister(payload) {
         }).catch((error) => {
             throw new Error(error.response.data.message)
         });
-        const responseData = yield response.data.data;
+        const responseData = yield response.data;
         yield put({
             type: REGISTER_USER_SUCCESS,
-            errorMessage: responseData.errorMessage,
-            payload: responseData
+            payload: responseData,
+            errorMessage: 'register successfully',
         })
     } catch (error) {
         if (typeof error === "string") {

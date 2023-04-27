@@ -74,6 +74,7 @@ export default function TagLeftWrapper() {
                 },
             });
             setIsEditing(false)
+     
         } else {
             dispatch({
                 type: GetTagsAction.ADD_TAG,
@@ -82,7 +83,7 @@ export default function TagLeftWrapper() {
                 },
             });
         }
-        // onReset(e)
+        onReset(e)
     }
 
     function getForm() {

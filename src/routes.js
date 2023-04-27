@@ -21,13 +21,13 @@ import EditorManagerHot from "./views/EditorManager/EditorManagerHot";
 import EditorManagerRecommend from "./views/EditorManager/EditorManagerRecommend";
 
 const dashboardRoutes = [
-  {
-    path: "/dashboard",
-    name: "Dashboard",
-    icon: Dashboard,
-    component: DashboardPage,
-    layout: "/admin"
-  },
+  // {
+  //   path: "/dashboard",
+  //   name: "Dashboard",
+  //   icon: Dashboard,
+  //   component: DashboardPage,
+  //   layout: "/admin"
+  // },
   {
     path: "/user",
     name: "User Profile",
@@ -71,38 +71,38 @@ const dashboardRoutes = [
     layout: "/admin",
     hide: false
   },
-  {
-    path: "/editorManager",
-    name: "文章管理",
-    icon: "content_paste",
-    component: EditorManager,
-    layout: "/admin",
-    hide: false
-  },
-  {
-    path: "/editorManager/news",
-    name: "文章管理",
-    icon: "content_paste",
-    component: EditorManagerNews,
-    layout: "/admin",
-    hide: true
-  },
-  {
-    path: "/editorManager/hot",
-    name: "文章管理",
-    icon: "content_paste",
-    component: EditorManagerHot,
-    layout: "/admin",
-    hide: true
-  },
-  {
-    path: "/editorManager/recommend",
-    name: "文章管理",
-    icon: "content_paste",
-    component: EditorManagerRecommend,
-    layout: "/admin",
-    hide: true
-  },
+  // {
+  //   path: "/editorManager",
+  //   name: "文章管理",
+  //   icon: "content_paste",
+  //   component: EditorManager,
+  //   layout: "/admin",
+  //   hide: false
+  // },
+  // {
+  //   path: "/editorManager/news",
+  //   name: "文章管理",
+  //   icon: "content_paste",
+  //   component: EditorManagerNews,
+  //   layout: "/admin",
+  //   hide: true
+  // },
+  // {
+  //   path: "/editorManager/hot",
+  //   name: "文章管理",
+  //   icon: "content_paste",
+  //   component: EditorManagerHot,
+  //   layout: "/admin",
+  //   hide: true
+  // },
+  // {
+  //   path: "/editorManager/recommend",
+  //   name: "文章管理",
+  //   icon: "content_paste",
+  //   component: EditorManagerRecommend,
+  //   layout: "/admin",
+  //   hide: true
+  // },
   {
     path: "/login-page",
     name: "Login Page",

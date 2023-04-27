@@ -164,7 +164,7 @@ export function toBackendFormData(requestData) {
     requestData.forEach((value, key) => {
         if (Array.isArray(value)) {
             requestForm.append(fend2BendMap.get(`${key}`), JSON.stringify(value))
-        } else if (typeof value === 'object') {
+        } else if (value && typeof value === 'object') {
             value.forEach((v, k) => {
                 if (`${key}.${k}` === `media.banner`) {
                     typeof v === 'object' && requestForm.append(fend2BendMap.get(`${key}.${k}`), v)

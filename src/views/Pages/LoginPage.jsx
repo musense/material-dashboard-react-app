@@ -41,7 +41,7 @@ function LoginPage(props) {
   '' + useSelector((state) => state.getUserReducer.errorMessage);
   useEffect(() => {
     if (returnMessage.indexOf('login successfully') > -1) {
-      navigate('/admin/dashboard')
+      navigate('/admin/user')
     }
   }, [returnMessage, checked]);
 

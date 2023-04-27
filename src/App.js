@@ -50,8 +50,8 @@ function App() {
             <div className='App'>
                 <Routes>
                     <Route path="admin" element={<Admin />} >
-                        <Route path="dashboard" element={<Dashboard />} />
-                        <Route path="table" element={<TableList />} />
+                        {/* <Route path="dashboard" element={<Dashboard />} /> */}
+                        {/* <Route path="table" element={<TableList />} /> */}
                         <Route path="user" element={<UserProfile />} />
                         <Route path="tag" element={<TagList />} />
                         <Route path="editorClassList" element={<EditorClassList />} />
@@ -61,11 +61,11 @@ function App() {
                             <Route path="new" element={<NewIEditor />} />
                             <Route path=":id" element={<IEditor />} />
                         </Route>
-                        <Route path="editorManager" element={<EditorManager />} >
+                        {/* <Route path="editorManager" element={<EditorManager />} >
                             <Route path="news" element={<EditorManagerNews />} />
                             <Route path="hot" element={<EditorManagerHot />} />
                             <Route path="recommend" element={<EditorManagerRecommend />} />
-                        </Route>
+                        </Route> */}
                     </Route>
                     <Route path="auth" element={<Auth />}>
                         <Route path="login-page" element={<LoginPage />} />

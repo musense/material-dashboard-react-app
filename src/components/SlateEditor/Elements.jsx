@@ -152,6 +152,12 @@ export const Element = ({ element, children, attributes }) => {
                     {children}
                 </h2>
             )
+        case 'h3':
+            return (
+                <h3 style={style} {...attributes}>
+                    {children}
+                </h3>
+            )
         case 'list-item':
             return (
                 <li style={style} {...attributes}>

@@ -23,6 +23,7 @@ export default function Toolbar() {
         {/* block style */}
         <BlockButton type={'h1'} icon={'looks_one'} />
         <BlockButton type={'h2'} icon={'looks_two'} />
+        <BlockButton type={'h3'} icon={'looks_3'} />
         <BlockButton type={'numbered-list'} icon={'format_list_numbered'} />
         <BlockButton type={'bulleted-list'} icon={'format_list_bulleted'} />
         <BlockButton type={'block-quote'} icon={'format_quote'} />

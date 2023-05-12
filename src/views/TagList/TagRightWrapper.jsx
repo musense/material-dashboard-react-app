@@ -29,9 +29,9 @@ const TagRightHeader = () => {
     const dispatch = useDispatch()
     const submitRef = useRef(null);
     const dateRef = useRef(null);
-    
+
     usePressEnterEventHandler(submitRef)
-    
+
     function onSearchEditorList(e) {
         e.preventDefault()
         const form = e.target;
@@ -102,6 +102,7 @@ function TagRightBody() {
     const checkedToDeleteMapRef = useRef(new Map())
     const showTagList = useSelector((state) => state.getTagsReducer.showTagList);
     const currentPage = useSelector((state) => state.getTagsReducer.currentPage) || 0;
+    console.log("🚀 ~ file: TagRightWrapper.jsx:105 ~ TagRightBody ~ currentPage:", currentPage)
     const totalCount = useSelector((state) => state.getTagsReducer.totalCount) || 0;
 
     const [tagList, setTagList] = useState();
@@ -123,11 +124,6 @@ function TagRightBody() {
             setNextBtnDisable(false)
     }, [currentPage, totalCount]);
 
-    const sortingRef = useRef('asc')
-    const nameSortingRef = useRef('asc')
-    const createAtSortingRef = useRef('asc')
-    const hotSortingRef = useRef('asc')
-
     function onEdit(tag) {
         dispatch({
             type: GetTagsAction.EDITING_TAG,
@@ -138,8 +134,7 @@ function TagRightBody() {
     }
     function onPageButtonClick(pageNumber) {
         dispatch({
-            // type: GetTagsAction.REQUEST_TAG,
-            type: GetTagsAction.REQUEST_TAG,
+            type: GetTagsAction.REQUEST_PAGE_TAG,
             payload: pageNumber
 
         })
@@ -169,52 +164,14 @@ function TagRightBody() {
         checkedToDeleteMapRef.current.clear()
         e.target.reset();
     }
-
-    const SortingHelperFunc = {
-        onSortingClick() {
-            const tempViewList = [...showTagList]
-            if (sortingRef.current === 'asc') {
-                sortingRef.current = 'desc'
-                setTagList(tempViewList.sort((t1, t2) => parseInt(t2.sorting) - parseInt(t1.sorting)))
-            } else {
-                sortingRef.current = 'asc'
-                setTagList(tempViewList.sort((t1, t2) => parseInt(t1.sorting) - parseInt(t2.sorting)))
+    const onSortingClick = (key) => {
+        dispatch({
+            type: GetTagsAction.SHOW_TAG_LIST_SORTING,
+            payload: {
+                key: key
             }
-        },
-        onNameClick() {
-            const tempViewList = [...showTagList]
-            if (nameSortingRef.current === 'asc') {
-                nameSortingRef.current = 'desc'
-                setTagList(tempViewList.sort((t1, t2) => t2.name.localeCompare(t1.name)))
-            } else {
-                nameSortingRef.current = 'asc'
-                setTagList(tempViewList.sort((t1, t2) => t1.name.localeCompare(t2.name)))
-            }
-        },
-        onCreateAtClick() {
-            const tempViewList = [...showTagList]
-            if (createAtSortingRef.current === 'asc') {
-                createAtSortingRef.current = 'desc'
-                setTagList(tempViewList.sort((t1, t2) => (new Date(t2.createDate)).getTime() - (new Date(t1.createDate)).getTime()))
-            } else {
-                createAtSortingRef.current = 'asc'
-                setTagList(tempViewList.sort((t1, t2) => (new Date(t1.createDate)).getTime() - (new Date(t2.createDate)).getTime()))
-            }
-        },
-        onIsHotClick() {
-            const tempViewList = [...showTagList]
-            if (hotSortingRef.current === 'asc') {
-                hotSortingRef.current = 'desc'
-                setTagList(tempViewList.sort((t1, t2) => t2.isHot.localeCompare(t1.isHot)))
-            } else {
-                hotSortingRef.current = 'asc'
-                setTagList(tempViewList.sort((t1, t2) => t1.isHot.localeCompare(t2.isHot)))
-            }
-        },
-
+        })
     }
-
-
     return <CardBody>
         <Button
             color='info'
@@ -234,10 +191,10 @@ function TagRightBody() {
             <div data-attr="data-header" className={`${styles['view-form']} ${styles['tag-table-header']}`}>
                 <div data-attr="data-header-row">
                     <div> <input type='submit' value='批次刪除' /> </div>
-                    <div> <input type='button' value='標籤名稱' onClick={SortingHelperFunc.onNameClick} /></div>
-                    <div> <input type='button' value='標籤排序' onClick={SortingHelperFunc.onSortingClick} /></div>
-                    <div> <input type='button' value='日期' onClick={SortingHelperFunc.onCreateAtClick} /></div>
-                    <div> <input type='button' value='熱門標籤' onClick={SortingHelperFunc.onIsHotClick} /></div>
+                    <div> <input type='button' value='標籤名稱' onClick={() => onSortingClick('name')} /></div>
+                    <div> <input type='button' value='標籤排序' onClick={() => onSortingClick('sorting')} /></div>
+                    <div> <input type='button' value='日期' onClick={() => onSortingClick('createDate')} /></div>
+                    <div> <input type='button' value='熱門標籤' onClick={() => onSortingClick('isHot')} /></div>
                 </div>
             </div>
             <div data-attr="data-body" className={`${styles['view-form']} ${styles['tag-table-body']}`}>
@@ -248,7 +205,7 @@ function TagRightBody() {
                             <div>{tag.name}</div>
                             <div>{tag.sorting}</div>
                             <div>{tag.createDate}</div>
-                            <div>{tag.isHot}</div>
+                            <div>{tag.isHot ? 'Yes' : 'No'}</div>
                         </div>);
                 })}
             </div>

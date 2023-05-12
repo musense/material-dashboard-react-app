@@ -35,10 +35,10 @@ function App() {
     useEffect(() => {
         // dispatch({ type: GetClassAction.REQUEST_CLASS_LIST })
         // navigate('/auth/register-page')
-        navigate('/auth/login-page')
+        // navigate('/auth/login-page')
         // navigate('/admin/editorList')
         // navigate('/admin/tag')
-        // navigate('/admin/editorClassList')
+        navigate('/admin/editorClassList')
         // navigate('/admin/table')
         // navigate('/admin/editorList/new')
         
@@ -50,7 +50,7 @@ function App() {
             <div className='App'>
                 <Routes>
                     <Route path="admin" element={<Admin />} >
-                        {/* <Route path="dashboard" element={<Dashboard />} /> */}
+                        <Route path="dashboard" element={<Dashboard />} />
                         {/* <Route path="table" element={<TableList />} /> */}
                         <Route path="user" element={<UserProfile />} />
                         <Route path="tag" element={<TagList />} />

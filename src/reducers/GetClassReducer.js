@@ -1,39 +1,13 @@
 import * as GetClassAction from '../actions/GetClassAction';
-import { SelectProps } from '../components/Select/data';
 import { errorMessage } from './errorMessage';
 
-export interface EditorClass {
-    _id: string;
-    name: string;
-    parentClass: string | undefined;
-    title: string | undefined;
-    description: string | undefined;
-    keywords: string | undefined;
-    customUrl: string | undefined;
-}
-
-
-const emptyEditorClass = {
-    _id: '',
-    classification: '',
-    parentClass: '',
-    title: '',
-    description: '',
-    keywords: '',
-    customUrl: '',
-}
-
-const initialState: {
-    parentClassOptions: SelectProps[],
-    classifications: string[],
-    classList: Map<any, any>;
-    editorClassList: EditorClass[];
-    editorClass: EditorClass;
-    errorMessage: String | null;
-    reset: string | null;
-    currentPage: number | null,
-    totalCount: number | null,
-} = {
+const initialState = {
+    sortingMap: {
+        name: 'asc',
+        customUrl: 'asc',
+        parentClass: 'asc',
+    },
+    showList: null,
     parentClassOptions: null,
     classifications: null,
     classList: new Map(),
@@ -44,7 +18,7 @@ const initialState: {
     totalCount: null,
     reset: null
 }
-const getClassReducer = (state = initialState, action: { type: any; payload: { editorClassList: any; currentPage: any; totalCount: any; data: { _id: string; }; }; }) => {
+const getClassReducer = (state = initialState, action) => {
     // console.log(action);
 
     switch (action.type) {
@@ -62,10 +36,78 @@ const getClassReducer = (state = initialState, action: { type: any; payload: { e
         case GetClassAction.REQUEST_CLASS_LIST_SUCCESS:
             return {
                 ...state,
+                showList: action.payload.editorClassList.slice(0, 10),
                 editorClassList: action.payload.editorClassList,
                 currentPage: action.payload.currentPage,
                 totalCount: action.payload.totalCount,
                 errorMessage: errorMessage.getFinish
+            }
+        case GetClassAction.REQUEST_CLASS_PAGE:
+            const start = (action.payload - 1) * 10;
+            const end = start + 10
+            return {
+                ...state,
+                showList: state.editorClassList.slice(start, end),
+                currentPage: action.payload,
+            }
+        case GetClassAction.SHOW_CLASS_LIST_SORTING:
+            const { key } = action.payload;
+            return {
+                ...state,
+                sortingMap: {
+                    ...state.sortingMap,
+                    [key]: state.sortingMap[key] === 'asc' ? 'desc' : 'asc',
+                },
+                showList: state.editorClassList.sort((class1, class2) => {
+                    let typeOf
+                    let c1, c2,
+                        k1, k2;
+
+                    if (key.indexOf('.') !== -1) {
+                        k1 = key.split('.')[0]
+                        k2 = key.split('.')[1]
+                        c1 = class1[k1][k2]
+                        c2 = class2[k1][k2]
+                        typeOf = typeof class1[k1][k2]
+                    } else {
+                        c1 = class1[key]
+                        c2 = class2[key]
+                        typeOf = typeof class1[key]
+                    }
+                    const sorting = state.sortingMap[key]
+                    switch (typeOf) {
+                        case 'string': {
+                            if (sorting === 'asc') {
+                                return c1.localeCompare(c2)
+                            } else {
+                                return c2.localeCompare(c1)
+                            }
+                        }
+                        case 'boolean': {
+                            if (sorting === 'asc') {
+                                return c2.toString().localeCompare(c1.toString())
+                            } else {
+                                return c1.toString().localeCompare(c2.toString())
+                            }
+                        }
+                        case 'number': {
+                            if (sorting === 'asc') {
+                                return parseInt(c2 ? c2 : 0) - parseInt(c1 ? c1 : 0)
+                            } else {
+                                return parseInt(c1 ? c1 : 0) - parseInt(c2 ? c2 : 0)
+                            }
+                        }
+                        case 'object': {
+                            if (sorting === 'asc') {
+                                return (new Date(c2)).getTime() - (new Date(c1)).getTime()
+                            } else {
+                                return (new Date(c1)).getTime() - (new Date(c1)).getTime()
+                            }
+                        }
+
+                    }
+                }).slice(0, 10),
+                currentPage: 1
             }
         case GetClassAction.REQUEST_ALL_CLASS_LIST_SUCCESS:
             return {

@@ -18,7 +18,7 @@ export default function EditorRightWrapper({ isLoading = true }) {
 
     const dispatch = useDispatch();
     const checkedToDeleteMapRef = useRef(new Map())
-    const editorClassList = useSelector((state) => state.getClassReducer.editorClassList);
+    const showList = useSelector((state) => state.getClassReducer.showList);
     const currentPage = useSelector((state) => state.getClassReducer.currentPage);
     const totalCount = useSelector((state) => state.getClassReducer.totalCount);
 
@@ -48,7 +48,7 @@ export default function EditorRightWrapper({ isLoading = true }) {
             payload: deleteIds
 
         });
-        // checkedToDeleteMapRef.current.clear()
+        checkedToDeleteMapRef.current.clear()
         e.target.reset();
     }
 
@@ -58,7 +58,7 @@ export default function EditorRightWrapper({ isLoading = true }) {
         console.log("🚀 ~ file: EditorClassList.jsx:164 ~ checkEditorClassRow ~ checkedToDeleteMapRef.current:", checkedToDeleteMapRef.current)
     }
 
-    function onEdit(editorClass) {        
+    function onEdit(editorClass) {
         dispatch({
             type: GetClassAction.EDITING_CLASS,
             payload: {
@@ -67,9 +67,17 @@ export default function EditorRightWrapper({ isLoading = true }) {
             },
         });
     }
+    const onSortingClick = (key) => {
+        dispatch({
+            type: GetClassAction.SHOW_CLASS_LIST_SORTING,
+            payload: {
+                key: key
+            }
+        })
+    }
     function onPageButtonClick(pageNumber) {
         dispatch({
-            type: GetClassAction.REQUEST_CLASS_LIST,
+            type: GetClassAction.REQUEST_CLASS_PAGE,
             payload: pageNumber
 
         })
@@ -101,13 +109,13 @@ export default function EditorRightWrapper({ isLoading = true }) {
                             <div data-attr="data-header" className={`${styles['view-form']} ${styles['editor-table-header']}`}>
                                 <div data-attr="data-header-row">
                                     <div> <input type='submit' value='批次刪除' /> </div>
-                                    <div>分類名稱</div>
-                                    <div>分類網址</div>
-                                    <div>分類上層</div>
+                                    <div><input type='button' value='分類名稱' onClick={() => onSortingClick('name')} /></div>
+                                    <div><input type='button' value='分類網址' onClick={() => onSortingClick('customUrl')} /></div>
+                                    <div><input type='button' value='分類上層' onClick={() => onSortingClick('parentClass')} /></div>
                                 </div>
                             </div>
                             <div data-attr="data-body" className={`${styles['view-form']} ${styles['editor-table-body']}`}>
-                                {editorClassList && editorClassList.length > 0 && editorClassList.map((editorClass, index) => {
+                                {showList && showList.length > 0 && showList.map((editorClass, index) => {
                                     return (
                                         <div data-attr="data-body-row" key={index} onClick={() => onEdit(editorClass)}>
                                             <div><input type='checkbox' name={editorClass._id} onClick={checkEditorClassRow} /></div>

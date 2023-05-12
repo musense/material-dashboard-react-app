@@ -50,7 +50,7 @@ function Pages({ ...props }) {
           style={{ backgroundImage: 'url(' + getBgImage() + ')' }}
         >
           <Outlet />
-          <Footer white />
+          {/* <Footer white /> */}
         </div>
       </div>
     </div>

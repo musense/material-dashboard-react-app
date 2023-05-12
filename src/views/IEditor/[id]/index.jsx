@@ -16,20 +16,21 @@ function IEditor({ props }) {
   const dispatch = useDispatch();
 
 
+  const editor = useSelector((state) => state.getEditorReducer.editor);
+  console.log("🚀 ~ file: index.jsx:49 ~ IEditor ~ editor:", editor)
+
+
   const initialValue = useMemo(
     () =>
-      JSON.parse(localStorage.getItem('content')) || [
+      editor ? editor.content.content : [
         {
           type: 'paragraph',
           children: [{ text: '' }],
         },
       ],
-    []
+    [editor]
   )
-  const editor = useSelector((state) => state.getEditorReducer.editor);
-  console.log("🚀 ~ file: index.jsx:49 ~ IEditor ~ editor:", editor)
-
-
+  console.log("🚀 ~ file: index.jsx:33 ~ IEditor ~ initialValue:", initialValue)
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);

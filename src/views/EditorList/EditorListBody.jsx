@@ -24,11 +24,11 @@ export default function EditorListBody(
     const [nextBtnDisable, setNextBtnDisable] = useState(false);
 
 
-    const titleList = useSelector((state) => state.getEditorReducer.titleList);
-    console.log("🚀 ~ file: EditorListBody.jsx:28 ~ titleList:", titleList)
+    const showList = useSelector((state) => state.getEditorReducer.showList);
+    console.log("🚀 ~ file: EditorListBody.jsx:28 ~ showList:", showList)
     const currentPage = useSelector((state) => state.getEditorReducer.currentPage);
     const totalCount = useSelector((state) => state.getEditorReducer.totalCount);
-    // console.log("🚀 ~ file: EditorListBody.jsx:22 ~ titleList:", titleList)
+    // console.log("🚀 ~ file: EditorListBody.jsx:22 ~ showList:", showList)
 
     const [titleViewList, setTitleViewList] = useState([]);
 
@@ -44,54 +44,33 @@ export default function EditorListBody(
     }, [currentPage, totalCount]);
 
     useMemo(() => {
-        setTitleViewList(titleList)
-    }, [titleList]);
-
-    const serialNumberSortingRef = useRef('asc');
-    const titleSortingRef = useRef('asc');
-    const classificationSortingRef = useRef('asc');
-    const createAtSortingRef = useRef('asc');
-
+        setTitleViewList(showList)
+    }, [showList]);
     const SortingHelperFunc = {
+
         onSerialNumberClick() {
-            const tempViewList = [...titleViewList]
-            if (serialNumberSortingRef.current === 'asc') {
-                serialNumberSortingRef.current = 'desc'
-                setTitleViewList(tempViewList.sort((t1, t2) => parseInt(t2.serialNumber) - parseInt(t1.serialNumber)))
-            } else {
-                serialNumberSortingRef.current = 'asc'
-                setTitleViewList(tempViewList.sort((t1, t2) => parseInt(t1.serialNumber) - parseInt(t2.serialNumber)))
-            }
+            dispatch({
+                type: GetEditorAction.SHOW_EDITOR_LIST_SORTING,
+                payload: {
+                   key: 'serialNumber'
+                }
+            })
         },
         onTitleClick() {
-            const tempViewList = [...titleViewList]
-            if (titleSortingRef.current === 'asc') {
-                titleSortingRef.current = 'desc'
-                setTitleViewList(tempViewList.sort((t1, t2) => t2.content.title.localeCompare(t1.content.title)))
-            } else {
-                titleSortingRef.current = 'asc'
-                setTitleViewList(tempViewList.sort((t1, t2) => t1.content.title.localeCompare(t2.content.title)))
-            }
+            dispatch({
+                type: GetEditorAction.SHOW_EDITOR_LIST_SORTING,
+                payload: {
+                   key: 'content.title'
+                }
+            })
         },
-        // onClassificationClick() {
-        //     const tempViewList = [...titleViewList]
-        //     if (classificationSortingRef.current === 'asc') {
-        //         classificationSortingRef.current = 'desc'
-        //         setTitleViewList(tempViewList.sort((t1, t2) => t2.classification.localeCompare(t1.classification)))
-        //     } else {
-        //         classificationSortingRef.current = 'asc'
-        //         setTitleViewList(tempViewList.sort((t1, t2) => t1.classification.localeCompare(t2.classification)))
-        //     }
-        // },
         onCreateAtClick() {
-            const tempViewList = [...titleViewList]
-            if (createAtSortingRef.current === 'asc') {
-                createAtSortingRef.current = 'desc'
-                setTitleViewList(tempViewList.sort((t1, t2) => (new Date(t2.createDate)).getTime() - (new Date(t1.createDate)).getTime()))
-            } else {
-                createAtSortingRef.current = 'asc'
-                setTitleViewList(tempViewList.sort((t1, t2) => (new Date(t1.createDate)).getTime() - (new Date(t2.createDate)).getTime()))
-            }
+            dispatch({
+                type: GetEditorAction.SHOW_EDITOR_LIST_SORTING,
+                payload: {
+                   key: 'createDate'
+                }
+            })
         },
     }
 
@@ -131,7 +110,7 @@ export default function EditorListBody(
 
     function onPageButtonClick(pageNumber) {
         dispatch({
-            type: GetEditorAction.REQUEST_EDITOR,
+            type: GetEditorAction.REQUEST_EDITOR_PAGE,
             payload: pageNumber
 
         })
@@ -196,7 +175,7 @@ export default function EditorListBody(
                                         alt={titleView.media.altText}
                                         onClick={(e) => {
                                             e.stopPropagation()
-                                            window.open(titleView.media.banner, '_blank');
+                                            window.open(titleView.media.thumbnail, '_blank');
                                         }}
                                     />
                                 </div>

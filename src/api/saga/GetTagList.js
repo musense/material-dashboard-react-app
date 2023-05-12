@@ -16,7 +16,7 @@ export function toFrontendData(responseData) {
             },
             pageView: item.pageView,
             createDate: item.createdAt || '',
-            isHot: item.popular || '',
+            isHot: item.popular || false,
         })
 
         )
@@ -55,7 +55,7 @@ export function toBackendData(requestData) {
 function* GetTagList(payload = 1) {
     try {
 
-        const response = yield instance.get(`/tags?limit=10&pageNumber=${payload}`);
+        const response = yield instance.get(`/tags?limit=100000&pageNumber=${payload}`);
         const { currentPage, totalCount, data: responseData } = yield response.data
         const tagList = toFrontendData(responseData)
         console.log("🚀 ~ file: GetTagList.js:44 ~ function*GetTagList ~ tagList:", tagList)
@@ -68,8 +68,8 @@ function* GetTagList(payload = 1) {
             type: GetTagsAction.REQUEST_TAG_SUCCESS,
             payload: {
                 tagList,
-                totalCount: parseInt(totalCount || 10),
-                currentPage: parseInt(currentPage || 1),
+                totalCount: parseInt(totalCount),
+                currentPage: parseInt(currentPage),
             }
         })
     } catch (error) {
@@ -125,10 +125,10 @@ function* SearchTag(payload) {
 // POST
 function* AddTag(payload) {
     try {
-        const requestDate = toBackendData(payload.data)
-        console.log("🚀 ~ file: GetTagList.js:131 ~ function*AddTag ~ requestDate:", requestDate)
+        const requestData = toBackendData(payload.data)
+        console.log("🚀 ~ file: GetTagList.js:131 ~ function*AddTag ~ requestDate:", requestData)
         // return
-        const response = yield instance.post(`/tags`, requestDate);
+        const response = yield instance.post(`/tags`, requestData);
         const responseData = yield response.data;
         yield put({
             type: GetTagsAction.ADD_TAG_SUCCESS,
@@ -147,11 +147,12 @@ function* AddTag(payload) {
 function* UpdateTag(payload) {
     try {
         const { _id, ...data } = payload.data;
-
-        console.log("🚀 ~ file: GetTagList.js:55 ~ function*UpdateTag ~ data:", { data })
+        const requestData = toBackendData(data)
         console.log("🚀 ~ file: GetTagList.js:55 ~ function*UpdateTag ~ _id:", { _id })
+        console.log("🚀 ~ file: GetTagList.js:55 ~ function*UpdateTag ~ data:", { data })
+        console.log("🚀 ~ file: GetTagList.js:55 ~ function*UpdateTag ~ requestData:", { requestData })
 
-        const response = yield instance.patch(`/tags/${_id}`, data);
+        const response = yield instance.patch(`/tags/${_id}`, requestData);
         const tagList = yield response.data;
         yield put({
             type: GetTagsAction.UPDATE_TAG_SUCCESS,

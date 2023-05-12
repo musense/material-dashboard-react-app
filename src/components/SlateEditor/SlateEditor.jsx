@@ -1,4 +1,4 @@
-import React, { useMemo, useCallback } from 'react'
+import React, { useMemo, useCallback, useEffect, useState, useLayoutEffect } from 'react'
 import { createEditor } from 'slate'
 import { Slate, Editable, withReact } from 'slate-react'
 import { withHistory } from 'slate-history'
@@ -11,6 +11,7 @@ import "./SlateEditor.module.css";
 import { Element, Leaf } from "./Elements";
 
 function SlateEditor({ editorContentRef }) {
+
   const editor = useMemo(() => CustomEditor.withInlines(
     CustomEditor.withImages(
       withHistory(
@@ -18,6 +19,13 @@ function SlateEditor({ editorContentRef }) {
       )
     )
   ), [])
+
+  // console.log("🚀 ~ file: SlateEditor.jsx:24 ~ SlateEditor ~ editorContentRef.current:", editorContentRef.current)
+  // const [value, setValue] = useState(editorContentRef.current);
+ 
+  // useEffect(() => {
+  //   setValue(editorContentRef.current)
+  // }, [editorContentRef.current]);
   const renderElement = useCallback(props => <Element {...props} />, [])
   const renderLeaf = useCallback(props => <Leaf {...props} />, [])
 
@@ -32,6 +40,7 @@ function SlateEditor({ editorContentRef }) {
         editor={editor}
         value={editorContentRef.current}
         onChange={newValue => {
+          // setValue(newValue)
           editorContentRef.current = newValue
           // console.log(editorContentRef.current);
           // const isAstChange = editor.operations.some(
@@ -59,7 +68,7 @@ function SlateEditor({ editorContentRef }) {
             if (!event.ctrlKey) {
               return
             }
-           
+
             switch (event.key) {
               case 'b': {
                 event.preventDefault()

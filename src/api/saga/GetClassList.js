@@ -90,7 +90,7 @@ function* GetAllClassList() {
 // GET
 function* GetClassList(payload = 1) {
     try {
-        const response = yield instance.get(`/categories?limit=10&pageNumber=${payload}`);
+        const response = yield instance.get(`/categories?limit=10000&pageNumber=${payload}`);
         const { currentPage, totalCount, data: classList } = yield response.data
         const mappedClassList = classList.map(
             (item) => {

@@ -19,10 +19,7 @@ function NewIEditor({ props }) {
     },
   ]
 
-  const returnMessage = useSelector(
-    (state) => state.getEditorReducer.errorMessage
-  );
-
+  const returnMessage = useSelector((state) => state.getEditorReducer.errorMessage);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
 
@@ -63,14 +60,14 @@ function NewIEditor({ props }) {
     const formDataObject = Object.fromEntries(formData)
 
     const tData = new Map()
-    
+
     const webHeader = new Map()
     webHeader.set('title', formDataObject.title)
     webHeader.set('description', formDataObject.description)
     webHeader.set('keywords', formDataObject.keywords)
     webHeader.set('customUrl', formDataObject.customUrl)
-    tData.set('webHeader', webHeader) 
-    
+    tData.set('webHeader', webHeader)
+
     const content = new Map()
     content.set('title', newTitleRef.current.value)
     content.set('content', editorContentRef.current)
@@ -79,19 +76,19 @@ function NewIEditor({ props }) {
       console.log('please add title!!!');
       return
     }
-    
+
     const media = new Map()
     media.set('banner', bannerRef.current)
     media.set('thumbnail', thumbnailRef.current)
     media.set('altText', imageAltTextRef.current.value)
     tData.set('media', media)
-    
+
     tData.set('hide', !!formDataObject.hideSwitch)
-    
+
     tData.set('tags', tagArrayRef.current)
-    
+
     tData.set('classifications', classArrayRef.current)
-    
+
     console.log("🚀 ~ file: index.jsx:66 ~ onEditorSave ~ tData:", tData)
     // return
     dispatch({

@@ -42,7 +42,7 @@ function AuthNavbar(props) {
   });
   const list = (
     <List className={classes.list}>
-      {/* <ListItem className={classes.listItem}>
+      <ListItem className={classes.listItem}>
         <NavLink to={'/admin/dashboard'} className={classes.navLink}>
           <Dashboard className={classes.listItemIcon} />
           <ListItemText
@@ -51,7 +51,7 @@ function AuthNavbar(props) {
             className={classes.listItemText}
           />
         </NavLink>
-      </ListItem> */}
+      </ListItem>
       <ListItem className={classes.listItem}>
         <NavLink
           to={'/auth/register-page'}

@@ -5,6 +5,7 @@ export default function ContentEditorForm({
   newTitleRef,
   editorContentRef
 }) {
+  console.log("🚀 ~ file: ContentEditorForm.jsx:8 ~ editorContentRef:", editorContentRef)
 
 
   return (

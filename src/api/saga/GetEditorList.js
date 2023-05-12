@@ -8,7 +8,7 @@ function* GetEditorTitleList(payload = 1) {
     const nowTime = new Date();
 
     try {
-        const response = yield instance.get(`/editor?limit=10&pageNumber=${payload}`);
+        const response = yield instance.get(`/editor?limit=10000&pageNumber=${payload}`);
         const { currentPage, totalCount, data: responseData } = yield response.data
         console.log("🚀 ~ file: GetEditorList.js:13 ~ function*GetEditorTitleList ~ currentPage, totalCount, data: responseData:", { currentPage, totalCount, responseData })
 

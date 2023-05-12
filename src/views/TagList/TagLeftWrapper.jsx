@@ -15,7 +15,7 @@ export default function TagLeftWrapper() {
 
     const [isEditing, setIsEditing] = useState(false);
     const formRef = useRef(null);
-
+    const isHotRef = useRef(false)
     const dispatch = useDispatch();
 
     const selectedTag = useSelector((state) => state.getTagsReducer.selectedTag);
@@ -32,11 +32,12 @@ export default function TagLeftWrapper() {
         if (form === null) return
         form.elements['_id'].value = selectedTag._id
         form.elements.name.value = selectedTag.name
-        form.elements.title.value = selectedTag.title ? selectedTag.title : ''
-        form.elements.description.value = selectedTag.description ? selectedTag.description : ''
-        form.elements.keywords.value = selectedTag.keywords ? selectedTag.keywords : ''
-        form.elements.customUrl.value = selectedTag.customUrl ? selectedTag.customUrl : ''
+        form.elements.title.value = selectedTag.webHeader.title ? selectedTag.webHeader.title : ''
+        form.elements.description.value = selectedTag.webHeader.description ? selectedTag.webHeader.description : ''
+        form.elements.keywords.value = selectedTag.webHeader.keywords ? selectedTag.webHeader.keywords : ''
+        form.elements.customUrl.value = selectedTag.webHeader.customUrl ? selectedTag.webHeader.customUrl : ''
         form.elements.sorting.value = selectedTag.sorting ? selectedTag.sorting : ''
+        form.elements.hotTag.checked = selectedTag.isHot || false
     }, [selectedTag])
 
     function onAddNewEditor(e) {
@@ -59,6 +60,7 @@ export default function TagLeftWrapper() {
                 keywords: formData.get('keywords'),
                 href: formData.get('customUrl'),
             },
+            isHot: !!formData.get('hotTag')
         }
 
         console.log("🚀 ~ file: TagLeftWrapper.jsx:48 ~ onAddNewEditor ~ tempData:", tempData)
@@ -74,7 +76,7 @@ export default function TagLeftWrapper() {
                 },
             });
             setIsEditing(false)
-     
+
         } else {
             dispatch({
                 type: GetTagsAction.ADD_TAG,
@@ -104,7 +106,7 @@ export default function TagLeftWrapper() {
             <GridItem xs={12} sm={12} md={12}>
                 <Card>
                     <CardHeader color="primary">
-                        <h4>{isEditing ? '編輯' :'新增'}</h4>
+                        <h4>{isEditing ? '編輯' : '新增'}</h4>
                     </CardHeader>
                     <CardBody>
                         <form ref={formRef} name='class-form' onSubmit={onAddNewEditor}>

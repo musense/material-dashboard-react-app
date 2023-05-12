@@ -21,13 +21,13 @@ import EditorManagerHot from "./views/EditorManager/EditorManagerHot";
 import EditorManagerRecommend from "./views/EditorManager/EditorManagerRecommend";
 
 const dashboardRoutes = [
-  // {
-  //   path: "/dashboard",
-  //   name: "Dashboard",
-  //   icon: Dashboard,
-  //   component: DashboardPage,
-  //   layout: "/admin"
-  // },
+  {
+    path: "/dashboard",
+    name: "Dashboard",
+    icon: Dashboard,
+    component: DashboardPage,
+    layout: "/admin"
+  },
   {
     path: "/user",
     name: "User Profile",

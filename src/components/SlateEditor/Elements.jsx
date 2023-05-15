@@ -11,7 +11,7 @@ import { Button, Icon } from './components'
 import InlineChromiumBugfix from './CustomEditor'
 import { css } from '@emotion/css'
 
-export const Link = ({ attributes, children, element }) => {
+const Link = ({ attributes, children, element }) => {
     const selected = useSelected()
     return (
         <a
@@ -35,7 +35,7 @@ export const Link = ({ attributes, children, element }) => {
     )
 }
 
-export const EditableButton = ({ attributes, children }) => {
+const EditableButton = ({ attributes, children }) => {
     return (
         /*
           Note that this is not a true button, but a span with button-like CSS.
@@ -66,7 +66,7 @@ export const EditableButton = ({ attributes, children }) => {
     )
 }
 
-export const Badge = ({ attributes, children }) => {
+const Badge = ({ attributes, children }) => {
     const selected = useSelected()
 
     return (
@@ -90,7 +90,7 @@ export const Badge = ({ attributes, children }) => {
     )
 }
 
-export const Image = ({ attributes, children, element }) => {
+const Image = ({ attributes, children, element }) => {
     const editor = useSlateStatic()
     const path = ReactEditor.findPath(editor, element)
 

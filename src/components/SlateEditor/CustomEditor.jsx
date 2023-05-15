@@ -79,6 +79,39 @@ export const CustomEditor = {
         }
     },
 
+    resetBlockAndNewLine(editor, type) {
+        const isActive = this.isBlockActive(
+            editor,
+            type,
+            TEXT_ALIGN_TYPES.includes(type) ? 'align' : 'type'
+        )
+        const isList = LIST_TYPES.includes(type)
+        Transforms.unwrapNodes(editor, {
+            match: n =>
+                !Editor.isEditor(n) &&
+                SlateElement.isElement(n) &&
+                LIST_TYPES.includes(n.type) &&
+                !TEXT_ALIGN_TYPES.includes(type),
+            split: true,
+        })
+        let newProperties
+        if (TEXT_ALIGN_TYPES.includes(type)) {
+            newProperties = {
+                align: isActive ? undefined : type,
+            }
+        } else {
+            newProperties = {
+                type: isActive ? 'paragraph' : isList ? 'list-item' : type,
+            }
+        }
+        Transforms.setNodes(editor, newProperties)
+
+        if (!isActive && isList) {
+            const paragraph = { type: 'paragraph', children: [] }
+            Transforms.wrapNodes(editor, paragraph)
+        }
+    },
+
     toggleFormat(editor, format) {
         const isActive = this.isFormatActive(editor, format)
         Transforms.setNodes(

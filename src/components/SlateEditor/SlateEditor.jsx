@@ -82,6 +82,22 @@ function SlateEditor({ editorContentRef }) {
           renderLeaf={renderLeaf}
           placeholder="請輸入文案..."
           onKeyDown={event => {
+            if (event.shiftKey && event.key === 'Enter') {
+              event.preventDefault()
+              console.log("🚀 ~ file: SlateEditor.jsx:155 ~ SlateEditor ~ event:", event)
+              console.log("🚀 ~ file: SlateEditor.jsx:155 ~ SlateEditor ~ event.target.childNodes[0].localName:", event.target.childNodes[0].localName)
+              switch (event.target.childNodes[0].localName) {
+                case 'ol': {
+                  CustomEditor.resetBlockAndNewLine(editor, 'numbered-list')
+                  return
+                }
+                case 'ul': {
+                  CustomEditor.resetBlockAndNewLine(editor, 'bulleted-list')
+                  return
+                }
+              }
+            }
+
             if (!event.ctrlKey) {
               return
             }
@@ -143,6 +159,7 @@ function SlateEditor({ editorContentRef }) {
     </div >
   )
 }
+
 
 export default SlateEditor
 

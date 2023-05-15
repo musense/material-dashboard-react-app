@@ -71,8 +71,11 @@ function SlateEditor({ editorContentRef }) {
         <Editable
           style={
             {
-              minHeight: '60rem',
               fontSize: '1rem',
+              minHeight: '30rem',
+              height: 'auto',
+              maxHeight: '57rem',
+              overflow: 'hidden scroll',
             }
           }
           renderElement={renderElement}

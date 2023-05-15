@@ -6,14 +6,18 @@ import { CustomEditor, TEXT_ALIGN_TYPES } from './CustomEditor'
 
 export default function Toolbar({ handleClickOpen, currentUrl, currentAltText }) {
     return <div className={css` 
-                  position: relative;
+                  position: sticky;
+                  top: 0;
                   display: flex;
                   flex-direction: row;
                   flex-wrap: wrap;
                   gap: 1rem;
+                  padding-top: 1rem;
                   padding-bottom: 1rem;
                   margin-bottom: 1rem;
                   border-bottom: 2px solid rgb(238, 238, 238);
+                  background-color: white;
+                  z-index: 1;
                   `}>
         {/* inline-block style */}
         <MarkButton type={'bold'} icon={'format_bold'} title={'ctrl+b'} />

@@ -2,6 +2,7 @@ form[name='editor-list-form'] {
   display: flex;
   flex-direction: row;
   gap: 4rem;
+  color: black;
 }
 
 form[name='editor-list-form']>div {

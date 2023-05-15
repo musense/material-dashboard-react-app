@@ -1,10 +1,10 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useSlate, useSlateStatic } from 'slate-react'
 import { Button, Icon } from './components'
 import { css } from '@emotion/css'
 import { CustomEditor, TEXT_ALIGN_TYPES } from './CustomEditor'
 
-export default function Toolbar() {
+export default function Toolbar({ handleClickOpen, currentUrl, currentAltText }) {
     return <div className={css` 
                   position: relative;
                   display: flex;
@@ -32,7 +32,12 @@ export default function Toolbar() {
         <BlockButton type={'right'} icon={'format_align_right'} />
         <BlockButton type={'justify'} icon={'format_align_justify'} />
 
-        <ImageButton type={'image'} icon={'insert_photo'} />
+        <ImageButton type={'image'} icon={'insert_photo'}
+            handleClickOpen={handleClickOpen}
+
+            currentUrl={currentUrl}
+            currentAltText={currentAltText}
+        />
 
         <AddLinkButton type={'link'} icon={'link'} title={'ctrl+l'} />
         <RemoveLinkButton type={'unlink'} icon={'link_off'} title={'ctrl+r'} />
@@ -70,21 +75,29 @@ function BlockButton({ icon, type }) {
     </Button>
 }
 
-function ImageButton() {
+function ImageButton({ handleClickOpen, currentUrl, currentAltText }) {
+
     const editor = useSlateStatic()
+
+    useEffect(() => {
+        console.log("🚀 ~ file: Toolbar.jsx:88 ~ ImageButton ~ currentUrl:", currentUrl)
+        console.log("🚀 ~ file: Toolbar.jsx:89 ~ ImageButton ~ currentAltText:", currentAltText)
+ 
+        if (currentUrl) {
+            CustomEditor.insertImage(editor, currentUrl, currentAltText)
+        }
+    }, [currentUrl, currentAltText]);
+    
     return (
         <Button
             onMouseDown={event => {
                 event.preventDefault()
-                const url = window.prompt('Enter the URL of the image:')
-                console.log(url);
-
+                handleClickOpen()
                 //! fail at this point, the ext should not be part of the url
                 // if (url && !CustomEditor.isImageUrl(url)) {
                 //   alert('URL is not an image')
                 //   return
                 // }
-                url && CustomEditor.insertImage(editor, url)
             }}
         >
             <Icon icon={'image'} />
@@ -111,7 +124,7 @@ function AddLinkButton({ icon, type, title }) {
     )
 }
 
-function RemoveLinkButton({ icon, type, title  }) {
+function RemoveLinkButton({ icon, type, title }) {
     const editor = useSlate()
 
     return (

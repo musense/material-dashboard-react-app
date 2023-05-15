@@ -1,4 +1,4 @@
-import React, { useMemo, useCallback, useEffect, useState, useLayoutEffect } from 'react'
+import React, { useMemo, useCallback, useState, useRef } from 'react'
 import { createEditor } from 'slate'
 import { Slate, Editable, withReact } from 'slate-react'
 import { withHistory } from 'slate-history'
@@ -9,6 +9,7 @@ import Toolbar from "./Toolbar";
 import "./SlateEditor.module.css";
 
 import { Element, Leaf } from "./Elements";
+import ImageDialog from './ImageDialog'
 
 function SlateEditor({ editorContentRef }) {
 
@@ -20,22 +21,31 @@ function SlateEditor({ editorContentRef }) {
     )
   ), [])
 
-  // console.log("🚀 ~ file: SlateEditor.jsx:24 ~ SlateEditor ~ editorContentRef.current:", editorContentRef.current)
-  // const [value, setValue] = useState(editorContentRef.current);
- 
-  // useEffect(() => {
-  //   setValue(editorContentRef.current)
-  // }, [editorContentRef.current]);
+  const urlRef = useRef(null);
+  const altTextRef = useRef(null);
+
+  const [open, setOpen] = useState(false);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+
   const renderElement = useCallback(props => <Element {...props} />, [])
   const renderLeaf = useCallback(props => <Leaf {...props} />, [])
 
   return (
     <div className={css` 
+    position: relative;
     background: rgb(255, 255, 255);
     max-width: 100%;
     margin-top: 20px;
     padding-top: 20px;
     `}>
+      <ImageDialog
+        open={open} setClose={() => setOpen(false)}
+        urlRef={urlRef} altTextRef={altTextRef}
+      />
       <Slate
         editor={editor}
         value={editorContentRef.current}
@@ -53,7 +63,11 @@ function SlateEditor({ editorContentRef }) {
           // }
         }}>
         <HoveringPopupToolbar />
-        <Toolbar />
+        <Toolbar
+          handleClickOpen={handleClickOpen}
+          currentUrl={urlRef.current}
+          currentAltText={altTextRef.current}
+        />
         <Editable
           style={
             {
@@ -122,6 +136,7 @@ function SlateEditor({ editorContentRef }) {
           }}
         />
       </Slate>
+
     </div >
   )
 }

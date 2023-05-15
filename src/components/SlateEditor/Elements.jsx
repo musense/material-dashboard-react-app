@@ -107,6 +107,8 @@ export const Image = ({ attributes, children, element }) => {
             >
                 <img
                     src={element.url}
+                    alt={element.alt}
+                    title={element.alt}
                     className={css`
               display: block;
               max-width: 100%;

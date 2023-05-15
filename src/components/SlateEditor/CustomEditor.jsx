@@ -105,9 +105,10 @@ export const CustomEditor = {
         return imageExtensions.includes(ext)
     },
 
-    insertImage(editor, url) {
+    insertImage(editor, url, alt) {
+        console.log("🚀 ~ file: CustomEditor.jsx:113 ~ insertImage ~ alt:", alt)
         const text = { text: '' }
-        const image = { type: 'image', url, children: [text] }
+        const image = { type: 'image', url, alt, children: [text] }
         Transforms.insertNodes(editor, image)
     },
 

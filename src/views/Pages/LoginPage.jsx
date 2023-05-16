@@ -25,23 +25,26 @@ import GridItem from 'components/Grid/GridItem.jsx';
 
 import loginPageStyle from 'assets/jss/material-dashboard-react/views/loginPageStyle.jsx';
 import { useDispatch, useSelector } from 'react-redux';
-import { LOGIN_USER } from './../../actions/GetUserAction';
+import { LOGIN_USER, REGISTER_USER_ERROR_RESET } from './../../actions/GetUserAction';
 import { useNavigate } from 'react-router-dom';
 import { useRef } from 'react';
 
+import Box from '@mui/material/Box';
+import TextField from '@mui/material/TextField';
+import MessageDialog from './MessageDialog';
 
 function LoginPage(props) {
   const { classes } = props;
 
   const loginFormRef = useRef(null);
+  const [loginSuccess, setLoginSuccess] = useState(false);
   const [rememberMeChecked, setRememberMeChecked] = useState(false);
   const [password, setPassword] = useState(null);
   const [showPassword, setShowPassword] = useState(false);
   const errors = {};
   const navigate = useNavigate()
   const dispatch = new useDispatch();
-  const returnMessage =
-    '' + useSelector((state) => state.getUserReducer.errorMessage);
+  const returnMessage = useSelector((state) => state.getUserReducer.errorMessage);
   useEffect(() => {
     if (loginFormRef.current === null) {
       return
@@ -54,9 +57,32 @@ function LoginPage(props) {
         setRememberMeChecked(true);
       }
     }
+    let title,
+      content;
+    console.log("🚀 ~ file: LoginPage.jsx:75 ~ LoginPage ~ returnMessage:", returnMessage)
 
-    if (returnMessage.indexOf('login successfully') > -1) {
-      navigate('/admin/user')
+    switch (returnMessage) {
+      case "login failed": {
+        title = '登入失敗'
+        content = '帳號或密碼輸入錯誤'
+        break
+      }
+      case "ERR_NETWORK": {
+        title = '登入失敗'
+        content = "連線錯誤！"
+        break
+      }
+      case "login successfully": {
+        title = "登入成功";
+        content = "登入成功！"
+        setLoginSuccess(true)
+        break
+      }
+    }
+    if (content) {
+      handleClickOpen()
+      setDialogTitle(title)
+      setDialogContent(content)
     }
 
   }, [loginFormRef, returnMessage]);
@@ -90,6 +116,22 @@ function LoginPage(props) {
     setPassword(e.target.value);
   };
 
+  const [open, setOpen] = React.useState(false);
+  const [dialogContent, setDialogContent] = useState(null);
+  const [dialogTitle, setDialogTitle] = useState(null);
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+    dispatch({
+      type: REGISTER_USER_ERROR_RESET
+    })
+    if (loginSuccess) {
+      navigate('/admin/user')
+    }
+  };
   return (
     <div className={classes.container}>
       {/* <GridContainer justify="center">
@@ -184,6 +226,15 @@ function LoginPage(props) {
           </form>
         </GridItem>
       </GridContainer>
+
+
+      <MessageDialog
+        open={open}
+        setClose={handleClose}
+        dialogTitle={dialogTitle}
+        dialogContent={dialogContent}
+      />
+
     </div>
   );
 }

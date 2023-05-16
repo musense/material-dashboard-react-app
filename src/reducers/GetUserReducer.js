@@ -1,6 +1,4 @@
-import {
-    LOGIN_USER_FAIL, LOGIN_USER_SUCCESS, REGISTER_USER_FAIL, REGISTER_USER_SUCCESS
-} from '../actions/GetUserAction';
+import * as GetUserAction from '../actions/GetUserAction';
 
 const initialState = {
     email: null,
@@ -11,22 +9,27 @@ const initialState = {
 
 const getUserReducer = (state = initialState, action) => {
     switch (action.type) {
-        case REGISTER_USER_SUCCESS:
+        case GetUserAction.REGISTER_USER_SUCCESS:
             return {
                 ...state,
                 errorMessage: action.errorMessage
             }
-        case REGISTER_USER_FAIL:
+        case GetUserAction.REGISTER_USER_ERROR_RESET:
+            return {
+                ...state,
+                errorMessage: null
+            }
+        case GetUserAction.REGISTER_USER_FAIL:
             return {
                 ...state,
                 errorMessage: action.errorMessage
             }
-        case LOGIN_USER_SUCCESS:
+        case GetUserAction.LOGIN_USER_SUCCESS:
             return {
                 ...state,
                 errorMessage: action.errorMessage
             }
-        case LOGIN_USER_FAIL:
+        case GetUserAction.LOGIN_USER_FAIL:
             return {
                 ...state,
                 errorMessage: action.errorMessage

@@ -13,17 +13,27 @@ function* UserLogin(payload) {
     try {
         const response = yield instance.post(`/login`, { username, password });
         const user = yield response.data;
+        console.log("🚀 ~ file: GetUserList.js:16 ~ function*UserLogin ~ user:", user)
         yield put({
             type: LOGIN_USER_SUCCESS,
             errorMessage: 'login successfully',
             payload: user,
         })
     } catch (error) {
-        yield put({
-            type: LOGIN_USER_FAIL,
-            errorMessage: error.message,
-            payload: null
-        })
+        console.log("🚀 ~ file: GetUserList.js:23 ~ function*UserLogin ~ error:", error)
+        let errorMessage;
+        if (error.response) {
+            errorMessage = error.response.data.message
+        } else {
+            errorMessage = error.code
+        }
+        if (error.response) {
+            yield put({
+                type: REGISTER_USER_FAIL,
+                errorMessage: errorMessage,
+                payload: null
+            })
+        }
     }
 }
 
@@ -32,11 +42,7 @@ function* UserRegister(payload) {
     const { username, email, password } = payload
     try {
 
-        const response = yield instance.post(`/register`, {
-            username, email, password
-        }).catch((error) => {
-            throw new Error(error.response.data.message)
-        });
+        const response = yield instance.post(`/register`, { username, email, password })
         const responseData = yield response.data;
         yield put({
             type: REGISTER_USER_SUCCESS,
@@ -44,19 +50,21 @@ function* UserRegister(payload) {
             errorMessage: 'register successfully',
         })
     } catch (error) {
-        if (typeof error === "string") {
-            yield put({
-                type: REGISTER_USER_FAIL,
-                errorMessage: error,
-                payload: null
-            })
+        console.log("🚀 ~ file: GetUserList.js:57 ~ function*UserRegister ~ error:", error)
+        let errorMessage;
+        if (error.response) {
+            errorMessage = error.response.data.message
         } else {
+            errorMessage = error.code
+        }
+        if (error.response) {
             yield put({
                 type: REGISTER_USER_FAIL,
-                errorMessage: error.message,
+                errorMessage: errorMessage,
                 payload: null
             })
         }
+
     }
 }
 

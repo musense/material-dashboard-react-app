@@ -26,34 +26,53 @@ import GridItem from 'components/Grid/GridItem.jsx';
 
 import registerPageStyle from 'assets/jss/material-dashboard-react/views/registerPageStyle.jsx';
 import { useDispatch, useSelector } from 'react-redux';
-import { REGISTER_USER } from './../../actions/GetUserAction';
+import { REGISTER_USER, REGISTER_USER_ERROR_RESET } from './../../actions/GetUserAction';
 import { useNavigate } from 'react-router-dom';
+import MessageDialog from './MessageDialog';
+
+
 
 function RegisterPage(props) {
   const { classes } = props;
-  const [checked, setChecked] = useState([]);
+
+  const [registerSuccess, setRegisterSuccess] = useState(false);
   const errors = {};
   const navigate = useNavigate()
   const dispatch = new useDispatch();
-  const returnMessage =
-    '' + useSelector((state) => state.getUserReducer.errorMessage);
+  const returnMessage = useSelector((state) => state.getUserReducer.errorMessage);
 
   useEffect(() => {
+    let title,
+      content;
+    console.log("🚀 ~ file: RegisterPage.jsx:44 ~ useEffect ~ returnMessage:", returnMessage)
 
-    if (returnMessage.indexOf('upper case') > -1)
-      console.log(`useEffect register 密碼最少需一碼為大寫字母!`);
-    if (returnMessage.indexOf('lower case') > -1)
-      console.log(`useEffect register 密碼最少需一碼為小寫字母!`);
-    if (returnMessage.indexOf('at least 8 characters') > -1)
-      console.log(`useEffect register 密碼最少為8碼!`);
-    if (returnMessage.indexOf('email_1 dup') > -1)
-      console.log(`useEffect register 此信箱已註冊過!`);
-    if (returnMessage.indexOf('username_1 dup') > -1)
-      console.log(`useEffect register 此名稱已註冊過!`);
-    if (returnMessage.indexOf('register successfully') > -1) {
-      navigate('/auth/login-page')
+    switch (returnMessage) {
+      case "user validation failed: email: email not valid!":
+      case "email has been used":
+      case "username has been used":
+      case "ERR_NETWORK": {
+        title = "註冊失敗";
+        content = "請重新檢查填入資訊";
+        break;
+      }
+      case "ERR_NETWORK": {
+        title = "註冊失敗";
+        content = "連線錯誤！";
+        break;
+      }
+      case "register successfully": {
+        title = "註冊成功";
+        content = "註冊成功！";
+        setRegisterSuccess(true);
+        break;
+      }
     }
-  }, [returnMessage, checked]);
+    if (content) {
+      handleClickOpen()
+      setDialogTitle(title)
+      setDialogContent(content)
+    }
+  }, [returnMessage]);
 
   const register = (e) => {
     e.preventDefault();
@@ -80,17 +99,21 @@ function RegisterPage(props) {
     });
   };
 
-  const handleToggle = (value) => {
-    const currentIndex = checked.indexOf(value);
-    const newChecked = [...checked];
+  const [open, setOpen] = React.useState(false);
+  const [dialogContent, setDialogContent] = useState(null);
+  const [dialogTitle, setDialogTitle] = useState(null);
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
 
-    if (currentIndex === -1) {
-      newChecked.push(value);
-    } else {
-      newChecked.splice(currentIndex, 1);
+  const handleClose = () => {
+    setOpen(false);
+    dispatch({
+      type: REGISTER_USER_ERROR_RESET
+    })
+    if (registerSuccess) {
+      navigate('/auth/login-page')
     }
-
-    setChecked(newChecked);
   };
 
   return (
@@ -103,7 +126,7 @@ function RegisterPage(props) {
                 className={`${classes.cardHeader} ${classes.textCenter}`}
                 color='primary'
               >
-                <h4 className={classes.cardTitle}>Register</h4>
+                <h4 className={classes.cardTitle}>註冊</h4>
               </CardHeader>
               <CardBody>
                 <CustomInput
@@ -115,6 +138,7 @@ function RegisterPage(props) {
                   }}
                   inputProps={{
                     required: true,
+                    type: 'text',
                     name: 'username',
                     endAdornment: (
                       <InputAdornment position='end'>
@@ -163,43 +187,25 @@ function RegisterPage(props) {
                     ),
                   }}
                 />
-                <FormControlLabel
-                  classes={{
-                    root:
-                      classes.checkboxLabelControl +
-                      ' ' +
-                      classes.checkboxLabelControlClassName,
-                    label: classes.checkboxLabel,
-                  }}
-                  control={
-                    <Checkbox
-                      tabIndex={-1}
-                      onClick={() => handleToggle(1)}
-                      checkedIcon={<Check className={classes.checkedIcon} />}
-                      icon={<Check className={classes.uncheckedIcon} />}
-                      required
-                      classes={{
-                        checked: classes.checked,
-                        root: classes.checkRoot,
-                      }}
-                    />
-                  }
-                  label={
-                    <span>
-                      I agree with the <a href='#pablo'>Privacy Policy</a>.
-                    </span>
-                  }
-                />
               </CardBody>
               <CardFooter className={classes.justifyContentCenter}>
                 <Button type='submit' color='primary' simple size='lg' block>
-                  Let's Go
+                  註冊
                 </Button>
               </CardFooter>
             </Card>
           </form>
         </GridItem>
       </GridContainer>
+
+
+      <MessageDialog
+        open={open}
+        setClose={handleClose}
+        dialogTitle={dialogTitle}
+        dialogContent={dialogContent}
+      />
+
     </div>
   );
 }

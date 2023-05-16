@@ -111,7 +111,7 @@ export default function EditorRightWrapper({ isLoading = true }) {
                                     <div> <input type='submit' value='批次刪除' /> </div>
                                     <div><input type='button' value='分類名稱' onClick={() => onSortingClick('name')} /></div>
                                     <div><input type='button' value='分類網址' onClick={() => onSortingClick('customUrl')} /></div>
-                                    <div><input type='button' value='分類上層' onClick={() => onSortingClick('parentClass')} /></div>
+                                    {/* <div><input type='button' value='分類上層' onClick={() => onSortingClick('parentClass')} /></div> */}
                                 </div>
                             </div>
                             <div data-attr="data-body" className={`${styles['view-form']} ${styles['editor-table-body']}`}>
@@ -121,7 +121,7 @@ export default function EditorRightWrapper({ isLoading = true }) {
                                             <div><input type='checkbox' name={editorClass._id} onClick={checkEditorClassRow} /></div>
                                             <div>{editorClass.name}</div>
                                             <div>{editorClass.customUrl}</div>
-                                            <div>{editorClass.parentClass}</div>
+                                            {/* <div>{editorClass.parentClass}</div> */}
                                         </div>);
                                 })}
                             </div>

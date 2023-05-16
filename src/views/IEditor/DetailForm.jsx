@@ -7,10 +7,12 @@ import CustomRadio from '../../components/CustomRadio/CustomRadio';
 import { fetchYoutubeInfo } from './youtube';
 import styles from './IEditor.module.css';
 import { css, cx } from '@emotion/css';
+import SingleClassificationSelect from "../../components/Select/Single/SingleClassificationSelect";
 
 
 const MemorizedTagSelector = React.memo(MultiTagSelectSort);
-const MemorizedClassSelector = React.memo(MultiClassSelectSort);
+// const MemorizedClassSelector = React.memo(MultiClassSelectSort);
+const MemorizedClassSelector = React.memo(SingleClassificationSelect);
 
 const allowedFileTypes = ["image/png", "image/jpeg", "image/gif"];
 
@@ -160,7 +162,7 @@ export default function DetailForm({
                 </div>
                 <div className={styles['input-group']}>
                     <label htmlFor='classification'>分類</label>
-                    <MemorizedClassSelector classArrayRef={classArrayRef} />
+                    <MemorizedClassSelector classRef={classArrayRef} />
                 </div>
                 <div className={styles['image-upload-container']}>
 

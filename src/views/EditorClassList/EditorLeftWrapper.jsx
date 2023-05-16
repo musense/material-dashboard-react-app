@@ -9,7 +9,7 @@ import GridContainer from 'components/Grid/GridContainer.jsx';
 import GridItem from 'components/Grid/GridItem.jsx';
 import styles from './EditorClassList.module.css'
 
-import SingleParentCatSelect from "../../components/Select/Single/SingleParentCatSelect";
+// import SingleParentCatSelect from "../../components/Select/Single/SingleParentCatSelect";
 import SingleClassificationSelect from "../../components/Select/Single/SingleClassificationSelect";
 
 import usePressEnterEventHandler from '../../hook/usePressEnterEventHandler';
@@ -59,17 +59,17 @@ export default function EditorLeftWrapper() {
 
         console.log("🚀 ~ file: EditorLeftWrapper.jsx:77 ~ onAddNewEditor ~ parentClassRef.current:", parentClassRef.current)
         console.log("🚀 ~ file: EditorLeftWrapper.jsx:77 ~ onAddNewEditor ~ classRef.current:", classRef.current)
-        if (!parentClassRef.current) {
-            console.log('請輸入 [上層分類] 選項');
-            return
-        }
+        // if (!parentClassRef.current) {
+        //     console.log('請輸入 [上層分類] 選項');
+        //     return
+        // }
 
         if (!classRef.current) {
             console.log('請輸入 [分類名稱] 選項');
             return
         }
         const tempData = {
-            parentClassification: parentClassRef.current.label,
+            // parentClassification: parentClassRef.current.label,
             classification: classRef.current.label,
             webHeader: {
                 title: classData.title,
@@ -131,10 +131,13 @@ export default function EditorLeftWrapper() {
                         <form ref={formRef} name='class-form' onSubmit={onAddNewEditor}>
                             <input type="hidden" name='_id' />
                             <label htmlFor="classification">分類名稱</label>
-                            <SingleClassificationSelect classRef={classRef} />
-                            <label htmlFor="parentClass">上層分類</label>
+                            <SingleClassificationSelect
+                                creatable
+                                classRef={classRef}
+                            />
+                            {/* <label htmlFor="parentClass">上層分類</label> */}
                             {/* <MemorizedParentSelector parentClassRef={parentClassRef} /> */}
-                            <SingleParentCatSelect parentClassRef={parentClassRef} />
+                            {/* <SingleParentCatSelect parentClassRef={parentClassRef} /> */}
                             <label htmlFor="title">title</label>
                             <input type="text" name='title' />
                             <label htmlFor="description">description</label>

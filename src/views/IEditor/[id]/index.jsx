@@ -157,7 +157,7 @@ function IEditor({ props }) {
 
     JSON.stringify(tagArrayRef.current) !== JSON.stringify(editor.tags) && (tData.set('tags', tagArrayRef.current))
 
-    JSON.stringify(classArrayRef.current) !== JSON.stringify(editor.classifications) && (tData.set('classifications', classArrayRef.current))
+    JSON.stringify(classArrayRef.current) !== JSON.stringify(editor.classifications) && (tData.set('classifications', [classArrayRef.current]))
 
     if (tData.size === 0) {
       console.log('nothing to update!!!');

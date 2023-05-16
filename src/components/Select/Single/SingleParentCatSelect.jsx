@@ -87,7 +87,7 @@ export default function SingleParentCatSelect({ parentClassRef }) {
   return <SingleSelector
     parentSelected={selected}
     parentSetSelected={setSelected}
-    selectedArrayRef={parentClassRef}
+    selectedRef={parentClassRef}
     options={classOptions}
   />;
 }

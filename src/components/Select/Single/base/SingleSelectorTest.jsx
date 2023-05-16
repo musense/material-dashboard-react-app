@@ -1,12 +1,13 @@
 import React, { useEffect, useMemo, useState } from 'react';
-// import Select from 'react-select';
+import Select from 'react-select';
 import CreatableSelect from 'react-select/creatable';
 
 const SingleSelectorTest = ({
+  creatable = false,
   parentSelected,
   parentSetSelected,
   options: defaultOptions,
-  selectedArrayRef
+  selectedRef
 }) => {
 
   const [options, setOptions] = useState(defaultOptions);
@@ -23,32 +24,51 @@ const SingleSelectorTest = ({
   }, [optionsLabel]);
 
   useEffect(() => {
-    setSelected(parentSelected);
-    selectedArrayRef.current = parentSelected
-  }, [parentSelected]);
+    setSelected(selectedRef.current)
+  }, [selectedRef.current]);
 
   const onChange = (newValue, actionMeta) => {
     setSelected(newValue);
     parentSetSelected(newValue)
-    selectedArrayRef.current = newValue;
+    selectedRef.current = newValue;
   };
-  return (
-    <CreatableSelect
-      options={options}
-      isClearable={true}
-      isSearchable={true}
-      value={selected}
-      onChange={onChange}
-      styles={{
-        menuPortal: (base) => ({ ...base, zIndex: 9999 }),
-        menu: (base) => ({
-          ...base,
-          zIndex: 99999,
-          color: 'black',
-        }),
-      }}
+
+  const styles = {
+    menuPortal: (base) => ({ ...base, zIndex: 9999 }),
+    menu: (base) => ({
+      ...base,
+      zIndex: 99999,
+      color: 'black',
+      backgroundColor: 'white',
+      border: '1px solid black'
+    }),
+  }
+
+  const props = useMemo(() => {
+    return {
+      options: options,
+      isClearable: true,
+      isSearchable: true,
+      value: selected,
+      onChange: onChange,
+      styles: { styles }
+    }
+  }, [options, selected, onChange, styles]);
+
+  const CreatableSelectProps = (props) => {
+    return <CreatableSelect
+      {...props}
     />
-  );
+  }
+  const SelectProps = (props) => {
+    return <Select
+      {...props}
+    />
+  }
+
+  return creatable
+    ? CreatableSelectProps(props)
+    : SelectProps(props);
 };
 
 export default SingleSelectorTest;

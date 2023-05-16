@@ -27,31 +27,50 @@ import loginPageStyle from 'assets/jss/material-dashboard-react/views/loginPageS
 import { useDispatch, useSelector } from 'react-redux';
 import { LOGIN_USER } from './../../actions/GetUserAction';
 import { useNavigate } from 'react-router-dom';
+import { useRef } from 'react';
+
 
 function LoginPage(props) {
   const { classes } = props;
 
-  const [checked, setChecked] = useState([]);
+  const loginFormRef = useRef(null);
+  const [rememberMeChecked, setRememberMeChecked] = useState(false);
   const [password, setPassword] = useState(null);
   const [showPassword, setShowPassword] = useState(false);
   const errors = {};
   const navigate = useNavigate()
   const dispatch = new useDispatch();
   const returnMessage =
-  '' + useSelector((state) => state.getUserReducer.errorMessage);
+    '' + useSelector((state) => state.getUserReducer.errorMessage);
   useEffect(() => {
+    if (loginFormRef.current === null) {
+      return
+
+    } else {
+      const loginForm = loginFormRef.current;
+      if (localStorage.getItem('username')) {
+        loginForm.username.focus()
+        loginForm.username.value = localStorage.getItem('username') || '';
+        setRememberMeChecked(true);
+      }
+    }
+
     if (returnMessage.indexOf('login successfully') > -1) {
       navigate('/admin/user')
     }
-  }, [returnMessage, checked]);
 
-  // TODO: add rememberMe
+  }, [loginFormRef, returnMessage]);
+
   const login = (e) => {
     e.preventDefault();
 
     const fields = ['username', 'password'];
     const formElements = e.target.elements;
-
+    console.log("🚀 ~ file: LoginPage.jsx:57 ~ login ~ checked:", rememberMeChecked)
+    if (rememberMeChecked) {
+      console.log("🚀 ~ file: LoginPage.jsx:58 ~ login ~ formElements.username.value:", formElements.username.value)
+      localStorage.setItem('username', formElements.username.value);
+    }
     const formValues = fields
       .map((field) => ({
         [field]: formElements.namedItem(field).value,
@@ -70,18 +89,6 @@ function LoginPage(props) {
   const onInputChange = (e) => {
     setPassword(e.target.value);
   };
-  const handleToggle = (value) => {
-    const currentIndex = checked.indexOf(value);
-    const newChecked = [...checked];
-
-    if (currentIndex === -1) {
-      newChecked.push(value);
-    } else {
-      newChecked.splice(currentIndex, 1);
-    }
-
-    setChecked(newChecked);
-  };
 
   return (
     <div className={classes.container}>
@@ -95,14 +102,14 @@ function LoginPage(props) {
       </GridContainer> */}
       <GridContainer justify='center'>
         <GridItem xs={12} sm={6} md={4}>
-          <form onSubmit={login}>
+          <form ref={loginFormRef} onSubmit={login}>
             {/* <Card className={classes[this.state.cardAnimaton]}> */}
             <Card className={classes.cardAnimaton}>
               <CardHeader
                 className={`${classes.cardHeader} ${classes.textCenter}`}
                 color='primary'
               >
-                <h4 className={classes.cardTitle}>Log in</h4>
+                <h4 className={classes.cardTitle}>登入</h4>
               </CardHeader>
               <CardBody>
                 <CustomInput
@@ -155,7 +162,8 @@ function LoginPage(props) {
                   control={
                     <Checkbox
                       tabIndex={-1}
-                      onClick={() => handleToggle(1)}
+                      checked={rememberMeChecked}
+                      onChange={(e) => setRememberMeChecked(e.target.checked)}
                       checkedIcon={<Check className={classes.checkedIcon} />}
                       icon={<Check className={classes.uncheckedIcon} />}
                       classes={{
@@ -164,12 +172,12 @@ function LoginPage(props) {
                       }}
                     />
                   }
-                  label={<span>Remember me</span>}
+                  label={<span>記住我</span>}
                 />
               </CardBody>
               <CardFooter className={classes.justifyContentCenter}>
                 <Button type='submit' color='primary' simple size='lg' block>
-                  Let's Go
+                  登入
                 </Button>
               </CardFooter>
             </Card>

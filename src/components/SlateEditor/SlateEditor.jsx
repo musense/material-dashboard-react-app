@@ -1,5 +1,5 @@
-import React, { useMemo, useCallback, useState, useRef } from 'react'
-import { createEditor } from 'slate'
+import React, { useMemo, useCallback, useState, useRef, useEffect } from 'react'
+import { createEditor, Transforms } from 'slate'
 import { Slate, Editable, withReact } from 'slate-react'
 import { withHistory } from 'slate-history'
 import { css } from '@emotion/css'
@@ -12,6 +12,7 @@ import { Element, Leaf } from "./Elements";
 import ImageDialog from './ImageDialog'
 
 function SlateEditor({ editorContentRef }) {
+  // console.log("🚀 ~ file: SlateEditor.jsx:15 ~ SlateEditor ~ editorContentRef.current:", editorContentRef.current)
 
   const editor = useMemo(() => CustomEditor.withInlines(
     CustomEditor.withImages(
@@ -23,6 +24,31 @@ function SlateEditor({ editorContentRef }) {
 
   const urlRef = useRef(null);
   const altTextRef = useRef(null);
+
+  useEffect(() => {
+    if (!editorContentRef.current) return
+    if (editorContentRef.current.length <= 0) return
+
+    const totalNodes = editor.children.length;
+    const savedDefaultNodes = editorContentRef.current;
+
+    for (let i = 0; i < totalNodes - 1; i++) {
+      Transforms.removeNodes(editor, {
+        at: [totalNodes - i - 1],
+      });
+    }
+
+    for (const value of savedDefaultNodes) {
+      Transforms.insertNodes(editor, value, {
+        at: [editor.children.length]
+      })
+    }
+
+    Transforms.removeNodes(editor, {
+      at: [0],
+    });
+    
+  }, [editor, editorContentRef.current]);
 
   const [open, setOpen] = useState(false);
 
@@ -49,19 +75,8 @@ function SlateEditor({ editorContentRef }) {
       <Slate
         editor={editor}
         value={editorContentRef.current}
-        onChange={newValue => {
-          // setValue(newValue)
-          editorContentRef.current = newValue
-          // console.log(editorContentRef.current);
-          // const isAstChange = editor.operations.some(
-          //   op => 'set_selection' !== op.type
-          // )
-          // if (isAstChange) {
-          //   // Save the value to Local Storage
-          //   const content = JSON.stringify(newValue)
-          //   localStorage.setItem('content', content)
-          // }
-        }}>
+        onChange={newValue => editorContentRef.current = newValue
+        }>
         <HoveringPopupToolbar />
         <Toolbar
           handleClickOpen={handleClickOpen}
@@ -84,8 +99,8 @@ function SlateEditor({ editorContentRef }) {
           onKeyDown={event => {
             if (event.shiftKey && event.key === 'Enter') {
               event.preventDefault()
-              console.log("🚀 ~ file: SlateEditor.jsx:155 ~ SlateEditor ~ event:", event)
-              console.log("🚀 ~ file: SlateEditor.jsx:155 ~ SlateEditor ~ event.target.childNodes[0].localName:", event.target.childNodes[0].localName)
+              // console.log("🚀 ~ file: SlateEditor.jsx:155 ~ SlateEditor ~ event:", event)
+              // console.log("🚀 ~ file: SlateEditor.jsx:155 ~ SlateEditor ~ event.target.childNodes[0].localName:", event.target.childNodes[0].localName)
               switch (event.target.childNodes[0].localName) {
                 case 'ol': {
                   CustomEditor.resetBlockAndNewLine(editor, 'numbered-list')

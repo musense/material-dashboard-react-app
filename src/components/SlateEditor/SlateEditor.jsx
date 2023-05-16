@@ -31,6 +31,7 @@ function SlateEditor({ editorContentRef }) {
 
     const totalNodes = editor.children.length;
     const savedDefaultNodes = editorContentRef.current;
+    if (totalNodes > 1) return
 
     for (let i = 0; i < totalNodes - 1; i++) {
       Transforms.removeNodes(editor, {

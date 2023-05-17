@@ -37,7 +37,7 @@ export default function DetailForm({
     const hideSwitchRef = React.useRef();
 
     useEffect(() => {
-        if (bannerRef.current && typeof bannerRef.current === 'string') {
+        if (bannerRef.current && typeof bannerRef.current === 'string' && bannerRef.current.indexOf('<iframe') !== -1) {
             const imageWrapper = document.getElementById('preview-image-wrapper');
             imageWrapper.innerHTML = bannerRef.current;
         }
@@ -151,7 +151,7 @@ export default function DetailForm({
                     <input
                         type='text'
                         name='real-url'
-                        value={`https://kashinobi.com/${customUrl || customUrlRef.current}`}
+                        value={`${customUrl || customUrlRef.current}`}
                         readOnly
                         disabled
                     />

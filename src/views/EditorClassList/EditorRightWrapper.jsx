@@ -120,7 +120,11 @@ export default function EditorRightWrapper({ isLoading = true }) {
                                         <div data-attr="data-body-row" key={index} onClick={() => onEdit(editorClass)}>
                                             <div><input type='checkbox' name={editorClass._id} onClick={checkEditorClassRow} /></div>
                                             <div>{editorClass.name}</div>
-                                            <div>{editorClass.customUrl}</div>
+                                            <div>
+                                                <a href={editorClass.customUrl} target="_blank" rel="noopener noreferrer" >
+                                                    {editorClass.customUrl}
+                                                </a>
+                                            </div>
                                             {/* <div>{editorClass.parentClass}</div> */}
                                         </div>);
                                 })}

@@ -56,7 +56,7 @@
     "typescript": "^5.0.2"
   },
   "scripts": {
-    "dev": "set PORT=80 && react-scripts start",
+    "dev": "SET PORT=80 && react-scripts start",
     "start": "yarn pm2 start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",

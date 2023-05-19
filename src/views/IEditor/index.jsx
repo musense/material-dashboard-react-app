@@ -34,6 +34,8 @@ function NewIEditor({ props }) {
   const classRef = useRef(null);
   const [dialogTitle, setDialogTitle] = useState(null);
   const [dialogContent, setDialogContent] = useState(null);
+
+  const [preview, setPreview] = useState(false);
   useEffect(() => {
     classRef.current = null;
     setDialogTitle('新增文章訊息')
@@ -49,8 +51,8 @@ function NewIEditor({ props }) {
 
   }, [returnMessage]);
 
-  function onEditorSave(e) {
-    e.preventDefault();
+
+  function getFormData(e) {
     const form = e.target;
     const formData = new FormData(form);
     const formDataObject = Object.fromEntries(formData)
@@ -68,11 +70,12 @@ function NewIEditor({ props }) {
     content.set('title', newTitleRef.current.value)
     content.set('content', editorContentRef.current)
     tData.set('content', content)
-    if (content.get('title') === '') {
-      console.log('please add title!!!');
-      return
+    if (!preview) {
+      if (content.get('title') === '') {
+        console.log('please add title!!!');
+        return
+      }
     }
-
     const media = new Map()
     media.set('banner', bannerRef.current)
     media.set('thumbnail', thumbnailRef.current)
@@ -83,22 +86,35 @@ function NewIEditor({ props }) {
 
     tData.set('tags', tagArrayRef.current)
 
-    tData.set('classifications', classRef.current)
+    tData.set('classifications', [classRef.current])
 
-    console.log("🚀 ~ file: index.jsx:66 ~ onEditorSave ~ tData:", tData)
+    return tData
+  }
+  function onEditorSave(e) {
+    e.preventDefault();
 
-    if (tData.size === 0) {
+    const formData = getFormData(e)
+
+    if (preview) {
+      dispatch({
+        type: GetEditorAction.PREVIEW_EDITOR,
+        payload: {
+          data: formData
+        },
+      })
+      return
+    }
+    if (formData.size === 0) {
       console.log('nothing to add!!!');
       setDialogContent('沒有新增任何資訊！')
       handleClickOpen()
       return
     }
-
     // return
     dispatch({
       type: GetEditorAction.ADD_EDITOR,
       payload: {
-        data: tData
+        data: formData
       },
     })
   }
@@ -134,6 +150,7 @@ function NewIEditor({ props }) {
             tagArrayRef={tagArrayRef}
             classRef={classRef}
             onEditorSave={onEditorSave}
+            setPreview={setPreview}
           />
         </div>
       </div>

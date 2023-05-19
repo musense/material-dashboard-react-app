@@ -73,7 +73,7 @@ const TagRightHeader = () => {
                     <div className={css`
                         width: 50%;
                     `}>
-                        <label htmlFor="title">標題</label>
+                        <label htmlFor="title">標籤</label>
                         <input type="text" name='title' />
                     </div>
 

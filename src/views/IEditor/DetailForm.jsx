@@ -1,17 +1,13 @@
 import React, { useEffect, useState } from "react";
-import MultiTagSelectSort from '../../components/Select/Multi/MultiTagSelectSort';
 import CustomRadio from '../../components/CustomRadio/CustomRadio';
 
 
 import { fetchYoutubeInfo } from './youtube';
 import styles from './IEditor.module.css';
 import { css, cx } from '@emotion/css';
+import MultiTagSelectSort from '../../components/Select/Multi/MultiTagSelectSort';
 import SingleClassificationSelect from "../../components/Select/Single/SingleClassificationSelect";
 
-
-const MemorizedTagSelector = React.memo(MultiTagSelectSort);
-// const MemorizedClassSelector = React.memo(MultiClassSelectSort);
-const MemorizedClassSelector = React.memo(SingleClassificationSelect);
 
 const allowedFileTypes = ["image/png", "image/jpeg", "image/gif"];
 
@@ -161,11 +157,11 @@ export default function DetailForm({
                 </div>
                 <div className={styles['input-group']}>
                     <label htmlFor='tags'>新增標籤</label>
-                    <MemorizedTagSelector tagArrayRef={tagArrayRef} />
+                    <MultiTagSelectSort tagArrayRef={tagArrayRef} />
                 </div>
                 <div className={styles['input-group']}>
                     <label htmlFor='classification'>分類</label>
-                    <MemorizedClassSelector classRef={classRef} />
+                    <SingleClassificationSelect classRef={classRef} />
                 </div>
                 <div className={styles['image-upload-container']}>
 

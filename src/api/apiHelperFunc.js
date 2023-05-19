@@ -120,7 +120,10 @@ export function toFrontendData(responseData) {
                     label: cat.name,
                 }
                 ))
-                : [],
+                : {
+                    value: responseData.categories._id,
+                    label: responseData.categories.name,
+                },
             webHeader: {
                 title: responseData.headTitle || '',
                 description: responseData.headDescription || '',

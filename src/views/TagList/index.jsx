@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'; // useState
+import React, { useEffect, useState } from 'react'; // useState
 
 // core components
 
@@ -26,10 +26,9 @@ function TagList() {
         }
     }, [returnMessage]);
 
-    useEffect(() => {
-        dispatch({ type: GetTagsAction.REQUEST_TAG })
-        // dispatch({ type: GetTagsAction.REQUEST_CLASS_LIST })
-    }, []);
+    // useEffect(() => {
+    //     dispatch({ type: GetTagsAction.REQUEST_TAG })
+    // }, []);
 
     const [isModalOpen, setIsModalOpen] = useState(true);
 

@@ -109,12 +109,12 @@ const getClassReducer = (state = initialState, action) => {
                 }).slice(0, 10),
                 currentPage: 1
             }
-        case GetClassAction.REQUEST_ALL_CLASS_LIST_SUCCESS:
-            return {
-                ...state,
-                classifications: action.payload,
-                errorMessage: errorMessage.getFinish
-            }
+        // case GetClassAction.REQUEST_ALL_CLASS_LIST_SUCCESS:
+        //     return {
+        //         ...state,
+        //         classifications: action.payload,
+        //         errorMessage: errorMessage.getFinish
+        //     }
         case GetClassAction.REQUEST_CLASS:
             return {
                 ...state,
@@ -135,7 +135,7 @@ const getClassReducer = (state = initialState, action) => {
         case GetClassAction.EDITING_CLASS:
             return {
                 ...state,
-                editorClass: action.payload.data,
+                editorClass: action.payload.editorClass,
             }
         // case GetClassAction.EDIT_SAVING_CLASS:
         //     return {

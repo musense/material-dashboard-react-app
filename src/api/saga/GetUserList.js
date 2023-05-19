@@ -17,7 +17,10 @@ function* UserLogin(payload) {
         yield put({
             type: LOGIN_USER_SUCCESS,
             errorMessage: 'login successfully',
-            payload: user,
+            payload: {
+                username: user.username,
+                email: user.email,
+            },
         })
     } catch (error) {
         console.log("🚀 ~ file: GetUserList.js:23 ~ function*UserLogin ~ error:", error)

@@ -1,11 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react';
-
 import { useDispatch, useSelector } from 'react-redux';
-import CustomModal from '../../components/CustomModal/CustomModal.jsx';
-
 import ContentEditorForm from "./ContentEditorForm.jsx"
 import DetailForm from "./DetailForm.jsx"
-import * as GetEditorAction from '../../actions/GetEditorAction.js';
+import * as GetEditorAction from 'actions/GetEditorAction.js';
+import EditorDialog from './EditorDialog.jsx';
 
 
 function NewIEditor({ props }) {
@@ -20,11 +18,6 @@ function NewIEditor({ props }) {
   ]
 
   const returnMessage = useSelector((state) => state.getEditorReducer.errorMessage);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
-
-  const [tagArray, setTagArray] = useState([]);
-  const [classArray, setClassArray] = useState([]);
 
   const bannerRef = useRef();
   const thumbnailRef = useRef();
@@ -38,17 +31,20 @@ function NewIEditor({ props }) {
   const editorContentRef = useRef(initialValue)
 
   const tagArrayRef = useRef(null);
-  const classArrayRef = useRef(null);
-
+  const classRef = useRef(null);
+  const [dialogTitle, setDialogTitle] = useState(null);
+  const [dialogContent, setDialogContent] = useState(null);
+  useEffect(() => {
+    classRef.current = null;
+    setDialogTitle('新增文章訊息')
+  }, []);
   useEffect(() => {
 
-    if (
-      returnMessage &&
-      (returnMessage.indexOf('get successfully') !== -1 ||
-        returnMessage.indexOf('add successfully') !== -1)
-    ) {
-      setIsModalOpen(false);
-      setIsAddModalOpen(false);
+    console.log("🚀 ~ file: index.jsx:45 ~ useEffect ~ returnMessage:", returnMessage)
+    if (returnMessage === 'add successfully') {
+      console.log('新增成功！');
+      setDialogContent('新增成功！')
+      handleClickOpen()
     }
 
   }, [returnMessage]);
@@ -87,9 +83,17 @@ function NewIEditor({ props }) {
 
     tData.set('tags', tagArrayRef.current)
 
-    tData.set('classifications', classArrayRef.current)
+    tData.set('classifications', classRef.current)
 
     console.log("🚀 ~ file: index.jsx:66 ~ onEditorSave ~ tData:", tData)
+
+    if (tData.size === 0) {
+      console.log('nothing to add!!!');
+      setDialogContent('沒有新增任何資訊！')
+      handleClickOpen()
+      return
+    }
+
     // return
     dispatch({
       type: GetEditorAction.ADD_EDITOR,
@@ -98,11 +102,22 @@ function NewIEditor({ props }) {
       },
     })
   }
+  const [open, setOpen] = React.useState(false);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
 
   return (
     <div className={'container'}>
       <div className={'wrapper'}>
         <div className={'left-side'}>
+          <EditorDialog
+            open={open}
+            handleClose={() => setOpen(false)}
+            dialogTitle={dialogTitle}
+            dialogContent={dialogContent}
+          />
           <ContentEditorForm
             newTitleRef={newTitleRef}
             editorContentRef={editorContentRef}
@@ -117,16 +132,10 @@ function NewIEditor({ props }) {
             imageNameRef={imageNameRef}
             customUrlRef={customUrlRef}
             tagArrayRef={tagArrayRef}
-            classArrayRef={classArrayRef}
+            classRef={classRef}
             onEditorSave={onEditorSave}
           />
         </div>
-        <CustomModal ariaHideApp={false} isModalOpen={isModalOpen} />
-        <CustomModal
-          ariaHideApp={false}
-          isModalOpen={isAddModalOpen}
-          text={'add successfully'}
-        />
       </div>
     </div>
   );

@@ -1,7 +1,6 @@
 import { all, put, take, takeEvery } from 'redux-saga/effects';
 import * as GetClassAction from "../../actions/GetClassAction";
 import { instance } from "./AxiosInstance";
-import { useDispatch } from 'react-redux';
 
 function toFrontendData(responseData) {
     return {
@@ -69,24 +68,24 @@ function foFrontEndCatDate(responseData) {
     return dataArray
 }
 
-function* GetAllClassList() {
-    try {
-        const response = yield instance.get(`/categories`);
-        const classList = yield response.data.data;
-        const mappedClassList = foFrontEndCatDate(classList)
-        // return
-        yield put({
-            type: GetClassAction.REQUEST_ALL_CLASS_LIST_SUCCESS,
-            payload: mappedClassList
-        })
-    } catch (error) {
-        yield put({
-            type: GetClassAction.REQUEST_ALL_CLASS_LIST_FAIL,
-            errorMessage: error.message,
-            payload: null
-        })
-    }
-}
+// function* GetAllClassList() {
+//     try {
+//         const response = yield instance.get(`/categories`);
+//         const classList = yield response.data.data;
+//         const mappedClassList = foFrontEndCatDate(classList)
+//         // return
+//         yield put({
+//             type: GetClassAction.REQUEST_ALL_CLASS_LIST_SUCCESS,
+//             payload: mappedClassList
+//         })
+//     } catch (error) {
+//         yield put({
+//             type: GetClassAction.REQUEST_ALL_CLASS_LIST_FAIL,
+//             errorMessage: error.message,
+//             payload: null
+//         })
+//     }
+// }
 // GET
 function* GetClassList(payload = 1) {
     try {
@@ -195,7 +194,6 @@ function* AddClass(payload) {
 function* UpdateClass(payload) {
     try {
         const { _id, request: requestData } = toBackendData(payload.data)
-        return
         const response = yield instance.patch(`/categories/${_id}`, requestData);
         const responseData = yield response.data.data;
 
@@ -263,19 +261,19 @@ function* watchGetClassList() {
         yield GetClassList(payload)
     }
 }
-function* watchGetAllClassList() {
-    while (true) {
-        const { payload } = yield take(GetClassAction.REQUEST_All_CLASS_LIST)
-        yield GetAllClassList(payload)
-    }
-}
+// function* watchGetAllClassList() {
+//     while (true) {
+//         const { payload } = yield take(GetClassAction.REQUEST_All_CLASS_LIST)
+//         yield GetAllClassList(payload)
+//     }
+// }
 
 
 
 function* mySaga() {
     yield all([
         watchGetClassList(),
-        watchGetAllClassList(),
+        // watchGetAllClassList(),
         watchAddClassSaga(),
         watchUpdateClassSaga(),
         // takeEvery(ADD_CLASS_SUCCESS, reGetClassList),

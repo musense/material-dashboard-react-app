@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import PropTypes from 'prop-types';
 // @material-ui/core components
@@ -16,6 +16,7 @@ import CardFooter from 'components/Card/CardFooter.jsx';
 
 // import avatar from "assets/img/faces/marc.jpg";
 import avatar from 'assets/img/scaredseal.jpeg';
+import { useSelector } from 'react-redux';
 
 const styles = {
   cardCategoryWhite: {
@@ -42,12 +43,20 @@ const styles = {
 function UserProfile(props) {
   const { classes } = props;
 
-  const errors = {};
+  const username = useSelector((state) => state.getUserReducer.username);
+  const email = useSelector((state) => state.getUserReducer.email);
+  console.log("🚀 ~ file: UserProfile.jsx:47 ~ UserProfile ~ username:", username)
+  console.log("🚀 ~ file: UserProfile.jsx:49 ~ UserProfile ~ email:", email)
 
-  const [username, setUsername] = useState('Wilson');
-  // const [username, setUsername] = useState(props.username);
-  const [email, setEmail] = useState('wilson.wan@musense.tw');
-  // const [email, setEmail] = useState(props.email);
+  const errors = {};
+  // const [username, setUsername] = useState(null);
+  // const [email, setEmail] = useState(null);
+  // useEffect(() => {
+  //   if (user_username && user_email) {
+  //     setUsername(user_username)
+  //     setEmail(user_email)
+  //   }
+  // }, [user_username, user_email]);
 
   const updateProfile = (e) => {
     e.preventDefault();
@@ -114,27 +123,6 @@ function UserProfile(props) {
               </CardFooter>
             </Card>
           </form>
-        </GridItem>
-        <GridItem xs={12} sm={12} md={4}>
-          <Card profile>
-            <CardAvatar profile>
-              <a href='#pablo' onClick={(e) => e.preventDefault()}>
-                <img src={avatar} alt='...' />
-              </a>
-            </CardAvatar>
-            <CardBody profile>
-              <h6 className={classes.cardCategory}>Web Developer</h6>
-              <h4 className={classes.cardTitle}>Wilson Wan</h4>
-              <p className={classes.description}>
-                Don't be scared of the truth because we need to restart the
-                human foundation in truth And I love you like Kanye loves Kanye
-                I love Rick Owens’ bed design but the back is...
-              </p>
-              <Button color='primary' round>
-                Follow
-              </Button>
-            </CardBody>
-          </Card>
         </GridItem>
       </GridContainer>
     </div>

@@ -3,7 +3,6 @@ import * as GetUserAction from '../actions/GetUserAction';
 const initialState = {
     email: null,
     username: null,
-    password: null,
     errorMessage: null,
 }
 
@@ -27,6 +26,8 @@ const getUserReducer = (state = initialState, action) => {
         case GetUserAction.LOGIN_USER_SUCCESS:
             return {
                 ...state,
+                username: action.payload.username,
+                email: action.payload.email,
                 errorMessage: action.errorMessage
             }
         case GetUserAction.LOGIN_USER_FAIL:

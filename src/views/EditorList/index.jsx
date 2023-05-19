@@ -9,7 +9,6 @@ import EditorListBody from "./EditorListBody";
 
 import CustomModal from '../../components/CustomModal/CustomModal.jsx';
 import * as GetEditorAction from "../../actions/GetEditorAction";
-import * as GetClassAction from "../../actions/GetClassAction";
 import { reDispatchMessage } from './../../reducers/errorMessage';
 
 
@@ -20,14 +19,14 @@ function EditorList() {
   console.log("🚀 ~ file: index.jsx:20 ~ EditorList ~ returnMessage:", returnMessage)
 
   useEffect(() => {
-      if (reDispatchMessage.includes(returnMessage)) {
-          dispatch({ type: GetEditorAction.REQUEST_EDITOR })
-      }
+    if (reDispatchMessage.includes(returnMessage)) {
+      dispatch({ type: GetEditorAction.REQUEST_EDITOR })
+    }
   }, [returnMessage]);
 
   useEffect(() => {
     dispatch({ type: GetEditorAction.REQUEST_EDITOR });
-    dispatch({ type: GetClassAction.REQUEST_All_CLASS_LIST });
+    dispatch({ type: GetEditorAction.RESET_EDITOR })
   }, [])
 
   // const titleList = useSelector((state) => state.getEditorReducer.titleList);

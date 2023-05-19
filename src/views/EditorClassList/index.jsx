@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'; // useState
+import React, { useEffect, useState } from 'react'; // useState
 
 // core components
 
@@ -24,7 +24,7 @@ function EditorClassList() {
     }, [returnMessage]);
 
     useEffect(() => {
-        dispatch({ type: GetClassAction.REQUEST_PARENT_CLASS })
+        // dispatch({ type: GetClassAction.REQUEST_PARENT_CLASS })
         dispatch({ type: GetClassAction.REQUEST_CLASS_LIST })
     }, []);
 

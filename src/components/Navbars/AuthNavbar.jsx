@@ -1,6 +1,6 @@
 import cx from 'classnames';
 import PropTypes from 'prop-types';
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
 
 // @material-ui/core components
@@ -14,7 +14,6 @@ import withStyles from '@material-ui/core/styles/withStyles';
 import Toolbar from '@material-ui/core/Toolbar';
 
 // @material-ui/icons
-import Dashboard from '@material-ui/icons/Dashboard';
 import Fingerprint from '@material-ui/icons/Fingerprint';
 import Menu from '@material-ui/icons/Menu';
 import PersonAdd from '@material-ui/icons/PersonAdd';
@@ -42,7 +41,7 @@ function AuthNavbar(props) {
   });
   const list = (
     <List className={classes.list}>
-      <ListItem className={classes.listItem}>
+      {/* <ListItem className={classes.listItem}>
         <NavLink to={'/admin/dashboard'} className={classes.navLink}>
           <Dashboard className={classes.listItemIcon} />
           <ListItemText
@@ -51,7 +50,7 @@ function AuthNavbar(props) {
             className={classes.listItemText}
           />
         </NavLink>
-      </ListItem>
+      </ListItem> */}
       <ListItem className={classes.listItem}>
         <NavLink
           to={'/auth/register-page'}

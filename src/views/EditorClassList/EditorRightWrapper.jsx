@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 
 import { useDispatch, useSelector } from 'react-redux';
-import * as GetClassAction from '../../actions/GetClassAction';
+import * as GetClassAction from 'actions/GetClassAction';
 
 import Card from 'components/Card/Card.jsx';
 import CardBody from 'components/Card/CardBody.jsx';
@@ -9,7 +9,7 @@ import CardHeader from 'components/Card/CardHeader.jsx';
 import GridContainer from 'components/Grid/GridContainer.jsx';
 import GridItem from 'components/Grid/GridItem.jsx';
 import styles from './EditorClassList.module.css'
-import Button from '../../components/CustomButtons/Button';
+import Button from 'components/CustomButtons/Button';
 
 export default function EditorRightWrapper({ isLoading = true }) {
 
@@ -62,7 +62,7 @@ export default function EditorRightWrapper({ isLoading = true }) {
         dispatch({
             type: GetClassAction.EDITING_CLASS,
             payload: {
-                data: editorClass,
+                editorClass: editorClass,
 
             },
         });

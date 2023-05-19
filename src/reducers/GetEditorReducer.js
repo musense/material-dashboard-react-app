@@ -13,10 +13,24 @@ const initialState = {
   currentPage: null,
   totalCount: null,
   errorMessage: null,
+  previewID: null,
 }
 const getEditorReducer = (state = initialState, action) => {
   // console.log("🚀 ~ file: GetEditorReducer.js:157 ~ getEditorReducer ~ action:", action)
   switch (action.type) {
+    case GetEditorAction.PREVIEW_EDITOR_SUCCESS: {
+      return {
+        ...state,
+        previewID: action.payload.previewID,
+        errorMessage: action.payload.errorMessage,
+      }
+    }
+    case GetEditorAction.RESET_EDITOR: {
+      return {
+        ...state,
+        editor: null
+      }
+    }
     case GetEditorAction.INITIAL_EDITOR:
       return {
         ...state,
@@ -33,9 +47,7 @@ const getEditorReducer = (state = initialState, action) => {
       return {
         ...state,
         _id: action.payload._id,
-        id: action.payload.id,
-        title: action.payload.title,
-        content: action.payload.content,
+        editor: action.payload.editor,
         errorMessage: errorMessage.addSuccess
       }
     case GetEditorAction.ADD_EDITOR_FAIL:
@@ -165,7 +177,7 @@ const getEditorReducer = (state = initialState, action) => {
     case GetEditorAction.UPDATE_EDITOR_SUCCESS:
       return {
         ...state,
-        errorMessage: errorMessage.updateSuccess
+        errorMessage: action.payload.message
       }
     case GetEditorAction.UPDATE_EDITOR_FAIL:
       return {

@@ -3,22 +3,22 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import SingleSelector from './base/SingleSelectorTest';
 
-import { RESET_SELECTED_CLASS } from '../../../actions/GetClassAction';
+import { RESET_SELECTED_CLASS } from 'actions/GetClassAction';
 
 //* classRef: parent form get selected value
 export default function SingleClassificationSelect({ creatable, classRef }) {
 
   const editorClass = useSelector((state) => state.getClassReducer.editorClass);
-  const classifications = useSelector((state) => state.getClassReducer.classifications);
+  const editorClassList = useSelector((state) => state.getClassReducer.editorClassList);
   const reset = useSelector((state) => state.getClassReducer.reset);
 
-  const [selected, setSelected] = useState();
+  // const [selected, setSelected] = useState();
   const dispatch = useDispatch();
 
   useEffect(() => {
     switch (reset) {
       case '--reset-all': {
-        setSelected(null)
+        // setSelected(null)
         //* reset [分類名稱] 選擇
         dispatch({
           type: RESET_SELECTED_CLASS,
@@ -36,26 +36,27 @@ export default function SingleClassificationSelect({ creatable, classRef }) {
         value: editorClass._id,
         label: editorClass.name
       }
-      setSelected(option)
+      classRef.current = option
+      // setSelected(option)
       console.log("🚀 ~ file: EditorLeftWrapper.jsx:64 ~ option ~ option:", option)
     }
   }, [editorClass])
 
   //* 選擇[分類名稱]名單
   const classOptions = useMemo(() => {
-    console.log("🚀 ~ file: SingleClassificationSelect.jsx:45 ~ SingleClassificationSelect ~ classifications:", classifications)
-    if (!classifications) return;
-    return classifications.map((item) => ({
+    console.log("🚀 ~ file: SingleClassificationSelect.jsx:45 ~ SingleClassificationSelect ~ editorClassList:", editorClassList)
+    if (!editorClassList) return;
+    return editorClassList.map((item) => ({
       value: item._id,
       label: item.name,
     }));
-  }, [classifications]);
+  }, [editorClassList]);
 
   return (
     <SingleSelector
       creatable={creatable}
-      parentSelected={selected}
-      parentSetSelected={setSelected}
+      // parentSelected={selected}
+      // parentSetSelected={setSelected}
       selectedRef={classRef}
       options={classOptions}
     />

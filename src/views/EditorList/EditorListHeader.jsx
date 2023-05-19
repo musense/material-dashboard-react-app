@@ -1,13 +1,13 @@
-import React, { useRef, useState } from 'react'; // useState
+import React, { useEffect, useRef, useState } from 'react'; // useState
 import CardHeader from 'components/Card/CardHeader.jsx';
 
-import * as GetEditorAction from '../../actions/GetEditorAction';
+import * as GetEditorAction from 'actions/GetEditorAction';
 import { useDispatch } from 'react-redux';
 
-import SingleClassificationSelect from '../../components/Select/Single/SingleClassificationSelect';
-import DateSelector from '../../components/DateSelector/DateSelector';
+import SingleClassificationSelect from 'components/Select/Single/SingleClassificationSelect';
+import DateSelector from 'components/DateSelector/DateSelector';
 import { css } from '@emotion/css'
-import usePressEnterEventHandler from '../../hook/usePressEnterEventHandler';
+import usePressEnterEventHandler from 'hook/usePressEnterEventHandler';
 
 export default function EditorListHeader({ titleList, setTitleViewList }) {
 
@@ -15,8 +15,12 @@ export default function EditorListHeader({ titleList, setTitleViewList }) {
     const submitRef = useRef(null);
     const dateRef = useRef(null);
     const [selectedItem, setSelectedItem] = useState(null);
-  
-    const classRef = useRef();
+
+    const classRef = useRef(null);
+
+    useEffect(() => {
+        classRef.current = null
+    }, []);
     usePressEnterEventHandler(submitRef);
 
     function onSearchEditorList(e) {
@@ -26,7 +30,7 @@ export default function EditorListHeader({ titleList, setTitleViewList }) {
         const searchData = Object.assign(
             {},
             Object.fromEntries(formData),
-            { classification: classRef.current.label },
+            classRef.current && { classification: classRef.current.label },
             { createDate: dateRef.current.current() }
         );
         console.log("🚀 ~ file: EditorList.jsx:136 ~ onSearchEditorList ~ searchData:", searchData)
@@ -70,7 +74,7 @@ export default function EditorListHeader({ titleList, setTitleViewList }) {
                         <label htmlFor="classification">分類</label>
                         {/* <input type="text" name='classification' /> */}
                         <SingleClassificationSelect
-                        classRef={classRef}
+                            classRef={classRef}
                         />
                     </div>
                     <DateSelector ref={dateRef} />

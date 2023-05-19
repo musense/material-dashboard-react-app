@@ -112,7 +112,7 @@ function RegisterPage(props) {
       type: REGISTER_USER_ERROR_RESET
     })
     if (registerSuccess) {
-      navigate('/auth/login-page')
+      navigate('/auth/login-page', { replace: true })
     }
   };
 

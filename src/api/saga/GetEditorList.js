@@ -2,6 +2,7 @@ import { all, put, take, takeEvery } from 'redux-saga/effects';
 import * as GetEditorAction from "../../actions/GetEditorAction";
 import { formInstance, instance } from "./AxiosInstance";
 import { toBackendData, toBackendFormData, toFrontendData } from "./../apiHelperFunc";
+import { errorMessage } from '../../reducers/errorMessage';
 
 // GET
 function* GetEditorTitleList(payload = 1) {
@@ -141,25 +142,55 @@ function* AddEditor(payload) {
         } else if (typeof requestFormData.get('contentImagePath') === 'string') {
             response = yield instance.post(`/editor`, requestFormData);
         }
-        const responseData = yield response.data.data;
+        const editor = yield response.data;
 
         yield put({
             type: GetEditorAction.ADD_EDITOR_SUCCESS,
-            payload: responseData
+            payload: { editor }
         })
 
     } catch (error) {
         yield put({
             type: GetEditorAction.ADD_EDITOR_FAIL,
             errorMessage: error.message,
-            payload: null
+        })
+    }
+}
+
+// POST
+function* PreviewEditor(payload) {
+    try {
+        console.log("🚀 ~ file: GetEditorList.js:940 ~ function*PreviewEditor ~ payload:", payload)
+        const requestFormData = toBackendFormData(payload.data)
+        console.log("🚀 ~ file: GetEditorList.js:943 ~ function*PreviewEditor ~ requestData:", requestFormData)
+        // return
+        let response
+        if (typeof requestFormData.get('contentImagePath') === 'object') {
+            response = yield formInstance.post(`/tempEditor`, requestFormData);
+        } else if (typeof requestFormData.get('contentImagePath') === 'string') {
+            response = yield instance.post(`/tempEditor`, requestFormData);
+        }
+        const { id: previewID } = yield response.data.data;
+        console.log("🚀 ~ file: GetEditorList.js:173 ~ function*PreviewEditor ~ previewID:", previewID)
+
+        // return
+        yield put({
+            type: GetEditorAction.PREVIEW_EDITOR_SUCCESS,
+            payload: { previewID },
+            errorMessage: errorMessage.addSuccess
+        })
+
+    } catch (error) {
+        yield put({
+            type: GetEditorAction.PREVIEW_EDITOR_FAIL,
+            errorMessage: error.message,
         })
     }
 }
 
 // PATCH
 function* UpdateEditor(payload) {
-    // console.log("🚀 ~ file: GetEditorList.js:72 ~ function*UpdateEditor ~ payload:", payload)
+    console.log("🚀 ~ file: GetEditorList.js:72 ~ function*UpdateEditor ~ payload:", payload)
     // return
 
     try {
@@ -173,15 +204,16 @@ function* UpdateEditor(payload) {
         } else if (typeof requestFormData.get('contentImagePath') === 'string') {
             response = yield instance.patch(`/editor/${payload.id}`, requestFormData);
         }
-        const responseData = yield response.data.data;
+        const { message } = yield response.data;
+        console.log("🚀 ~ file: GetEditorList.js:177 ~ function*UpdateEditor ~ message:", message)
         yield put({
             type: GetEditorAction.UPDATE_EDITOR_SUCCESS,
-            payload: responseData
+            payload: { message }
         })
     } catch (error) {
         yield put({
             type: GetEditorAction.UPDATE_EDITOR_FAIL,
-            payload: null
+            errorMessage: error.message,
         })
     }
 }
@@ -214,6 +246,13 @@ function* watchAddEditorSaga() {
     while (true) {
         const { payload } = yield take(GetEditorAction.ADD_EDITOR)
         yield AddEditor(payload)
+    }
+}
+
+function* watchPreviewEditorSaga() {
+    while (true) {
+        const { payload } = yield take(GetEditorAction.PREVIEW_EDITOR)
+        yield PreviewEditor(payload)
     }
 }
 function* watchGetEditorTitleListSaga() {
@@ -256,6 +295,7 @@ function* mySaga() {
         // takeEvery(GetEditorAction.ADD_EDITOR_SUCCESS, reGetEditorList),
         // takeEvery(GetEditorAction.REQUEST_EDITOR, GetEditorTitleList),
         watchUpdateEditorSaga(),
+        watchPreviewEditorSaga(),
         watchGetEditorTitleListSaga(),
         watchSearchEditorSaga(),
         watchAddEditorSaga(),

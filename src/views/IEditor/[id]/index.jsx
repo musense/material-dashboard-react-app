@@ -1,11 +1,11 @@
 import React, { useEffect, useRef, useState, useMemo } from 'react';
-
+import { useParams } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux';
-import CustomModal from "./../../../components/CustomModal/CustomModal.jsx";
-
 import ContentEditorForm from "./../ContentEditorForm.jsx"
 import DetailForm from "./../DetailForm.jsx"
-import * as GetEditorAction from "../../../actions/GetEditorAction.js";
+import * as GetEditorAction from "actions/GetEditorAction.js";
+import EditorDialog from '../EditorDialog.jsx';
+
 
 const webHeaderID = [
   'title', 'description', 'keywords', 'customUrl'
@@ -14,9 +14,12 @@ const webHeaderID = [
 function IEditor({ props }) {
 
   const dispatch = useDispatch();
-
-
+  const { id } = useParams();
+  console.log("🚀 ~ file: index.jsx:30 ~ IEditor ~ id:", id)
   const editor = useSelector((state) => state.getEditorReducer.editor);
+  const returnMessage = useSelector((state) => state.getEditorReducer.errorMessage);
+  const previewID = useSelector((state) => state.getEditorReducer.previewID);
+
   console.log("🚀 ~ file: index.jsx:49 ~ IEditor ~ editor:", editor)
 
 
@@ -30,10 +33,7 @@ function IEditor({ props }) {
       ],
     [editor]
   )
-  console.log("🚀 ~ file: index.jsx:33 ~ IEditor ~ initialValue:", initialValue)
-
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  // console.log("🚀 ~ file: index.jsx:33 ~ IEditor ~ initialValue:", initialValue)
 
   const bannerRef = useRef();
   const thumbnailRef = useRef();
@@ -46,9 +46,46 @@ function IEditor({ props }) {
   const newTitleRef = useRef('');
   const editorContentRef = useRef(initialValue)
   const tagArrayRef = useRef(null);
-  const classArrayRef = useRef(null);
+
+  const classRef = useRef(null);
+  const [dialogTitle, setDialogTitle] = useState(null);
+  const [dialogContent, setDialogContent] = useState(null);
 
 
+  const [preview, setPreview] = useState(false);
+  useEffect(() => {
+    classRef.current = null;
+    setDialogTitle('修改文章訊息')
+  }, []);
+
+  useEffect(() => {
+    
+    console.log("🚀 ~ file: index.jsx:66 ~ useEffect ~ previewID:", previewID)
+    if (previewID) {
+      window.open(`http://10.88.0.103:4200/preview_${previewID}`, '_blank');
+    }
+  }, [previewID]);
+  useEffect(() => {
+    if (!returnMessage) return
+
+    if (returnMessage === "Editor update successfully") {
+
+      console.log('更新成功！');
+      setDialogContent('更新成功！')
+      handleClickOpen()
+
+      console.log('Editor update successfully');
+      console.log("🚀 ~ file: index.jsx:79 ~ useEffect ~ id:", id)
+      dispatch({
+        type: GetEditorAction.REQUEST_EDITOR_BY_ID,
+        payload: {
+          data: {
+            _id: id,
+          },
+        },
+      });
+    }
+  }, [returnMessage, id]);
 
   function setDefaultValueById(id, obj) {
     const item = document.getElementById(`detail-form-${id}`)
@@ -108,7 +145,7 @@ function IEditor({ props }) {
 
     setDefaultValueById('hide', hide)
 
-    console.log("🚀 ~ file: index.jsx:108 ~ setDetailDefaultValue ~ hide:", hide)
+    // console.log("🚀 ~ file: index.jsx:108 ~ setDetailDefaultValue ~ hide:", hide)
   }
 
   setContentDefaultValue(editor)
@@ -117,66 +154,137 @@ function IEditor({ props }) {
   useMemo(() => {
     if (!editor) return
     tagArrayRef.current = editor.tags
-    classArrayRef.current = editor.classifications
+    classRef.current = editor.classifications
   }, [editor])
 
-  console.log("🚀 ~ file: index.jsx:145 ~ IEditor ~ tagArrayRef:", tagArrayRef)
-  console.log("🚀 ~ file: index.jsx:146 ~ IEditor ~ classArrayRef:", classArrayRef)
+  // console.log("🚀 ~ file: index.jsx:145 ~ IEditor ~ tagArrayRef:", tagArrayRef)
+  // console.log("🚀 ~ file: index.jsx:146 ~ IEditor ~ classArrayRef:", classArrayRef)
 
-  function onEditorSave(e) {
-    e.preventDefault();
+
+  function getFormData(e) {
     const form = e.target;
     const formData = new FormData(form);
     const formDataObject = Object.fromEntries(formData)
 
     const tData = new Map()
 
-    const webHeader = new Map()
-    formDataObject.title !== editor.webHeader.title && (webHeader.set('title', formDataObject.title));
-    formDataObject.description !== editor.webHeader.description && (webHeader.set('description', formDataObject.description))
-    formDataObject.keywords !== editor.webHeader.keywords && (webHeader.set('keywords', formDataObject.keywords))
-    formDataObject.customUrl !== editor.webHeader.customUrl && (webHeader.set('customUrl', formDataObject.customUrl))
-    webHeader.size !== 0 && tData.set('webHeader', webHeader)
-    console.log("🚀 ~ file: index.jsx:145 ~ onEditorSave ~ webHeader:", webHeader)
+    if (preview) {
+      const webHeader = new Map()
+      webHeader.set('title', formDataObject.title)
+      webHeader.set('description', formDataObject.description)
+      webHeader.set('keywords', formDataObject.keywords)
+      webHeader.set('customUrl', formDataObject.customUrl)
+      tData.set('webHeader', webHeader)
+      console.log("🚀 ~ file: index.jsx:145 ~ onEditorSave ~ webHeader:", webHeader)
 
-    const content = new Map()
-    newTitleRef.current.value !== editor.content.title && (content.set('title', newTitleRef.current.value))
-    editorContentRef.current !== editor.content.content && (content.set('content', editorContentRef.current))
-    content.size !== 0 && tData.set('content', content)
-    console.log("🚀 ~ file: index.jsx:145 ~ onEditorSave ~ content:", content)
+      const content = new Map()
+      content.set('title', newTitleRef.current.value)
+      content.set('content', editorContentRef.current)
+      tData.set('content', content)
+      console.log("🚀 ~ file: index.jsx:145 ~ onEditorSave ~ content:", content)
 
-    const media = new Map()
-    bannerRef.current !== editor.media.banner && (media.set('banner', bannerRef.current))
-    thumbnailRef.current && thumbnailRef.current !== editor.media.thumbnail && (media.set('thumbnail', thumbnailRef.current))
-    console.log("🚀 ~ file: index.jsx:150 ~ onEditorSave ~ editor.media.thumbnail:", editor.media.thumbnail)
-    imageAltTextRef.current.value !== editor.media.altText && (media.set('altText', imageAltTextRef.current.value))
-    media.size !== 0 && tData.set('media', media)
-    console.log("🚀 ~ file: index.jsx:152 ~ onEditorSave ~ media:", media)
+      const media = new Map()
+      media.set('banner', bannerRef.current)
+      media.set('thumbnail', editor.media.thumbnail)
+      media.set('altText', imageAltTextRef.current.value)
+      tData.set('media', media)
+      console.log("🚀 ~ file: index.jsx:152 ~ onEditorSave ~ media:", media)
 
-    !!formDataObject.hideSwitch !== editor.hide && (tData.set('hide', !!formDataObject.hideSwitch))
+      tData.set('hide', !!formDataObject.hideSwitch)
 
-    JSON.stringify(tagArrayRef.current) !== JSON.stringify(editor.tags) && (tData.set('tags', tagArrayRef.current))
+      tData.set('tags', tagArrayRef.current)
 
-    JSON.stringify(classArrayRef.current) !== JSON.stringify(editor.classifications) && (tData.set('classifications', [classArrayRef.current]))
+      tData.set('classifications', [classRef.current])
 
-    if (tData.size === 0) {
-      console.log('nothing to update!!!');
+    } else {
+      const webHeader = new Map()
+      formDataObject.title !== editor.webHeader.title && (webHeader.set('title', formDataObject.title));
+      formDataObject.description !== editor.webHeader.description && (webHeader.set('description', formDataObject.description))
+      formDataObject.keywords !== editor.webHeader.keywords && (webHeader.set('keywords', formDataObject.keywords))
+      formDataObject.customUrl !== editor.webHeader.customUrl && (webHeader.set('customUrl', formDataObject.customUrl))
+      webHeader.size !== 0 && tData.set('webHeader', webHeader)
+      console.log("🚀 ~ file: index.jsx:145 ~ onEditorSave ~ webHeader:", webHeader)
+
+      const content = new Map()
+      newTitleRef.current.value !== editor.content.title && (content.set('title', newTitleRef.current.value))
+      JSON.stringify(editorContentRef.current) !== JSON.stringify(editor.content.content) && (content.set('content', editorContentRef.current))
+      content.size !== 0 && tData.set('content', content)
+      console.log("🚀 ~ file: index.jsx:145 ~ onEditorSave ~ content:", content)
+
+      const media = new Map()
+      bannerRef.current !== editor.media.banner && (media.set('banner', bannerRef.current))
+      thumbnailRef.current && thumbnailRef.current !== editor.media.thumbnail && (media.set('thumbnail', thumbnailRef.current))
+      console.log("🚀 ~ file: index.jsx:150 ~ onEditorSave ~ editor.media.thumbnail:", editor.media.thumbnail)
+      imageAltTextRef.current.value !== editor.media.altText && (media.set('altText', imageAltTextRef.current.value))
+      media.size !== 0 && tData.set('media', media)
+      console.log("🚀 ~ file: index.jsx:152 ~ onEditorSave ~ media:", media)
+
+      !!formDataObject.hideSwitch !== editor.hide && (tData.set('hide', !!formDataObject.hideSwitch))
+
+      JSON.stringify(tagArrayRef.current) !== JSON.stringify(editor.tags) && (tData.set('tags', tagArrayRef.current))
+
+      JSON.stringify(classRef.current) !== JSON.stringify(editor.classifications) && (tData.set('classifications', [classRef.current]))
+    }
+
+    return tData
+  }
+
+
+  function onEditorSave(e) {
+    e.preventDefault(e);
+
+    const formData = getFormData(e);
+    console.log("🚀 ~ file: index.jsx:198 ~ onEditorSave ~ formData:", formData)
+    // return
+    if (preview) {
+      dispatch({
+        type: GetEditorAction.PREVIEW_EDITOR,
+        payload: {
+          data: formData
+        },
+      })
       return
     }
-    // return
+
+    if (formData.size === 0) {
+      console.log('nothing to update!!!');
+      setDialogContent('沒有更新任何資訊！')
+      handleClickOpen()
+      return
+    }
     dispatch({
       type: GetEditorAction.UPDATE_EDITOR,
       payload: {
         id: editor._id,
-        data: tData
+        data: formData
       },
     })
   }
+  const [open, setOpen] = React.useState(false);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+
+  // const onPreviewButtonClick = (e) => {
+
+  //   e.preventDefault(e);
+
+  //   const formData = getFormData();
+
+  // }
 
   return (
     <div className={'container'}>
       <div className={'wrapper'}>
         <div className={'left-side'}>
+          <EditorDialog
+            open={open}
+            handleClose={() => setOpen(false)}
+            dialogTitle={dialogTitle}
+            dialogContent={dialogContent}
+          />
           <ContentEditorForm
             newTitleRef={newTitleRef}
             editorContentRef={editorContentRef}
@@ -191,17 +299,14 @@ function IEditor({ props }) {
             imageNameRef={imageNameRef}
             customUrlRef={customUrlRef}
             tagArrayRef={tagArrayRef}
-            classArrayRef={classArrayRef}
+            classRef={classRef}
             onEditorSave={onEditorSave}
+            // onPreviewButtonClick={onPreviewButtonClick}
+            setPreview={setPreview}
           />
         </div>
-        <CustomModal ariaHideApp={false} isModalOpen={isModalOpen} />
-        <CustomModal
-          ariaHideApp={false}
-          isModalOpen={isAddModalOpen}
-          text={'add successfully'}
-        />
       </div>
+
     </div>
   );
 }

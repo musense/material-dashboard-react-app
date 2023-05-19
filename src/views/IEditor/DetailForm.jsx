@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import MultiTagSelectSort from '../../components/Select/Multi/MultiTagSelectSort';
-import MultiClassSelectSort from '../../components/Select/Multi/MultiClassSelectSort';
 import CustomRadio from '../../components/CustomRadio/CustomRadio';
 
 
@@ -24,8 +23,10 @@ export default function DetailForm({
     imageNameRef,
     customUrlRef,
     tagArrayRef,
-    classArrayRef,
-    onEditorSave
+    classRef,
+    onEditorSave,
+    // onPreviewButtonClick,
+    setPreview
 }) {
 
     const [customUrl, setCustomUrl] = useState();
@@ -34,14 +35,16 @@ export default function DetailForm({
 
     const [imageUrl, setImageUrl] = useState();
     const [imageName, setImageName] = useState();
+    const uploadImageRef = React.useRef(null);
     const hideSwitchRef = React.useRef();
 
     useEffect(() => {
-        if (bannerRef.current && typeof bannerRef.current === 'string' && bannerRef.current.indexOf('<iframe') !== -1) {
+        if (!bannerRef.current || typeof bannerRef.current !== 'string') return
+        if (bannerRef.current.indexOf('<iframe') !== -1) {
             const imageWrapper = document.getElementById('preview-image-wrapper');
             imageWrapper.innerHTML = bannerRef.current;
         }
-    }, [bannerRef.current]);
+    }, [bannerRef.current, uploadImageRef]);
 
     useEffect(() => {
         hideSwitchRef.current.id = 'detail-form-hide'
@@ -162,7 +165,7 @@ export default function DetailForm({
                 </div>
                 <div className={styles['input-group']}>
                     <label htmlFor='classification'>分類</label>
-                    <MemorizedClassSelector classRef={classArrayRef} />
+                    <MemorizedClassSelector classRef={classRef} />
                 </div>
                 <div className={styles['image-upload-container']}>
 
@@ -198,6 +201,7 @@ export default function DetailForm({
                             <label htmlFor='uploadImage'>
                                 上傳圖片
                                 <input
+                                    ref={uploadImageRef}
                                     id='uploadImage'
                                     type='file'
                                     name='uploadImage'
@@ -272,8 +276,8 @@ export default function DetailForm({
                     />
                 </div>
                 <div className={styles['button-wrapper']}>
-                    <input type='submit' value='確認' />
-                    <input type='button' value='預覽' />
+                    <input type='submit' onClick={() => setPreview(false)} value='確認' />
+                    <input type='submit' onClick={() => setPreview(true)} value='預覽' />
                 </div>
             </form >
         </>

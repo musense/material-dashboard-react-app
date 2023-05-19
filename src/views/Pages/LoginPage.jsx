@@ -33,6 +33,11 @@ import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import MessageDialog from './MessageDialog';
 
+import * as GetClassAction from "actions/GetClassAction.js";
+import * as GetTagsAction from "actions/GetTagsAction.js";
+
+import Cookie from "js-cookie";
+
 function LoginPage(props) {
   const { classes } = props;
 
@@ -129,7 +134,11 @@ function LoginPage(props) {
       type: REGISTER_USER_ERROR_RESET
     })
     if (loginSuccess) {
-      navigate('/admin/user')
+      const sid = Cookie.get('sid')
+      console.log("🚀 ~ file: LoginPage.jsx:135 ~ handleClose ~ sid:", sid)
+      dispatch({ type: GetClassAction.REQUEST_CLASS_LIST });
+      dispatch({ type: GetTagsAction.REQUEST_TAG })
+      navigate('/admin/editorList', { replace: true })
     }
   };
   return (

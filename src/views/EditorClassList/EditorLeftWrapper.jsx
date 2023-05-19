@@ -1,6 +1,6 @@
-import React, { useMemo, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import * as GetClassAction from '../../actions/GetClassAction';
+import * as GetClassAction from 'actions/GetClassAction';
 // import md5 from 'crypto-js/md5'
 import Card from 'components/Card/Card.jsx';
 import CardBody from 'components/Card/CardBody.jsx';
@@ -9,14 +9,9 @@ import GridContainer from 'components/Grid/GridContainer.jsx';
 import GridItem from 'components/Grid/GridItem.jsx';
 import styles from './EditorClassList.module.css'
 
-// import SingleParentCatSelect from "../../components/Select/Single/SingleParentCatSelect";
-import SingleClassificationSelect from "../../components/Select/Single/SingleClassificationSelect";
+import SingleClassificationSelect from "components/Select/Single/SingleClassificationSelect";
 
-import usePressEnterEventHandler from '../../hook/usePressEnterEventHandler';
-
-// const MemorizedParentSelector = React.memo(SingleParentCatSelect)
-// const MemorizedClassSelector = React.memo(SingleClassificationSelect)
-
+import usePressEnterEventHandler from 'hook/usePressEnterEventHandler';
 
 
 export default function EditorLeftWrapper() {
@@ -27,12 +22,14 @@ export default function EditorLeftWrapper() {
     const dispatch = useDispatch();
 
     const parentClassRef = useRef();
-    const classRef = useRef();
+    const classRef = useRef(null);
 
     const editorClass = useSelector((state) => state.getClassReducer.editorClass);
     console.log("🚀 ~ file: EditorLeftWrapper.jsx:25 ~ EditorLeftWrapper ~ editorClass:", editorClass)
 
-
+    useEffect(() => {
+        classRef.current = null
+    }, []);
     usePressEnterEventHandler(formRef)
 
     useMemo(() => {

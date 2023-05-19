@@ -9,10 +9,12 @@ const SingleSelectorTest = ({
   options: defaultOptions,
   selectedRef
 }) => {
+  console.log("🚀 ~ file: SingleSelectorTest.jsx:12 ~ defaultOptions:", defaultOptions)
 
   const [options, setOptions] = useState(defaultOptions);
 
-  const [selected, setSelected] = useState(parentSelected);
+  // const [selected, setSelected] = useState(parentSelected);
+  const [selected, setSelected] = useState();
 
   const optionsLabel = useMemo(() => {
     if (!defaultOptions || defaultOptions.length === 0) return;
@@ -29,7 +31,7 @@ const SingleSelectorTest = ({
 
   const onChange = (newValue, actionMeta) => {
     setSelected(newValue);
-    parentSetSelected(newValue)
+    // parentSetSelected(newValue)
     selectedRef.current = newValue;
   };
 

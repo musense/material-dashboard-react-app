@@ -17,6 +17,8 @@ const Link = ({ attributes, children, element }) => {
         <a
             {...attributes}
             href={element.url}
+            target="_blank"
+            rel="noopener noreferrer"
             className={
                 selected
                     ? css`

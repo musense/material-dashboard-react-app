@@ -117,7 +117,7 @@ function AddLinkButton({ icon, type, title }) {
             active={CustomEditor.isLinkActive(editor)}
             onMouseDown={event => {
                 event.preventDefault()
-                const url = window.prompt('Enter the URL of the link:')
+                const url = window.prompt('請輸入超連結：')
                 if (!url) return
                 CustomEditor.insertLink(editor, url)
             }}

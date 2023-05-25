@@ -17,6 +17,7 @@ const Link = ({ attributes, children, element }) => {
         <a
             {...attributes}
             href={element.url}
+            title={element.url}
             target="_blank"
             rel="noopener noreferrer"
             className={

@@ -141,7 +141,7 @@ function SlateEditor({ editorContentRef }) {
               }
               case 'l': {
                 event.preventDefault()
-                const url = window.prompt('Enter the URL of the link:')
+                const url = window.prompt('請輸入超連結：')
                 if (!url) return
                 CustomEditor.insertLink(editor, url)
                 break

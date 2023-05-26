@@ -60,13 +60,10 @@ export function toFrontendData(responseData) {
                 }
                 ))
                 : [],
-            classifications: item.categories && item.categories.length > 0
-                ? item.categories.map(cat => ({
-                    value: cat._id,
-                    label: cat.name,
-                }
-                ))
-                : [],
+            classifications: {
+                value: item.categories._id,
+                label: item.categories.name,
+            },
             webHeader: {
                 title: item.headTitle || '',
                 description: item.headDescription || '',

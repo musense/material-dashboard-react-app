@@ -95,7 +95,7 @@ function* SearchEditor(payload) {
     try {
 
         const titleString = payload.title ? `title=${payload.title}&` : ''
-        const categoryString = payload.classification ? `category=${payload.classification.label}&` : ''
+        const categoryString = payload.classification ? `category=${payload.classification}&` : ''
         const startDateString = payload.createDate
             ? payload.createDate.startDate
                 ? `startDate=${payload.createDate.startDate}&`

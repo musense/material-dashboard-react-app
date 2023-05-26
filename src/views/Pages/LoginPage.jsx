@@ -62,11 +62,17 @@ function LoginPage(props) {
         setRememberMeChecked(true);
       }
     }
+    if (!returnMessage) return
     let title,
       content;
     console.log("🚀 ~ file: LoginPage.jsx:75 ~ LoginPage ~ returnMessage:", returnMessage)
-
     switch (returnMessage) {
+      // case "can't find user!": 
+      //   title = '登入失敗'
+      //   content = '請先註冊！'
+      //   break
+      // }
+      case "can't find user!":
       case "login failed": {
         title = '登入失敗'
         content = '帳號或密碼輸入錯誤'
@@ -81,6 +87,11 @@ function LoginPage(props) {
         title = "登入成功";
         content = "登入成功！"
         setLoginSuccess(true)
+        break
+      }
+      default: {
+        title = "登入失敗"
+        content = "登入失敗！"
         break
       }
     }
@@ -135,9 +146,7 @@ function LoginPage(props) {
     })
     if (loginSuccess) {
       const sid = Cookie.get('sid')
-      console.log("🚀 ~ file: LoginPage.jsx:135 ~ handleClose ~ sid:", sid)
-      dispatch({ type: GetClassAction.REQUEST_CLASS_LIST });
-      dispatch({ type: GetTagsAction.REQUEST_TAG })
+      console.log("🚀 ~ file: LoginPage.jsx:135 ~ handleClose ~ sid:", sid) 
       navigate('/admin/editorList', { replace: true })
     }
   };

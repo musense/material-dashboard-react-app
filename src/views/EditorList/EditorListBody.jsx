@@ -52,7 +52,7 @@ export default function EditorListBody(
             dispatch({
                 type: GetEditorAction.SHOW_EDITOR_LIST_SORTING,
                 payload: {
-                   key: 'serialNumber'
+                    key: 'serialNumber'
                 }
             })
         },
@@ -60,7 +60,7 @@ export default function EditorListBody(
             dispatch({
                 type: GetEditorAction.SHOW_EDITOR_LIST_SORTING,
                 payload: {
-                   key: 'content.title'
+                    key: 'content.title'
                 }
             })
         },
@@ -68,7 +68,7 @@ export default function EditorListBody(
             dispatch({
                 type: GetEditorAction.SHOW_EDITOR_LIST_SORTING,
                 payload: {
-                   key: 'createDate'
+                    key: 'createDate'
                 }
             })
         },
@@ -163,31 +163,29 @@ export default function EditorListBody(
                             <div>{parseInt(titleView.serialNumber)}</div>
                             <div>{titleView.content.title}</div>
                             <div className={styles['class-cell']}>
-                                {titleView.classifications && titleView.classifications.map((item) =>
-                                    <span key={item.value}>{item.label}</span>
-                                )}
+
+                                <span key={titleView.classifications.value}>{titleView.classifications.label}</span>
+
                             </div>
-                            {titleView.media.banner !== '' ? (
-                                <div className={styles['view-editor-image-container']}>
-                                    <img
-                                        src={titleView.media.thumbnail}
-                                        title={titleView.media.banner}
-                                        alt={titleView.media.altText}
-                                        onClick={(e) => {
-                                            e.stopPropagation()
-                                            window.open(titleView.media.thumbnail, '_blank');
-                                        }}
-                                    />
-                                </div>
-                            )
-                                :
-                                (
+                            {titleView.media.banner !== ''
+                                ? (
+                                    <div className={styles['view-editor-image-container']}>
+                                        <img
+                                            src={titleView.media.thumbnail}
+                                            title={titleView.media.banner}
+                                            alt={titleView.media.altText}
+                                            onClick={(e) => {
+                                                e.stopPropagation()
+                                                window.open(titleView.media.thumbnail, '_blank');
+                                            }}
+                                        />
+                                    </div>
+                                ) : (
                                     <>
                                         <div className={styles['view-editor-image-container']}>無圖片/縮圖</div>
                                         {/* <div>無連結</div> */}
                                     </>
                                 )}
-
                             <div>
                                 <span className={`${titleView.published ? styles['published'] : styles['not-published-yet']}`}>
                                     {titleView.published ? '已發佈' : '未發佈'}

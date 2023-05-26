@@ -17,6 +17,9 @@ const Link = ({ attributes, children, element }) => {
         <a
             {...attributes}
             href={element.url}
+            title={element.url}
+            target="_blank"
+            rel="noopener noreferrer"
             className={
                 selected
                     ? css`
@@ -128,6 +131,28 @@ const Image = ({ attributes, children, element }) => {
             `}
                 >
                     <Icon icon={'delete'} />
+                </Button>
+                <Button
+                    active
+                    onClick={() => {
+                        const alt = prompt('請輸入替代文字：')
+                        if (!alt) return
+                        const imageAlt = {
+                            type: 'image',
+                            alt,
+                            children: { text: '' }
+                        }
+                        Transforms.setNodes(editor, imageAlt)
+                    }}
+                    className={css`
+              display: ${selected && focused ? 'inline' : 'none'};
+              position: absolute;
+              top: 0.5em;
+              left: 2.5em;
+              background-color: white;
+            `}
+                >
+                    <Icon icon={'edit'} />
                 </Button>
             </div>
         </div>

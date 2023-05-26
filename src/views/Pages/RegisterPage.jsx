@@ -42,6 +42,7 @@ function RegisterPage(props) {
   const returnMessage = useSelector((state) => state.getUserReducer.errorMessage);
 
   useEffect(() => {
+    if (!returnMessage) return
     let title,
       content;
     console.log("🚀 ~ file: RegisterPage.jsx:44 ~ useEffect ~ returnMessage:", returnMessage)
@@ -65,6 +66,11 @@ function RegisterPage(props) {
         content = "註冊成功！";
         setRegisterSuccess(true);
         break;
+      }
+      default: {
+        title = "註冊失敗"
+        content = "註冊失敗！"
+        break
       }
     }
     if (content) {

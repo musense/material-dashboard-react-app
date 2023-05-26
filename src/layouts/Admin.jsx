@@ -19,6 +19,11 @@ import logo from 'assets/img/scaredseal.jpeg';
 import { Link, Outlet } from 'react-router-dom';
 import PerfectScrollbar from 'perfect-scrollbar';
 
+import { useDispatch, useSelector } from 'react-redux';
+
+import * as GetClassAction from "actions/GetClassAction.js";
+import * as GetTagsAction from "actions/GetTagsAction.js";
+
 let userInfo = {};
 
 function Dashboard({ ...props }) {
@@ -34,6 +39,11 @@ function Dashboard({ ...props }) {
   // const handleImageClick = (image) => {
   //   setImage(image);
   // };
+
+  const editorClassList = useSelector((state) => state.getClassReducer.editorClassList);
+  const tagList = useSelector((state) => state.getTagsReducer.tagList);
+
+  const dispatch = new useDispatch();
 
   const handleColorClick = (color) => {
     setColor(color);
@@ -64,6 +74,17 @@ function Dashboard({ ...props }) {
       : 'unknown';
   };
 
+  useEffect(() => {    
+    if (!editorClassList) {
+      dispatch({ type: GetClassAction.REQUEST_CLASS_LIST });
+    }
+  }, [editorClassList]);
+  
+  useEffect(() => {
+    if (!tagList) {
+      dispatch({ type: GetTagsAction.REQUEST_TAG })
+    }
+  }, [tagList]);
   useEffect(() => {
     if (mainPanel.current === null) {
       //componentDidMount

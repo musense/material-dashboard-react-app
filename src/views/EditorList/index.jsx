@@ -9,6 +9,7 @@ import EditorListBody from "./EditorListBody";
 
 import CustomModal from '../../components/CustomModal/CustomModal.jsx';
 import * as GetEditorAction from "../../actions/GetEditorAction";
+import * as GetTagsAction from "../../actions/GetTagsAction";
 import { reDispatchMessage } from './../../reducers/errorMessage';
 
 
@@ -27,6 +28,7 @@ function EditorList() {
   useEffect(() => {
     dispatch({ type: GetEditorAction.REQUEST_EDITOR });
     dispatch({ type: GetEditorAction.RESET_EDITOR })
+    dispatch({ type: GetTagsAction.REQUEST_TAG })
   }, [])
 
   // const titleList = useSelector((state) => state.getEditorReducer.titleList);

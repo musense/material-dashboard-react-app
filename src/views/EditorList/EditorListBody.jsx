@@ -120,6 +120,10 @@ export default function EditorListBody(
         checkedToDeleteMapRef.current.set(e.target.name, e.target.checked)
         console.log("🚀 ~ file: EditorClassList.jsx:164 ~ checkEditorClassRow ~ checkedToDeleteMapRef.current:", checkedToDeleteMapRef.current)
     }
+    const [open, setOpen] = React.useState(false);
+    const handleOpen = () => setOpen(true);
+    const handleClose = () => setOpen(false);
+    const [mediaInfo, setMediaInfo] = useState(null);
     return <CardBody>
         <Button
             color='info'
@@ -198,5 +202,11 @@ export default function EditorListBody(
                 })}
             </div>
         </form>
+        <MediaModal
+            open={open}
+            handleClose={handleClose}
+            mediaInfo={mediaInfo}
+        />
     </CardBody>;
 }
+

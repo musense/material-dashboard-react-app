@@ -31,18 +31,23 @@ function App() {
 
     const navigate = useNavigate()
 
-
     useEffect(() => {
-        // dispatch({ type: GetClassAction.REQUEST_CLASS_LIST })
-        // navigate('/auth/register-page')
-        // navigate('/auth/login-page')
-        // navigate('/admin/editorList')
-        // navigate('/admin/tag')
-        navigate('/admin/editorClassList')
-        // navigate('/admin/table')
-        // navigate('/admin/editorList/new')
-        
-        // navigate('/admin/editorManager')
+        localStorage.setItem('pathname', window.location.pathname)
+
+        if (localStorage.getItem('pathname')) {
+            navigate(localStorage.getItem('pathname'))
+        } else {
+            // dispatch({ type: GetClassAction.REQUEST_CLASS_LIST })
+            // navigate('/auth/register-page')
+            // navigate('/auth/login-page')
+            // navigate('/admin/editorList')
+            // navigate('/admin/tag')
+            navigate('/admin/editorClassList')
+            // navigate('/admin/table')
+            // navigate('/admin/editorList/new')
+
+            // navigate('/admin/editorManager')
+        }
     }, []);
 
     return (

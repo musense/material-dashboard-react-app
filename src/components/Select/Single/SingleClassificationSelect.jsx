@@ -18,7 +18,7 @@ export default function SingleClassificationSelect({ creatable, classRef }) {
   useEffect(() => {
     switch (reset) {
       case '--reset-all': {
-        // setSelected(null)
+        classRef.current = null
         //* reset [分類名稱] 選擇
         dispatch({
           type: RESET_SELECTED_CLASS,

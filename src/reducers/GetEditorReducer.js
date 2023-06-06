@@ -6,6 +6,7 @@ const initialState = {
     serialNumber: 'asc',
     'content.title': 'asc',
     createDate: 'asc',
+    'classifications.label': 'asc',
   },
   showList: null,
   titleList: null,
@@ -146,27 +147,6 @@ const getEditorReducer = (state = initialState, action) => {
       return {
         ...state,
         editor: action.payload,
-        // _id: action.payload._id,
-        // title: action.payload.title,
-        // content: {
-        //     title: action.payload.content.title,
-        //     content: action.payload.content.content,
-        // },
-        // tags: action.payload.tags,
-        // classifications: action.payload.classifications,
-        // webHeader: {
-        //     title: action.payload.webHeader.title,
-        //     description: action.payload.webHeader.description,
-        //     keywords: action.payload.webHeader.keywords,
-        //     customUrl: action.payload.webHeader.customUrl,
-        // },
-        // media: {
-        //     banner: action.payload.media.banner,
-        //     thumbnail: action.payload.media.thumbnail,
-        //     altText: action.payload.media.altText,
-        // },
-        // setTop: action.payload.setTop || false,
-        // hide: action.payload.hide || false,
         errorMessage: errorMessage.getFinish
       }
     case GetEditorAction.REQUEST_EDITOR_FAIL:

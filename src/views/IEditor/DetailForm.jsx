@@ -18,15 +18,17 @@ export default function DetailForm({
     imageUrlRef,
     imageNameRef,
     customUrlRef,
+    manualUrlRef,
     tagArrayRef,
     classRef,
     onEditorSave,
     // onPreviewButtonClick,
-    setPreview
+
+    setPreview,
 }) {
+    console.log("🚀 ~ file: DetailForm.jsx:29 ~ customUrlRef:", customUrlRef)
 
-    const [customUrl, setCustomUrl] = useState();
-
+    const [manualUrl, setManualUrl] = useState(undefined);
     const [isError, setIsError] = useState(false);
 
     const [imageUrl, setImageUrl] = useState();
@@ -134,26 +136,31 @@ export default function DetailForm({
                     <input type='text' name='keywords' id='detail-form-keywords' />
                 </div>
                 <div className={styles['input-group']}>
-                    <label htmlFor='custom-url'>自訂網址</label>
+                    <label htmlFor='manualUrl'>自訂網址</label>
                     <input
+                        ref={manualUrlRef}
                         type='text'
-                        name='customUrl'
-                        id='detail-form-customUrl'
-                        onChange={(e) => {
-                            setCustomUrl(e.target.value)
-                            customUrlRef.current = e.target.value
-                        }}
+                        name='manualUrl'
+                        onChange={e => setManualUrl(e.target.value)}
                     />
                 </div>
                 <div className={styles['input-group']}>
                     <label htmlFor='real-url'>前台顯示網址</label>
-                    <input
-                        type='text'
-                        name='real-url'
-                        value={`${customUrl || customUrlRef.current}`}
-                        readOnly
-                        disabled
-                    />
+                    {manualUrl && manualUrl.length > 0
+                        ? < input
+                            type='text'
+                            name='real-url'
+                            value={manualUrl}
+                            readOnly
+                            disabled
+                        />
+                        : <div><a
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            href={customUrlRef.current}
+                        >{customUrlRef.current}</a></div>
+                    }
+
                 </div>
                 <div className={styles['input-group']}>
                     <label htmlFor='tags'>新增標籤</label>

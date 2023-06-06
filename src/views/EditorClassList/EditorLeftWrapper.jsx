@@ -17,6 +17,8 @@ import usePressEnterEventHandler from 'hook/usePressEnterEventHandler';
 export default function EditorLeftWrapper() {
 
     const [isEditing, setIsEditing] = useState(false);
+    const [manualUrl, setManualUrl] = useState('');
+    const [customUrl, setCustomUrl] = useState('');
     const formRef = useRef(null);
 
     const dispatch = useDispatch();
@@ -32,19 +34,22 @@ export default function EditorLeftWrapper() {
     }, []);
     usePressEnterEventHandler(formRef)
 
-    useMemo(() => {
-        if (editorClass && editorClass._id !== '') {
+    useEffect(() => {
+        if (!editorClass) return
+        if (editorClass._id !== '') {
             setIsEditing(true)
         }
         console.log("🚀 ~ file: EditorClassList.jsx:142 ~ setFormData ~ editorClass:", editorClass)
         const form = getForm();
         if (form === null) return
+        form.reset()
+        setManualUrl('')
+        setCustomUrl('')
         form.elements['_id'].value = editorClass._id
-
         form.elements['title'].value = editorClass.title
         form.elements['description'].value = editorClass.description
         form.elements['keywords'].value = editorClass.keywords
-        form.elements.customUrl.value = editorClass.customUrl
+        setCustomUrl(editorClass.customUrl)
     }, [editorClass])
 
     function onAddNewEditor(e) {
@@ -73,6 +78,7 @@ export default function EditorLeftWrapper() {
                 description: classData.description,
                 keywords: classData.keywords,
                 href: classData.customUrl,
+                route: classData.manualUrl,
             },
         }
 
@@ -104,9 +110,11 @@ export default function EditorLeftWrapper() {
         return formRef.current;
     }
     function onReset(e) {
-        e.preventDefault()
+        e && e.preventDefault()
         const form = getForm()
         form.reset()
+        setManualUrl('')
+        setCustomUrl('')
         dispatch({
             type: GetClassAction.RESET_SELECTED_CLASS,
             payload: '--reset-all'
@@ -128,21 +136,21 @@ export default function EditorLeftWrapper() {
                         <form ref={formRef} name='class-form' onSubmit={onAddNewEditor}>
                             <input type="hidden" name='_id' />
                             <label htmlFor="classification">分類名稱</label>
-                            <SingleClassificationSelect
-                                creatable
-                                classRef={classRef}
-                            />
-                            {/* <label htmlFor="parentClass">上層分類</label> */}
-                            {/* <MemorizedParentSelector parentClassRef={parentClassRef} /> */}
-                            {/* <SingleParentCatSelect parentClassRef={parentClassRef} /> */}
+                            <SingleClassificationSelect creatable classRef={classRef} />
                             <label htmlFor="title">title</label>
                             <input type="text" name='title' />
                             <label htmlFor="description">description</label>
                             <input type="text" name='description' />
                             <label htmlFor="keywords">keywords</label>
                             <input type="text" name='keywords' />
-                            <label htmlFor="customUrl">自訂網址</label>
-                            <input type="text" name='customUrl' />
+                            <label htmlFor="manualUrl">自訂網址</label>
+                            <input type="text" name='manualUrl' onChange={e => setManualUrl(e.target.value)} value={manualUrl} />
+                            <label htmlFor="customUrl">前台顯示網址</label>
+                            {manualUrl && manualUrl.length > 0
+                                ? <input readOnly disabled type="text" name='manualUrl' value={manualUrl} />
+                                : <input readOnly disabled type="text" name='customUrl' value={customUrl} />
+                            }
+
                             <div className={styles['left-button-container']}>
                                 {isEditing === true && (<>
                                     <input type='button' value='取消'

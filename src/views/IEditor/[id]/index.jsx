@@ -20,6 +20,22 @@ function IEditor({ props }) {
   const returnMessage = useSelector((state) => state.getEditorReducer.errorMessage);
   const previewID = useSelector((state) => state.getEditorReducer.previewID);
 
+  function requestEditorByID(id) {
+    dispatch({
+      type: GetEditorAction.REQUEST_EDITOR_BY_ID,
+      payload: {
+        data: {
+          _id: id
+        },
+      },
+    });
+  }
+  useEffect(() => {
+    if (!editor) {
+      requestEditorByID(id)
+    }
+  }, [editor]);
+
   console.log("🚀 ~ file: index.jsx:49 ~ IEditor ~ editor:", editor)
 
 
@@ -40,7 +56,8 @@ function IEditor({ props }) {
   const imageAltTextRef = useRef();
   const imageUrlRef = useRef(undefined);
   const imageNameRef = useRef(undefined);
-  const customUrlRef = useRef();
+  const manualUrlRef = useRef(undefined);
+  const customUrlRef = useRef(undefined);
 
   const idRef = useRef()
   const newTitleRef = useRef('');
@@ -58,13 +75,13 @@ function IEditor({ props }) {
     setDialogTitle('修改文章訊息')
   }, []);
 
-  useEffect(() => {
-    
-    console.log("🚀 ~ file: index.jsx:66 ~ useEffect ~ previewID:", previewID)
-    if (previewID) {
-      window.open(`http://10.88.0.103:4200/preview_${previewID}`, '_blank');
-    }
-  }, [previewID]);
+  // useEffect(() => {
+
+  //   console.log("🚀 ~ file: index.jsx:66 ~ useEffect ~ previewID:", previewID)
+  //   if (previewID) {
+  //     window.open(`http://10.88.0.103:4200/preview_${previewID}`, '_blank');
+  //   }
+  // }, [previewID]);
   useEffect(() => {
     if (!returnMessage) return
 
@@ -76,14 +93,7 @@ function IEditor({ props }) {
 
       console.log('Editor update successfully');
       console.log("🚀 ~ file: index.jsx:79 ~ useEffect ~ id:", id)
-      dispatch({
-        type: GetEditorAction.REQUEST_EDITOR_BY_ID,
-        payload: {
-          data: {
-            _id: id,
-          },
-        },
-      });
+      requestEditorByID(id)
     }
   }, [returnMessage, id]);
 
@@ -129,7 +139,7 @@ function IEditor({ props }) {
 
     webHeaderID.map(id => setDefaultValueById(id, webHeader))
     customUrlRef.current = webHeader.customUrl
-
+    manualUrlRef.current.value = ''
     if (media && media.altText) {
       setDefaultValueById('altText', media)
     }
@@ -154,7 +164,7 @@ function IEditor({ props }) {
   useMemo(() => {
     if (!editor) return
     tagArrayRef.current = editor.tags
-    classRef.current = editor.classifications
+    classRef.current = editor.classifications ? editor.classifications : null
   }, [editor])
 
   // console.log("🚀 ~ file: index.jsx:145 ~ IEditor ~ tagArrayRef:", tagArrayRef)
@@ -201,7 +211,7 @@ function IEditor({ props }) {
       formDataObject.title !== editor.webHeader.title && (webHeader.set('title', formDataObject.title));
       formDataObject.description !== editor.webHeader.description && (webHeader.set('description', formDataObject.description))
       formDataObject.keywords !== editor.webHeader.keywords && (webHeader.set('keywords', formDataObject.keywords))
-      formDataObject.customUrl !== editor.webHeader.customUrl && (webHeader.set('customUrl', formDataObject.customUrl))
+      formDataObject.manualUrl.length > 0 && (webHeader.set('manualUrl', formDataObject.manualUrl))
       webHeader.size !== 0 && tData.set('webHeader', webHeader)
       console.log("🚀 ~ file: index.jsx:145 ~ onEditorSave ~ webHeader:", webHeader)
 
@@ -223,7 +233,7 @@ function IEditor({ props }) {
 
       JSON.stringify(tagArrayRef.current) !== JSON.stringify(editor.tags) && (tData.set('tags', tagArrayRef.current))
 
-      JSON.stringify(classRef.current) !== JSON.stringify(editor.classifications) && (tData.set('classifications', [classRef.current]))
+      JSON.stringify(classRef.current) !== JSON.stringify(editor.classifications) && (tData.set('classifications', classRef.current ? [classRef.current] : []))
     }
 
     return tData
@@ -235,7 +245,7 @@ function IEditor({ props }) {
 
     const formData = getFormData(e);
     console.log("🚀 ~ file: index.jsx:198 ~ onEditorSave ~ formData:", formData)
-    // return
+
     if (preview) {
       dispatch({
         type: GetEditorAction.PREVIEW_EDITOR,
@@ -297,6 +307,7 @@ function IEditor({ props }) {
             imageAltTextRef={imageAltTextRef}
             imageUrlRef={imageUrlRef}
             imageNameRef={imageNameRef}
+            manualUrlRef={manualUrlRef}
             customUrlRef={customUrlRef}
             tagArrayRef={tagArrayRef}
             classRef={classRef}
@@ -306,7 +317,6 @@ function IEditor({ props }) {
           />
         </div>
       </div>
-
     </div>
   );
 }

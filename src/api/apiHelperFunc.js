@@ -3,7 +3,8 @@ const bend2FendMap = new Map([
     ['headTitle', 'webHeader.title'],
     ['headKeyword', 'webHeader.keywords'],
     ['headDescription', 'webHeader.description'],
-    ['manualUrl', 'webHeader.customUrl'],
+    ['manualUrl', 'webHeader.manualUrl'],
+    ['sitemapUrl', 'webHeader.customUrl'],
     ['title', 'content.title'],
     ['content', 'content.content'],
     ['categories', 'classifications'],
@@ -19,7 +20,8 @@ const fend2BendMap = new Map([
     ['webHeader.title', 'headTitle'],
     ['webHeader.keywords', 'headKeyword'],
     ['webHeader.description', 'headDescription'],
-    ['webHeader.customUrl', 'manualUrl'],
+    ['webHeader.manualUrl', 'manualUrl'],
+    ['webHeader.customUrl', 'sitemapUrl'],
     ['content.title', 'title'],
     ['content.content', 'content'],
     ['classifications', 'categories'],
@@ -31,6 +33,7 @@ const fend2BendMap = new Map([
 ])
 
 export function toFrontendData(responseData) {
+    console.log("🚀 ~ file: apiHelperFunc.js:34 ~ toFrontendData ~ responseData:", responseData)
     if (Array.isArray(responseData)) {
         return responseData.map(item => ({
             _id: item._id,
@@ -60,15 +63,16 @@ export function toFrontendData(responseData) {
                 }
                 ))
                 : [],
-            classifications: {
+            classifications: item.categories ? {
                 value: item.categories._id,
                 label: item.categories.name,
-            },
+            } : null,
             webHeader: {
                 title: item.headTitle || '',
                 description: item.headDescription || '',
                 keywords: item.headKeyword || '',
-                customUrl: item.manualUrl || '',
+                manualUrl: item.manualUrl || '',
+                customUrl: item.sitemapUrl || '',
             },
             media: {
                 banner: item.contentImagePath || '',
@@ -111,21 +115,16 @@ export function toFrontendData(responseData) {
                 }
                 ))
                 : [],
-            classifications: responseData.categories && responseData.categories.length > 0
-                ? responseData.categories.map(cat => ({
-                    value: cat._id,
-                    label: cat.name,
-                }
-                ))
-                : {
-                    value: responseData.categories._id,
-                    label: responseData.categories.name,
-                },
+            classifications: responseData.categories ? {
+                value: responseData.categories._id,
+                label: responseData.categories.name,
+            } : null,
             webHeader: {
                 title: responseData.headTitle || '',
                 description: responseData.headDescription || '',
                 keywords: responseData.headKeyword || '',
-                customUrl: responseData.manualUrl || '',
+                manualUrl: responseData.manualUrl || '',
+                customUrl: responseData.sitemapUrl || '',
             },
             media: {
                 banner: responseData.contentImagePath || '',

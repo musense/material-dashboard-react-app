@@ -6,7 +6,8 @@ import SingleSelector from './base/SingleSelectorTest';
 import { RESET_SELECTED_CLASS } from 'actions/GetClassAction';
 
 //* classRef: parent form get selected value
-export default function SingleClassificationSelect({ creatable, classRef }) {
+export default function SingleClassificationSelect({ creatable, classRef, width = null }) {
+console.log("🚀 ~ file: SingleClassificationSelect.jsx:10 ~ SingleClassificationSelect ~ width:", width)
 
   const editorClass = useSelector((state) => state.getClassReducer.editorClass);
   const editorClassList = useSelector((state) => state.getClassReducer.editorClassList);
@@ -59,6 +60,7 @@ export default function SingleClassificationSelect({ creatable, classRef }) {
       // parentSetSelected={setSelected}
       selectedRef={classRef}
       options={classOptions}
+      controlWidth={width}
     />
   );
 }

@@ -9,7 +9,7 @@ import GridContainer from 'components/Grid/GridContainer.jsx';
 import GridItem from 'components/Grid/GridItem.jsx';
 import styles from './EditorClassList.module.css'
 
-import SingleClassificationSelect from "components/Select/Single/SingleClassificationSelect";
+// import SingleClassificationSelect from "components/Select/Single/SingleClassificationSelect";
 
 import usePressEnterEventHandler from 'hook/usePressEnterEventHandler';
 
@@ -24,14 +24,14 @@ export default function EditorLeftWrapper() {
     const dispatch = useDispatch();
 
     const parentClassRef = useRef();
-    const classRef = useRef(null);
+    // const classRef = useRef(null);
 
     const editorClass = useSelector((state) => state.getClassReducer.editorClass);
     console.log("🚀 ~ file: EditorLeftWrapper.jsx:25 ~ EditorLeftWrapper ~ editorClass:", editorClass)
 
-    useEffect(() => {
-        classRef.current = null
-    }, []);
+    // useEffect(() => {
+    //     classRef.current = null
+    // }, []);
     usePressEnterEventHandler(formRef)
 
     useEffect(() => {
@@ -60,19 +60,22 @@ export default function EditorLeftWrapper() {
         const classData = Object.fromEntries(formData);
 
         console.log("🚀 ~ file: EditorLeftWrapper.jsx:77 ~ onAddNewEditor ~ parentClassRef.current:", parentClassRef.current)
-        console.log("🚀 ~ file: EditorLeftWrapper.jsx:77 ~ onAddNewEditor ~ classRef.current:", classRef.current)
+        // console.log("🚀 ~ file: EditorLeftWrapper.jsx:77 ~ onAddNewEditor ~ classRef.current:", classRef.current)
         // if (!parentClassRef.current) {
         //     console.log('請輸入 [上層分類] 選項');
         //     return
         // }
-
-        if (!classRef.current) {
+        if (!classData.classification || classData.classification === '') {
             console.log('請輸入 [分類名稱] 選項');
             return
         }
+        // if (!classRef.current) {
+        //     console.log('請輸入 [分類名稱] 選項');
+        //     return
+        // }
         const tempData = {
             // parentClassification: parentClassRef.current.label,
-            classification: classRef.current.label,
+            classification: classData.classification,
             webHeader: {
                 title: classData.title,
                 description: classData.description,
@@ -136,7 +139,8 @@ export default function EditorLeftWrapper() {
                         <form ref={formRef} name='class-form' onSubmit={onAddNewEditor}>
                             <input type="hidden" name='_id' />
                             <label htmlFor="classification">分類名稱</label>
-                            <SingleClassificationSelect creatable classRef={classRef} />
+                            {/* <SingleClassificationSelect creatable classRef={classRef} /> */}
+                            <input type="text" name='classification' />
                             <label htmlFor="title">title</label>
                             <input type="text" name='title' />
                             <label htmlFor="description">description</label>

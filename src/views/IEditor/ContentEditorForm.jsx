@@ -10,18 +10,20 @@ export default function ContentEditorForm({
 
   return (
     <>
-      <div className='iEditor-Title-Container'>
-        <label htmlFor='title'>文章標題</label>
-        <input
-          ref={newTitleRef}
-          name='title'
-          id='content-editor-title'
-          type='text'
+      {/* <form> */}
+        <div className='iEditor-Title-Container'>
+          <label htmlFor='title'>文章標題</label>
+          <input
+            ref={newTitleRef}
+            name='title'
+            id='content-editor-title'
+            type='text'
+          />
+        </div>
+        <SlateEditor
+          editorContentRef={editorContentRef}
         />
-      </div>
-      <SlateEditor
-        editorContentRef={editorContentRef}
-      />
+      {/* </form> */}
     </>
   );
 }

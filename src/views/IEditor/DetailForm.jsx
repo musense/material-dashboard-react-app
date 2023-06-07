@@ -136,7 +136,7 @@ export default function DetailForm({
                     <input type='text' name='keywords' id='detail-form-keywords' />
                 </div>
                 <div className={styles['input-group']}>
-                    <label htmlFor='manualUrl'>自訂網址</label>
+                    <label htmlFor='custom-url'>自訂網址</label>
                     <input
                         ref={manualUrlRef}
                         type='text'

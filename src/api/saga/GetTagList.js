@@ -12,7 +12,8 @@ export function toFrontendData(responseData) {
                 title: item.headTitle || '',
                 description: item.headDescription || '',
                 keywords: item.headKeyword || '',
-                customUrl: item.manualUrl || '',
+                customUrl: item.sitemapUrl || '',
+                manualUrl: item.manualUrl || '',
             },
             pageView: item.pageView,
             createDate: item.createdAt || '',
@@ -30,7 +31,8 @@ export function toFrontendData(responseData) {
                 title: responseData.headTitle || '',
                 description: responseData.headDescription || '',
                 keywords: responseData.headKeyword || '',
-                customUrl: responseData.manualUrl || '',
+                customUrl: responseData.sitemapUrl || '',
+                manualUrl: responseData.manualUrl || '',
             },
             pageView: responseData.pageView,
             createDate: responseData.createdAt || '',
@@ -48,7 +50,7 @@ export function toBackendData(requestData) {
         headTitle: requestData.webHeader.title,
         headKeyword: requestData.webHeader.keywords,
         headDescription: requestData.webHeader.description,
-        manualUrl: requestData.webHeader.customUrl,
+        manualUrl: requestData.webHeader.route,
     }
 }
 
@@ -70,7 +72,7 @@ function* GetTagList(payload = 1) {
                 tagList,
                 totalCount: parseInt(totalCount),
                 currentPage: parseInt(currentPage),
-            }
+            },
         })
     } catch (error) {
         yield put({

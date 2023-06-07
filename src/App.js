@@ -56,7 +56,6 @@ function App() {
                 <Routes>
                     <Route path="admin" element={<Admin />} >
                         <Route path="dashboard" element={<Dashboard />} />
-                        {/* <Route path="table" element={<TableList />} /> */}
                         <Route path="user" element={<UserProfile />} />
                         <Route path="tag" element={<TagList />} />
                         <Route path="editorClassList" element={<EditorClassList />} />
@@ -76,8 +75,6 @@ function App() {
                         <Route path="login-page" element={<LoginPage />} />
                         <Route path="register-page" element={<RegisterPage />} />
                     </Route>
-                    {/* <Route path="rtl" render={(props) => <RTL {...props} />} /> */}
-                    {/* w/ useEffect navigate, in order to redirect */}
                     <Route path="/" render={(props) => <Dashboard {...props} />} />
                 </Routes>
             </div>

@@ -27,7 +27,7 @@ const DateSelector = React.forwardRef((props, ref) => {
 
     return (
         <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <DemoContainer components={['DateRangePicker']}>
+            <DemoContainer sx={{ overflow: 'visible', paddingTop: 'unset' }} components={['DateRangePicker']}>
                 <div className={css`
                         display: flex;
                         flex-direction: row;
@@ -37,11 +37,13 @@ const DateSelector = React.forwardRef((props, ref) => {
                     <DateTimePicker
                         ref={startDateRef}
                         title={'Start Date'}
+                        width={props.width}
                     />
                     ~
                     <DateTimePicker
                         ref={endDateRef}
                         title={'End Date'}
+                        width={props.width}
                     />
                 </div>
             </DemoContainer>

@@ -9,6 +9,7 @@ import { useNavigate } from 'react-router-dom';
 import styles from './EditorList.module.css'
 import Button from 'components/CustomButtons/Button';
 import MediaModal from './MediaModal';
+import EditorSearchForm from './EditorSearchForm';
 
 
 export default function EditorListBody(
@@ -134,6 +135,7 @@ export default function EditorListBody(
     const handleClose = () => setOpen(false);
     const [mediaInfo, setMediaInfo] = useState(null);
     return <CardBody>
+        <EditorSearchForm />
         <Button
             color='info'
             disabled={addEditorDisabled}
@@ -156,7 +158,7 @@ export default function EditorListBody(
             下一頁
         </Button>
         <form name='view-editor-list-form' onSubmit={onSearchBunchDeleteList}>
-            <div data-attr="data-header" className={`${styles['view-form']} ${styles['view-editor-list-header']}`}>
+            <div data-attr="data-header" className={`view-form ${styles['view-editor-list-header']}`}>
                 <div data-attr="data-header-row">
                     <div> <input type='submit' value='批次刪除' /> </div>
                     <div> <input type='button' value='編號' onClick={SortingHelperFunc.onSerialNumberClick} /> </div>
@@ -167,7 +169,7 @@ export default function EditorListBody(
                     <div><input type='button' value='日期' onClick={SortingHelperFunc.onCreateAtClick} /> </div>
                 </div>
             </div>
-            <div data-attr="data-body" className={`${styles['view-form']} ${styles['view-editor-list-body']}`}>
+            <div data-attr="data-body" className={`${styles['view-editor-list-body']}`}>
                 {titleViewList && titleViewList.length > 0 && titleViewList.map((titleView, index) => {
                     return (
                         <div data-attr="data-body-row" key={index} onClick={() => onEdit(titleView)}>

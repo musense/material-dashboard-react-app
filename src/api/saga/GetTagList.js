@@ -137,10 +137,10 @@ function* AddTag(payload) {
             payload: null
         })
     } catch (error) {
+        console.log("🚀 ~ file: GetTagList.js:140 ~ function*AddTag ~ error:", error)
         yield put({
             type: GetTagsAction.ADD_TAG_FAIL,
-            errorMessage: error.message,
-            payload: null
+            errorMessage: error.message
         })
     }
 }

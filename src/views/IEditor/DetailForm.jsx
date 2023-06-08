@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import CustomRadio from '../../components/CustomRadio/CustomRadio';
 
 
@@ -7,7 +7,7 @@ import styles from './IEditor.module.css';
 import { css, cx } from '@emotion/css';
 import MultiTagSelectSort from '../../components/Select/Multi/MultiTagSelectSort';
 import SingleClassificationSelect from "../../components/Select/Single/SingleClassificationSelect";
-
+import Iframe from "react-iframe";
 
 const allowedFileTypes = ["image/png", "image/jpeg", "image/gif"];
 
@@ -28,6 +28,19 @@ export default function DetailForm({
 }) {
     console.log("🚀 ~ file: DetailForm.jsx:29 ~ customUrlRef:", customUrlRef)
 
+    const [isImage, setIsImage] = useState(true);
+    const [iframeUrl, setIframeUrl] = useState(undefined);
+    const getProperty = useCallback((propertyName) => {
+        const indexOf = bannerRef.current.indexOf(`${propertyName}="`) + `${propertyName}="`.length;
+        const endIndexOf = bannerRef.current.indexOf(`"`, indexOf);
+
+        console.log("🚀 ~ file: MediaModal.jsx:32 ~ useEffect ~ indexOf:", indexOf);
+        console.log("🚀 ~ file: MediaModal.jsx:32 ~ useEffect ~ endIndexOf:", endIndexOf);
+        const property = bannerRef.current.substr(indexOf, endIndexOf - indexOf);
+        console.log("🚀 ~ file: MediaModal.jsx:32 ~ useEffect ~ property:", property);
+        return property
+    }, [bannerRef])
+
     const [manualUrl, setManualUrl] = useState(undefined);
     const [isError, setIsError] = useState(false);
 
@@ -39,10 +52,15 @@ export default function DetailForm({
     useEffect(() => {
         if (!bannerRef.current || typeof bannerRef.current !== 'string') return
         if (bannerRef.current.indexOf('<iframe') !== -1) {
-            const imageWrapper = document.getElementById('preview-image-wrapper');
-            imageWrapper.innerHTML = bannerRef.current;
+            const src = getProperty('src');
+            console.log("🚀 ~ file: MediaModal.jsx:41 ~ useEffect ~ src:", src)
+            setIsImage(false)
+            setIframeUrl(src)
+        } else {
+            setIsImage(true)
+            setIframeUrl(bannerRef.current)
         }
-    }, [bannerRef.current, uploadImageRef]);
+    }, [bannerRef.current]);
 
     useEffect(() => {
         hideSwitchRef.current.id = 'detail-form-hide'
@@ -114,8 +132,22 @@ export default function DetailForm({
                         backgroundImage: `url(${imageUrl || imageUrlRef.current})`,
                         backgroundColor: 'initial',
                     }
+                }>
+                {
+                    isImage
+                        ? <img src={iframeUrl} style={{ width: '100%' }} />
+                        : <Iframe
+                            url={iframeUrl}
+                            loading='lazy'
+                            width="100%"
+                            height="100%"
+                            display="block"
+                            position="relative"
+                        />
                 }
-            />
+            </div>
+
+
         );
     }
 

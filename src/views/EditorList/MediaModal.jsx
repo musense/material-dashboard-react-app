@@ -40,7 +40,8 @@ export default function MediaModal({ open, handleClose, mediaInfo }) {
     }, [handleClose])
     const [isImage, setIsImage] = useState(true);
     const [iframeUrl, setIframeUrl] = useState(undefined);
-    function getProperty(propertyName) {
+
+    const getProperty = useCallback((propertyName) => {
         const indexOf = mediaInfo.banner.indexOf(`${propertyName}="`) + `${propertyName}="`.length;
         const endIndexOf = mediaInfo.banner.indexOf(`"`, indexOf);
 
@@ -49,7 +50,18 @@ export default function MediaModal({ open, handleClose, mediaInfo }) {
         const property = mediaInfo.banner.substr(indexOf, endIndexOf - indexOf);
         console.log("🚀 ~ file: MediaModal.jsx:32 ~ useEffect ~ property:", property);
         return property
-    }
+    }, [mediaInfo])
+
+    // function getProperty(propertyName) {
+    //     const indexOf = mediaInfo.banner.indexOf(`${propertyName}="`) + `${propertyName}="`.length;
+    //     const endIndexOf = mediaInfo.banner.indexOf(`"`, indexOf);
+
+    //     console.log("🚀 ~ file: MediaModal.jsx:32 ~ useEffect ~ indexOf:", indexOf);
+    //     console.log("🚀 ~ file: MediaModal.jsx:32 ~ useEffect ~ endIndexOf:", endIndexOf);
+    //     const property = mediaInfo.banner.substr(indexOf, endIndexOf - indexOf);
+    //     console.log("🚀 ~ file: MediaModal.jsx:32 ~ useEffect ~ property:", property);
+    //     return property
+    // }
     useEffect(() => {
         if (!mediaInfo) return
         console.log("🚀 ~ file: MediaModal.jsx:32 ~ MediaModal ~ mediaInfo:", mediaInfo)

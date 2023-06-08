@@ -31,7 +31,7 @@ export default function EditorListBody(
     const currentPage = useSelector((state) => state.getEditorReducer.currentPage);
     const totalCount = useSelector((state) => state.getEditorReducer.totalCount);
 
-    // const [titleViewList, setTitleViewList] = useState([]);
+    const [titleViewList, setTitleViewList] = useState([]);
 
     useEffect(() => {
         if (currentPage === 1)
@@ -44,10 +44,11 @@ export default function EditorListBody(
             setNextBtnDisable(false)
     }, [currentPage, totalCount]);
 
-    const titleViewList = useMemo(() => {
-        return showList
-        // setTitleViewList(showList)
-    }, [showList]);
+    useEffect(() => {
+        setTitleViewList(showList)
+
+    }, [showList])
+
     const SortingHelperFunc = {
 
         onSerialNumberClick() {

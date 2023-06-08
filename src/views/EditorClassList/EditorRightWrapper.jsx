@@ -105,8 +105,8 @@ export default function EditorRightWrapper({ isLoading = true }) {
                         >
                             下一頁
                         </Button>
-                        <form name='view-class-form' className={styles['editor-table-wrapper']} onSubmit={onBunchDelete}>
-                            <div data-attr="data-header" className={`${styles['view-form']} ${styles['editor-table-header']}`}>
+                        <form name='view-class-form' className={`${styles['editor-table-wrapper']}`} onSubmit={onBunchDelete}>
+                            <div data-attr="data-header" className={`view-form ${styles['editor-table-header']}`}>
                                 <div data-attr="data-header-row">
                                     <div> <input type='submit' value='批次刪除' /> </div>
                                     <div><input type='button' value='分類名稱' onClick={() => onSortingClick('name')} /></div>
@@ -114,7 +114,7 @@ export default function EditorRightWrapper({ isLoading = true }) {
                                     {/* <div><input type='button' value='分類上層' onClick={() => onSortingClick('parentClass')} /></div> */}
                                 </div>
                             </div>
-                            <div data-attr="data-body" className={`${styles['view-form']} ${styles['editor-table-body']}`}>
+                            <div data-attr="data-body" className={`${styles['editor-table-body']}`}>
                                 {showList && showList.length > 0 && showList.map((editorClass, index) => {
                                     return (
                                         <div data-attr="data-body-row" key={index} onClick={() => onEdit(editorClass)}>

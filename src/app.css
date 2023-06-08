@@ -11,11 +11,9 @@ label {
   font-size: 1rem;
 }
 
-:where(
-  input[type='submit']
-  input[type='reset'],
+:where(input[type='submit'] input[type='reset'],
   input[type='button'],
-  ) {
+) {
   padding: 0;
   display: block;
   width: min(10rem, 100%);
@@ -30,6 +28,7 @@ div>input[type='button'] {
   padding: 0;
   cursor: pointer;
 }
+
 input[type='submit'] {
   background-color: darkviolet;
   color: white;
@@ -39,6 +38,7 @@ input[type='submit'] {
 input[type='submit']:hover {
   background-color: violet;
 }
+
 input[type='checkbox'] {
   padding: 0;
   margin: 0;
@@ -74,4 +74,26 @@ input[type='file'] {
   width: 30%;
   padding: 0 1rem;
   /* background-color: lightblue; */
+}
+
+
+.view-form {
+  position: relative;
+  margin-top: 1rem;
+}
+
+.view-form>div {
+  display: flex;
+  gap: 1rem;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.view-form>div>div {
+  text-align: center;
+  overflow-x: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  flex: 1;
 }

@@ -4,7 +4,7 @@ import { DatePicker as MUIDatePicker } from '@mui/x-date-pickers/DatePicker';
 import { css } from '@emotion/css';
 
 const DateTimePicker = React.forwardRef((props, ref) => {
-
+    const { width } = props
     const currentRef = useRef();
     useImperativeHandle(ref, () => {
         return {
@@ -35,10 +35,19 @@ const DateTimePicker = React.forwardRef((props, ref) => {
         <div className={css`
         display:flex;
         flex-direction: column;
-        gap: 0.5rem;
             `}>
             <label htmlFor={props.title}>{props.title}</label>
             <MUIDatePicker
+                sx={{
+                    height: '40.8px',
+                    border: '1px solid black',
+                    borderRadius: '4px',
+                    width: width,
+                    '& input': {
+                        paddingTop: '9px',
+                        paddingBottom: '9px',
+                    }
+                }}
                 className={css`
                     background-color: #fff;
                 `}

@@ -106,7 +106,7 @@ function* SearchEditor(payload) {
                 ? `endDate=${payload.createDate.endDate}&`
                 : ''
             : ''
-        const response = yield instance.get(`/editor?${titleString}${categoryString}${startDateString}${endDateString}`);
+        const response = yield instance.get(`/editor?${titleString}${categoryString}${startDateString}${endDateString}limit=10000&pageNumber=1`);
         console.log("🚀 ~ file: GetEditorList.js:72 ~ function*SearchEditor ~ response:", response)
         const { currentPage, totalCount, data: responseData } = yield response.data
         console.log("🚀 ~ file: GetEditorList.js:72 ~ function*SearchEditor ~ responseData:", responseData)

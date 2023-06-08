@@ -4,10 +4,12 @@ import CardBody from 'components/Card/CardBody.jsx';
 
 import { useDispatch, useSelector } from 'react-redux';
 import * as GetEditorAction from '../../actions/GetEditorAction';
-import Button from 'components/CustomButtons/Button';
+// import Button from 'components/CustomButtons/Button';
 import { useNavigate } from 'react-router-dom';
 import styles from './EditorList.module.css'
-
+import Button from 'components/CustomButtons/Button';
+import MediaModal from './MediaModal';
+import EditorSearchForm from './EditorSearchForm';
 
 
 export default function EditorListBody(
@@ -28,7 +30,6 @@ export default function EditorListBody(
     console.log("🚀 ~ file: EditorListBody.jsx:28 ~ showList:", showList)
     const currentPage = useSelector((state) => state.getEditorReducer.currentPage);
     const totalCount = useSelector((state) => state.getEditorReducer.totalCount);
-    // console.log("🚀 ~ file: EditorListBody.jsx:22 ~ showList:", showList)
 
     const [titleViewList, setTitleViewList] = useState([]);
 
@@ -43,9 +44,11 @@ export default function EditorListBody(
             setNextBtnDisable(false)
     }, [currentPage, totalCount]);
 
-    useMemo(() => {
+    useEffect(() => {
         setTitleViewList(showList)
-    }, [showList]);
+
+    }, [showList])
+
     const SortingHelperFunc = {
 
         onSerialNumberClick() {
@@ -61,6 +64,14 @@ export default function EditorListBody(
                 type: GetEditorAction.SHOW_EDITOR_LIST_SORTING,
                 payload: {
                     key: 'content.title'
+                }
+            })
+        },
+        onClassificationClick() {
+            dispatch({
+                type: GetEditorAction.SHOW_EDITOR_LIST_SORTING,
+                payload: {
+                    key: 'classifications.label'
                 }
             })
         },
@@ -120,7 +131,12 @@ export default function EditorListBody(
         checkedToDeleteMapRef.current.set(e.target.name, e.target.checked)
         console.log("🚀 ~ file: EditorClassList.jsx:164 ~ checkEditorClassRow ~ checkedToDeleteMapRef.current:", checkedToDeleteMapRef.current)
     }
+    const [open, setOpen] = React.useState(false);
+    const handleOpen = () => setOpen(true);
+    const handleClose = () => setOpen(false);
+    const [mediaInfo, setMediaInfo] = useState(null);
     return <CardBody>
+        <EditorSearchForm />
         <Button
             color='info'
             disabled={addEditorDisabled}
@@ -143,18 +159,18 @@ export default function EditorListBody(
             下一頁
         </Button>
         <form name='view-editor-list-form' onSubmit={onSearchBunchDeleteList}>
-            <div data-attr="data-header" className={`${styles['view-form']} ${styles['view-editor-list-header']}`}>
+            <div data-attr="data-header" className={`view-form ${styles['view-editor-list-header']}`}>
                 <div data-attr="data-header-row">
                     <div> <input type='submit' value='批次刪除' /> </div>
                     <div> <input type='button' value='編號' onClick={SortingHelperFunc.onSerialNumberClick} /> </div>
                     <div><input type='button' value='標題' onClick={SortingHelperFunc.onTitleClick} /></div>
                     {/* <div><input type='button' value='分類' onClick={SortingHelperFunc.onClassificationClick} /></div> */}
-                    <div>分類</div>
+                    <div><input type='button' value='分類' onClick={SortingHelperFunc.onClassificationClick} /></div>
                     <div>圖片/影片</div>
                     <div><input type='button' value='日期' onClick={SortingHelperFunc.onCreateAtClick} /> </div>
                 </div>
             </div>
-            <div data-attr="data-body" className={`${styles['view-form']} ${styles['view-editor-list-body']}`}>
+            <div data-attr="data-body" className={`${styles['view-editor-list-body']}`}>
                 {titleViewList && titleViewList.length > 0 && titleViewList.map((titleView, index) => {
                     return (
                         <div data-attr="data-body-row" key={index} onClick={() => onEdit(titleView)}>
@@ -162,30 +178,27 @@ export default function EditorListBody(
                             <div><input type='checkbox' name={titleView._id} onClick={checkEditorClassRow} /></div>
                             <div>{parseInt(titleView.serialNumber)}</div>
                             <div>{titleView.content.title}</div>
-                            <div className={styles['class-cell']}>
-
-                                <span key={titleView.classifications.value}>{titleView.classifications.label}</span>
-
-                            </div>
-                            {titleView.media.banner !== ''
-                                ? (
-                                    <div className={styles['view-editor-image-container']}>
+                            <div className={styles['class-cell']}>{titleView.classifications.label}</div>
+                            <div className={styles['view-editor-image-container']}>
+                                {titleView.media.banner !== ''
+                                    ? (
                                         <img
                                             src={titleView.media.thumbnail}
                                             title={titleView.media.banner}
                                             alt={titleView.media.altText}
                                             onClick={(e) => {
                                                 e.stopPropagation()
-                                                window.open(titleView.media.thumbnail, '_blank');
+                                                handleOpen()
+                                                setMediaInfo(titleView.media)
+                                                // window.open(titleView.media.thumbnail, '_blank');
                                             }}
                                         />
-                                    </div>
-                                ) : (
-                                    <>
-                                        <div className={styles['view-editor-image-container']}>無圖片/縮圖</div>
-                                        {/* <div>無連結</div> */}
-                                    </>
-                                )}
+                                    ) : (
+                                        <>
+                                            <div className={styles['view-editor-image-container']}>無圖片/縮圖</div>
+                                        </>
+                                    )}
+                            </div>
                             <div>
                                 <span className={`${titleView.published ? styles['published'] : styles['not-published-yet']}`}>
                                     {titleView.published ? '已發佈' : '未發佈'}
@@ -198,5 +211,11 @@ export default function EditorListBody(
                 })}
             </div>
         </form>
+        <MediaModal
+            open={open}
+            handleClose={handleClose}
+            mediaInfo={mediaInfo}
+        />
     </CardBody>;
 }
+

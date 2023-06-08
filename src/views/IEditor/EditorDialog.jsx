@@ -31,7 +31,7 @@ export default function EditorDialog({
                 </DialogContentText>
             </DialogContent>
             <DialogActions>
-                <Button onClick={() => navigate('/admin/editorList')}>回前頁</Button>
+                <Button onClick={() => navigate(-1)}>回前頁</Button>
                 <Button onClick={handleClose} autoFocus>
                     確定
                 </Button>

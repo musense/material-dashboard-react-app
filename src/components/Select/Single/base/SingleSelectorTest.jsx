@@ -7,7 +7,8 @@ const SingleSelectorTest = ({
   parentSelected,
   parentSetSelected,
   options: defaultOptions,
-  selectedRef
+  selectedRef,
+  controlWidth = null
 }) => {
   console.log("🚀 ~ file: SingleSelectorTest.jsx:12 ~ defaultOptions:", defaultOptions)
 
@@ -35,16 +36,45 @@ const SingleSelectorTest = ({
     selectedRef.current = newValue;
   };
 
-  const styles = {
-    menuPortal: (base) => ({ ...base, zIndex: 9999 }),
-    menu: (base) => ({
-      ...base,
-      zIndex: 99999,
-      color: 'black',
-      backgroundColor: 'white',
-      border: '1px solid black'
-    }),
-  }
+  const styles = useMemo(() => {
+    return {
+      control: (base) => ({
+        ...base,
+        borderColor: 'black',
+        boxShadow: 'none',
+        width: controlWidth,
+        '&:hover': {
+          borderColor: 'black',
+        }
+      }),
+      valueContainer: (base) => ({
+        ...base,
+        paddingTop: 'unset',
+        paddingBottom: 'unset',
+      }),
+      input: (base) => ({
+        ...base,
+        paddingTop: 'unset',
+        paddingBottom: 'unset',
+        marginTop: 'unset',
+        marginBottom: 'unset',
+
+      }),
+      menuPortal: (base) => ({
+        ...base,
+        borderColor: 'black',
+        border: '1px solid black',
+        zIndex: 9999,
+      }),
+      menu: (base) => ({
+        ...base,
+        zIndex: 99999,
+        color: 'black',
+        backgroundColor: 'white',
+        border: '1px solid black'
+      }),
+    }
+  }, [controlWidth])
 
   const props = useMemo(() => {
     return {
@@ -53,7 +83,7 @@ const SingleSelectorTest = ({
       isSearchable: true,
       value: selected,
       onChange: onChange,
-      styles: { styles }
+      styles: styles,
     }
   }, [options, selected, onChange, styles]);
 

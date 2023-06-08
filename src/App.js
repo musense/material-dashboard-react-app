@@ -24,14 +24,23 @@ function App() {
     const navigate = useNavigate()
     useEffect(() => {     
 
-        navigate('/auth/login-page')
-        // navigate('/admin/editorClassList')
-        // navigate('/auth/register-page')
-        // navigate('/admin/editorList')
-        // navigate('/admin/tag')
-        // navigate('/admin/table')
-        // navigate('/admin/editorList/new')
-        // navigate('/admin/editorManager')
+    useEffect(() => {
+        localStorage.setItem('pathname', window.location.pathname)
+
+        if (localStorage.getItem('pathname')) {
+            navigate(localStorage.getItem('pathname'))
+        } else {
+            // dispatch({ type: GetClassAction.REQUEST_CLASS_LIST })
+            // navigate('/auth/register-page')
+            navigate('/auth/login-page')
+            // navigate('/admin/editorList')
+            // navigate('/admin/tag')
+            // navigate('/admin/editorClassList')
+            // navigate('/admin/table')
+            // navigate('/admin/editorList/new')
+
+            // navigate('/admin/editorManager')
+        }
     }, []);
 
     return (
@@ -39,9 +48,8 @@ function App() {
             <div className='App'>
                 <Routes>
                     <Route path="admin" element={<Admin />} >
-                        {/* <Route path="dashboard" element={<Dashboard />} /> */}
-                        {/* <Route path="table" element={<TableList />} /> */}
-                        {/* <Route path="user" element={<UserProfile />} /> */}
+                        <Route path="dashboard" element={<Dashboard />} />
+                        <Route path="user" element={<UserProfile />} />
                         <Route path="tag" element={<TagList />} />
                         <Route path="editorClassList" element={<EditorClassList />} />
 
@@ -60,8 +68,6 @@ function App() {
                         <Route path="login-page" element={<LoginPage />} />
                         <Route path="register-page" element={<RegisterPage />} />
                     </Route>
-                    {/* <Route path="rtl" render={(props) => <RTL {...props} />} /> */}
-                    {/* w/ useEffect navigate, in order to redirect */}
                     <Route path="/" render={(props) => <Dashboard {...props} />} />
                 </Routes>
             </div>

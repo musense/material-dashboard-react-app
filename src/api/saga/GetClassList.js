@@ -52,7 +52,7 @@ function toBackendData(requestData) {
         headTitle: requestData.webHeader.title,
         headDescription: requestData.webHeader.description,
         headKeyword: requestData.webHeader.keywords,
-        manualUrl: requestData.webHeader.href,
+        manualUrl: requestData.webHeader.route,
     }
     if (!requestData._id) return request
     const _id = requestData._id;

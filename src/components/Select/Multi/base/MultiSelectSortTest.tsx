@@ -70,7 +70,42 @@ export default function MultiSelectSortTest({
       selectedArrayRef.current = newValue
       // console.log('Values sorted:',newValue.map((i) => i.value));
     };
-
+    const styles = {
+      control: (base) => ({
+        ...base,
+        borderColor: 'black',
+        boxShadow: 'none',
+        '&:hover':{
+          borderColor: 'black',
+        }
+      }),
+      valueContainer: (base) => ({
+        ...base,
+        paddingTop: 'unset',
+        paddingBottom: 'unset',
+      }),
+      input: (base) => ({
+        ...base,
+        paddingTop: 'unset',
+        paddingBottom: 'unset',
+        marginTop: 'unset',
+        marginBottom: 'unset',
+        
+      }),
+      menuPortal: (base) => ({
+        ...base,
+        borderColor: 'black',
+        border: '1px solid black',
+        zIndex: 9999,
+      }),
+      menu: (base) => ({
+        ...base,
+        zIndex: 99999,
+        color: 'black',
+        backgroundColor: 'white',
+        border: '1px solid black'
+      }),
+    }
     return(  <SortableSelect
         isMulti
         useDragHandle
@@ -84,10 +119,7 @@ export default function MultiSelectSortTest({
         options={options}
         value         = { selected }
         onChange      = { onChange }
-        styles={{
-           menuPortal: base => ({ ...base, zIndex: 9999 }),
-           menu: base => ({...base, zIndex: 99999 }),
-        }}
+        styles={styles}
         components={{
           // @ts-ignore We're failing to provide a required index prop to SortableElement
           MultiValue: SortableMultiValue,

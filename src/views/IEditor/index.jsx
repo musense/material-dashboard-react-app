@@ -4,7 +4,7 @@ import ContentEditorForm from "./ContentEditorForm.jsx"
 import DetailForm from "./DetailForm.jsx"
 import * as GetEditorAction from 'actions/GetEditorAction.js';
 import EditorDialog from './EditorDialog.jsx';
-
+import { useBeforeunload } from "react-beforeunload";
 
 function NewIEditor({ props }) {
 
@@ -24,7 +24,8 @@ function NewIEditor({ props }) {
   const imageAltTextRef = useRef();
   const imageUrlRef = useRef(undefined);
   const imageNameRef = useRef(undefined);
-  const customUrlRef = useRef('');
+  const manualUrlRef = useRef(undefined);
+  const customUrlRef = useRef(undefined);
 
   const idRef = useRef()
   const newTitleRef = useRef('');
@@ -40,17 +41,20 @@ function NewIEditor({ props }) {
     classRef.current = null;
     setDialogTitle('新增文章訊息')
   }, []);
-  useEffect(() => {
+  const alertUser = (e) => {
+    alert('are you sure?')
+  }
 
+  useBeforeunload(alertUser)
+
+  useEffect(() => {
     console.log("🚀 ~ file: index.jsx:45 ~ useEffect ~ returnMessage:", returnMessage)
     if (returnMessage === 'add successfully') {
       console.log('新增成功！');
       setDialogContent('新增成功！')
       handleClickOpen()
     }
-
   }, [returnMessage]);
-
 
   function getFormData(e) {
     const form = e.target;
@@ -63,7 +67,7 @@ function NewIEditor({ props }) {
     webHeader.set('title', formDataObject.title)
     webHeader.set('description', formDataObject.description)
     webHeader.set('keywords', formDataObject.keywords)
-    webHeader.set('customUrl', formDataObject.customUrl)
+    formDataObject.manualUrl.length > 0 && webHeader.set('manualUrl', formDataObject.manualUrl)
     tData.set('webHeader', webHeader)
 
     const content = new Map()
@@ -86,7 +90,7 @@ function NewIEditor({ props }) {
 
     tData.set('tags', tagArrayRef.current)
 
-    tData.set('classifications', [classRef.current])
+    tData.set('classifications', classRef.current ? [classRef.current] : [])
 
     return tData
   }
@@ -146,10 +150,12 @@ function NewIEditor({ props }) {
             imageAltTextRef={imageAltTextRef}
             imageUrlRef={imageUrlRef}
             imageNameRef={imageNameRef}
+            manualUrlRef={manualUrlRef}
             customUrlRef={customUrlRef}
             tagArrayRef={tagArrayRef}
             classRef={classRef}
             onEditorSave={onEditorSave}
+            // onPreviewButtonClick={onPreviewButtonClick}
             setPreview={setPreview}
           />
         </div>

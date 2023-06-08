@@ -1,49 +1,37 @@
+form[name='tag-list-form'],
 form[name='editor-list-form'] {
   display: flex;
   flex-direction: row;
-  gap: 4rem;
+  justify-content: space-between;
   color: black;
+  width: 100%;
+  margin: 0 auto;
+  align-items: flex-end;
 }
 
-form[name='editor-list-form']>div {
-  flex: 1;
+form[name='tag-list-form'] input,
+form[name='editor-list-form'] input {
+  width: 250px;
 }
 
 form[name='view-editor-list-form']>div {
   display: flex;
   /* flex-direction: row; */
   gap: 0.5rem;
-  margin-top: 1.5rem;
 }
 
-.view-form {
-  position: relative;
-}
 
-.view-form>div {
-  display: flex;
-  gap: 1rem;
-  justify-content: space-between;
-  align-items: center;
-  height: 6rem;
-  width: 100%;
-}
 
 .view-editor-list-header {
   flex-direction: row;
+  background-color: #ddd;
 }
 
 /* .view-editor-list-header > div {
   cursor: pointer;
   user-select: none;
 } */
-.view-form>div>div {
-  text-align: center;
-  overflow-x: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  flex: 1;
-}
+
 
 .view-editor-list-header,
 .view-editor-list-body {
@@ -79,7 +67,20 @@ form[name='view-editor-list-form']>div {
 .view-editor-list-body {
   flex-direction: column;
 }
-
+.view-editor-list-body>div {
+  display: flex;
+  gap: 1rem;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+.view-editor-list-body>div>div {
+  text-align: center;
+  overflow-x: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  flex: 1;
+}
 .view-editor-list-body>div>div:last-child {
   display: flex;
   flex-direction: column;

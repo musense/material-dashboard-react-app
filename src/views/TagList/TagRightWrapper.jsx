@@ -8,9 +8,8 @@ import CardBody from 'components/Card/CardBody.jsx';
 import CardHeader from 'components/Card/CardHeader.jsx';
 import styles from './TagList.module.css'
 import Button from '../../components/CustomButtons/Button';
-import DateSelector from '../../components/DateSelector/DateSelector';
-import { css } from '@emotion/css'
-import usePressEnterEventHandler from '../../hook/usePressEnterEventHandler';
+import TagSearchForm from './TagSearchForm';
+
 
 
 export default function TagRightWrapper({ isLoading = true }) {
@@ -26,71 +25,14 @@ export default function TagRightWrapper({ isLoading = true }) {
 
 const TagRightHeader = () => {
 
-    const dispatch = useDispatch()
-    const submitRef = useRef(null);
-    const dateRef = useRef(null);
-
-    usePressEnterEventHandler(submitRef)
-
-    function onSearchEditorList(e) {
-        e.preventDefault()
-        const form = e.target;
-        const formData = new FormData(form);
-        const searchData = Object.assign(
-            {},
-            Object.fromEntries(formData),
-            { createDate: dateRef.current.current() }
-        );
-        console.log("🚀 ~ file: EditorList.jsx:136 ~ onSearchEditorList ~ searchData:", searchData)
-
-        // return
-        dispatch({
-            type: GetTagsAction.SEARCH_TAG_LIST,
-            payload: searchData
-        })
-        return
-    }
-
-    function reset() {
-        const form = document.getElementsByName('editor-list-form')[0];
-        form.reset();
-        dateRef.current.reset()
-    }
 
     return <CardHeader color='primary'>
         <h4>標籤管理</h4>
-        <form name='editor-list-form' onSubmit={onSearchEditorList}>
-            <div className={css`
-                    display: flex;
-                    flex-direction: column;
-                `}>
-                <div className={css`
-                    display: flex;
-                    flex-direction: column;
-                    gap: 1rem;
-                `}>
 
-                    <div className={css`
-                        width: 50%;
-                    `}>
-                        <label htmlFor="title">標籤</label>
-                        <input type="text" name='title' />
-                    </div>
-
-                    <DateSelector ref={dateRef} />
-                </div>
-            </div>
-            <div className={css`
-                display: flex;
-                flex-direction: row;
-                gap: 1rem;
-            `}>
-                <input ref={submitRef} type="submit" value="查詢" />
-                <input type='button' value='清空' onClick={reset} />
-            </div>
-        </form>
     </CardHeader>;
 }
+
+
 
 function TagRightBody() {
 
@@ -173,6 +115,7 @@ function TagRightBody() {
         })
     }
     return <CardBody>
+        <TagSearchForm />
         <Button
             color='info'
             disabled={prevBtnDisable}
@@ -188,13 +131,14 @@ function TagRightBody() {
             下一頁
         </Button>
         <form name='view-class-form' className={styles['tag-table-wrapper']} onSubmit={onBunchDelete}>
-            <div data-attr="data-header" className={`${styles['view-form']} ${styles['tag-table-header']}`}>
+            <div data-attr="data-header" className={`view-form ${styles['tag-table-header']}`}>
                 <div data-attr="data-header-row">
                     <div> <input type='submit' value='批次刪除' /> </div>
                     <div> <input type='button' value='標籤名稱' onClick={() => onSortingClick('name')} /></div>
-                    <div> <input type='button' value='標籤排序' onClick={() => onSortingClick('sorting')} /></div>
-                    <div> <input type='button' value='日期' onClick={() => onSortingClick('createDate')} /></div>
-                    <div> <input type='button' value='熱門標籤' onClick={() => onSortingClick('isHot')} /></div>
+                    <div> 前台顯示網址</div>
+                    {/* <div> <input type='button' value='標籤排序' onClick={() => onSortingClick('sorting')} /></div> */}
+                    {/* <div> <input type='button' value='日期' onClick={() => onSortingClick('createDate')} /></div> */}
+                    {/* <div> <input type='button' value='熱門標籤' onClick={() => onSortingClick('isHot')} /></div> */}
                 </div>
             </div>
             <div data-attr="data-body" className={`${styles['view-form']} ${styles['tag-table-body']}`}>
@@ -203,9 +147,13 @@ function TagRightBody() {
                         <div data-attr="data-body-row" key={index} onClick={() => onEdit(tag)}>
                             <div><input type='checkbox' name={tag._id} onClick={checkEditorClassRow} /></div>
                             <div>{tag.name}</div>
-                            <div>{tag.sorting}</div>
-                            <div>{tag.createDate}</div>
-                            <div>{tag.isHot ? 'Yes' : 'No'}</div>
+                            <div>
+                                <a href={tag.webHeader.customUrl} target="_blank" rel="noopener noreferrer" >
+                                    {tag.webHeader.customUrl}
+                                </a>
+                            </div>
+                            {/* <div>{tag.createDate}</div>
+                            <div>{tag.isHot ? 'Yes' : 'No'}</div> */}
                         </div>);
                 })}
             </div>
@@ -215,3 +163,5 @@ function TagRightBody() {
 }
 const MemoizedTagRightHeader = React.memo(TagRightHeader)
 const MemoizedTagRightHeaderBody = React.memo(TagRightBody)
+
+

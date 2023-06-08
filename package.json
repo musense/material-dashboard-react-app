@@ -20,6 +20,7 @@
     "@types/react": "^18.0.31",
     "@types/react-dom": "^18.0.11",
     "axios": "^1.2.2",
+    "babel-preset-es2015-loose": "8.0.0",
     "classnames": "2.2.6",
     "crypto-js": "4.1.1",
     "date-fns": "^2.29.3",
@@ -34,8 +35,10 @@
     "prop-types": "15.7.1",
     "react": "^18.2.0",
     "react-beautiful-dnd": "^13.1.1",
+    "react-beforeunload": "2.5.3",
     "react-date-range": "^1.4.0",
     "react-dom": "^18.2.0",
+    "react-iframe": "1.8.5",
     "react-modal": "3.16.1",
     "react-redux": "^8.0.5",
     "react-router": "6.6.2",
@@ -88,6 +91,7 @@
     "@babel/helper-module-transforms": "7.19.6",
     "@types/crypto-js": "^4.1.1",
     "@types/js-cookie": "^3.0.3",
+    "@types/react-beforeunload": "^2.1.1",
     "@types/react-modal": "^3.13.1",
     "@types/redux-logger": "^3.0.9"
   }

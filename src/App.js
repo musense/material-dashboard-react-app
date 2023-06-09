@@ -18,21 +18,20 @@ import TagList from './views/TagList';
 import EditorClassList from './views/EditorClassList';
 import './app.css'
 
-import Cookie from "js-cookie";
+// import Cookie from "js-cookie";
 
 function App() {
     const navigate = useNavigate()
-    useEffect(() => {     
 
     useEffect(() => {
-        localStorage.setItem('pathname', window.location.pathname)
-
-        if (localStorage.getItem('pathname')) {
-            navigate(localStorage.getItem('pathname'))
+        const lastLocation = localStorage.getItem('pathname')
+        if (lastLocation) {
+            navigate(lastLocation)
         } else {
+            navigate('/auth/login-page')
             // dispatch({ type: GetClassAction.REQUEST_CLASS_LIST })
             // navigate('/auth/register-page')
-            navigate('/auth/login-page')
+
             // navigate('/admin/editorList')
             // navigate('/admin/tag')
             // navigate('/admin/editorClassList')
@@ -40,6 +39,9 @@ function App() {
             // navigate('/admin/editorList/new')
 
             // navigate('/admin/editorManager')
+        }
+        return () => {
+            localStorage.setItem('pathname', window.location.pathname)
         }
     }, []);
 
@@ -49,7 +51,7 @@ function App() {
                 <Routes>
                     <Route path="admin" element={<Admin />} >
                         <Route path="dashboard" element={<Dashboard />} />
-                        <Route path="user" element={<UserProfile />} />
+                        {/* <Route path="user" element={<UserProfile />} /> */}
                         <Route path="tag" element={<TagList />} />
                         <Route path="editorClassList" element={<EditorClassList />} />
 
@@ -74,5 +76,6 @@ function App() {
         </>
     )
 }
+
 
 export default App;

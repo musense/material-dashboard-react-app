@@ -46,9 +46,11 @@ export default function EditorLeftWrapper() {
         setManualUrl('')
         setCustomUrl('')
         form.elements['_id'].value = editorClass._id
+        form.elements['classification'].value = editorClass.name
         form.elements['title'].value = editorClass.title
         form.elements['description'].value = editorClass.description
         form.elements['keywords'].value = editorClass.keywords
+        setManualUrl(editorClass.manualUrl)
         setCustomUrl(editorClass.customUrl)
     }, [editorClass])
 
@@ -150,10 +152,11 @@ export default function EditorLeftWrapper() {
                             <label htmlFor="manualUrl">自訂網址</label>
                             <input type="text" name='manualUrl' onChange={e => setManualUrl(e.target.value)} value={manualUrl} />
                             <label htmlFor="customUrl">前台顯示網址</label>
-                            {manualUrl && manualUrl.length > 0
-                                ? <input readOnly disabled type="text" name='manualUrl' value={manualUrl} />
-                                : <input readOnly disabled type="text" name='customUrl' value={customUrl} />
-                            }
+                            {/* {manualUrl && manualUrl.length > 0 */}
+                            {/* ? <input readOnly disabled type="text" name='manualUrl' value={manualUrl} /> */}
+                            {/* :  */}
+                            <input readOnly disabled type="text" name='customUrl' value={customUrl} />
+                            {/* } */}
 
                             <div className={styles['left-button-container']}>
                                 {isEditing === true && (<>

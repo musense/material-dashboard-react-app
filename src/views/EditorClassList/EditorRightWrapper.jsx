@@ -21,6 +21,7 @@ export default function EditorRightWrapper({ isLoading = true }) {
     const showList = useSelector((state) => state.getClassReducer.showList);
     const currentPage = useSelector((state) => state.getClassReducer.currentPage);
     const totalCount = useSelector((state) => state.getClassReducer.totalCount);
+    console.log("🚀 ~ file: EditorRightWrapper.jsx:22 ~ EditorRightWrapper ~ showList:", showList)
 
     useEffect(() => {
         if (currentPage === 1)

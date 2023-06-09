@@ -101,6 +101,7 @@ function* GetClassList(payload = 1) {
                     description: item.headDescription ? item.headDescription : '',
                     keywords: item.headKeyword ? item.headKeyword : '',
                     customUrl: item.sitemapUrl,
+                    manualUrl: item.manualUrl ? item.manualUrl : '',
                 }
             })
         // return

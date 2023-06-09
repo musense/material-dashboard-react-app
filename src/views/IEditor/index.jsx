@@ -90,7 +90,7 @@ function NewIEditor({ props }) {
 
     tData.set('tags', tagArrayRef.current)
 
-    tData.set('classifications', classRef.current ? [classRef.current] : [])
+    tData.set('classifications', classRef.current ? [classRef.current] : null)
 
     return tData
   }

@@ -164,7 +164,6 @@ export default function EditorListBody(
             </Button>
             <Button
                 color='info'
-                // disabled={active}
                 onClick={() => setActive(prevActive => !prevActive)}
             >
                 刪除文章

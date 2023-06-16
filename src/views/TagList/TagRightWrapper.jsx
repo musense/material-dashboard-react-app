@@ -36,7 +36,7 @@ const TagRightHeader = () => {
 
 function TagRightBody() {
 
-
+    const [active, setActive] = useState(false);
     const dispatch = useDispatch();
     const [prevBtnDisable, setPrevBtnDisable] = useState(false);
     const [nextBtnDisable, setNextBtnDisable] = useState(false);
@@ -127,17 +127,23 @@ function TagRightBody() {
                 上一頁
             </Button>
             <Button
-                color='info'
-                disabled={nextBtnDisable}
-                onClick={() => onPageButtonClick(currentPage + 1)}
+                color    = 'info'
+                disabled = {nextBtnDisable}
+                onClick  = {() => onPageButtonClick(currentPage + 1)}
             >
                 下一頁
+            </Button>
+            <Button
+                color = 'info'
+                onClick = {() => setActive(prevActive => !prevActive)}
+            >
+                刪除標籤
             </Button>
         </div>
         <form name='view-class-form' className={styles['tag-table-wrapper']} onSubmit={onBunchDelete}>
             <div data-attr="data-header" className={`view-form ${styles['tag-table-header']}`}>
                 <div data-attr="data-header-row">
-                    <div> <input type='submit' value='批次刪除' /> </div>
+                    <div className={`${active ? styles.show : ''}`}> <input type='submit' value='批次刪除' /> </div>
                     <div> <input type='button' value='標籤名稱' onClick={() => onSortingClick('name')} /></div>
                     <div> 前台顯示網址</div>
                     {/* <div> <input type='button' value='標籤排序' onClick={() => onSortingClick('sorting')} /></div> */}
@@ -149,7 +155,7 @@ function TagRightBody() {
                 {tagList && tagList.length > 0 && tagList.map((tag, index) => {
                     return (
                         <div data-attr="data-body-row" key={index} onClick={() => onEdit(tag)}>
-                            <div><input type='checkbox' name={tag._id} onClick={checkEditorClassRow} /></div>
+                            <div className={`${active ? styles.show : ''}`}><input type='checkbox' name={tag._id} onClick={checkEditorClassRow} /></div>
                             <div>{tag.name}</div>
                             <div>
                                 <a href={tag.webHeader.customUrl} target="_blank" rel="noopener noreferrer" >

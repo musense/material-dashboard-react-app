@@ -18,6 +18,7 @@ export default function EditorListBody(
 ) {
 
     const navigate = useNavigate();
+    const [active, setActive] = useState(false);
     const checkedToDeleteMapRef = useRef(new Map())
     const [addEditorDisabled, setAddEditorDisabled] = useState(false);
     const dispatch = useDispatch();
@@ -137,33 +138,44 @@ export default function EditorListBody(
     const [mediaInfo, setMediaInfo] = useState(null);
     return <CardBody>
         <EditorSearchForm />
-        <Button
-            color='info'
-            disabled={addEditorDisabled}
-            onClick={() => onAddNewEditor()}
-        >
-            新增文章
-        </Button>
-        <Button
-            color='info'
-            disabled={prevBtnDisable}
-            onClick={() => onPageButtonClick(currentPage - 1)}
-        >
-            上一頁
-        </Button>
-        <Button
-            color='info'
-            disabled={nextBtnDisable}
-            onClick={() => onPageButtonClick(currentPage + 1)}
-        >
-            下一頁
-        </Button>
+        <div style={{
+            marginTop: '1.1rem',
+        }}>
+            <Button
+                color='info'
+                disabled={addEditorDisabled}
+                onClick={() => onAddNewEditor()}
+            >
+                新增文章
+            </Button>
+            <Button
+                color='info'
+                disabled={prevBtnDisable}
+                onClick={() => onPageButtonClick(currentPage - 1)}
+            >
+                上一頁
+            </Button>
+            <Button
+                color='info'
+                disabled={nextBtnDisable}
+                onClick={() => onPageButtonClick(currentPage + 1)}
+            >
+                下一頁
+            </Button>
+            <Button
+                color='info'
+                // disabled={active}
+                onClick={() => setActive(prevActive => !prevActive)}
+            >
+                刪除文章
+            </Button>
+        </div>
         <form name='view-editor-list-form' onSubmit={onSearchBunchDeleteList}>
             <div data-attr="data-header" className={`view-form ${styles['view-editor-list-header']}`}>
                 <div data-attr="data-header-row">
-                    <div> <input type='submit' value='批次刪除' /> </div>
-                    <div> <input type='button' value='編號' onClick={SortingHelperFunc.onSerialNumberClick} /> </div>
-                    <div><input type='button' value='標題' onClick={SortingHelperFunc.onTitleClick} /></div>
+                    <div className={`${active ? styles.show : ''}`}> <input type='submit' value='批次刪除' /> </div>
+                    <div> <input type='button' value='序號' onClick={SortingHelperFunc.onSerialNumberClick} /> </div>
+                    <div className={'editor-list-title'}><input type='button' value='標題' onClick={SortingHelperFunc.onTitleClick} /></div>
                     {/* <div><input type='button' value='分類' onClick={SortingHelperFunc.onClassificationClick} /></div> */}
                     <div><input type='button' value='分類' onClick={SortingHelperFunc.onClassificationClick} /></div>
                     <div>圖片/影片</div>
@@ -173,11 +185,19 @@ export default function EditorListBody(
             <div data-attr="data-body" className={`${styles['view-editor-list-body']}`}>
                 {titleViewList && titleViewList.length > 0 && titleViewList.map((titleView, index) => {
                     return (
-                        <div data-attr="data-body-row" key={index} onClick={() => onEdit(titleView)}>
+                        <div data-attr = "data-body-row" key = {index} onClick = {() => onEdit(titleView)}>
                             {/* <div data-attr="data-body-row" key={index} > */}
-                            <div><input type='checkbox' name={titleView._id} onClick={checkEditorClassRow} /></div>
+                            <div className={`${active ? styles.show : ''}`}><input type='checkbox' name={titleView._id} onClick={checkEditorClassRow} /></div>
                             <div>{parseInt(titleView.serialNumber)}</div>
-                            <div>{titleView.content.title}</div>
+                            <div className={styles['editor-list-title']}>
+                                <a href={titleView.sitemapUrl}
+                                    target='_blank'
+                                    title={titleView.sitemapUrl}
+                                    onClick={(e) => e.stopPropagation()}
+                                >
+                                    {titleView.content.title}
+                                </a>
+                            </div>
                             <div className={styles['class-cell']}>{titleView.classifications.label}</div>
                             <div className={styles['view-editor-image-container']}>
                                 {titleView.media.banner !== ''
@@ -190,7 +210,6 @@ export default function EditorListBody(
                                                 e.stopPropagation()
                                                 handleOpen()
                                                 setMediaInfo(titleView.media)
-                                                // window.open(titleView.media.thumbnail, '_blank');
                                             }}
                                         />
                                     ) : (

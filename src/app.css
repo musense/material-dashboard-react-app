@@ -97,3 +97,7 @@ input[type='file'] {
   text-overflow: ellipsis;
   flex: 1;
 }
+
+.view-form>div>div.editor-list-title {
+  flex-grow: 3;
+}

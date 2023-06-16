@@ -16,7 +16,8 @@ const cardHeaderStyle = {
     background: "transparent",
     zIndex: "3 !important",
     "&$cardHeaderPlain,&$cardHeaderIcon,&$cardHeaderStats,&$warningCardHeader,&$successCardHeader,&$dangerCardHeader,&$infoCardHeader,&$primaryCardHeader,&$roseCardHeader": {
-      margin: "0 15px",
+      width: "200px",
+      margin: "0 auto 0 20px",
       padding: "0",
       position: "relative",
       color: whiteColor
@@ -28,7 +29,8 @@ const cardHeaderStyle = {
       "&:not($cardHeaderIcon)": {
         borderRadius: "3px",
         marginTop: "-20px",
-        padding: "15px"
+        // padding: "15px",
+        padding: "0"
       }
     },
     "&$cardHeaderStats svg": {
@@ -50,6 +52,11 @@ const cardHeaderStyle = {
     },
     "&$cardHeaderStats$cardHeaderIcon": {
       textAlign: "right"
+    },
+    "& h4": {
+      textAlign: 'center',
+      lineHeight: '50px',
+      margin: '0',
     }
   },
   cardHeaderPlain: {

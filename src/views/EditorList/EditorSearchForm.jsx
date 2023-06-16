@@ -55,7 +55,7 @@ export default function EditorSearchForm() {
             width: '100%',
             height: 'fit-content',
             backgroundColor: 'transparent',
-            margin: '1rem auto',
+            margin: '0 auto 1rem',
             '& h3': {
                 textAlign: 'center',
                 m: 'unset',

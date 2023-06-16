@@ -79,9 +79,10 @@ export function toFrontendData(responseData) {
                 thumbnail: item.homeImagePath || '',
                 altText: item.altText || '',
             },
-            pageView: item.pageView,
-            hide: item.hidden || false,
+            pageView  : item.pageView,
+            hide      : item.hidden || false,
             createDate: item.createdAt || '',
+            sitemapUrl: item.sitemapUrl,
         })
 
         )
@@ -131,9 +132,10 @@ export function toFrontendData(responseData) {
                 thumbnail: responseData.homeImagePath || '',
                 altText: responseData.altText || '',
             },
-            pageView: responseData.pageView,
-            hide: responseData.hidden || false,
+            pageView  : responseData.pageView,
+            hide      : responseData.hidden || false,
             createDate: responseData.createdAt || '',
+            sitemapUrl: responseData.sitemapUrl,
         }
     }
 }

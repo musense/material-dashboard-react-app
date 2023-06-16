@@ -92,20 +92,24 @@ export default function EditorRightWrapper({ isLoading = true }) {
                         <h4>分類排列</h4>
                     </CardHeader>
                     <CardBody>
-                        <Button
-                            color='info'
-                            disabled={prevBtnDisable}
-                            onClick={() => onPageButtonClick(currentPage - 1)}
-                        >
-                            上一頁
-                        </Button>
-                        <Button
-                            color='info'
-                            disabled={nextBtnDisable}
-                            onClick={() => onPageButtonClick(currentPage + 1)}
-                        >
-                            下一頁
-                        </Button>
+                        <div style={{
+                            marginTop: '1.1rem',
+                        }}>
+                            <Button
+                                color='info'
+                                disabled={prevBtnDisable}
+                                onClick={() => onPageButtonClick(currentPage - 1)}
+                            >
+                                上一頁
+                            </Button>
+                            <Button
+                                color='info'
+                                disabled={nextBtnDisable}
+                                onClick={() => onPageButtonClick(currentPage + 1)}
+                            >
+                                下一頁
+                            </Button>
+                        </div>
                         <form name='view-class-form' className={`${styles['editor-table-wrapper']}`} onSubmit={onBunchDelete}>
                             <div data-attr="data-header" className={`view-form ${styles['editor-table-header']}`}>
                                 <div data-attr="data-header-row">

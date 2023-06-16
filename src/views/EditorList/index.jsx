@@ -45,12 +45,12 @@ function EditorList() {
   return (
     <div className={'container'}>
       {/* <CustomModal ariaHideApp={false} isModalOpen={isModalOpen} /> */}
-      <div className={'wrapper'}>
+      {/* <div className={'wrapper'}> */}
         <Card>
           <EditorListHeader />
           <EditorListBody />
         </Card>
-      </div>
+      {/* </div> */}
       <Outlet />
     </div>
   );

@@ -25,10 +25,7 @@ export default function Toolbar({
                   z-index: 1;
                   `}>
         {/* inline-block style */}
-        <MarkButton type={'bold'} icon={'format_bold'} title={'ctrl+b'} />
-        <MarkButton type={'italic'} icon={'format_italic'} title={'ctrl+i'} />
-        <MarkButton type={'underline'} icon={'format_underline'} title={'ctrl+u'} />
-        <MarkButton type={'code'} icon={'code'} title={'ctrl+`'} />
+        <MarkButton type = {'hide'} icon      = {'visibility_off'} title   = {'ctrl+shift+x'} />
         {/* block style */}
         <BlockButton type={'h1'} icon={'looks_one'} title={'ctrl+1'} />
         <BlockButton type={'h2'} icon={'looks_two'} title={'ctrl+2'} />

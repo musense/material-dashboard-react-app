@@ -228,6 +228,12 @@ function SlateEditor({ editorContentRef }) {
                   CustomEditor.toggleBlock(editor, 'justify');
                   break
                 }
+                case 'x':
+                case 'X': {
+                  event.preventDefault()
+                  CustomEditor.toggleMark(editor, 'hide')
+                  break
+                }
               }
             }
           }}

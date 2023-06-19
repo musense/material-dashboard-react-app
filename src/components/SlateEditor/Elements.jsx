@@ -292,5 +292,8 @@ export const Leaf = ({ attributes, children, leaf }) => {
     if (leaf.underline) {
         children = <u>{children}</u>
     }
+    if (leaf.hide) {      
+        children = <span data-attr = "display-none" style = {{ opacity: 0.3 }}>{children}</span>
+    }
     return <span {...attributes}>{children}</span>
 }

@@ -31,6 +31,7 @@ export default function EditorDialog({
     const goTo = useCallback(() => {
         if (success) {
             window.open(sitemapUrl, "_blank")
+            navigate(`/admin/editorList/${editorID}`)
             handleClose()
         } else {
             navigate(-1)

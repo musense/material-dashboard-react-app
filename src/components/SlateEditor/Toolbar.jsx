@@ -33,8 +33,8 @@ export default function Toolbar({
         <BlockButton type={'h1'} icon={'looks_one'} title={'ctrl+1'} />
         <BlockButton type={'h2'} icon={'looks_two'} title={'ctrl+2'} />
         <BlockButton type={'h3'} icon={'looks_3'} title={'ctrl+3'} />
-        <BlockButton type={'numbered-list'} icon={'format_list_numbered'} />
-        <BlockButton type={'bulleted-list'} icon={'format_list_bulleted'} />
+        <BlockButton type={'numbered-list'} icon={'format_list_numbered'} title={'ctrl+Enter'} />
+        <BlockButton type={'bulleted-list'} icon={'format_list_bulleted'} title={'shift+Enter'} />
         <BlockButton type={'block-quote'} icon={'format_quote'} title={'ctrl+q'} />
         <BlockButton type={'left'} icon={'format_align_left'} title={'ctrl+shift+l'} />
         <BlockButton type={'center'} icon={'format_align_center'} title={'ctrl+shift+c'} />
@@ -132,7 +132,19 @@ function AddLinkButton({ icon, type, title }) {
             active={CustomEditor.isLinkActive(editor)}
             onMouseDown={event => {
                 event.preventDefault()
-                const url = window.prompt('請輸入超連結：')
+
+                const { selection } = editor
+                const allTextArray  = editor.children
+                const anchorPath    = selection.anchor.path[0]
+                const focusPath     = selection.focus.path[0]
+
+                let selectedText
+                if (anchorPath === focusPath) {
+                    selectedText = CustomEditor.getSingleParagraphText(allTextArray, selection)
+                } else {
+                    selectedText = CustomEditor.getMultiParagraphText(allTextArray, selection)
+                }
+                const url = window.prompt(`${selectedText && `顯示的文字: ${selectedText}\n`}請輸入超連結：`)
                 if (!url) return
                 CustomEditor.insertLink(editor, url)
             }}

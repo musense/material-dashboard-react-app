@@ -28,7 +28,7 @@ function SlateEditor({ editorContentRef }) {
 
   const urlRef     = useRef(null);
   const altTextRef = useRef(null);
-  const hrefRef = useRef(null);
+  const hrefRef    = useRef(null);
 
   useEffect(() => {
     if (!editorContentRef.current) return
@@ -78,55 +78,47 @@ function SlateEditor({ editorContentRef }) {
         open       = {open} setClose = {() => setOpen(false)}
         urlRef     = {urlRef}
         altTextRef = {altTextRef}
-        hrefRef = {hrefRef}
+        hrefRef    = {hrefRef}
       />
       <Slate
-        editor={editor}
-        value={editorContentRef.current}
-        onChange={newValue => editorContentRef.current = newValue
+        editor   = {editor}
+        value    = {editorContentRef.current}
+        onChange = {newValue => editorContentRef.current = newValue
         }>
         {/* <HoveringPopupToolbar /> */}
         <Toolbar
           handleClickOpen = {handleClickOpen}
           currentUrl      = {urlRef.current}
           currentAltText  = {altTextRef.current}
-          currentHref  = {hrefRef.current}
+          currentHref     = {hrefRef.current}
         />
         <Editable
-          style={
-            {
-              fontSize: '1rem',
-              minHeight: '30rem',
-              height: 'auto',
-              maxHeight: '57rem',
-              overflow: 'hidden scroll',
+          style={{
+            fontSize : '1rem',
+            minHeight: '30rem',
+            height   : 'auto',
+            maxHeight: '57rem',
+            overflow : 'hidden scroll',
+          }}
+          renderElement = {renderElement}
+          renderLeaf    = {renderLeaf}
+          placeholder   = "請輸入文案..."
+          onKeyDown     = {event => {
+            console.log("🚀 ~ file: SlateEditor.jsx:155 ~ SlateEditor ~ event:", event)
+            if (event.ctrlKey && event.key === 'Enter') {
+              event.preventDefault()
+              CustomEditor.toggleBlock(editor, 'numbered-list');
             }
-          }
-          renderElement={renderElement}
-          renderLeaf={renderLeaf}
-          placeholder="請輸入文案..."
-          onKeyDown={event => {
+            if (event.shiftKey && event.key === 'Enter') {
+              event.preventDefault()
+              CustomEditor.toggleBlock(editor, 'bulleted-list');
+            }
 
             if (!event.ctrlKey) {
               return
             }
-            console.log("🚀 ~ file: SlateEditor.jsx:155 ~ SlateEditor ~ event:", event)
+
             switch (event.key) {
-              case 'Enter': {
-                event.preventDefault()
-                console.log("🚀 ~ file: SlateEditor.jsx:155 ~ SlateEditor ~ event.target.childNodes[0].localName:", event.target.childNodes[0].localName)
-                switch (event.target.childNodes[0].localName) {
-                  case 'ol': {
-                    CustomEditor.resetBlockAndNewLine(editor, 'numbered-list')
-                    return
-                  }
-                  case 'ul': {
-                    CustomEditor.resetBlockAndNewLine(editor, 'bulleted-list')
-                    return
-                  }
-                }
-                break;
-              }
               case '1': {
                 event.preventDefault();
                 CustomEditor.toggleBlock(editor, 'h1');
@@ -169,7 +161,19 @@ function SlateEditor({ editorContentRef }) {
               }
               case 'h': {
                 event.preventDefault()
-                const url = window.prompt('請輸入超連結：')
+
+                const { selection } = editor
+                const allTextArray = editor.children
+                const anchorPath   = selection.anchor.path[0]
+                const focusPath    = selection.focus.path[0]
+
+                let selectedText
+                if (anchorPath === focusPath) {
+                    selectedText = CustomEditor.getSingleParagraphText(allTextArray, selection)
+                } else {
+                    selectedText = CustomEditor.getMultiParagraphText(allTextArray, selection)
+                }
+                const url = window.prompt(`${selectedText && `顯示的文字: ${selectedText}\n`}請輸入超連結：`)
                 if (!url) return
                 CustomEditor.insertLink(editor, url)
                 break
@@ -192,53 +196,50 @@ function SlateEditor({ editorContentRef }) {
               }
 
             }
-            if (!event.shiftKey && !event.ctrlKey) {
-              return
-            }
-            console.log("🚀 ~ file: SlateEditor.jsx:194 ~ SlateEditor ~ event:", event)
-            switch (event.key) {
-              case 'm': 
-              case 'M': {
-                event.preventDefault()
-                handleClickOpen()
-                break
+            if (event.shiftKey && event.ctrlKey) {
+              switch (event.key) {
+                case 'm': 
+                case 'M': {
+                  event.preventDefault()
+                  handleClickOpen()
+                  break
+                }
+                case 'l': 
+                case 'L': {
+                  event.preventDefault();
+                  CustomEditor.toggleBlock(editor, 'left');
+                  break
+                }
+                case 'c': 
+                case 'C': {
+                  event.preventDefault();
+                  CustomEditor.toggleBlock(editor, 'center');
+                  break
+                }
+                case 'r': 
+                case 'R': {
+                  event.preventDefault();
+                  CustomEditor.toggleBlock(editor, 'right');
+                  break
+                }
+                case 'f': 
+                case 'F': {
+                  event.preventDefault();
+                  CustomEditor.toggleBlock(editor, 'justify');
+                  break
+                }
               }
-              case 'l': 
-              case 'L': {
-                event.preventDefault();
-                CustomEditor.toggleBlock(editor, 'left');
-                break
-              }
-              case 'c': 
-              case 'C': {
-                event.preventDefault();
-                CustomEditor.toggleBlock(editor, 'center');
-                break
-              }
-              case 'r': 
-              case 'R': {
-                event.preventDefault();
-                CustomEditor.toggleBlock(editor, 'right');
-                break
-              }
-              case 'f': 
-              case 'F': {
-                event.preventDefault();
-                CustomEditor.toggleBlock(editor, 'justify');
-                break
-              }
-
             }
           }}
           onDOMBeforeInput={event => {
             switch (event.inputType) {
-              case 'formatBold':
+              case 'formatBold': 
                 event.preventDefault()
                 return CustomEditor.toggleFormat(editor, 'bold')
-              case 'formatItalic':
+              case 'formatItalic': 
                 event.preventDefault()
                 return CustomEditor.toggleFormat(editor, 'italic')
-              case 'formatUnderline':
+              case 'formatUnderline': 
                 event.preventDefault()
                 return CustomEditor.toggleFormat(editor, 'underlined')
             }

@@ -109,12 +109,14 @@ const Image = ({ attributes, children, element }) => {
             position: relative;
           `}
             >
-                <a href={element.href} title={element.href} rel="noreferrer noopener" target="_blank">
+                <a href={element.href}
+                    title={element.href || element.alt}
+                    rel="noreferrer noopener"
+                    target="_blank">
                     <img
-                        src={element.url}
-                        alt={element.alt}
-                        title={element.href || element.alt}
-                        className={css`
+                        src       = {element.url}
+                        alt       = {element.alt}
+                        className = {css`
               display   : block;
               max-width : 100%;
               max-height: 20em;

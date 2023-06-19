@@ -1,17 +1,17 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useImperativeHandle, useRef, useState } from "react";
 import CustomRadio from '../../components/CustomRadio/CustomRadio';
 
 
 import { fetchYoutubeInfo } from './youtube';
 import styles from './IEditor.module.css';
 import { css, cx } from '@emotion/css';
-import MultiTagSelectSort from '../../components/Select/Multi/MultiTagSelectSort';
-import SingleClassificationSelect from "../../components/Select/Single/SingleClassificationSelect";
+import MultiTagSelectSort from '../../components/Select/MultiTagSelectSort';
+import SingleClassificationSelect from "../../components/Select/SingleClassificationSelect";
 import Iframe from "react-iframe";
 
 const allowedFileTypes = ["image/png", "image/jpeg", "image/gif"];
 
-export default function DetailForm({
+const DetailForm = React.forwardRef(({    
     bannerRef,
     thumbnailRef,
     imageAltTextRef,
@@ -22,12 +22,71 @@ export default function DetailForm({
     tagArrayRef,
     classRef,
     onEditorSave,
-    // onPreviewButtonClick,
-
     setPreview,
-}) {
-    console.log("🚀 ~ file: DetailForm.jsx:29 ~ customUrlRef:", customUrlRef)
+}, ref) => {
 
+
+    useImperativeHandle(ref, () => {
+        return {
+            getFormData: (editor) => {
+                const form = detailFormRef.current;
+                const formData = new FormData(form);
+                const formDataObject = Object.fromEntries(formData)
+                const tData = new Map()
+
+                if (editor) {
+                    const webHeader = new Map()
+                    formDataObject.title !== editor.webHeader.title && (webHeader.set('title', formDataObject.title));
+                    formDataObject.description !== editor.webHeader.description && (webHeader.set('description', formDataObject.description))
+                    formDataObject.keywords !== editor.webHeader.keywords && (webHeader.set('keywords', formDataObject.keywords))
+                    formDataObject.manualUrl.length > 0 && (webHeader.set('manualUrl', formDataObject.manualUrl))
+                    webHeader.size !== 0 && tData.set('webHeader', webHeader)
+                    console.log("🚀 ~ file: index.jsx:145 ~ onEditorSave ~ webHeader:", webHeader)
+
+                    const media = new Map()
+                    bannerRef.current !== editor.media.banner && (media.set('banner', bannerRef.current))
+                    thumbnailRef.current && thumbnailRef.current !== editor.media.thumbnail && (media.set('thumbnail', thumbnailRef.current))
+                    console.log("🚀 ~ file: index.jsx:150 ~ onEditorSave ~ editor.media.thumbnail:", editor.media.thumbnail)
+                    imageAltTextRef.current.value !== editor.media.altText && (media.set('altText', imageAltTextRef.current.value))
+                    media.size !== 0 && tData.set('media', media)
+                    console.log("🚀 ~ file: index.jsx:152 ~ onEditorSave ~ media:", media)
+
+                    !!formDataObject.hideSwitch !== editor.hide && (tData.set('hide', !!formDataObject.hideSwitch))
+
+                    JSON.stringify(tagArrayRef.current) !== JSON.stringify(editor.tags) && (tData.set('tags', tagArrayRef.current))
+
+                    JSON.stringify(classRef.current) !== JSON.stringify(editor.classifications) && (tData.set('classifications', classRef.current ? [classRef.current] : null))
+                } else {
+                    const webHeader = new Map()
+                    formDataObject.title !== '' && webHeader.set('title', formDataObject.title)
+                    formDataObject.description !== '' && webHeader.set('description', formDataObject.description)
+                    formDataObject.keywords !== '' && webHeader.set('keywords', formDataObject.keywords)
+                    formDataObject.manualUrl !== '' && formDataObject.manualUrl.length > 0 && webHeader.set('manualUrl', formDataObject.manualUrl)
+                    webHeader.size !== 0 && tData.set('webHeader', webHeader)
+
+                    const media = new Map()
+                    bannerRef.current && media.set('banner', bannerRef.current)
+                    thumbnailRef.current && media.set('thumbnail', thumbnailRef.current)
+                    imageAltTextRef.current.value !== '' && media.set('altText', imageAltTextRef.current.value)
+                    media.size !== 0 && tData.set('media', media)
+
+                    hideSwitchRef.current.checkHistory.length > 0 && tData.set('hide', !!formDataObject.hideSwitch)
+                    console.log("🚀 ~ file: DetailForm.jsx:52 ~ useImperativeHandle ~ hideSwitchRef.current.checkHistory:", hideSwitchRef.current.checkHistory)
+
+                    tagArrayRef.current.length > 0 && tData.set('tags', tagArrayRef.current)
+
+                    classRef.current && tData.set('classifications', classRef.current ? [classRef.current] : null)
+
+                }
+                return tData
+            }
+        }
+    })
+    const detailFormRef = useRef(null);
+    console.log("🚀 ~ file: DetailForm.jsx:30 ~ formRef:", ref)
+    console.log("🚀 ~ file: DetailForm.jsx:27 ~ tagArrayRef:", tagArrayRef)
+    console.log("🚀 ~ file: DetailForm.jsx:29 ~ customUrlRef:", customUrlRef)
+    const [formData, setFormData] = useState(null);
     const [isImage, setIsImage] = useState(true);
     const [iframeUrl, setIframeUrl] = useState(undefined);
     const getProperty = useCallback((propertyName) => {
@@ -153,7 +212,7 @@ export default function DetailForm({
 
     return (
         <>
-            <form name='ieditor-detail-form' onSubmit={onEditorSave}>
+            <form ref={detailFormRef} name='ieditor-detail-form' onSubmit={onEditorSave}>
 
                 <div className={styles['input-group']}>
                     <label htmlFor='title'>title</label>
@@ -196,11 +255,16 @@ export default function DetailForm({
                 </div>
                 <div className={styles['input-group']}>
                     <label htmlFor='tags'>新增標籤</label>
-                    <MultiTagSelectSort tagArrayRef={tagArrayRef} />
+                    <MultiTagSelectSort
+                        creatable
+                        tagArrayRef={tagArrayRef}
+                    />
                 </div>
                 <div className={styles['input-group']}>
                     <label htmlFor='classification'>分類</label>
-                    <SingleClassificationSelect classRef={classRef} />
+                    <SingleClassificationSelect
+                        classRef={classRef}
+                    />
                 </div>
                 <div className={styles['image-upload-container']}>
 
@@ -318,4 +382,6 @@ export default function DetailForm({
         </>
     );
 
-}
+})
+
+export default DetailForm;

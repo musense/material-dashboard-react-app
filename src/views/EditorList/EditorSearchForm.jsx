@@ -6,7 +6,7 @@ import { Box } from '@mui/material';
 import * as GetEditorAction from 'actions/GetEditorAction';
 import * as GetClassAction from 'actions/GetClassAction';
 import { useDispatch } from 'react-redux';
-import SingleClassificationSelect from 'components/Select/Single/SingleClassificationSelect';
+import SingleClassificationSelect from 'components/Select/SingleClassificationSelect';
 
 export default function EditorSearchForm() {
 

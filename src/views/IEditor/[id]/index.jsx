@@ -5,13 +5,18 @@ import ContentEditorForm from "./../ContentEditorForm.jsx"
 import DetailForm from "./../DetailForm.jsx"
 import * as GetEditorAction from "actions/GetEditorAction.js";
 import EditorDialog from '../EditorDialog.jsx';
+import { useBeforeunload } from 'react-beforeunload';
 
 
 const webHeaderID = [
   'title', 'description', 'keywords', 'customUrl'
 ]
 
-function IEditor({ props }) {
+function IEditor() {
+  const alertUser = (e) => {
+    window.alert('are you sure?')
+  }
+  useBeforeunload((e) => alertUser(e))
 
   const dispatch = useDispatch();
   const { id } = useParams();
@@ -51,6 +56,10 @@ function IEditor({ props }) {
   )
   // console.log("🚀 ~ file: index.jsx:33 ~ IEditor ~ initialValue:", initialValue)
 
+  const contentFormRef = useRef(null)
+  const detailFormRef = useRef(null)
+
+
   const bannerRef = useRef();
   const thumbnailRef = useRef();
   const imageAltTextRef = useRef();
@@ -62,16 +71,20 @@ function IEditor({ props }) {
   const idRef = useRef()
   const newTitleRef = useRef('');
   const editorContentRef = useRef(initialValue)
-  const tagArrayRef = useRef(null);
-
+  
+  const tagArrayRef = useRef([]);
   const classRef = useRef(null);
-  const [dialogTitle, setDialogTitle] = useState(null);
+
+  const [success, setSuccess]             = useState(true);
+  const [sitemapUrl, setSitemapUrl]       = useState(null);
+  const [dialogTitle, setDialogTitle]     = useState(null);
   const [dialogContent, setDialogContent] = useState(null);
 
 
   const [preview, setPreview] = useState(false);
   useEffect(() => {
     classRef.current = null;
+    tagArrayRef.current = [];
     setDialogTitle('修改文章訊息')
   }, []);
 
@@ -86,8 +99,9 @@ function IEditor({ props }) {
     if (!returnMessage) return
 
     if (returnMessage === "Editor update successfully") {
-
+      setSitemapUrl(editor.sitemapUrl)
       console.log('更新成功！');
+      setSuccess(true)
       setDialogContent('更新成功！')
       handleClickOpen()
 
@@ -136,10 +150,11 @@ function IEditor({ props }) {
     if (!editor) return
     const { webHeader, media, hide } = editor
 
-
     webHeaderID.map(id => setDefaultValueById(id, webHeader))
     customUrlRef.current = webHeader.customUrl
-    manualUrlRef.current.value = ''
+    if (manualUrlRef && manualUrlRef.current) {
+      manualUrlRef.current.value = ''
+    }
     if (media && media.altText) {
       setDefaultValueById('altText', media)
     }
@@ -147,14 +162,15 @@ function IEditor({ props }) {
     if (media && media.banner) {
       imageUrlRef.current = media.banner
       bannerRef.current = media.banner
-      //* 圖片才要取檔名
+      // * 圖片才要取檔名
       if (media.banner.indexOf('<iframe') === -1) {
-        imageNameRef.current = media.banner.substring(media.banner.lastIndexOf('/') + 1)
+        if (imageNameRef && imageNameRef.current) {
+          imageNameRef.current = media.banner.substring(media.banner.lastIndexOf('/') + 1)
+        }
       }
     }
 
     setDefaultValueById('hide', hide)
-
     // console.log("🚀 ~ file: index.jsx:108 ~ setDetailDefaultValue ~ hide:", hide)
   }
 
@@ -164,6 +180,7 @@ function IEditor({ props }) {
   useMemo(() => {
     if (!editor) return
     tagArrayRef.current = editor.tags
+    console.log("🚀 ~ file: index.jsx:178 ~ useMemo ~ tagArrayRef.current:", tagArrayRef.current)
     classRef.current = editor.classifications ? editor.classifications : null
   }, [editor])
 
@@ -243,8 +260,23 @@ function IEditor({ props }) {
   function onEditorSave(e) {
     e.preventDefault(e);
 
-    const formData = getFormData(e);
-    console.log("🚀 ~ file: index.jsx:198 ~ onEditorSave ~ formData:", formData)
+    const contentFormData = contentFormRef.current.getFormData(editor);
+    const detailFormData = detailFormRef.current.getFormData(editor);
+    const formData = new Map([
+      ...contentFormData,
+      ...detailFormData,
+    ])
+    console.log("🚀 ~ file: index.jsx:256 ~ onEditorSave ~ contentFormData:", contentFormData)
+    console.log("🚀 ~ file: index.jsx:256 ~ onEditorSave ~ detailFormData:", detailFormData)
+    console.log("🚀 ~ file: index.jsx:256 ~ onEditorSave ~ formData:", formData)
+
+    if (formData === undefined || formData.size === 0) {
+      console.log('nothing to update!!!');
+      setSuccess(false)
+      setDialogContent('沒有更新任何資訊！')
+      handleClickOpen()
+      return
+    }
 
     if (preview) {
       dispatch({
@@ -256,12 +288,7 @@ function IEditor({ props }) {
       return
     }
 
-    if (formData.size === 0) {
-      console.log('nothing to update!!!');
-      setDialogContent('沒有更新任何資訊！')
-      handleClickOpen()
-      return
-    }
+    // return
     dispatch({
       type: GetEditorAction.UPDATE_EDITOR,
       payload: {
@@ -285,35 +312,82 @@ function IEditor({ props }) {
 
   // }
 
+  const detailFormProps = useMemo(() => ({
+    bannerRef: bannerRef,
+    thumbnailRef: thumbnailRef,
+    imageAltTextRef: imageAltTextRef,
+    imageUrlRef: imageUrlRef,
+    imageNameRef: imageNameRef,
+    manualUrlRef: manualUrlRef,
+    customUrlRef: customUrlRef,
+    tagArrayRef: tagArrayRef,
+    classRef: classRef,
+    onEditorSave: onEditorSave,
+    // onPreviewButtonClick:onPreviewButtonClick,
+    setPreview: setPreview,
+  }), [
+    bannerRef,
+    thumbnailRef,
+    imageAltTextRef,
+    imageUrlRef,
+    imageNameRef,
+    manualUrlRef,
+    customUrlRef,
+    tagArrayRef,
+    classRef,
+    onEditorSave,
+    // onPreviewButtonClick,
+    setPreview,
+  ])
+
+  const contentFormProps = useMemo(() => ({
+    newTitleRef: newTitleRef,
+    editorContentRef: editorContentRef,
+    initialValue: initialValue,
+    onEditorSave: onEditorSave,
+    setPreview: setPreview
+  }), [
+    newTitleRef,
+    editorContentRef,
+    initialValue,
+    onEditorSave,
+    setPreview,
+  ])
+
+  const dialogProps = useMemo(() => ({
+    open: open,
+    success: success,
+    editorID: id,
+    sitemapUrl: sitemapUrl,
+    handleClose: () => setOpen(false),
+    dialogTitle: dialogTitle,
+    dialogContent: dialogContent,
+  }), [
+    open,
+    success,
+    id,
+    sitemapUrl,
+    setOpen,
+    dialogTitle,
+    dialogContent,
+  ])
+
   return (
     <div className={'container'}>
       <div className={'wrapper'}>
         <div className={'left-side'}>
           <EditorDialog
-            open={open}
-            handleClose={() => setOpen(false)}
-            dialogTitle={dialogTitle}
-            dialogContent={dialogContent}
+            {...dialogProps}
           />
           <ContentEditorForm
-            newTitleRef={newTitleRef}
-            editorContentRef={editorContentRef}
+            ref={contentFormRef}
+            {...contentFormProps}
           />
         </div>
         <div className={'right-side'}>
           <DetailForm
-            bannerRef={bannerRef}
-            thumbnailRef={thumbnailRef}
-            imageAltTextRef={imageAltTextRef}
-            imageUrlRef={imageUrlRef}
-            imageNameRef={imageNameRef}
-            manualUrlRef={manualUrlRef}
-            customUrlRef={customUrlRef}
-            tagArrayRef={tagArrayRef}
-            classRef={classRef}
-            onEditorSave={onEditorSave}
-            // onPreviewButtonClick={onPreviewButtonClick}
-            setPreview={setPreview}
+            ref={detailFormRef}
+            {...detailFormProps}
           />
         </div>
       </div>

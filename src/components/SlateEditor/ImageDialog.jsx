@@ -8,7 +8,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 
-export default function ImageDialog({ open, setClose, urlRef, altTextRef }) {
+export default function ImageDialog({ open, setClose, urlRef, altTextRef, hrefRef }) {
 
 
     const handleClose = (e) => {
@@ -22,6 +22,7 @@ export default function ImageDialog({ open, setClose, urlRef, altTextRef }) {
         }
         console.log("🚀 ~ file: ImageDialog.jsx:15 ~ handleClose ~ urlRef.current:", urlRef.current)
         console.log("🚀 ~ file: ImageDialog.jsx:15 ~ handleClose ~ altTextRef.current:", altTextRef.current)
+        console.log("🚀 ~ file: ImageDialog.jsx:15 ~ handleClose ~ hrefRef.current:", hrefRef.current)
     };
 
 
@@ -41,6 +42,16 @@ export default function ImageDialog({ open, setClose, urlRef, altTextRef }) {
                     fullWidth
                     variant="standard"
                     onChange={e => urlRef.current = e.target.value}
+                />
+                <TextField
+                    autoFocus
+                    margin="dense"
+                    id="href"
+                    label="超連結"
+                    type="text"
+                    fullWidth
+                    variant="standard"
+                    onChange={e => hrefRef.current = e.target.value}
                 />
                 <TextField
                     margin="dense"

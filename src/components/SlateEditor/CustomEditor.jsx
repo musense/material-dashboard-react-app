@@ -52,6 +52,7 @@ export const CustomEditor = {
             TEXT_ALIGN_TYPES.includes(type) ? 'align' : 'type'
         )
         const isList = LIST_TYPES.includes(type)
+        console.log("🚀 ~ file: CustomEditor.jsx:55 ~ toggleBlock ~ isList:", isList)
 
         Transforms.unwrapNodes(editor, {
             match: n =>
@@ -138,10 +139,10 @@ export const CustomEditor = {
         return imageExtensions.includes(ext)
     },
 
-    insertImage(editor, url, alt) {
+    insertImage(editor, url, alt, href) {
         console.log("🚀 ~ file: CustomEditor.jsx:113 ~ insertImage ~ alt:", alt)
         const text = { text: '' }
-        const image = { type: 'image', url, alt, children: [text] }
+        const image = { type: 'image', url, alt, href, children: [text] }
         Transforms.insertNodes(editor, image)
     },
 

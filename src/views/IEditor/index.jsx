@@ -1,12 +1,16 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import ContentEditorForm from "./ContentEditorForm.jsx"
 import DetailForm from "./DetailForm.jsx"
 import * as GetEditorAction from 'actions/GetEditorAction.js';
 import EditorDialog from './EditorDialog.jsx';
-import { useBeforeunload } from "react-beforeunload";
+import { Beforeunload, useBeforeunload } from "react-beforeunload";
 
-function NewIEditor({ props }) {
+function NewIEditor() {
+  const alertUser = (e) => {
+    window.alert('are you sure?')
+  }
+  useBeforeunload((e) => alertUser(e))
 
   const dispatch = useDispatch();
 
@@ -17,6 +21,10 @@ function NewIEditor({ props }) {
     },
   ]
 
+  const contentFormRef = useRef(null)
+  const detailFormRef = useRef(null)
+
+  const editor = useSelector((state) => state.getEditorReducer.editor);
   const returnMessage = useSelector((state) => state.getEditorReducer.errorMessage);
 
   const bannerRef = useRef();
@@ -31,74 +39,78 @@ function NewIEditor({ props }) {
   const newTitleRef = useRef('');
   const editorContentRef = useRef(initialValue)
 
-  const tagArrayRef = useRef(null);
+  const tagArrayRef = useRef([]);
   const classRef = useRef(null);
   const [dialogTitle, setDialogTitle] = useState(null);
+
+  const [success, setSuccess] = useState(true);
+  const [id, setId] = useState(null);
+  const [sitemapUrl, setSitemapUrl] = useState(null);
   const [dialogContent, setDialogContent] = useState(null);
 
   const [preview, setPreview] = useState(false);
   useEffect(() => {
     classRef.current = null;
+    tagArrayRef.current = [];
+    console.log("🚀 ~ file: index.jsx:48 ~ useEffect ~ classRef:", classRef)
+    console.log("🚀 ~ file: index.jsx:48 ~ useEffect ~ tagArrayRef.current:", tagArrayRef.current)
     setDialogTitle('新增文章訊息')
   }, []);
-  const alertUser = (e) => {
-    alert('are you sure?')
-  }
-
-  useBeforeunload(alertUser)
 
   useEffect(() => {
     console.log("🚀 ~ file: index.jsx:45 ~ useEffect ~ returnMessage:", returnMessage)
     if (returnMessage === 'add successfully') {
+      console.log("🚀 ~ file: index.jsx:54 ~ useEffect ~ editor:", editor)
+
       console.log('新增成功！');
+      setSuccess(true)
+      setId(editor._id)
+      setSitemapUrl(editor.sitemapUrl)
       setDialogContent('新增成功！')
       handleClickOpen()
     }
-  }, [returnMessage]);
 
-  function getFormData(e) {
-    const form = e.target;
-    const formData = new FormData(form);
-    const formDataObject = Object.fromEntries(formData)
+    if (returnMessage === 'add fail!') {
+      // setDialogContent(editor.sitemapUrl)
 
-    const tData = new Map()
-
-    const webHeader = new Map()
-    webHeader.set('title', formDataObject.title)
-    webHeader.set('description', formDataObject.description)
-    webHeader.set('keywords', formDataObject.keywords)
-    formDataObject.manualUrl.length > 0 && webHeader.set('manualUrl', formDataObject.manualUrl)
-    tData.set('webHeader', webHeader)
-
-    const content = new Map()
-    content.set('title', newTitleRef.current.value)
-    content.set('content', editorContentRef.current)
-    tData.set('content', content)
-    if (!preview) {
-      if (content.get('title') === '') {
-        console.log('please add title!!!');
-        return
-      }
+      console.log('新增失敗！');
+      setSuccess(false)
+      setDialogContent('新增失敗！')
+      handleClickOpen()
     }
-    const media = new Map()
-    media.set('banner', bannerRef.current)
-    media.set('thumbnail', thumbnailRef.current)
-    media.set('altText', imageAltTextRef.current.value)
-    tData.set('media', media)
+  }, [returnMessage, editor]);
 
-    tData.set('hide', !!formDataObject.hideSwitch)
-
-    tData.set('tags', tagArrayRef.current)
-
-    tData.set('classifications', classRef.current ? [classRef.current] : null)
-
-    return tData
-  }
   function onEditorSave(e) {
     e.preventDefault();
 
-    const formData = getFormData(e)
+    const contentFormData = contentFormRef.current.getFormData();
+    const detailFormData = detailFormRef.current.getFormData();
+    const formData = new Map([
+      ...contentFormData,
+      ...detailFormData,
+    ])
+    console.log("🚀 ~ file: index.jsx:121 ~ onEditorSave ~ contentFormData:", contentFormData)
+    console.log("🚀 ~ file: index.jsx:121 ~ onEditorSave ~ detailFormData:", detailFormData)
+    console.log("🚀 ~ file: index.jsx:121 ~ onEditorSave ~ formData:", formData)
+    if (formData === undefined || formData.size === 0) {
+      console.log('nothing to add!!!');
+      setSuccess(false)
+      setDialogContent('沒有新增任何資訊！')
+      handleClickOpen()
+      return
+    }
+    const noContentState = !formData.has('content')
+    const noContentTitleState = formData.has('content') && !formData.get('content').has('title')
 
+    if (noContentState || noContentTitleState) {
+      console.log('content title required!!!');
+      setSuccess(false)
+      setDialogContent('文章標題為必填欄位！')
+      handleClickOpen()
+      return
+    }
+
+    // return
     if (preview) {
       dispatch({
         type: GetEditorAction.PREVIEW_EDITOR,
@@ -108,8 +120,10 @@ function NewIEditor({ props }) {
       })
       return
     }
-    if (formData.size === 0) {
+
+    if (formData === undefined || formData.size === 0) {
       console.log('nothing to add!!!');
+      setSuccess(false)
       setDialogContent('沒有新增任何資訊！')
       handleClickOpen()
       return
@@ -128,35 +142,81 @@ function NewIEditor({ props }) {
     setOpen(true);
   };
 
+  const detailFormProps = useMemo(() => ({
+    bannerRef: bannerRef,
+    thumbnailRef: thumbnailRef,
+    imageAltTextRef: imageAltTextRef,
+    imageUrlRef: imageUrlRef,
+    imageNameRef: imageNameRef,
+    manualUrlRef: manualUrlRef,
+    customUrlRef: customUrlRef,
+    tagArrayRef: tagArrayRef,
+    classRef: classRef,
+    onEditorSave: onEditorSave,
+    // onPreviewButtonClick:onPreviewButtonClick,
+    setPreview: setPreview,
+  }), [
+    bannerRef,
+    thumbnailRef,
+    imageAltTextRef,
+    imageUrlRef,
+    imageNameRef,
+    manualUrlRef,
+    customUrlRef,
+    tagArrayRef,
+    classRef,
+    onEditorSave,
+    // onPreviewButtonClick,
+    setPreview,
+  ])
+
+  const contentFormProps = useMemo(() => ({
+    newTitleRef: newTitleRef,
+    editorContentRef: editorContentRef,
+    initialValue: initialValue,
+    onEditorSave: onEditorSave,
+    setPreview: setPreview
+  }), [
+    newTitleRef,
+    editorContentRef,
+    initialValue,
+    onEditorSave,
+    setPreview,
+  ])
+
+  const dialogProps = useMemo(() => ({
+    open: open,
+    success: success,
+    editorID: id,
+    sitemapUrl: sitemapUrl,
+    handleClose: () => setOpen(false),
+    dialogTitle: dialogTitle,
+    dialogContent: dialogContent,
+  }), [
+    open,
+    success,
+    id,
+    sitemapUrl,
+    setOpen,
+    dialogTitle,
+    dialogContent,
+  ])
   return (
     <div className={'container'}>
       <div className={'wrapper'}>
         <div className={'left-side'}>
           <EditorDialog
-            open={open}
-            handleClose={() => setOpen(false)}
-            dialogTitle={dialogTitle}
-            dialogContent={dialogContent}
+            {...dialogProps}
           />
           <ContentEditorForm
-            newTitleRef={newTitleRef}
-            editorContentRef={editorContentRef}
+            ref={contentFormRef}
+            {...contentFormProps}
           />
         </div>
         <div className={'right-side'}>
           <DetailForm
-            bannerRef={bannerRef}
-            thumbnailRef={thumbnailRef}
-            imageAltTextRef={imageAltTextRef}
-            imageUrlRef={imageUrlRef}
-            imageNameRef={imageNameRef}
-            manualUrlRef={manualUrlRef}
-            customUrlRef={customUrlRef}
-            tagArrayRef={tagArrayRef}
-            classRef={classRef}
-            onEditorSave={onEditorSave}
-            // onPreviewButtonClick={onPreviewButtonClick}
-            setPreview={setPreview}
+            ref={detailFormRef}
+            {...detailFormProps}
           />
         </div>
       </div>

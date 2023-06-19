@@ -8,7 +8,7 @@ import {
     ReactEditor,
 } from 'slate-react'
 import { Button, Icon } from './components'
-import InlineChromiumBugfix from './CustomEditor'
+import InlineChromiumBugfix, { CustomEditor } from './CustomEditor'
 import { css } from '@emotion/css'
 
 const Link = ({ attributes, children, element }) => {
@@ -99,6 +99,7 @@ const Image = ({ attributes, children, element }) => {
 
     const selected = useSelected()
     const focused = useFocused()
+    console.log("🚀 ~ file: Elements.jsx:97 ~ Image ~ element:", element)
     return (
         <div {...attributes}>
             {children}
@@ -108,52 +109,98 @@ const Image = ({ attributes, children, element }) => {
             position: relative;
           `}
             >
-                <img
-                    src={element.url}
-                    alt={element.alt}
-                    title={element.alt}
-                    className={css`
-              display: block;
-              max-width: 100%;
+                <a href={element.href} title={element.href} rel="noreferrer noopener" target="_blank">
+                    <img
+                        src={element.url}
+                        alt={element.alt}
+                        title={element.href || element.alt}
+                        className={css`
+              display   : block;
+              max-width : 100%;
               max-height: 20em;
               box-shadow: ${selected && focused ? '0 0 0 3px #B4D5FF' : 'none'};
             `}
-                />
-                <Button
-                    active
-                    onClick={() => Transforms.removeNodes(editor, { at: path })}
-                    className={css`
-              display: ${selected && focused ? 'inline' : 'none'};
-              position: absolute;
-              top: 0.5em;
-              left: 0.5em;
-              background-color: white;
-            `}
-                >
-                    <Icon icon={'delete'} />
-                </Button>
-                <Button
-                    active
-                    onClick={() => {
-                        const alt = prompt('請輸入替代文字：')
-                        if (!alt) return
-                        const imageAlt = {
-                            type: 'image',
-                            alt,
-                            children: { text: '' }
-                        }
-                        Transforms.setNodes(editor, imageAlt)
-                    }}
-                    className={css`
-              display: ${selected && focused ? 'inline' : 'none'};
-              position: absolute;
-              top: 0.5em;
-              left: 2.5em;
-              background-color: white;
-            `}
-                >
-                    <Icon icon={'edit'} />
-                </Button>
+                    />
+                </a>
+                <div className={css`
+                display    : ${selected && focused ? 'inline' : 'none'};
+                position   : absolute;
+                top        : 0.5em;
+                left       : 0.5em;
+                width      : fit-content;
+                height     : fit-content;
+                display    : flex;
+                align-items: center;
+                gap        : 1rem;
+                & > span {
+                    background-color: white;
+                }
+              `}>
+                    <Button
+                        active
+                        onClick={() => Transforms.removeNodes(editor, { at: path })}
+                    >
+                        <Icon icon={'delete'} />
+                    </Button>
+                    <Button
+                        active
+                        onClick={() => {
+                            const alt = prompt(`請輸入替代文字： ${element.alt ? `\n目前替代文字: ${element.alt}` : ''}`)
+                            if (!alt) return
+                            const imageAlt = {
+                                type: 'image',
+                                alt,
+                                children: { text: '' }
+                            }
+                            Transforms.setNodes(editor, imageAlt)
+                        }}
+                    >
+                        <Icon icon={'edit'} />
+                    </Button>
+                    {element.alt && <Button
+                        active
+                        onClick={() => {
+                            const alt = null
+                            const imageAlt = {
+                                type: 'image',
+                                alt,
+                                children: { text: '' }
+                            }
+                            Transforms.setNodes(editor, imageAlt)
+                        }}
+                    >
+                        <Icon icon={'edit_off'} />
+                    </Button>}
+                    <Button
+                        active
+                        onClick={() => {
+                            const href = prompt(`請輸入超連結： ${element.href ? `\n目前超連結: ${element.href}` : ''}`)
+                            if (!href) return
+                            const imageHref = {
+                                type: 'image',
+                                href,
+                                children: { text: '' }
+                            }
+                            Transforms.setNodes(editor, imageHref)
+                        }}
+                    >
+                        <Icon icon={'link'} />
+                    </Button>
+                    {element.href && <Button
+                        active
+                        onClick={() => {
+                            const href = null
+                            const imageHref = {
+                                type: 'image',
+                                href,
+                                children: { text: '' }
+                            }
+                            Transforms.setNodes(editor, imageHref)
+                        }}
+                    >
+                        <Icon icon={'link_off'} />
+                    </Button>}
+                </div>
             </div>
         </div>
     )

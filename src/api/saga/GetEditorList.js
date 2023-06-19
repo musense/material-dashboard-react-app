@@ -143,10 +143,13 @@ function* AddEditor(payload) {
             response = yield instance.post(`/editor`, requestFormData);
         }
         const editor = yield response.data;
+        const mappedEditorData = toFrontendData(editor)
 
         yield put({
             type: GetEditorAction.ADD_EDITOR_SUCCESS,
-            payload: { editor }
+            payload:{
+                editor: mappedEditorData,
+            }
         })
 
     } catch (error) {

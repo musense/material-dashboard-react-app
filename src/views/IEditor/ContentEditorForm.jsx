@@ -1,16 +1,41 @@
-import React from "react";
+import React, { useImperativeHandle, useRef } from "react";
 import SlateEditor from '../../components/SlateEditor/SlateEditor';
 
-export default function ContentEditorForm({
+const ContentEditorForm = React.forwardRef(({
   newTitleRef,
-  editorContentRef
-}) {
-  console.log("🚀 ~ file: ContentEditorForm.jsx:8 ~ editorContentRef:", editorContentRef)
+  editorContentRef,
+  initialValue,
+  onEditorSave,
+}, ref) => {
+  console.log("🚀 ~ file: ContentEditorForm.jsx:45 ~ editorContentRef:", editorContentRef)
+  console.log("🚀 ~ file: ContentEditorForm.jsx:45 ~ initialValue:", initialValue)
 
 
+  useImperativeHandle(ref, () => {
+    return {
+      getFormData: (editor) => {
+
+        const tData = new Map()
+        if (editor) {
+          const content = new Map()
+          newTitleRef.current.value !== editor.content.title && (content.set('title', newTitleRef.current.value))
+          JSON.stringify(editorContentRef.current) !== JSON.stringify(editor.content.content) && (content.set('content', editorContentRef.current))
+          content.size !== 0 && tData.set('content', content)
+          console.log("🚀 ~ file: index.jsx:145 ~ onEditorSave ~ content:", content)
+        } else {
+          const content = new Map()
+          newTitleRef.current.value !== "" && content.set('title', newTitleRef.current.value)
+          JSON.stringify(editorContentRef.current) !== JSON.stringify(initialValue) && content.set('content', editorContentRef.current)
+          content.size !== 0 && tData.set('content', content)
+        }
+        return tData
+      }
+    }
+  })
+  const contentFormRef = useRef(null);
   return (
     <>
-      {/* <form> */}
+      <form ref={contentFormRef} onSubmit={onEditorSave}>
         <div className='iEditor-Title-Container'>
           <label htmlFor='title'>文章標題</label>
           <input
@@ -23,7 +48,10 @@ export default function ContentEditorForm({
         <SlateEditor
           editorContentRef={editorContentRef}
         />
-      {/* </form> */}
+      </form>
     </>
   );
-}
+})
+
+
+export default ContentEditorForm;

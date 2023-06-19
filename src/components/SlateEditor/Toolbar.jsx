@@ -25,18 +25,22 @@ export default function Toolbar({
                   z-index: 1;
                   `}>
         {/* inline-block style */}
+        <MarkButton type = {'bold'} icon      = {'format_bold'} title      = {'ctrl+b'} />
+        <MarkButton type = {'italic'} icon    = {'format_italic'} title    = {'ctrl+i'} />
+        <MarkButton type = {'underline'} icon = {'format_underline'} title = {'ctrl+u'} />
+        <MarkButton type = {'code'} icon      = {'code'} title             = {'ctrl+`'} />
         <MarkButton type = {'hide'} icon      = {'visibility_off'} title   = {'ctrl+shift+x'} />
         {/* block style */}
-        <BlockButton type={'h1'} icon={'looks_one'} title={'ctrl+1'} />
-        <BlockButton type={'h2'} icon={'looks_two'} title={'ctrl+2'} />
-        <BlockButton type={'h3'} icon={'looks_3'} title={'ctrl+3'} />
-        <BlockButton type={'numbered-list'} icon={'format_list_numbered'} title={'ctrl+Enter'} />
-        <BlockButton type={'bulleted-list'} icon={'format_list_bulleted'} title={'shift+Enter'} />
-        <BlockButton type={'block-quote'} icon={'format_quote'} title={'ctrl+q'} />
-        <BlockButton type={'left'} icon={'format_align_left'} title={'ctrl+shift+l'} />
-        <BlockButton type={'center'} icon={'format_align_center'} title={'ctrl+shift+c'} />
-        <BlockButton type={'right'} icon={'format_align_right'} title={'ctrl+shift+r'} />
-        <BlockButton type={'justify'} icon={'format_align_justify'} title={'ctrl+shift+f'} />
+        <BlockButton type = {'h1'} icon            = {'looks_one'} title            = {'ctrl+1'} />
+        <BlockButton type = {'h2'} icon            = {'looks_two'} title            = {'ctrl+2'} />
+        <BlockButton type = {'h3'} icon            = {'looks_3'} title              = {'ctrl+3'} />
+        <BlockButton type = {'numbered-list'} icon = {'format_list_numbered'} title = {'ctrl+Enter'} />
+        <BlockButton type = {'bulleted-list'} icon = {'format_list_bulleted'} title = {'shift+Enter'} />
+        <BlockButton type = {'block-quote'} icon   = {'format_quote'} title         = {'ctrl+q'} />
+        <BlockButton type = {'left'} icon          = {'format_align_left'} title    = {'ctrl+shift+l'} />
+        <BlockButton type = {'center'} icon        = {'format_align_center'} title  = {'ctrl+shift+c'} />
+        <BlockButton type = {'right'} icon         = {'format_align_right'} title   = {'ctrl+shift+r'} />
+        <BlockButton type = {'justify'} icon       = {'format_align_justify'} title = {'ctrl+shift+f'} />
 
         <ImageButton type={'image'} icon={'insert_photo'} title={'ctrl+shift+m'}
 

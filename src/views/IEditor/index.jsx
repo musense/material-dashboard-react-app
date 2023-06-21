@@ -1,46 +1,38 @@
-import React, { useEffect, useRef, useState, useMemo } from 'react';
+import React, { useEffect, useRef, useState, useMemo, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import ContentEditorForm from "./ContentEditorForm.jsx"
 import DetailForm from "./DetailForm.jsx"
 import * as GetEditorAction from 'actions/GetEditorAction.js';
 import EditorDialog from './EditorDialog.jsx';
-import { Beforeunload, useBeforeunload } from "react-beforeunload";
+// import { useBeforeUnload } from "react-router-dom";
+
 
 function NewIEditor() {
-  const alertUser = (e) => {
-    window.alert('are you sure?')
-  }
-  useBeforeunload((e) => alertUser(e))
+
+  const [state, setState] = useState(null);
+
+  // save it off before users navigate away
+  const [isDraft, setIsDraft] = useState(false);
+
+  const onDraftEditorSave = useCallback(() => {
+    setIsDraft(true)
+    onEditorSave()
+  }, [onEditorSave])
+
+  // useBeforeUnload(
+  //   useCallback(() => {
+  //     onDraftEditorSave()
+  //   }, [onDraftEditorSave])
+  // )
 
   const dispatch = useDispatch();
-
-  const initialValue = [
-    {
-      type: 'paragraph',
-      children: [{ text: '' }],
-    },
-  ]
-
   const contentFormRef = useRef(null)
   const detailFormRef = useRef(null)
 
   const editor = useSelector((state) => state.getEditorReducer.editor);
+
   const returnMessage = useSelector((state) => state.getEditorReducer.errorMessage);
 
-  const bannerRef = useRef();
-  const thumbnailRef = useRef();
-  const imageAltTextRef = useRef();
-  const imageUrlRef = useRef(undefined);
-  const imageNameRef = useRef(undefined);
-  const manualUrlRef = useRef(undefined);
-  const customUrlRef = useRef(undefined);
-
-  const idRef = useRef()
-  const newTitleRef = useRef('');
-  const editorContentRef = useRef(initialValue)
-
-  const tagArrayRef = useRef([]);
-  const classRef = useRef(null);
   const [dialogTitle, setDialogTitle] = useState(null);
 
   const [success, setSuccess] = useState(true);
@@ -50,15 +42,8 @@ function NewIEditor() {
 
   const [preview, setPreview] = useState(false);
   useEffect(() => {
-    classRef.current = null;
-    tagArrayRef.current = [];
-    console.log("🚀 ~ file: index.jsx:48 ~ useEffect ~ classRef:", classRef)
-    console.log("🚀 ~ file: index.jsx:48 ~ useEffect ~ tagArrayRef.current:", tagArrayRef.current)
-    setDialogTitle('新增文章訊息')
-  }, []);
-
-  useEffect(() => {
     console.log("🚀 ~ file: index.jsx:45 ~ useEffect ~ returnMessage:", returnMessage)
+    if (!editor) return
     if (returnMessage === 'add successfully') {
       console.log("🚀 ~ file: index.jsx:54 ~ useEffect ~ editor:", editor)
 
@@ -80,37 +65,75 @@ function NewIEditor() {
     }
   }, [returnMessage, editor]);
 
-  function onEditorSave(e) {
-    e.preventDefault();
+  //* e exists means that the context was not draft
+  function onEditorSave(e = null) {
+
+    e && e.preventDefault();
 
     const contentFormData = contentFormRef.current.getFormData();
     const detailFormData = detailFormRef.current.getFormData();
-    const formData = new Map([
+    const checkFormSizeData = new Map([
       ...contentFormData,
-      ...detailFormData,
+      ...detailFormData
     ])
+
+    console.log("🚀 ~ file: index.jsx:121 ~ onEditorSave ~ checkFormSizeData:", checkFormSizeData)
     console.log("🚀 ~ file: index.jsx:121 ~ onEditorSave ~ contentFormData:", contentFormData)
     console.log("🚀 ~ file: index.jsx:121 ~ onEditorSave ~ detailFormData:", detailFormData)
-    console.log("🚀 ~ file: index.jsx:121 ~ onEditorSave ~ formData:", formData)
-    if (formData === undefined || formData.size === 0) {
+    if (checkFormSizeData === undefined || checkFormSizeData.size === 0) {
       console.log('nothing to add!!!');
-      setSuccess(false)
-      setDialogContent('沒有新增任何資訊！')
-      handleClickOpen()
+      if (e) {
+        setSuccess(false)
+        setDialogContent('沒有新增任何資訊！')
+        handleClickOpen()
+      }
       return
     }
-    const noContentState = !formData.has('content')
-    const noContentTitleState = formData.has('content') && !formData.get('content').has('title')
+    const formData = e
+      ? new Map([
+        ...checkFormSizeData
+      ])
+      : new Map([
+        ...checkFormSizeData,
+        ['draft', true]
+      ])
+    console.log("🚀 ~ file: index.jsx:121 ~ onEditorSave ~ formData:", formData)
 
-    if (noContentState || noContentTitleState) {
+    const contentState = formData.has('content')
+    console.log("🚀 ~ file: index.jsx:121 ~ onEditorSave ~ noContentState:", contentState)
+    const contentTitleState = formData.has('content') && formData.get('content').has('title')
+    const contentContentState = formData.has('content') && formData.get('content').has('content')
+    console.log("🚀 ~ file: index.jsx:121 ~ onEditorSave ~ noContentTitleState:", contentTitleState)
+    console.log("🚀 ~ file: index.jsx:121 ~ onEditorSave ~ noContentContentState:", contentContentState)
+
+    if (!contentState) {
       console.log('content title required!!!');
-      setSuccess(false)
-      setDialogContent('文章標題為必填欄位！')
-      handleClickOpen()
+      if (e) {
+        setSuccess(false)
+        setDialogContent('文章標題與文案為必填！')
+        handleClickOpen()
+      }
+      return
+    }
+    if (contentState && !contentTitleState) {
+      console.log('content title required!!!');
+      if (e) {
+        setSuccess(false)
+        setDialogContent('文章標題為必填！')
+        handleClickOpen()
+      }
+      return
+    }
+    if (contentState && !contentContentState) {
+      console.log('content title required!!!');
+      if (e) {
+        setSuccess(false)
+        setDialogContent('文案為必填！')
+        handleClickOpen()
+      }
       return
     }
 
-    // return
     if (preview) {
       dispatch({
         type: GetEditorAction.PREVIEW_EDITOR,
@@ -135,7 +158,9 @@ function NewIEditor() {
         data: formData
       },
     })
+    setIsDraft(false)
   }
+
   const [open, setOpen] = React.useState(false);
 
   const handleClickOpen = () => {
@@ -143,64 +168,25 @@ function NewIEditor() {
   };
 
   const detailFormProps = useMemo(() => ({
-    bannerRef: bannerRef,
-    thumbnailRef: thumbnailRef,
-    imageAltTextRef: imageAltTextRef,
-    imageUrlRef: imageUrlRef,
-    imageNameRef: imageNameRef,
-    manualUrlRef: manualUrlRef,
-    customUrlRef: customUrlRef,
-    tagArrayRef: tagArrayRef,
-    classRef: classRef,
-    onEditorSave: onEditorSave,
-    // onPreviewButtonClick:onPreviewButtonClick,
-    setPreview: setPreview,
-  }), [
-    bannerRef,
-    thumbnailRef,
-    imageAltTextRef,
-    imageUrlRef,
-    imageNameRef,
-    manualUrlRef,
-    customUrlRef,
-    tagArrayRef,
-    classRef,
+    editor,
     onEditorSave,
-    // onPreviewButtonClick,
-    setPreview,
-  ])
+  }), [editor, onEditorSave])
 
   const contentFormProps = useMemo(() => ({
-    newTitleRef: newTitleRef,
-    editorContentRef: editorContentRef,
-    initialValue: initialValue,
-    onEditorSave: onEditorSave,
-    setPreview: setPreview
-  }), [
-    newTitleRef,
-    editorContentRef,
-    initialValue,
+    editor,
     onEditorSave,
-    setPreview,
-  ])
+  }), [editor, onEditorSave])
 
   const dialogProps = useMemo(() => ({
-    open: open,
-    success: success,
-    editorID: id,
-    sitemapUrl: sitemapUrl,
-    handleClose: () => setOpen(false),
-    dialogTitle: dialogTitle,
-    dialogContent: dialogContent,
-  }), [
     open,
     success,
-    id,
+    editorID: id,
     sitemapUrl,
-    setOpen,
+    handleClose: () => setOpen(false),
     dialogTitle,
     dialogContent,
-  ])
+  }), [open, success, id, sitemapUrl, setOpen, dialogTitle, dialogContent])
+
   return (
     <div className={'container'}>
       <div className={'wrapper'}>

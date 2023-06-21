@@ -1,7 +1,7 @@
 /* eslint-disable */
 import PropTypes from 'prop-types';
 import React, { useState, useEffect, useRef } from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
 // creates a beautiful scrollbar
 import 'perfect-scrollbar/css/perfect-scrollbar.css';
 // @material-ui/core components
@@ -15,7 +15,7 @@ import routes from 'routes.js';
 import dashboardStyle from 'assets/jss/material-dashboard-react/layouts/dashboardStyle.jsx';
 
 import image from 'assets/img/sidebar-1.jpg';
-import logo from 'assets/img/scaredseal.jpeg';
+import logo from 'assets/img/logo.png';
 import { Link, Outlet } from 'react-router-dom';
 import PerfectScrollbar from 'perfect-scrollbar';
 
@@ -39,7 +39,7 @@ function Dashboard({ ...props }) {
   // const handleImageClick = (image) => {
   //   setImage(image);
   // };
-
+  const location = useLocation()
   const editorClassList = useSelector((state) => state.getClassReducer.editorClassList);
   const tagList = useSelector((state) => state.getTagsReducer.tagList);
 
@@ -75,16 +75,10 @@ function Dashboard({ ...props }) {
   };
 
   useEffect(() => {
-    if (!editorClassList) {
-      dispatch({ type: GetClassAction.REQUEST_CLASS_LIST });
-    }
-  }, [editorClassList]);
+    dispatch({ type: GetClassAction.REQUEST_CLASS_LIST });
+    dispatch({ type: GetTagsAction.REQUEST_TAG })
+  }, [location.pathname]);
 
-  useEffect(() => {
-    if (!tagList) {
-      dispatch({ type: GetTagsAction.REQUEST_TAG })
-    }
-  }, [tagList]);
   useEffect(() => {
     if (mainPanel.current === null) {
       //componentDidMount
@@ -146,7 +140,7 @@ function Dashboard({ ...props }) {
       <div className={classes.wrapper}>
         <Sidebar
           routes={routes}
-          logoText={'Scared Seal'}
+          logoText={'Zoonobet'}
           logo={logo}
           image={image}
           handleDrawerToggle={handleDrawerToggle}

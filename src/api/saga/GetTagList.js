@@ -60,7 +60,7 @@ function* GetTagList(payload = 1) {
         const response = yield instance.get(`/tags?limit=100000&pageNumber=${payload}`);
         const { currentPage, totalCount, data: responseData } = yield response.data
         const tagList = toFrontendData(responseData)
-        console.log("🚀 ~ file: GetTagList.js:44 ~ function*GetTagList ~ tagList:", tagList)
+        // console.log("🚀 ~ file: GetTagList.js:44 ~ function*GetTagList ~ tagList:", tagList)
         // const tagList = yield response.data;
         // console.log("🚀 ~ file: GetTagList.js:14 ~ function*GetTagList ~ tagList:", tagList)
 
@@ -102,9 +102,9 @@ function* SearchTag(payload) {
                 : ''
             : ''
         const response = yield instance.get(`/tags?${nameString}${startDateString} ${endDateString}`);
-        console.log("🚀 ~ file: GetEditorList.js:72 ~ function*SearchEditor ~ response:", response)
+        // console.log("🚀 ~ file: GetEditorList.js:72 ~ function*SearchEditor ~ response:", response)
         const { currentPage, totalCount, data: responseData } = yield response.data
-        console.log("🚀 ~ file: GetEditorList.js:72 ~ function*SearchEditor ~ responseData:", responseData)
+        // console.log("🚀 ~ file: GetEditorList.js:72 ~ function*SearchEditor ~ responseData:", responseData)
         const tagList = toFrontendData(responseData)
         // return
         yield put({
@@ -128,7 +128,7 @@ function* SearchTag(payload) {
 function* AddTag(payload) {
     try {
         const requestData = toBackendData(payload.data)
-        console.log("🚀 ~ file: GetTagList.js:131 ~ function*AddTag ~ requestDate:", requestData)
+        // console.log("🚀 ~ file: GetTagList.js:131 ~ function*AddTag ~ requestDate:", requestData)
         // return
         const response = yield instance.post(`/tags`, requestData);
         const responseData = yield response.data;
@@ -137,7 +137,7 @@ function* AddTag(payload) {
             payload: null
         })
     } catch (error) {
-        console.log("🚀 ~ file: GetTagList.js:140 ~ function*AddTag ~ error:", error)
+        // console.log("🚀 ~ file: GetTagList.js:140 ~ function*AddTag ~ error:", error)
         yield put({
             type: GetTagsAction.ADD_TAG_FAIL,
             errorMessage: error.message
@@ -150,9 +150,9 @@ function* UpdateTag(payload) {
     try {
         const { _id, ...data } = payload.data;
         const requestData = toBackendData(data)
-        console.log("🚀 ~ file: GetTagList.js:55 ~ function*UpdateTag ~ _id:", { _id })
-        console.log("🚀 ~ file: GetTagList.js:55 ~ function*UpdateTag ~ data:", { data })
-        console.log("🚀 ~ file: GetTagList.js:55 ~ function*UpdateTag ~ requestData:", { requestData })
+        // console.log("🚀 ~ file: GetTagList.js:55 ~ function*UpdateTag ~ _id:", { _id })
+        // console.log("🚀 ~ file: GetTagList.js:55 ~ function*UpdateTag ~ data:", { data })
+        // console.log("🚀 ~ file: GetTagList.js:55 ~ function*UpdateTag ~ requestData:", { requestData })
 
         const response = yield instance.patch(`/tags/${_id}`, requestData);
         const tagList = yield response.data;
@@ -175,7 +175,7 @@ function* DeleteTag(payload) {
         const data = {
             'ids': payload
         }
-        console.log("🚀 ~ file: GetTagList.js:175 ~ function*DeleteTag ~ data:", data)
+        // console.log("🚀 ~ file: GetTagList.js:175 ~ function*DeleteTag ~ data:", data)
      
         
         const response = yield instance.delete(`/tags/bunchDeleteByIds`,{

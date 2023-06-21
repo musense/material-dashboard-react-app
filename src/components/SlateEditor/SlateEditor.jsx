@@ -104,7 +104,7 @@ function SlateEditor({ editorContentRef }) {
           renderLeaf    = {renderLeaf}
           placeholder   = "請輸入文案..."
           onKeyDown     = {event => {
-            console.log("🚀 ~ file: SlateEditor.jsx:155 ~ SlateEditor ~ event:", event)
+              // console.log("🚀 ~ file: SlateEditor.jsx:155 ~ SlateEditor ~ event:", event)
             if (event.ctrlKey && event.key === 'Enter') {
               event.preventDefault()
               CustomEditor.toggleBlock(editor, 'numbered-list');
@@ -222,7 +222,7 @@ function SlateEditor({ editorContentRef }) {
                   CustomEditor.toggleBlock(editor, 'right');
                   break
                 }
-                case 'f': 
+            case 'f': 
                 case 'F': {
                   event.preventDefault();
                   CustomEditor.toggleBlock(editor, 'justify');

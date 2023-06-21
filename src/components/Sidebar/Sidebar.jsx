@@ -15,12 +15,15 @@ import AdminNavbarLinks from 'components/Navbars/AdminNavbarLinks.jsx';
 // import RTLNavbarLinks from 'components/Navbars/RTLNavbarLinks.jsx';
 
 import sidebarStyle from 'assets/jss/material-dashboard-react/components/sidebarStyle.jsx';
+import { useDispatch } from "react-redux";
+import { RESET_EDITOR } from '../../actions/GetEditorAction';
+
 
 const Sidebar = ({ ...props }) => {
   // verifies if routeName is the one active (in browser input)
   const location = useLocation();
+  const dispatch = useDispatch();
   function activeRoute(routeName) {
-    // return location.pathname.indexOf(routeName) > -1;
     return location.pathname === routeName;
   }
   const { classes, color, logo, image, logoText, routes } = props;
@@ -34,8 +37,7 @@ const Sidebar = ({ ...props }) => {
         const whiteFontClasses = classNames({
           [' ' + classes.whiteFont]: activeRoute(prop.layout + prop.path),
         });
-        const classItemHide =
-          prop.hide === true ? classes.itemHide : classes.item;
+        const classItemHide = prop.hide === true ? classes.itemHide : classes.item;
         return (
           <NavLink
             to={prop.layout + prop.path}
@@ -44,24 +46,48 @@ const Sidebar = ({ ...props }) => {
             }
             key={key}
           >
-            <ListItem button className={classes.itemLink + listItemClasses}>
-              {typeof prop.icon === 'string' ? (
-                <Icon
-                  className={classNames(classes.itemIcon, whiteFontClasses)}
-                >
-                  {prop.icon}
-                </Icon>
-              ) : (
-                <prop.icon
-                  className={classNames(classes.itemIcon, whiteFontClasses)}
+            {prop.name === '新增文章'
+              ? <ListItem button
+              onClick={() => dispatch({
+                type: RESET_EDITOR
+              })}
+              className={classes.itemLink + listItemClasses}>
+                {typeof prop.icon === 'string' ? (
+                  <Icon
+                    className={classNames(classes.itemIcon, whiteFontClasses)}
+                  >
+                    {prop.icon}
+                  </Icon>
+                ) : (
+                  <prop.icon
+                    className={classNames(classes.itemIcon, whiteFontClasses)}
+                  />
+                )}
+                <ListItemText
+                  primary={prop.name}
+                  className={classNames(classes.itemText, whiteFontClasses)}
+                  disableTypography={true}
                 />
-              )}
-              <ListItemText
-                primary={prop.name}
-                className={classNames(classes.itemText, whiteFontClasses)}
-                disableTypography={true}
-              />
-            </ListItem>
+              </ListItem>
+              : <ListItem button className={classes.itemLink + listItemClasses}>
+                {typeof prop.icon === 'string' ? (
+                  <Icon
+                    className={classNames(classes.itemIcon, whiteFontClasses)}
+                  >
+                    {prop.icon}
+                  </Icon>
+                ) : (
+                  <prop.icon
+                    className={classNames(classes.itemIcon, whiteFontClasses)}
+                  />
+                )}
+                <ListItemText
+                  primary={prop.name}
+                  className={classNames(classes.itemText, whiteFontClasses)}
+                  disableTypography={true}
+                />
+              </ListItem>
+            }
           </NavLink>
         );
       })}

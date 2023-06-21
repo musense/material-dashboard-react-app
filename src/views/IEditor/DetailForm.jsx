@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useImperativeHandle, useRef, useState } from "react";
+import React, { useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState } from "react";
 import CustomRadio from '../../components/CustomRadio/CustomRadio';
 
 
@@ -8,23 +8,64 @@ import { css, cx } from '@emotion/css';
 import MultiTagSelectSort from '../../components/Select/MultiTagSelectSort';
 import SingleClassificationSelect from "../../components/Select/SingleClassificationSelect";
 import Iframe from "react-iframe";
+import DateTimeSelector from "../../components/DateSelector/DateTimeSelector";
+import { Stack } from "@mui/system";
 
+const webHeaderID = [
+    'title', 'description', 'keywords', 'customUrl'
+]
 const allowedFileTypes = ["image/png", "image/jpeg", "image/gif"];
 
-const DetailForm = React.forwardRef(({    
-    bannerRef,
-    thumbnailRef,
-    imageAltTextRef,
-    imageUrlRef,
-    imageNameRef,
-    customUrlRef,
-    manualUrlRef,
-    tagArrayRef,
-    classRef,
+const DetailForm = React.forwardRef(({
+    editor,
     onEditorSave,
-    setPreview,
 }, ref) => {
 
+    console.log("🚀 ~ file: DetailForm.jsx:441 ~ editor:", editor)
+    const detailFormRef = useRef(null);
+    const [preview, setPreview] = useState(false);
+    const bannerRef = useRef();
+    const thumbnailRef = useRef();
+    const imageAltTextRef = useRef();
+    const imageUrlRef = useRef(undefined);
+    const imageNameRef = useRef(undefined);
+    const manualUrlRef = useRef(undefined);
+    const customUrlRef = useRef(undefined);
+    const tagArrayRef = useRef([]);
+    const classRef = useRef(null);
+    const [isImage, setIsImage] = useState(true);
+    const [iframeUrl, setIframeUrl] = useState(undefined);
+    const [manualUrl, setManualUrl] = useState(undefined);
+    const [isError, setIsError] = useState(false);
+    const [imageUrl, setImageUrl] = useState();
+    const [imageName, setImageName] = useState();
+    const uploadImageRef = useRef(null);
+    const hideSwitchRef = useRef();
+    const isScheduledSwitchRef = useRef();
+    const scheduledDateTimeRef = useRef(null);
+    const [hideSwitch, setHideSwitch] = useState();
+    const [scheduledSwitch, setScheduledSwitch] = useState();
+
+    useMemo(() => {
+        if (!editor) return
+        tagArrayRef.current = editor.tags
+        console.log("🚀 ~ file: index.jsx:178 ~ useMemo ~ tagArrayRef.current:", tagArrayRef.current)
+        classRef.current = editor.classifications ? editor.classifications : null
+    }, [editor])
+
+    useEffect(() => {
+        if (!editor) return
+        if (!bannerRef.current || typeof bannerRef.current !== 'string') return
+        if (bannerRef.current.indexOf('<iframe') !== -1) {
+            const src = getProperty('src');
+            console.log("🚀 ~ file: MediaModal.jsx:41 ~ useEffect ~ src:", src)
+            setIsImage(false)
+            setIframeUrl(src)
+        } else {
+            setIsImage(true)
+            setIframeUrl(bannerRef.current)
+        }
+    }, [editor, bannerRef.current]);
 
     useImperativeHandle(ref, () => {
         return {
@@ -33,7 +74,11 @@ const DetailForm = React.forwardRef(({
                 const formData = new FormData(form);
                 const formDataObject = Object.fromEntries(formData)
                 const tData = new Map()
-
+                console.log("🚀 ~ file: DetailForm.jsx:74 ~ useEffect ~ hideSwitchRef:", hideSwitchRef)
+                console.log("🚀 ~ file: DetailForm.jsx:74 ~ useEffect ~ hideSwitchRef.current.checkHistory():", hideSwitchRef.current.checkHistory())
+                console.log("🚀 ~ file: DetailForm.jsx:74 ~ useEffect ~ hideSwitchRef.current.current():", hideSwitchRef.current.current())
+                // console.log("🚀 ~ file: DetailForm.jsx:144 ~ useImperativeHandle ~ dateTimeRef.current.current():", scheduledDateTimeRef.current.current())
+                // return
                 if (editor) {
                     const webHeader = new Map()
                     formDataObject.title !== editor.webHeader.title && (webHeader.set('title', formDataObject.title));
@@ -56,6 +101,9 @@ const DetailForm = React.forwardRef(({
                     JSON.stringify(tagArrayRef.current) !== JSON.stringify(editor.tags) && (tData.set('tags', tagArrayRef.current))
 
                     JSON.stringify(classRef.current) !== JSON.stringify(editor.classifications) && (tData.set('classifications', classRef.current ? [classRef.current] : null))
+                    // scheduledDateTimeRef.current &&
+                    scheduledDateTimeRef.current && tData.set('scheduleTime', scheduledDateTimeRef.current.current())
+
                 } else {
                     const webHeader = new Map()
                     formDataObject.title !== '' && webHeader.set('title', formDataObject.title)
@@ -70,61 +118,77 @@ const DetailForm = React.forwardRef(({
                     imageAltTextRef.current.value !== '' && media.set('altText', imageAltTextRef.current.value)
                     media.size !== 0 && tData.set('media', media)
 
-                    hideSwitchRef.current.checkHistory.length > 0 && tData.set('hide', !!formDataObject.hideSwitch)
-                    console.log("🚀 ~ file: DetailForm.jsx:52 ~ useImperativeHandle ~ hideSwitchRef.current.checkHistory:", hideSwitchRef.current.checkHistory)
+                    hideSwitchRef.current.checkHistory().length > 1 && tData.set('hide', hideSwitchRef.current.current())
+                    // isScheduledSwitchRef.current.checkHistory.length > 0 && tData.set('hide', !!formDataObject.isScheduledSwitchRef)
+                    // console.log("🚀 ~ file: DetailForm.jsx:52 ~ useImperativeHandle ~ hideSwitchRef.current.checkHistory:", hideSwitchRef.current.checkHistory)
 
                     tagArrayRef.current.length > 0 && tData.set('tags', tagArrayRef.current)
 
                     classRef.current && tData.set('classifications', classRef.current ? [classRef.current] : null)
+                    scheduledDateTimeRef.current && tData.set('scheduleTime', scheduledDateTimeRef.current.current())
 
                 }
                 return tData
             }
+
         }
     })
-    const detailFormRef = useRef(null);
-    console.log("🚀 ~ file: DetailForm.jsx:30 ~ formRef:", ref)
-    console.log("🚀 ~ file: DetailForm.jsx:27 ~ tagArrayRef:", tagArrayRef)
-    console.log("🚀 ~ file: DetailForm.jsx:29 ~ customUrlRef:", customUrlRef)
-    const [formData, setFormData] = useState(null);
-    const [isImage, setIsImage] = useState(true);
-    const [iframeUrl, setIframeUrl] = useState(undefined);
+
+    function setDefaultValueById(id, obj) {
+        const item = document.getElementById(`detail-form-${id}`)
+        if (!item) return
+        switch (item.type) {
+            case 'checkbox': {
+                item.checked = obj
+                break;
+            }
+            case 'text':
+            default: {
+                item.value = obj[id]
+                break;
+            }
+        }
+    }
+
+    console.log("🚀 ~ file: DetailForm.jsx:55 ~ setDetailDefaultValue ~ bannerRef.current:", bannerRef.current)
+    console.log("🚀 ~ file: DetailForm.jsx:55 ~ setDetailDefaultValue ~ imageUrlRef.current:", imageUrlRef.current)
+    //*  set default value for DetailForm
+    function setDetailDefaultValue(editor) {
+        if (!editor) return
+        const { webHeader, media, hide } = editor
+
+        webHeaderID.map(id => setDefaultValueById(id, webHeader))
+        customUrlRef.current = webHeader.customUrl
+        if (manualUrlRef && manualUrlRef.current) {
+            manualUrlRef.current.value = ''
+        }
+        if (media && media.altText) {
+            setDefaultValueById('altText', media)
+        }
+
+        if (media && media.banner) {
+            imageUrlRef.current = media.banner
+            bannerRef.current = media.banner
+            // * 圖片才要取檔名
+            if (media.banner.indexOf('<iframe') === -1) {
+                if (imageNameRef && imageNameRef.current) {
+                    imageNameRef.current = media.banner.substring(media.banner.lastIndexOf('/') + 1)
+                }
+            }
+        }
+
+        setDefaultValueById('hide', hide)
+        // console.log("🚀 ~ file: index.jsx:108 ~ setDetailDefaultValue ~ hide:", hide)
+    }
+    setDetailDefaultValue(editor)
+
     const getProperty = useCallback((propertyName) => {
         const indexOf = bannerRef.current.indexOf(`${propertyName}="`) + `${propertyName}="`.length;
         const endIndexOf = bannerRef.current.indexOf(`"`, indexOf);
-
-        console.log("🚀 ~ file: MediaModal.jsx:32 ~ useEffect ~ indexOf:", indexOf);
-        console.log("🚀 ~ file: MediaModal.jsx:32 ~ useEffect ~ endIndexOf:", endIndexOf);
         const property = bannerRef.current.substr(indexOf, endIndexOf - indexOf);
-        console.log("🚀 ~ file: MediaModal.jsx:32 ~ useEffect ~ property:", property);
         return property
     }, [bannerRef])
 
-    const [manualUrl, setManualUrl] = useState(undefined);
-    const [isError, setIsError] = useState(false);
-
-    const [imageUrl, setImageUrl] = useState();
-    const [imageName, setImageName] = useState();
-    const uploadImageRef = React.useRef(null);
-    const hideSwitchRef = React.useRef();
-
-    useEffect(() => {
-        if (!bannerRef.current || typeof bannerRef.current !== 'string') return
-        if (bannerRef.current.indexOf('<iframe') !== -1) {
-            const src = getProperty('src');
-            console.log("🚀 ~ file: MediaModal.jsx:41 ~ useEffect ~ src:", src)
-            setIsImage(false)
-            setIframeUrl(src)
-        } else {
-            setIsImage(true)
-            setIframeUrl(bannerRef.current)
-        }
-    }, [bannerRef.current]);
-
-    useEffect(() => {
-        hideSwitchRef.current.id = 'detail-form-hide'
-
-    }, [hideSwitchRef.current]);
     const mediaHelperFunc = {
         previewImage(e) {
             this.removeFilm();
@@ -210,6 +274,9 @@ const DetailForm = React.forwardRef(({
         );
     }
 
+    const displayScheduleTime = (scheduledSwitch) => ({
+        display: scheduledSwitch ? 'block' : 'none'
+    })
     return (
         <>
             <form ref={detailFormRef} name='ieditor-detail-form' onSubmit={onEditorSave}>
@@ -368,12 +435,32 @@ const DetailForm = React.forwardRef(({
                     <PreviewMedia styles={styles} />
                 </div>
                 <div className={styles['input-group']}>
-                    <CustomRadio
-                        ref={hideSwitchRef}
-                        label={'將這篇文章「隱藏」'}
-                        name={'hideSwitch'}
-                    />
+                    <Stack direction={"column"} spacing={2}>
+                        <CustomRadio
+                            ref={hideSwitchRef}
+                            defaultValue={editor && editor.hide}
+                            label={'將這篇文章「隱藏」'}
+                            name={'hideSwitch'}
+                            setState={setHideSwitch}
+                        />
+                        {hideSwitch && <CustomRadio
+                            defaultValue={editor && editor.isScheduled}
+                            label={'是否排程上版'}
+                            name={'scheduledSwitch'}
+                            setState={setScheduledSwitch}
+                        />}
+                    </Stack>
                 </div>
+                <div >
+                    {hideSwitch && scheduledSwitch && <div className={styles['input-group']}>
+                        <DateTimeSelector
+                            defaultValue={editor && editor.scheduleTime}
+                            width={'250px'}
+                            title={'排程日期'}
+                            ref={scheduledDateTimeRef} />
+                    </div>}
+                </div>
+
                 <div className={styles['button-wrapper']}>
                     <input type='submit' onClick={() => setPreview(false)} value='確認' />
                     <input type='submit' onClick={() => setPreview(true)} value='預覽' />
@@ -383,5 +470,6 @@ const DetailForm = React.forwardRef(({
     );
 
 })
+
 
 export default DetailForm;

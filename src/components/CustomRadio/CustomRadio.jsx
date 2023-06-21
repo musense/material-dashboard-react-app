@@ -3,26 +3,31 @@ import styles from './CustomRadio.module.css'
 
 const CustomRadio = React.forwardRef(({ ...props }, ref) => {
 
-    const radioRef = React.useRef(null);
-
-    const [checked, setChecked] = useState(props.checked);
+    const [checked, setChecked] = useState(false);
     const [checkHistory, setCheckHistory] = useState([]);
     useEffect(() => {
-        if (checked === true || checked === false) {
-            setCheckHistory(prevState => {
-                return [...prevState, checked]
-            })
-        }
+        if (!props.setState) return
+        props.setState(checked)
+    }, [props.setState, checked]);
+    useEffect(() => {
+        setCheckHistory(prevState => [
+            ...prevState, checked
+        ])
     }, [checked]);
+    useEffect(() => {
+        if (!props.defaultValue) return
+        setChecked(props.defaultValue)
+    }, [props.defaultValue]);
+
     useImperativeHandle(ref, () => {
         return {
-            checkHistory: checkHistory
+            checkHistory: () => checkHistory,
+            current: () => checked
         }
     })
     return <>
         <label htmlFor={props.name}>{props.label}</label>
         <input
-            ref={radioRef}
             type='checkbox'
             checked={checked}
             onChange={e => setChecked(e.target.checked)}

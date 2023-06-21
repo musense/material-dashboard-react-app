@@ -11,11 +11,11 @@ function* GetEditorTitleList(payload = 1) {
     try {
         const response = yield instance.get(`/editor?limit=10000&pageNumber=${payload}`);
         const { currentPage, totalCount, data: responseData } = yield response.data
-        console.log("🚀 ~ file: GetEditorList.js:13 ~ function*GetEditorTitleList ~ currentPage, totalCount, data: responseData:", { currentPage, totalCount, responseData })
+        // console.log("🚀 ~ file: GetEditorList.js:13 ~ function*GetEditorTitleList ~ currentPage, totalCount, data: responseData:", { currentPage, totalCount, responseData })
 
         // const titleList = toFrontendData(titleViewListFakeData)
         const titleList = toFrontendData(responseData)
-        console.log("🚀 ~ file: GetEditorList.js:422 ~ function*GetEditorTitleList ~ titleList:", titleList)
+        // console.log("🚀 ~ file: GetEditorList.js:422 ~ function*GetEditorTitleList ~ titleList:", titleList)
         yield put({
             type: GetEditorAction.REQUEST_EDITOR_TITLE_LIST_SUCCESS,
             payload: {
@@ -39,11 +39,11 @@ function* GetEditorTitleListByPageNumber(payload) {
     try {
         const response = yield instance.get(`/editor?limit=10&pageNumber=${payload}`);
         const { currentPage, totalCount, data: responseData } = yield response.data
-        console.log("🚀 ~ file: GetEditorList.js:13 ~ function*GetEditorTitleList ~ currentPage, totalCount, data: responseData:", { currentPage, totalCount, responseData })
+        // console.log("🚀 ~ file: GetEditorList.js:13 ~ function*GetEditorTitleList ~ currentPage, totalCount, data: responseData:", { currentPage, totalCount, responseData })
 
         // const titleList = toFrontendData(titleViewListFakeData)
         const titleList = toFrontendData(responseData)
-        console.log("🚀 ~ file: GetEditorList.js:422 ~ function*GetEditorTitleList ~ titleList:", titleList)
+        // console.log("🚀 ~ file: GetEditorList.js:422 ~ function*GetEditorTitleList ~ titleList:", titleList)
         yield put({
             type: GetEditorAction.REQUEST_EDITOR_TITLE_LIST_SUCCESS,
             payload: {
@@ -107,9 +107,9 @@ function* SearchEditor(payload) {
                 : ''
             : ''
         const response = yield instance.get(`/editor?${titleString}${categoryString}${startDateString}${endDateString}limit=10000&pageNumber=1`);
-        console.log("🚀 ~ file: GetEditorList.js:72 ~ function*SearchEditor ~ response:", response)
+        // console.log("🚀 ~ file: GetEditorList.js:72 ~ function*SearchEditor ~ response:", response)
         const { currentPage, totalCount, data: responseData } = yield response.data
-        console.log("🚀 ~ file: GetEditorList.js:72 ~ function*SearchEditor ~ responseData:", responseData)
+        // console.log("🚀 ~ file: GetEditorList.js:72 ~ function*SearchEditor ~ responseData:", responseData)
         const titleList = toFrontendData(responseData)
         // return
         yield put({
@@ -132,9 +132,9 @@ function* SearchEditor(payload) {
 // POST
 function* AddEditor(payload) {
     try {
-        console.log("🚀 ~ file: GetEditorList.js:940 ~ function*AddEditor ~ payload:", payload)
+        // console.log("🚀 ~ file: GetEditorList.js:940 ~ function*AddEditor ~ payload:", payload)
         const requestFormData = toBackendFormData(payload.data)
-        console.log("🚀 ~ file: GetEditorList.js:943 ~ function*AddEditor ~ requestData:", requestFormData)
+        // console.log("🚀 ~ file: GetEditorList.js:943 ~ function*AddEditor ~ requestData:", requestFormData)
         // return
         let response
         if (typeof requestFormData.get('contentImagePath') === 'object') {
@@ -143,10 +143,13 @@ function* AddEditor(payload) {
             response = yield instance.post(`/editor`, requestFormData);
         }
         const editor = yield response.data;
+        const mappedEditorData = toFrontendData(editor)
 
         yield put({
             type: GetEditorAction.ADD_EDITOR_SUCCESS,
-            payload: { editor }
+            payload:{
+                editor: mappedEditorData,
+            }
         })
 
     } catch (error) {
@@ -160,9 +163,9 @@ function* AddEditor(payload) {
 // POST
 function* PreviewEditor(payload) {
     try {
-        console.log("🚀 ~ file: GetEditorList.js:940 ~ function*PreviewEditor ~ payload:", payload)
+        // console.log("🚀 ~ file: GetEditorList.js:940 ~ function*PreviewEditor ~ payload:", payload)
         const requestFormData = toBackendFormData(payload.data)
-        console.log("🚀 ~ file: GetEditorList.js:943 ~ function*PreviewEditor ~ requestData:", requestFormData)
+        // console.log("🚀 ~ file: GetEditorList.js:943 ~ function*PreviewEditor ~ requestData:", requestFormData)
         // return
         let response
         if (typeof requestFormData.get('contentImagePath') === 'object') {
@@ -171,7 +174,7 @@ function* PreviewEditor(payload) {
             response = yield instance.post(`/tempEditor`, requestFormData);
         }
         const { id: previewID } = yield response.data.data;
-        console.log("🚀 ~ file: GetEditorList.js:173 ~ function*PreviewEditor ~ previewID:", previewID)
+        // console.log("🚀 ~ file: GetEditorList.js:173 ~ function*PreviewEditor ~ previewID:", previewID)
 
         // return
         yield put({
@@ -190,13 +193,13 @@ function* PreviewEditor(payload) {
 
 // PATCH
 function* UpdateEditor(payload) {
-    console.log("🚀 ~ file: GetEditorList.js:72 ~ function*UpdateEditor ~ payload:", payload)
+    // console.log("🚀 ~ file: GetEditorList.js:72 ~ function*UpdateEditor ~ payload:", payload)
     // return
 
     try {
-        console.log("🚀 ~ file: GetEditorList.js:117 ~ function*UpdateEditor ~ payload:", payload)
+        // console.log("🚀 ~ file: GetEditorList.js:117 ~ function*UpdateEditor ~ payload:", payload)
         const requestFormData = toBackendFormData(payload.data)
-        console.log("🚀 ~ file: GetEditorList.js:123 ~ function*UpdateEditor ~ requestFormData:", Object.fromEntries(requestFormData))
+        // console.log("🚀 ~ file: GetEditorList.js:123 ~ function*UpdateEditor ~ requestFormData:", Object.fromEntries(requestFormData))
         // return
         let response
         if (typeof requestFormData.get('contentImagePath') === 'object') {
@@ -205,7 +208,7 @@ function* UpdateEditor(payload) {
             response = yield instance.patch(`/editor/${payload.id}`, requestFormData);
         }
         const { message } = yield response.data;
-        console.log("🚀 ~ file: GetEditorList.js:177 ~ function*UpdateEditor ~ message:", message)
+        // console.log("🚀 ~ file: GetEditorList.js:177 ~ function*UpdateEditor ~ message:", message)
         yield put({
             type: GetEditorAction.UPDATE_EDITOR_SUCCESS,
             payload: { message }
@@ -221,7 +224,7 @@ function* UpdateEditor(payload) {
 // DELETE
 function* DeleteEditor(payload) {
     try {
-        console.log("🚀 ~ file: GetEditorList.js:172 ~ function*DeleteEditor ~ payload:", payload)
+        // console.log("🚀 ~ file: GetEditorList.js:172 ~ function*DeleteEditor ~ payload:", payload)
         const data = {
             'ids': payload
         }

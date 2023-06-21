@@ -9,8 +9,6 @@ import GridContainer from 'components/Grid/GridContainer.jsx';
 import GridItem from 'components/Grid/GridItem.jsx';
 import styles from './EditorClassList.module.css'
 
-// import SingleClassificationSelect from "components/Select/Single/SingleClassificationSelect";
-
 import usePressEnterEventHandler from 'hook/usePressEnterEventHandler';
 
 

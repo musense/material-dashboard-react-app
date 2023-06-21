@@ -51,8 +51,8 @@ export const Button = React.forwardRef((
           color: ${reversed
                     ? active
                         ? 'white'
-                        : '#aaa'
-                    : active
+                    :  '#aaa'
+                    :  active
                         ? 'black'
                         : '#ccc'};
           `
@@ -65,7 +65,7 @@ export const Button = React.forwardRef((
 export const Icon = React.forwardRef((
     {
         icon,
-        className='',
+        className = '',
         ...props
     },
     ref) => (
@@ -76,7 +76,9 @@ export const Icon = React.forwardRef((
             'material-icons',
             css`
         font-size: 18px;
-        vertical-align: text-bottom;`)}>{icon}</span>
+        color    : #999;
+        vertical-align: text-bottom;`
+        )}>{icon}</span>
 )
 )
 

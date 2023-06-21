@@ -1,13 +1,17 @@
 import React, { useEffect, useMemo, useState } from 'react';
 
 import { useDispatch, useSelector } from 'react-redux';
-import SingleSelector from './base/SingleSelectorTest';
+import SingleSelector from './base/Selector';
 
 import { RESET_SELECTED_CLASS } from 'actions/GetClassAction';
 
 //* classRef: parent form get selected value
-export default function SingleClassificationSelect({ creatable, classRef, width = null }) {
-console.log("🚀 ~ file: SingleClassificationSelect.jsx:10 ~ SingleClassificationSelect ~ width:", width)
+export default function SingleClassificationSelect({
+  creatable,
+  classRef,
+  width = null
+}) {
+  console.log("🚀 ~ file: SingleClassificationSelect.jsx:10 ~ SingleClassificationSelect ~ width:", width)
 
   const editorClass = useSelector((state) => state.getClassReducer.editorClass);
   const editorClassList = useSelector((state) => state.getClassReducer.editorClassList);

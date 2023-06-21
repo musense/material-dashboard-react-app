@@ -13,6 +13,7 @@ const bend2FendMap = new Map([
     ['contentImagePath', 'media.banner'],
     ['homeImagePath', 'media.thumbnail'],
     ['hidden', 'hide'],
+    ['scheduledAt', 'scheduleTime'],
 ])
 
 const fend2BendMap = new Map([
@@ -30,6 +31,8 @@ const fend2BendMap = new Map([
     ['media.banner', 'contentImagePath'],
     ['media.thumbnail', 'homeImagePath'],
     ['hide', 'hidden'],
+    ['scheduleTime', 'scheduledAt'],
+    ['draft', 'draft'],
 ])
 
 export function toFrontendData(responseData) {
@@ -81,7 +84,12 @@ export function toFrontendData(responseData) {
             },
             pageView: item.pageView,
             hide: item.hidden || false,
-            createDate: item.createdAt || '',
+            createDate: item.createdAt,
+            updateDate: item.updatedAt,
+            sitemapUrl: item.sitemapUrl,
+            isScheduled: item.scheduledAt ? true : false,
+            scheduleTime: item.scheduledAt,
+            status: item.status,
         })
 
         )
@@ -131,9 +139,14 @@ export function toFrontendData(responseData) {
                 thumbnail: responseData.homeImagePath || '',
                 altText: responseData.altText || '',
             },
-            pageView: responseData.pageView,
-            hide: responseData.hidden || false,
-            createDate: responseData.createdAt || '',
+            pageView  : responseData.pageView,
+            hide      : responseData.hidden || false,
+            createDate: responseData.createdAt,
+            updateDate: responseData.updatedAt,
+            sitemapUrl: responseData.sitemapUrl,
+            isScheduled: responseData.scheduledAt ? true : false,
+            scheduleTime: responseData.scheduledAt,
+            status: responseData.status,
         }
     }
 }

@@ -6,6 +6,8 @@ const initialState = {
     serialNumber: 'asc',
     'content.title': 'asc',
     createDate: 'asc',
+    updateDate: 'asc',
+    status: 'asc',
     'classifications.label': 'asc',
   },
   showList: null,

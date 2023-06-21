@@ -1,7 +1,5 @@
 import React, { useEffect } from 'react'
-import { Routes, Route, useNavigate } from 'react-router-dom'
-
-import { useDispatch } from 'react-redux';
+import { Routes, Route, useNavigate, useLocation } from 'react-router-dom'
 
 import * as GetClassAction from "actions/GetClassAction.js";
 import * as GetTagsAction from "actions/GetTagsAction.js";
@@ -22,27 +20,31 @@ import './app.css'
 
 function App() {
     const navigate = useNavigate()
+    const location = useLocation()
+    console.log("🚀 ~ file: App.js:24 ~ App ~ location:", location)
 
     useEffect(() => {
-        const lastLocation = localStorage.getItem('pathname')
-        if (lastLocation) {
-            navigate(lastLocation)
-        } else {
+        window.sessionStorage.setItem('pathname', location.pathname)
+    }, [location.pathname]);
+
+    useEffect(() => {
+        const lastLocation = window.sessionStorage.getItem('pathname')
+        if (!lastLocation || lastLocation === '/') {
             navigate('/auth/login-page')
-            // dispatch({ type: GetClassAction.REQUEST_CLASS_LIST })
-            // navigate('/auth/register-page')
-
-            // navigate('/admin/editorList')
-            // navigate('/admin/tag')
-            // navigate('/admin/editorClassList')
-            // navigate('/admin/table')
-            // navigate('/admin/editorList/new')
-
-            // navigate('/admin/editorManager')
+        } else if (lastLocation) {
+            navigate(lastLocation)
         }
-        return () => {
-            localStorage.setItem('pathname', window.location.pathname)
-        }
+        // dispatch({ type: GetClassAction.REQUEST_CLASS_LIST })
+        // navigate('/auth/register-page')
+
+        // navigate('/admin/editorList')
+        // navigate('/admin/tag')
+        // navigate('/admin/editorClassList')
+        // navigate('/admin/table')
+        // navigate('/admin/editorList/new')
+
+        // navigate('/admin/editorManager')
+
     }, []);
 
     return (

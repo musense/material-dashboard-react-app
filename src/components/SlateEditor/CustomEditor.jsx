@@ -52,6 +52,7 @@ export const CustomEditor = {
             TEXT_ALIGN_TYPES.includes(type) ? 'align' : 'type'
         )
         const isList = LIST_TYPES.includes(type)
+        console.log("🚀 ~ file: CustomEditor.jsx:55 ~ toggleBlock ~ isList:", isList)
 
         Transforms.unwrapNodes(editor, {
             match: n =>
@@ -79,6 +80,7 @@ export const CustomEditor = {
         }
     },
 
+    //! would be removed
     resetBlockAndNewLine(editor, type) {
         const isActive = this.isBlockActive(
             editor,
@@ -138,10 +140,10 @@ export const CustomEditor = {
         return imageExtensions.includes(ext)
     },
 
-    insertImage(editor, url, alt) {
+    insertImage(editor, url, alt, href) {
         console.log("🚀 ~ file: CustomEditor.jsx:113 ~ insertImage ~ alt:", alt)
         const text = { text: '' }
-        const image = { type: 'image', url, alt, children: [text] }
+        const image = { type: 'image', url, alt, href, children: [text] }
         Transforms.insertNodes(editor, image)
     },
 
@@ -299,6 +301,50 @@ export const CustomEditor = {
             Transforms.wrapNodes(editor, button, { split: true })
             Transforms.collapse(editor, { edge: 'end' })
         }
+    },
+    getSingleParagraphText(allTextArray, selection) {
+        const anchorOffset = selection.anchor.offset
+        const anchorPath   = selection.anchor.path[0]
+        const focusOffset  = selection.focus.offset
+        const focusText    = allTextArray[anchorPath].children[0].text
+
+        const        selectedText = 
+            anchorOffset <= focusOffset
+                ? focusText.slice(anchorOffset, focusOffset)
+                :    focusText.slice(focusOffset, anchorOffset)
+        return selectedText
+    },
+    getMultiParagraphText(allTextArray, selection) {
+        const anchorPath = selection.anchor.path[0]
+        const focusPath  = selection.focus.path[0]
+
+        let selectedText
+        let startOffset,
+            startPath,
+            endOffset,
+            endPath
+
+
+        if (anchorPath < focusPath) {
+            startOffset = selection.anchor.offset
+            startPath   = anchorPath
+            endOffset   = selection.focus.offset
+            endPath     = focusPath
+        } else {
+            startOffset = selection.focus.offset
+            startPath   = focusPath
+            endOffset   = selection.anchor.offset
+            endPath     = anchorPath
+        }
+
+        selectedText =
+            [allTextArray[startPath].children[0].text.slice(startOffset, allTextArray[startPath].children[0].text.length),
+            allTextArray[endPath].children[0].text.slice(0, endOffset)
+            ]
+        for (let i = startPath + 1; i < endPath; i++) {
+            selectedText.splice(1, 0, allTextArray[startPath].children[0].text)
+        }
+        return selectedText.join()
     },
 }
 

@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react'; // useStatev
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 
 import CardBody from 'components/Card/CardBody.jsx';
 
@@ -18,6 +18,7 @@ export default function EditorListBody(
 ) {
 
     const navigate = useNavigate();
+    const [active, setActive] = useState(false);
     const checkedToDeleteMapRef = useRef(new Map())
     const [addEditorDisabled, setAddEditorDisabled] = useState(false);
     const dispatch = useDispatch();
@@ -114,10 +115,6 @@ export default function EditorListBody(
         });
         e.target.reset();
     }
-    function onAddNewEditor() {
-        // initialEditorState()
-        navigate('/admin/editorList/new');
-    }
 
     function onPageButtonClick(pageNumber) {
         dispatch({
@@ -135,35 +132,56 @@ export default function EditorListBody(
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
     const [mediaInfo, setMediaInfo] = useState(null);
+    const getUpdateDateTime = (date) => `
+    ${new Date(date).toLocaleDateString('zh-TW', {
+        year: 'numeric', month: 'long', day: 'numeric'
+    })} ${new Date(date).toLocaleTimeString('zh-TW', {
+        hour: 'numeric', minute: 'numeric', hour12: 'numeric'
+    })}`;
     return <CardBody>
         <EditorSearchForm />
-        <Button
-            color='info'
-            disabled={addEditorDisabled}
-            onClick={() => onAddNewEditor()}
-        >
-            新增文章
-        </Button>
-        <Button
-            color='info'
-            disabled={prevBtnDisable}
-            onClick={() => onPageButtonClick(currentPage - 1)}
-        >
-            上一頁
-        </Button>
-        <Button
-            color='info'
-            disabled={nextBtnDisable}
-            onClick={() => onPageButtonClick(currentPage + 1)}
-        >
-            下一頁
-        </Button>
+        <div style={{
+            marginTop: '1.1rem',
+        }}>
+            <Button
+                color='info'
+                disabled={addEditorDisabled}
+                onClick={() => {
+                    dispatch({
+                        type: GetEditorAction.RESET_EDITOR
+                    })
+                    navigate('/admin/editorList/new')
+                }}
+            >
+                新增文章
+            </Button>
+            <Button
+                color='info'
+                disabled={prevBtnDisable}
+                onClick={() => onPageButtonClick(currentPage - 1)}
+            >
+                上一頁
+            </Button>
+            <Button
+                color='info'
+                disabled={nextBtnDisable}
+                onClick={() => onPageButtonClick(currentPage + 1)}
+            >
+                下一頁
+            </Button>
+            <Button
+                color='info'
+                onClick={() => setActive(prevActive => !prevActive)}
+            >
+                刪除文章
+            </Button>
+        </div>
         <form name='view-editor-list-form' onSubmit={onSearchBunchDeleteList}>
             <div data-attr="data-header" className={`view-form ${styles['view-editor-list-header']}`}>
                 <div data-attr="data-header-row">
-                    <div> <input type='submit' value='批次刪除' /> </div>
-                    <div> <input type='button' value='編號' onClick={SortingHelperFunc.onSerialNumberClick} /> </div>
-                    <div><input type='button' value='標題' onClick={SortingHelperFunc.onTitleClick} /></div>
+                    <div className={`${active ? styles.show : ''}`}> <input type='submit' value='批次刪除' /> </div>
+                    <div> <input type='button' value='序號' onClick={SortingHelperFunc.onSerialNumberClick} /> </div>
+                    <div className={'editor-list-title'}><input type='button' value='標題' onClick={SortingHelperFunc.onTitleClick} /></div>
                     {/* <div><input type='button' value='分類' onClick={SortingHelperFunc.onClassificationClick} /></div> */}
                     <div><input type='button' value='分類' onClick={SortingHelperFunc.onClassificationClick} /></div>
                     <div>圖片/影片</div>
@@ -172,12 +190,21 @@ export default function EditorListBody(
             </div>
             <div data-attr="data-body" className={`${styles['view-editor-list-body']}`}>
                 {titleViewList && titleViewList.length > 0 && titleViewList.map((titleView, index) => {
+
                     return (
                         <div data-attr="data-body-row" key={index} onClick={() => onEdit(titleView)}>
                             {/* <div data-attr="data-body-row" key={index} > */}
-                            <div><input type='checkbox' name={titleView._id} onClick={checkEditorClassRow} /></div>
+                            <div className={`${active ? styles.show : ''}`}><input type='checkbox' name={titleView._id} onClick={checkEditorClassRow} /></div>
                             <div>{parseInt(titleView.serialNumber)}</div>
-                            <div>{titleView.content.title}</div>
+                            <div className={styles['editor-list-title']}>
+                                <a href={titleView.sitemapUrl}
+                                    target='_blank'
+                                    title={titleView.sitemapUrl}
+                                    onClick={(e) => e.stopPropagation()}
+                                >
+                                    {titleView.content.title}
+                                </a>
+                            </div>
                             <div className={styles['class-cell']}>{titleView.classifications.label}</div>
                             <div className={styles['view-editor-image-container']}>
                                 {titleView.media.banner !== ''
@@ -190,7 +217,6 @@ export default function EditorListBody(
                                                 e.stopPropagation()
                                                 handleOpen()
                                                 setMediaInfo(titleView.media)
-                                                // window.open(titleView.media.thumbnail, '_blank');
                                             }}
                                         />
                                     ) : (
@@ -200,15 +226,35 @@ export default function EditorListBody(
                                     )}
                             </div>
                             <div>
-                                <span className={`${titleView.published ? styles['published'] : styles['not-published-yet']}`}>
-                                    {titleView.published ? '已發佈' : '未發佈'}
+                                <span style={{
+                                    color: titleView.status === '已發布'
+                                        ? 'green'
+                                        : titleView.status === '已排程'
+                                            ? 'red'
+                                            : titleView.status === '草稿'
+                                                ? 'black'
+                                                : 'grey',
+                                    fontWeight: 'bold'
+                                }}>
+                                    {titleView.status}
                                 </span>
                                 <span>
-                                    {`${new Date(titleView.createDate).toLocaleDateString('zh-TW', { year: 'numeric', month: 'long', day: 'numeric' })} ${new Date(titleView.createDate).toLocaleTimeString('zh-TW', { hour: 'numeric', minute: 'numeric', hour12: 'numeric' })}`}
+                                    {getUpdateDateTime(titleView.updateDate)}
                                 </span>
                             </div>
                         </div>);
                 })}
+            </div>
+            <div data-attr="data-footer" className={`view-form ${styles['view-editor-list-header']}`}>
+                <div data-attr="data-header-row">
+                    <div className={`${active ? styles.show : ''}`}> <input type='submit' value='批次刪除' /> </div>
+                    <div> <input type='button' value='序號' onClick={SortingHelperFunc.onSerialNumberClick} /> </div>
+                    <div className={'editor-list-title'}><input type='button' value='標題' onClick={SortingHelperFunc.onTitleClick} /></div>
+                    {/* <div><input type='button' value='分類' onClick={SortingHelperFunc.onClassificationClick} /></div> */}
+                    <div><input type='button' value='分類' onClick={SortingHelperFunc.onClassificationClick} /></div>
+                    <div>圖片/影片</div>
+                    <div><input type='button' value='日期' onClick={SortingHelperFunc.onCreateAtClick} /> </div>
+                </div>
             </div>
         </form>
         <MediaModal

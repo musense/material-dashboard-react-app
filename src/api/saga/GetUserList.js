@@ -13,7 +13,7 @@ function* UserLogin(payload) {
     try {
         const response = yield instance.post(`/login`, { username, password });
         const user = yield response.data;
-        console.log("🚀 ~ file: GetUserList.js:16 ~ function*UserLogin ~ user:", user)
+        // console.log("🚀 ~ file: GetUserList.js:16 ~ function*UserLogin ~ user:", user)
         yield put({
             type: LOGIN_USER_SUCCESS,
             errorMessage: 'login successfully',
@@ -23,7 +23,7 @@ function* UserLogin(payload) {
             },
         })
     } catch (error) {
-        console.log("🚀 ~ file: GetUserList.js:23 ~ function*UserLogin ~ error:", error)
+        // console.log("🚀 ~ file: GetUserList.js:23 ~ function*UserLogin ~ error:", error)
         let errorMessage;
         if (error.response) {
             errorMessage = error.response.data.message
@@ -53,7 +53,7 @@ function* UserRegister(payload) {
             errorMessage: 'register successfully',
         })
     } catch (error) {
-        console.log("🚀 ~ file: GetUserList.js:57 ~ function*UserRegister ~ error:", error)
+        // console.log("🚀 ~ file: GetUserList.js:57 ~ function*UserRegister ~ error:", error)
         let errorMessage;
         if (error.response) {
             errorMessage = error.response.data.message

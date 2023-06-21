@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import SingleSelector from './base/SingleSelectorTest';
+import SingleSelector from './base/Selector';
 
 import { useDispatch, useSelector } from 'react-redux';
 import * as GetClassAction from '../../../actions/GetClassAction';

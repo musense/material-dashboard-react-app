@@ -13,6 +13,7 @@ import Button from 'components/CustomButtons/Button';
 
 export default function EditorRightWrapper({ isLoading = true }) {
 
+    const [active, setActive] = useState(false);
     const [prevBtnDisable, setPrevBtnDisable] = useState(false);
     const [nextBtnDisable, setNextBtnDisable] = useState(false);
 
@@ -92,24 +93,34 @@ export default function EditorRightWrapper({ isLoading = true }) {
                         <h4>分類排列</h4>
                     </CardHeader>
                     <CardBody>
-                        <Button
-                            color='info'
-                            disabled={prevBtnDisable}
-                            onClick={() => onPageButtonClick(currentPage - 1)}
-                        >
-                            上一頁
-                        </Button>
-                        <Button
-                            color='info'
-                            disabled={nextBtnDisable}
-                            onClick={() => onPageButtonClick(currentPage + 1)}
-                        >
-                            下一頁
-                        </Button>
+                        <div style={{
+                            marginTop: '1.1rem',
+                        }}>
+                            <Button
+                                color='info'
+                                disabled={prevBtnDisable}
+                                onClick={() => onPageButtonClick(currentPage - 1)}
+                            >
+                                上一頁
+                            </Button>
+                            <Button
+                                color='info'
+                                disabled={nextBtnDisable}
+                                onClick={() => onPageButtonClick(currentPage + 1)}
+                            >
+                                下一頁
+                            </Button>
+                            <Button
+                                color='info'
+                                onClick={() => setActive(prevActive => !prevActive)}
+                            >
+                                刪除分類
+                            </Button>
+                        </div>
                         <form name='view-class-form' className={`${styles['editor-table-wrapper']}`} onSubmit={onBunchDelete}>
                             <div data-attr="data-header" className={`view-form ${styles['editor-table-header']}`}>
                                 <div data-attr="data-header-row">
-                                    <div> <input type='submit' value='批次刪除' /> </div>
+                                    <div className={`${active ? styles.show : ''}`}> <input type='submit' value='批次刪除' /> </div>
                                     <div><input type='button' value='分類名稱' onClick={() => onSortingClick('name')} /></div>
                                     <div><input type='button' value='分類網址' onClick={() => onSortingClick('customUrl')} /></div>
                                     {/* <div><input type='button' value='分類上層' onClick={() => onSortingClick('parentClass')} /></div> */}
@@ -119,7 +130,7 @@ export default function EditorRightWrapper({ isLoading = true }) {
                                 {showList && showList.length > 0 && showList.map((editorClass, index) => {
                                     return (
                                         <div data-attr="data-body-row" key={index} onClick={() => onEdit(editorClass)}>
-                                            <div><input type='checkbox' name={editorClass._id} onClick={checkEditorClassRow} /></div>
+                                            <div className={`${active ? styles.show : ''}`}><input type='checkbox' name={editorClass._id} onClick={checkEditorClassRow} /></div>
                                             <div>{editorClass.name}</div>
                                             <div>
                                                 <a href={editorClass.customUrl} target="_blank" rel="noopener noreferrer" >

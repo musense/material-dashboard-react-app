@@ -1,9 +1,10 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
 import Modal from '@mui/material/Modal';
 import Iframe from "react-iframe";
-
-
+import { Icon } from '@mui/material';
+import CloseIcon from "./../../components/Icon/CloseIcon";
 const style = {
     position: 'absolute',
     top: '50%',
@@ -34,8 +35,6 @@ const imageStyle = {
 export default function MediaModal({ open, handleClose, mediaInfo }) {
 
     const onClose = useCallback(() => {
-        setIsImage(true)
-        setIframeUrl(undefined)
         handleClose()
     }, [handleClose])
     const [isImage, setIsImage] = useState(true);
@@ -44,24 +43,10 @@ export default function MediaModal({ open, handleClose, mediaInfo }) {
     const getProperty = useCallback((propertyName) => {
         const indexOf = mediaInfo.banner.indexOf(`${propertyName}="`) + `${propertyName}="`.length;
         const endIndexOf = mediaInfo.banner.indexOf(`"`, indexOf);
-
-        console.log("🚀 ~ file: MediaModal.jsx:32 ~ useEffect ~ indexOf:", indexOf);
-        console.log("🚀 ~ file: MediaModal.jsx:32 ~ useEffect ~ endIndexOf:", endIndexOf);
         const property = mediaInfo.banner.substr(indexOf, endIndexOf - indexOf);
-        console.log("🚀 ~ file: MediaModal.jsx:32 ~ useEffect ~ property:", property);
         return property
     }, [mediaInfo])
 
-    // function getProperty(propertyName) {
-    //     const indexOf = mediaInfo.banner.indexOf(`${propertyName}="`) + `${propertyName}="`.length;
-    //     const endIndexOf = mediaInfo.banner.indexOf(`"`, indexOf);
-
-    //     console.log("🚀 ~ file: MediaModal.jsx:32 ~ useEffect ~ indexOf:", indexOf);
-    //     console.log("🚀 ~ file: MediaModal.jsx:32 ~ useEffect ~ endIndexOf:", endIndexOf);
-    //     const property = mediaInfo.banner.substr(indexOf, endIndexOf - indexOf);
-    //     console.log("🚀 ~ file: MediaModal.jsx:32 ~ useEffect ~ property:", property);
-    //     return property
-    // }
     useEffect(() => {
         if (!mediaInfo) return
         console.log("🚀 ~ file: MediaModal.jsx:32 ~ MediaModal ~ mediaInfo:", mediaInfo)
@@ -85,6 +70,10 @@ export default function MediaModal({ open, handleClose, mediaInfo }) {
             aria-describedby="modal-modal-description"
         >
             <Box sx={style}>
+                <CloseIcon
+                    color="white"
+                    onClose={onClose}
+                    distance={-20} />
                 {isImage ?
                     <div style={imageDivStyle}>
                         <img src={iframeUrl} style={imageStyle} />
@@ -99,6 +88,6 @@ export default function MediaModal({ open, handleClose, mediaInfo }) {
                         position="relative"
                     />}
             </Box>
-        </Modal>
+        </Modal >
     )
 }

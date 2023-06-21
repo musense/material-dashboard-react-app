@@ -1,9 +1,6 @@
 import React, { useEffect } from 'react'
 import { Routes, Route, useNavigate, useLocation } from 'react-router-dom'
 
-import * as GetClassAction from "actions/GetClassAction.js";
-import * as GetTagsAction from "actions/GetTagsAction.js";
-
 import Admin from "layouts/Admin.jsx";
 import Auth from "layouts/Auth.jsx";
 import Dashboard from 'views/Dashboard/Dashboard.jsx';
@@ -15,8 +12,6 @@ import RegisterPage from 'views/Pages/RegisterPage';
 import TagList from './views/TagList';
 import EditorClassList from './views/EditorClassList';
 import './app.css'
-
-// import Cookie from "js-cookie";
 
 function App() {
     const navigate = useNavigate()
@@ -32,13 +27,17 @@ function App() {
         if (!lastLocation || lastLocation === '/') {
             navigate('/auth/login-page')
         } else if (lastLocation) {
-            navigate(lastLocation)
+            navigate('/admin/editorList')
+            // navigate('/admin/editorList/new')
+            // navigate(lastLocation)
         }
-        // dispatch({ type: GetClassAction.REQUEST_CLASS_LIST })
-        // navigate('/auth/register-page')
 
-        // navigate('/admin/editorList')
+        // dispatch({ type: GetClassAction.REQUEST_CLASS_LIST })
+        // navigate('/admin/editorList/new')
+
+        // navigate('/auth/register-page')
         // navigate('/admin/tag')
+
         // navigate('/admin/editorClassList')
         // navigate('/admin/table')
         // navigate('/admin/editorList/new')
@@ -52,7 +51,7 @@ function App() {
             <div className='App'>
                 <Routes>
                     <Route path="admin" element={<Admin />} >
-                        <Route path="dashboard" element={<Dashboard />} />
+                        {/* <Route path="dashboard" element={<Dashboard />} /> */}
                         {/* <Route path="user" element={<UserProfile />} /> */}
                         <Route path="tag" element={<TagList />} />
                         <Route path="editorClassList" element={<EditorClassList />} />
@@ -72,7 +71,7 @@ function App() {
                         <Route path="login-page" element={<LoginPage />} />
                         <Route path="register-page" element={<RegisterPage />} />
                     </Route>
-                    <Route path="/" render={(props) => <Dashboard {...props} />} />
+                    {/* <Route path="/" render={(props) => <Dashboard {...props} />} /> */}
                 </Routes>
             </div>
         </>

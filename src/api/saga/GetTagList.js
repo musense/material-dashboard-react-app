@@ -60,9 +60,9 @@ function* GetTagList(payload = 1) {
         const response = yield instance.get(`/tags?limit=100000&pageNumber=${payload}`);
         const { currentPage, totalCount, data: responseData } = yield response.data
         const tagList = toFrontendData(responseData)
-        // console.log("🚀 ~ file: GetTagList.js:44 ~ function*GetTagList ~ tagList:", tagList)
-        // const tagList = yield response.data;
-        // console.log("🚀 ~ file: GetTagList.js:14 ~ function*GetTagList ~ tagList:", tagList)
+          // console.log("🚀 ~ file: GetTagList.js:44 ~ function*GetTagList ~ tagList:", tagList)
+          // const tagList = yield response.data;
+          // console.log("🚀 ~ file: GetTagList.js:14 ~ function*GetTagList ~ tagList:", tagList)
 
         // console.log("🚀 ~ file: GetTagList.js:19 ~ tagMapped ~ tagMapped:", tagMapped)
         // return

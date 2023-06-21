@@ -13,7 +13,7 @@ function* UserLogin(payload) {
     try {
         const response = yield instance.post(`/login`, { username, password });
         const user = yield response.data;
-        // console.log("🚀 ~ file: GetUserList.js:16 ~ function*UserLogin ~ user:", user)
+          // console.log("🚀 ~ file: GetUserList.js:16 ~ function*UserLogin ~ user:", user)
         yield put({
             type: LOGIN_USER_SUCCESS,
             errorMessage: 'login successfully',

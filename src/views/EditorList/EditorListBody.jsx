@@ -7,10 +7,27 @@ import * as GetEditorAction from '../../actions/GetEditorAction';
 // import Button from 'components/CustomButtons/Button';
 import { useNavigate } from 'react-router-dom';
 import styles from './EditorList.module.css'
-import Button from 'components/CustomButtons/Button';
+  // import Button from 'components/CustomButtons/Button';
 import MediaModal from './MediaModal';
 import EditorSearchForm from './EditorSearchForm';
+import { Stack } from '@mui/system';
 
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import Typography from '@mui/material/Typography';
+import Modal from '@mui/material/Modal';
+
+const style = {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: 400,
+    bgcolor: 'background.paper',
+    border: '2px solid #000',
+    boxShadow: 24,
+    p: 4,
+  };
 
 export default function EditorListBody(
     // { titleViewList, 
@@ -26,7 +43,7 @@ export default function EditorListBody(
     const [prevBtnDisable, setPrevBtnDisable] = useState(false);
     const [nextBtnDisable, setNextBtnDisable] = useState(false);
 
-
+    
     const showList = useSelector((state) => state.getEditorReducer.showList);
     console.log("🚀 ~ file: EditorListBody.jsx:28 ~ showList:", showList)
     const currentPage = useSelector((state) => state.getEditorReducer.currentPage);
@@ -84,6 +101,22 @@ export default function EditorListBody(
                 }
             })
         },
+        onUpdateAtClick() {
+            dispatch({
+                type: GetEditorAction.SHOW_EDITOR_LIST_SORTING,
+                payload: {
+                    key: 'updateDate'
+                }
+            })
+        },
+        onStatusClick() {
+            dispatch({
+                type: GetEditorAction.SHOW_EDITOR_LIST_SORTING,
+                payload: {
+                    key: 'status'
+                }
+            })
+        },
     }
 
     function onEdit(updateEditor) {
@@ -128,9 +161,11 @@ export default function EditorListBody(
         checkedToDeleteMapRef.current.set(e.target.name, e.target.checked)
         console.log("🚀 ~ file: EditorClassList.jsx:164 ~ checkEditorClassRow ~ checkedToDeleteMapRef.current:", checkedToDeleteMapRef.current)
     }
+
     const [open, setOpen] = React.useState(false);
-    const handleOpen = () => setOpen(true);
-    const handleClose = () => setOpen(false);
+    const handleOpen      = () => setOpen(true);
+    const handleClose     = () => setOpen(false);
+    
     const [mediaInfo, setMediaInfo] = useState(null);
     const getUpdateDateTime = (date) => `
     ${new Date(date).toLocaleDateString('zh-TW', {
@@ -139,6 +174,22 @@ export default function EditorListBody(
         hour: 'numeric', minute: 'numeric', hour12: 'numeric'
     })}`;
     return <CardBody>
+        <Button onClick = {handleOpen}>Open modal</Button>
+        <Modal
+            open={open}
+            onClose={handleClose}
+            aria-labelledby="modal-modal-title"
+            aria-describedby="modal-modal-description"
+        >
+            <Box sx={style}>
+                <Typography id="modal-modal-title" variant="h6" component="h2">
+                    Text in a modal
+                </Typography>
+                <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+                    Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
+                </Typography>
+            </Box>
+        </Modal>
         <EditorSearchForm />
         <div style={{
             marginTop: '1.1rem',
@@ -185,7 +236,8 @@ export default function EditorListBody(
                     {/* <div><input type='button' value='分類' onClick={SortingHelperFunc.onClassificationClick} /></div> */}
                     <div><input type='button' value='分類' onClick={SortingHelperFunc.onClassificationClick} /></div>
                     <div>圖片/影片</div>
-                    <div><input type='button' value='日期' onClick={SortingHelperFunc.onCreateAtClick} /> </div>
+                    <div><input type='button' value='狀態' onClick={SortingHelperFunc.onStatusClick} /> </div>
+                    <div><input type='button' value='更新日期' onClick={SortingHelperFunc.onUpdateAtClick} /> </div>
                 </div>
             </div>
             <div data-attr="data-body" className={`${styles['view-editor-list-body']}`}>
@@ -226,18 +278,25 @@ export default function EditorListBody(
                                     )}
                             </div>
                             <div>
-                                <span style={{
-                                    color: titleView.status === '已發布'
-                                        ? 'green'
-                                        : titleView.status === '已排程'
-                                            ? 'red'
-                                            : titleView.status === '草稿'
-                                                ? 'black'
-                                                : 'grey',
-                                    fontWeight: 'bold'
-                                }}>
-                                    {titleView.status}
-                                </span>
+                                <Stack direction={"column"} spacing={0}>
+                                    <span style={{
+                                        color: titleView.status === '已發布'
+                                            ? 'green'
+                                            : titleView.status === '已排程'
+                                                ? 'red'
+                                                : titleView.status === '草稿'
+                                                    ? 'black'
+                                                    : 'grey',
+                                        fontWeight: 'bold'
+                                    }}>
+                                        {titleView.status}
+                                    </span>
+                                    <span>
+                                        {getUpdateDateTime(titleView.publishDate)}
+                                    </span>
+                                </Stack>
+                            </div>
+                            <div>
                                 <span>
                                     {getUpdateDateTime(titleView.updateDate)}
                                 </span>
@@ -253,7 +312,8 @@ export default function EditorListBody(
                     {/* <div><input type='button' value='分類' onClick={SortingHelperFunc.onClassificationClick} /></div> */}
                     <div><input type='button' value='分類' onClick={SortingHelperFunc.onClassificationClick} /></div>
                     <div>圖片/影片</div>
-                    <div><input type='button' value='日期' onClick={SortingHelperFunc.onCreateAtClick} /> </div>
+                    <div><input type='button' value='狀態' onClick={SortingHelperFunc.onStatusClick} /> </div>
+                    <div><input type='button' value='更新日期' onClick={SortingHelperFunc.onCreateAtClick} /> </div>
                 </div>
             </div>
         </form>

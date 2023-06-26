@@ -1,33 +1,19 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState, useCallback } from 'react';
 
 import CardBody from 'components/Card/CardBody.jsx';
 
 import { useDispatch, useSelector } from 'react-redux';
 import * as GetEditorAction from '../../actions/GetEditorAction';
-// import Button from 'components/CustomButtons/Button';
+
 import { useNavigate } from 'react-router-dom';
 import styles from './EditorList.module.css'
-  // import Button from 'components/CustomButtons/Button';
+import Button from 'components/CustomButtons/Button';
 import MediaModal from './MediaModal';
+import MessageModal from "./MessageModal";
+
 import EditorSearchForm from './EditorSearchForm';
 import { Stack } from '@mui/system';
 
-import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
-import Typography from '@mui/material/Typography';
-import Modal from '@mui/material/Modal';
-
-const style = {
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-    width: 400,
-    bgcolor: 'background.paper',
-    border: '2px solid #000',
-    boxShadow: 24,
-    p: 4,
-  };
 
 export default function EditorListBody(
     // { titleViewList, 
@@ -43,14 +29,39 @@ export default function EditorListBody(
     const [prevBtnDisable, setPrevBtnDisable] = useState(false);
     const [nextBtnDisable, setNextBtnDisable] = useState(false);
 
-    
+
     const showList = useSelector((state) => state.getEditorReducer.showList);
     console.log("🚀 ~ file: EditorListBody.jsx:28 ~ showList:", showList)
     const currentPage = useSelector((state) => state.getEditorReducer.currentPage);
     const totalCount = useSelector((state) => state.getEditorReducer.totalCount);
+    const returnMessage = useSelector((state) => state.getEditorReducer.errorMessage);
+
+    const [dialogTitle, setDialogTitle] = useState(null);
+
+    const [success, setSuccess] = useState(true);
+    const [dialogContent, setDialogContent] = useState(null);
 
     const [titleViewList, setTitleViewList] = useState([]);
+    useEffect(() => {
+        console.log("🚀 ~ file: EditorListBody.jsx:62 ~ returnMessage:", returnMessage)
 
+        if (returnMessage === 'Request failed with status code 400') {
+            console.log('刪除失敗！');
+            setSuccess(false)
+            setDialogTitle('刪除失敗！')
+            setDialogContent('請選擇項目後再刪除！')
+            handleClickOpen()
+        }
+
+        if (returnMessage === 'delete successfully') {
+
+            console.log('刪除成功！');
+            setSuccess(true)
+            setDialogTitle('刪除成功！')
+            setDialogContent('刪除成功！')
+            handleClickOpen()
+        }
+    }, [returnMessage]);
     useEffect(() => {
         if (currentPage === 1)
             setPrevBtnDisable(true)
@@ -63,6 +74,7 @@ export default function EditorListBody(
     }, [currentPage, totalCount]);
 
     useEffect(() => {
+        if (!showList) return
         setTitleViewList(showList)
 
     }, [showList])
@@ -142,6 +154,10 @@ export default function EditorListBody(
         }
         console.log("🚀 ~ file: EditorClassList.jsx:142 ~ onDelete ~ deleteKeys:", deleteIds)
 
+        setDialogTitle('確定要刪除以下文章？')
+        setDialogContent(deleteIds.join(','))
+        handleClickConfirmOpen()
+
         dispatch({
             type: GetEditorAction.BUNCH_DELETE_EDITOR,
             payload: deleteIds
@@ -163,9 +179,21 @@ export default function EditorListBody(
     }
 
     const [open, setOpen] = React.useState(false);
-    const handleOpen      = () => setOpen(true);
-    const handleClose     = () => setOpen(false);
-    
+    const [confirm, setConfirm] = useState(false);
+    const handleClickConfirmOpen = new Promise((res) => {
+
+
+        setConfirm(true);
+    });
+    const handleClickOpen = () => {
+        setOpen(true);
+    };
+    const [openMedia, setOpenMedia] = React.useState(false);
+    const handleOpenMedia = () => setOpenMedia(true);
+    const handleCloseMedia = () => setOpenMedia(false);
+    const handleOpen = () => setOpen(true);
+    const handleClose = () => setOpen(false);
+
     const [mediaInfo, setMediaInfo] = useState(null);
     const getUpdateDateTime = (date) => `
     ${new Date(date).toLocaleDateString('zh-TW', {
@@ -173,23 +201,37 @@ export default function EditorListBody(
     })} ${new Date(date).toLocaleTimeString('zh-TW', {
         hour: 'numeric', minute: 'numeric', hour12: 'numeric'
     })}`;
+
+    const handleConfirmClose = useCallback(() => {
+        setConfirm(false);
+    }, [setConfirm, setOpen])
+
+    const dialogConfirmProps = useMemo(() => ({
+        confirm: true,
+        open: confirm,
+        handleClose: () => setConfirm(false),
+        dialogTitle,
+        dialogContent,
+    }), [confirm, setConfirm, dialogTitle, dialogContent])
+
+    const dialogProps = useMemo(() => ({
+        open,
+        success,
+        handleClose: () => setOpen(false),
+        dialogTitle,
+        dialogContent,
+    }), [open, success, setOpen, dialogTitle, dialogContent])
+
+
+
     return <CardBody>
-        <Button onClick = {handleOpen}>Open modal</Button>
-        <Modal
-            open={open}
-            onClose={handleClose}
-            aria-labelledby="modal-modal-title"
-            aria-describedby="modal-modal-description"
-        >
-            <Box sx={style}>
-                <Typography id="modal-modal-title" variant="h6" component="h2">
-                    Text in a modal
-                </Typography>
-                <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-                    Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
-                </Typography>
-            </Box>
-        </Modal>
+        <Button onClick={handleOpen}>Open modal</Button>
+        <MessageModal
+            {...dialogProps}
+        />
+        <MessageModal
+            {...dialogConfirmProps}
+        />
         <EditorSearchForm />
         <div style={{
             marginTop: '1.1rem',
@@ -267,7 +309,7 @@ export default function EditorListBody(
                                             alt={titleView.media.altText}
                                             onClick={(e) => {
                                                 e.stopPropagation()
-                                                handleOpen()
+                                                handleOpenMedia()
                                                 setMediaInfo(titleView.media)
                                             }}
                                         />
@@ -318,8 +360,8 @@ export default function EditorListBody(
             </div>
         </form>
         <MediaModal
-            open={open}
-            handleClose={handleClose}
+            open={openMedia}
+            handleClose={handleCloseMedia}
             mediaInfo={mediaInfo}
         />
     </CardBody>;

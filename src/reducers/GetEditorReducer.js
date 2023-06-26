@@ -140,10 +140,15 @@ const getEditorReducer = (state = initialState, action) => {
         ...state,
         errorMessage: errorMessage.getFail
       }
-    case GetEditorAction.DELETE_EDITOR_SUCCESS:
+    case GetEditorAction.DELETE_EDITOR_SUCCESS: 
       return {
         ...state,
         errorMessage: errorMessage.deleteSuccess
+      }
+    case GetEditorAction.DELETE_EDITOR_FAIL:
+      return {
+        ...state,
+        errorMessage: action.errorMessage
       }
     case GetEditorAction.REQUEST_EDITOR_SUCCESS:
       return {

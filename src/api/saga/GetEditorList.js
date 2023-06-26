@@ -15,7 +15,7 @@ function* GetEditorTitleList(payload = 1) {
 
         // const titleList = toFrontendData(titleViewListFakeData)
         const titleList = toFrontendData(responseData)
-        // console.log("🚀 ~ file: GetEditorList.js:422 ~ function*GetEditorTitleList ~ titleList:", titleList)
+        console.log("🚀 ~ file: GetEditorList.js:422 ~ function*GetEditorTitleList ~ titleList:", titleList)
         yield put({
             type: GetEditorAction.REQUEST_EDITOR_TITLE_LIST_SUCCESS,
             payload: {
@@ -233,8 +233,9 @@ function* DeleteEditor(payload) {
         });
         const responseData = yield response.data.data;
         yield put({
-            type: GetEditorAction.DELETE_EDITOR_SUCCESS,
+            type   : GetEditorAction.DELETE_EDITOR_SUCCESS,
             payload: responseData
+            
         })
     } catch (error) {
         yield put({

@@ -27,9 +27,10 @@ function App() {
         if (!lastLocation || lastLocation === '/') {
             navigate('/auth/login-page')
         } else if (lastLocation) {
-            navigate('/admin/editorList')
+            // navigate('/auth/login-page')
+            // navigate('/admin/editorList')
             // navigate('/admin/editorList/new')
-            // navigate(lastLocation)
+            navigate(lastLocation)
         }
 
         // dispatch({ type: GetClassAction.REQUEST_CLASS_LIST })

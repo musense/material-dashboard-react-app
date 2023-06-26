@@ -17,8 +17,8 @@ const webHeaderID = [
 const allowedFileTypes = ["image/png", "image/jpeg", "image/gif"];
 
 const DetailForm = React.forwardRef(({
-    editor,
-    onEditorSave,
+    editor, // defaultValue
+    onEditorSave, // saveValue
 }, ref) => {
 
     console.log("🚀 ~ file: DetailForm.jsx:441 ~ editor:", editor)
@@ -29,7 +29,6 @@ const DetailForm = React.forwardRef(({
     const imageAltTextRef = useRef();
     const imageUrlRef = useRef(undefined);
     const imageNameRef = useRef(undefined);
-    const manualUrlRef = useRef(undefined);
     const customUrlRef = useRef(undefined);
     const tagArrayRef = useRef([]);
     const classRef = useRef(null);
@@ -84,7 +83,7 @@ const DetailForm = React.forwardRef(({
                     formDataObject.title !== editor.webHeader.title && (webHeader.set('title', formDataObject.title));
                     formDataObject.description !== editor.webHeader.description && (webHeader.set('description', formDataObject.description))
                     formDataObject.keywords !== editor.webHeader.keywords && (webHeader.set('keywords', formDataObject.keywords))
-                    formDataObject.manualUrl.length > 0 && (webHeader.set('manualUrl', formDataObject.manualUrl))
+                    formDataObject.manualUrl !== '' && (webHeader.set('manualUrl', formDataObject.manualUrl))
                     webHeader.size !== 0 && tData.set('webHeader', webHeader)
                     console.log("🚀 ~ file: index.jsx:145 ~ onEditorSave ~ webHeader:", webHeader)
 
@@ -127,7 +126,7 @@ const DetailForm = React.forwardRef(({
                     classRef.current && tData.set('classifications', classRef.current ? [classRef.current] : null)
                     scheduledDateTimeRef.current && tData.set('scheduleTime', scheduledDateTimeRef.current.current())
 
-                }
+                }          
                 return tData
             }
 
@@ -159,9 +158,7 @@ const DetailForm = React.forwardRef(({
 
         webHeaderID.map(id => setDefaultValueById(id, webHeader))
         customUrlRef.current = webHeader.customUrl
-        if (manualUrlRef && manualUrlRef.current) {
-            manualUrlRef.current.value = ''
-        }
+
         if (media && media.altText) {
             setDefaultValueById('altText', media)
         }
@@ -296,7 +293,6 @@ const DetailForm = React.forwardRef(({
                 <div className={styles['input-group']}>
                     <label htmlFor='custom-url'>自訂網址</label>
                     <input
-                        ref={manualUrlRef}
                         type='text'
                         name='manualUrl'
                         onChange={e => setManualUrl(e.target.value)}
@@ -308,7 +304,7 @@ const DetailForm = React.forwardRef(({
                         ? < input
                             type='text'
                             name='real-url'
-                            value={manualUrl}
+                            value={`p_${manualUrl}.html`}
                             readOnly
                             disabled
                         />

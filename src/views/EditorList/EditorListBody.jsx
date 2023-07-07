@@ -12,10 +12,7 @@ import MediaModal from './MediaModal';
 import EditorSearchForm from './EditorSearchForm';
 
 
-export default function EditorListBody(
-    // { titleViewList, 
-    //     setTitleViewList }
-) {
+export default function EditorListBody() {
 
     const navigate = useNavigate();
     const [active, setActive] = useState(false);

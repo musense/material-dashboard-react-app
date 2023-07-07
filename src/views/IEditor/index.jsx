@@ -4,26 +4,25 @@ import ContentEditorForm from "./ContentEditorForm.jsx"
 import DetailForm from "./DetailForm.jsx"
 import * as GetEditorAction from 'actions/GetEditorAction.js';
 import EditorDialog from './EditorDialog.jsx';
-// import { useBeforeUnload } from "react-router-dom";
-
 
 function NewIEditor() {
 
-  const [state, setState] = useState(null);
+  const [state, setState] = React.useState(null);
+  const containRef = useRef(null);
 
-  // save it off before users navigate away
-  const [isDraft, setIsDraft] = useState(false);
-
-  const onDraftEditorSave = useCallback(() => {
-    setIsDraft(true)
-    onEditorSave()
-  }, [onEditorSave])
-
-  // useBeforeUnload(
-  //   useCallback(() => {
-  //     onDraftEditorSave()
-  //   }, [onDraftEditorSave])
-  // )
+  useEffect(() => {
+    const handleBeforeUnload = (event) => {
+      // Perform actions before the component unloads
+      console.log('🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀beforeunload Hola!');
+      event.preventDefault();
+      onDraftEditorSave()
+      event.returnValue = 'beforeunload Hola!';
+    };
+    window.addEventListener('beforeunload', handleBeforeUnload);
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+    };
+  }, []);
 
   const dispatch = useDispatch();
   const contentFormRef = useRef(null)
@@ -65,8 +64,12 @@ function NewIEditor() {
     }
   }, [returnMessage, editor]);
 
+
+  function onDraftEditorSave() {
+    onEditorSave(null, false)
+  }
   //* e exists means that the context was not draft
-  function onEditorSave(e = null) {
+  function onEditorSave(e = null, checkValidity = true) {
 
     e && e.preventDefault();
 
@@ -80,23 +83,20 @@ function NewIEditor() {
     console.log("🚀 ~ file: index.jsx:121 ~ onEditorSave ~ checkFormSizeData:", checkFormSizeData)
     console.log("🚀 ~ file: index.jsx:121 ~ onEditorSave ~ contentFormData:", contentFormData)
     console.log("🚀 ~ file: index.jsx:121 ~ onEditorSave ~ detailFormData:", detailFormData)
-    if (checkFormSizeData === undefined || checkFormSizeData.size === 0) {
-      console.log('nothing to add!!!');
-      if (e) {
-        setSuccess(false)
-        setDialogContent('沒有新增任何資訊！')
-        handleClickOpen()
+    if (checkValidity) {
+      if (checkFormSizeData === undefined || checkFormSizeData.size === 0) {
+        console.log('nothing to add!!!');
+        if (e) {
+          setSuccess(false)
+          setDialogContent('沒有新增任何資訊！')
+          handleClickOpen()
+        }
+        return
       }
-      return
     }
-    const formData = e
-      ? new Map([
-        ...checkFormSizeData
-      ])
-      : new Map([
-        ...checkFormSizeData,
-        ['draft', true]
-      ])
+    const formData = new Map([
+      ...checkFormSizeData
+    ])
     console.log("🚀 ~ file: index.jsx:121 ~ onEditorSave ~ formData:", formData)
 
     const contentState = formData.has('content')
@@ -106,32 +106,34 @@ function NewIEditor() {
     console.log("🚀 ~ file: index.jsx:121 ~ onEditorSave ~ noContentTitleState:", contentTitleState)
     console.log("🚀 ~ file: index.jsx:121 ~ onEditorSave ~ noContentContentState:", contentContentState)
 
-    if (!contentState) {
-      console.log('content title required!!!');
-      if (e) {
-        setSuccess(false)
-        setDialogContent('文章標題與文案為必填！')
-        handleClickOpen()
+    if (checkValidity) {
+      if (!contentState) {
+        console.log('content title required!!!');
+        if (e) {
+          setSuccess(false)
+          setDialogContent('文章標題與文案為必填！')
+          handleClickOpen()
+        }
+        return
       }
-      return
-    }
-    if (contentState && !contentTitleState) {
-      console.log('content title required!!!');
-      if (e) {
-        setSuccess(false)
-        setDialogContent('文章標題為必填！')
-        handleClickOpen()
+      if (contentState && !contentTitleState) {
+        console.log('content title required!!!');
+        if (e) {
+          setSuccess(false)
+          setDialogContent('文章標題為必填！')
+          handleClickOpen()
+        }
+        return
       }
-      return
-    }
-    if (contentState && !contentContentState) {
-      console.log('content title required!!!');
-      if (e) {
-        setSuccess(false)
-        setDialogContent('文案為必填！')
-        handleClickOpen()
+      if (contentState && !contentContentState) {
+        console.log('content title required!!!');
+        if (e) {
+          setSuccess(false)
+          setDialogContent('文案為必填！')
+          handleClickOpen()
+        }
+        return
       }
-      return
     }
 
     if (preview) {
@@ -143,22 +145,26 @@ function NewIEditor() {
       })
       return
     }
-
-    if (formData === undefined || formData.size === 0) {
-      console.log('nothing to add!!!');
-      setSuccess(false)
-      setDialogContent('沒有新增任何資訊！')
-      handleClickOpen()
-      return
+    if (checkValidity) {
+      if (formData === undefined || formData.size === 0) {
+        console.log('nothing to add!!!');
+        setSuccess(false)
+        setDialogContent('沒有新增任何資訊！')
+        handleClickOpen()
+        return
+      }
+    }
+    if (!checkValidity) {
+      formData.set('draft', true)
     }
     // return
     dispatch({
       type: GetEditorAction.ADD_EDITOR,
       payload: {
-        data: formData
+        data: formData,
+        draft: formData.get('draft')
       },
     })
-    setIsDraft(false)
   }
 
   const [open, setOpen] = React.useState(false);
@@ -188,7 +194,7 @@ function NewIEditor() {
   }), [open, success, id, sitemapUrl, setOpen, dialogTitle, dialogContent])
 
   return (
-    <div className={'container'}>
+    <div ref={containRef} className={'container'}>
       <div className={'wrapper'}>
         <div className={'left-side'}>
           <EditorDialog

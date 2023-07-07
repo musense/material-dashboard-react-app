@@ -15,7 +15,9 @@ import routes from 'routes.js';
 import dashboardStyle from 'assets/jss/material-dashboard-react/layouts/dashboardStyle.jsx';
 
 import image from 'assets/img/sidebar-1.jpg';
-import logo from 'assets/img/logo.png';
+
+// import logo from process.env.REACT_APP_LOGO_DIR;
+
 import { Link, Outlet } from 'react-router-dom';
 import PerfectScrollbar from 'perfect-scrollbar';
 
@@ -39,6 +41,8 @@ function Dashboard({ ...props }) {
   // const handleImageClick = (image) => {
   //   setImage(image);
   // };
+  const [logoImage, setLogoImage] = useState(null);
+  const [logoText, setLogoText] = useState(null);
   const location = useLocation()
   const editorClassList = useSelector((state) => state.getClassReducer.editorClassList);
   const tagList = useSelector((state) => state.getTagsReducer.tagList);
@@ -80,6 +84,7 @@ function Dashboard({ ...props }) {
   }, [location.pathname]);
 
   useEffect(() => {
+
     if (mainPanel.current === null) {
       //componentDidMount
       mainPanel.current = classes.mainPanel;
@@ -89,59 +94,22 @@ function Dashboard({ ...props }) {
       window.addEventListener('resize', resizeFunction);
     } else {
       //componentDidUpdate
+      import(process.env.REACT_APP_LOGO_DIR)
+        .then(res => setLogoImage(res.default));
+      setLogoText(process.env.REACT_APP_LOGO_TEXT);
     }
     return () => {
       //componentWillUnmount
       window.removeEventListener('resize', resizeFunction);
     };
   }, []);
-  // async componentDidMount() {
-  // componentDidMount() {
-  //   const { history } = this.props;
-
-  //   if (navigator.platform.indexOf("Win") > -1) {
-  //     const ps = new PerfectScrollbar(this.ref.mainPanel);
-  //   }
-  //   window.addEventListener("resize", this.resizeFunction);
-
-  // let getSessionRequest;
-  // try {
-  //   getSessionRequest = await axios.get(
-  //     `http://${REACT_APP_SERVER_URL}/get-session`,
-  //     {
-  //       withCredentials: true
-  //     }
-  //   );
-  // } catch ({ response }) {
-  //   getSessionRequest = response;
-  // }
-  // const { data: getSessionRequestData } = getSessionRequest;
-  // if (getSessionRequestData.success) {
-  //   return userInfo = getSessionRequestData.userInfo;
-  // }
-  // return history.push("/auth/login-page");
-  //   return;
-  // }
-  // componentDidUpdate(e) {
-  //   if (e.history.location.pathname !== e.location.pathname) {
-  //     this.mainPanel.scrollTop = 0;
-  //     if (this.state.mobileOpen) {
-  //       this.setState({ mobileOpen: false });
-  //     }
-  //   }
-  // }
-  // componentWillUnmount() {
-  //   window.removeEventListener("resize", this.resizeFunction);
-  // }
-  // const { classes, ...rest } = this.props;
-
   return (
     <>
       <div className={classes.wrapper}>
         <Sidebar
           routes={routes}
-          logoText={'Zoonobet'}
-          logo={logo}
+          logoText={logoText}
+          logo={logoImage}
           image={image}
           handleDrawerToggle={handleDrawerToggle}
           open={mobileOpen}

@@ -5,9 +5,9 @@ const ContentEditorForm = React.forwardRef(({
   editor,
   onEditorSave,
 }, ref) => {
-  console.log("🚀 ~ file: ContentEditorForm.jsx:85 ~ editor:", editor)
-  console.log("🚀 ~ file: ContentEditorForm.jsx:45 ~ editorContentRef:", editorContentRef)
-  console.log("🚀 ~ file: ContentEditorForm.jsx:45 ~ initialValue:", initialValue)
+  // console.log("🚀 ~ file: ContentEditorForm.jsx:85 ~ editor:", editor)
+  // console.log("🚀 ~ file: ContentEditorForm.jsx:45 ~ editorContentRef:", editorContentRef)
+  // console.log("🚀 ~ file: ContentEditorForm.jsx:45 ~ initialValue:", initialValue)
 
 
   const initialValue = [
@@ -58,8 +58,9 @@ const ContentEditorForm = React.forwardRef(({
           JSON.stringify(editorContentRef.current) !== JSON.stringify(initialValue) && content.set('content', editorContentRef.current)
           content.size !== 0 && tData.set('content', content)
         }
+        console.log("🚀 ~ file: ContentEditorForm.jsx:62 ~ useImperativeHandle ~ tData:", tData)
         return tData
-      }
+      },
     }
   })
   const contentFormRef = useRef(null);

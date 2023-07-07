@@ -164,6 +164,7 @@ export function toBackendData(requestData) {
         tags: requestData.tags,
         // top: requestData.setTop,
         hidden: requestData.hide,
+        draft: requestData.draft,
         // homeImagePath: requestData.media.banner,
     }
 }

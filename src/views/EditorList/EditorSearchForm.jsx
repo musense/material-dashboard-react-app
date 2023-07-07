@@ -7,6 +7,7 @@ import * as GetEditorAction from 'actions/GetEditorAction';
 import * as GetClassAction from 'actions/GetClassAction';
 import { useDispatch } from 'react-redux';
 import SingleClassificationSelect from 'components/Select/SingleClassificationSelect';
+import SingleStatusSelect from 'components/Select/SingleStatusSelect';
 
 export default function EditorSearchForm() {
 
@@ -15,9 +16,11 @@ export default function EditorSearchForm() {
     const dateRef = useRef(null);
 
     const classRef = useRef(null);
+    const statusRef = useRef(null);
 
     useEffect(() => {
         classRef.current = null
+        statusRef.current = null
     }, []);
     usePressEnterEventHandler(submitRef);
 
@@ -29,6 +32,7 @@ export default function EditorSearchForm() {
             {},
             Object.fromEntries(formData),
             classRef.current && { classification: classRef.current.label },
+            statusRef.current && { status: statusRef.current.label },
             { createDate: dateRef.current.current() }
         );
         console.log("🚀 ~ file: EditorList.jsx:136 ~ onSearchEditorList ~ searchData:", searchData)
@@ -105,7 +109,6 @@ export default function EditorSearchForm() {
                         }
                     `}>
                             <label htmlFor="classification">分類</label>
-                            {/* <input type="text" name='classification' /> */}
                             <SingleClassificationSelect
                                 classRef={classRef}
                                 width={'250px'}
@@ -113,10 +116,36 @@ export default function EditorSearchForm() {
                         </div>
                     </div>
                     <div>
-                        <DateSelector
-                            width={'250px'}
-                            ref={dateRef} />
+                        <div>
+                            <DateSelector
+                                width={'250px'}
+                                ref={dateRef} />
+                        </div>
+                        <div className={css`
+                        width: 50%;
+                        .control{
+                            border-color: black;
+                        }
+                        * .ValueContainer {
+                            padding-top: unset;
+                            padding-bottom: unset;
+                        }
+                        & .Input{
+                            padding: unset;
+                            margin: unset;
+                        }
+                        & input {
+                            height: 40.8px;
+                        }
+                    `}>
+                            <label htmlFor="status">文章狀態</label>
+                            <SingleStatusSelect
+                                statusRef={statusRef}
+                                width={'250px'}
+                            />
+                        </div>
                     </div>
+
                 </div>
             </div>
             <div className={css`

@@ -3,21 +3,23 @@ import styles from './CustomRadio.module.css'
 
 const CustomRadio = React.forwardRef(({ ...props }, ref) => {
 
-    const [checked, setChecked] = useState(false);
+    const defaultValue = props.defaultValue || false;
+    console.log("🚀 ~ file: CustomRadio.jsx:7 ~ CustomRadio ~ defaultValue:", defaultValue)
+    const [checked, setChecked] = useState(defaultValue);
     const [checkHistory, setCheckHistory] = useState([]);
     useEffect(() => {
         if (!props.setState) return
         props.setState(checked)
     }, [props.setState, checked]);
-    useEffect(() => {
-        setCheckHistory(prevState => [
-            ...prevState, checked
-        ])
-    }, [checked]);
-    useEffect(() => {
-        if (!props.defaultValue) return
-        setChecked(props.defaultValue)
-    }, [props.defaultValue]);
+    // useEffect(() => {
+    //     setCheckHistory(prevState => [
+    //         ...prevState, checked
+    //     ])
+    // }, [checked]);
+    // useEffect(() => {
+    //     if (!props.defaultValue) return
+    //     setChecked(props.defaultValue)
+    // }, [props.defaultValue]);
 
     useImperativeHandle(ref, () => {
         return {
@@ -30,7 +32,13 @@ const CustomRadio = React.forwardRef(({ ...props }, ref) => {
         <input
             type='checkbox'
             checked={checked}
-            onChange={e => setChecked(e.target.checked)}
+            defaultValue={defaultValue}
+            onChange={e => {
+                setChecked(e.target.checked)
+                setCheckHistory(prevState => [
+                    ...prevState, e.target.checked
+                ])
+            }}
             name={props.name}
             className={styles['custom-switch']}
         />

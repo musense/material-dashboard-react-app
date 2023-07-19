@@ -128,12 +128,12 @@ export default function EditorListBody(
         <form name='view-editor-list-form' onSubmit={onSearchBunchDeleteList}>
             <div data-attr="data-header" className={`view-form ${styles['view-editor-list-header']}`}>
                 <div data-attr="data-header-row">
-                    <div className={`${active ? styles.show : ''}`}> <input type='submit' value='批次刪除' /> </div>
+                    {/* <div className={`${active ? styles.show : ''}`}> <input type='submit' value='批次刪除' /> </div> */}
                     <div> <input type='button' value='序號' onClick={SortingHelperFunc.onSerialNumberClick} /> </div>
+                    <div>圖片/影片</div>
                     <div className={'editor-list-title'}><input type='button' value='標題' onClick={SortingHelperFunc.onTitleClick} /></div>
                     {/* <div><input type='button' value='分類' onClick={SortingHelperFunc.onClassificationClick} /></div> */}
                     <div><input type='button' value='分類' onClick={SortingHelperFunc.onClassificationClick} /></div>
-                    <div>圖片/影片</div>
                     <div><input type='button' value='日期' onClick={SortingHelperFunc.onCreateAtClick} /> </div>
                 </div>
             </div>
@@ -143,18 +143,8 @@ export default function EditorListBody(
                     return (
                         <div data-attr="data-body-row" key={index} onClick={() => onEdit(titleView)}>
                             {/* <div data-attr="data-body-row" key={index} > */}
-                            <div className={`${active ? styles.show : ''}`}><input type='checkbox' name={titleView._id} onClick={checkEditorClassRow} /></div>
+                            {/* <div className={`${active ? styles.show : ''}`}><input type='checkbox' name={titleView._id} onClick={checkEditorClassRow} /></div> */}
                             <div>{parseInt(titleView.serialNumber)}</div>
-                            <div className={styles['editor-list-title']}>
-                                <a href={titleView.sitemapUrl}
-                                    target='_blank'
-                                    title={titleView.sitemapUrl}
-                                    onClick={(e) => e.stopPropagation()}
-                                >
-                                    {titleView.content.title}
-                                </a>
-                            </div>
-                            <div className={styles['class-cell']}>{titleView.classifications.label}</div>
                             <div className={styles['view-editor-image-container']}>
                                 {titleView.media.banner !== ''
                                     ? (
@@ -174,6 +164,17 @@ export default function EditorListBody(
                                         </>
                                     )}
                             </div>
+                            <div className={styles['editor-list-title']}>
+                                <a href={titleView.sitemapUrl}
+                                    target='_blank'
+                                    title={titleView.sitemapUrl}
+                                    onClick={(e) => e.stopPropagation()}
+                                >
+                                    {titleView.content.title}
+                                </a>
+                            </div>
+                            <div className={styles['class-cell']}>{titleView.classifications.label}</div>
+                          
                             <div>
                                 <span style={{
                                     color: titleView.status === '已發布'
@@ -196,12 +197,12 @@ export default function EditorListBody(
             </div>
             <div data-attr="data-footer" className={`view-form ${styles['view-editor-list-header']}`}>
                 <div data-attr="data-header-row">
-                    <div className={`${active ? styles.show : ''}`}> <input type='submit' value='批次刪除' /> </div>
+                    {/* <div className={`${active ? styles.show : ''}`}> <input type='submit' value='批次刪除' /> </div> */}
                     <div> <input type='button' value='序號' onClick={SortingHelperFunc.onSerialNumberClick} /> </div>
+                    <div>圖片/影片</div>
                     <div className={'editor-list-title'}><input type='button' value='標題' onClick={SortingHelperFunc.onTitleClick} /></div>
                     {/* <div><input type='button' value='分類' onClick={SortingHelperFunc.onClassificationClick} /></div> */}
                     <div><input type='button' value='分類' onClick={SortingHelperFunc.onClassificationClick} /></div>
-                    <div>圖片/影片</div>
                     <div><input type='button' value='日期' onClick={SortingHelperFunc.onCreateAtClick} /> </div>
                 </div>
             </div>

@@ -117,7 +117,7 @@ form[name='view-editor-list-form']>div {
   justify-content: center;
 }
 
-div[data-attr="data-header-row"]>div:first-child,
+/* div[data-attr="data-header-row"]>div:first-child,
 div[data-attr="data-body-row"]>div:first-child {
   display: none;
 }
@@ -125,4 +125,4 @@ div[data-attr="data-body-row"]>div:first-child {
 div[data-attr="data-header-row"]>div:first-child.show,
 div[data-attr="data-body-row"]>div:first-child.show {
   display: block;
-}
+} */

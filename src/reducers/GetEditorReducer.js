@@ -14,6 +14,7 @@ const initialState = {
   titleList: null,
   editor: null,
   currentPage: null,
+  totalPage: null,
   totalCount: null,
   errorMessage: null,
   previewID: null,
@@ -64,6 +65,7 @@ const getEditorReducer = (state = initialState, action) => {
         titleList: action.payload.titleList,
         showList: action.payload.titleList.slice(0, 10),
         currentPage: action.payload.currentPage,
+        totalPage: Math.ceil(action.payload.totalCount / 10),
         totalCount: action.payload.totalCount,
         errorMessage: errorMessage.getFinish
       }

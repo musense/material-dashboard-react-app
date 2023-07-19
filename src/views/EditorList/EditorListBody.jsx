@@ -20,30 +20,14 @@ export default function EditorListBody(
     const navigate = useNavigate();
     const [active, setActive] = useState(false);
     const checkedToDeleteMapRef = useRef(new Map())
-    const [addEditorDisabled, setAddEditorDisabled] = useState(false);
     const dispatch = useDispatch();
-
-    const [prevBtnDisable, setPrevBtnDisable] = useState(false);
-    const [nextBtnDisable, setNextBtnDisable] = useState(false);
-
 
     const showList = useSelector((state) => state.getEditorReducer.showList);
     console.log("🚀 ~ file: EditorListBody.jsx:28 ~ showList:", showList)
     const currentPage = useSelector((state) => state.getEditorReducer.currentPage);
-    const totalCount = useSelector((state) => state.getEditorReducer.totalCount);
+    const totalPage = useSelector((state) => state.getEditorReducer.totalPage);
 
     const [titleViewList, setTitleViewList] = useState([]);
-
-    useEffect(() => {
-        if (currentPage === 1)
-            setPrevBtnDisable(true)
-        else
-            setPrevBtnDisable(false)
-        if (currentPage * 10 - totalCount >= 0 && currentPage * 10 - totalCount < 10)
-            setNextBtnDisable(true)
-        else
-            setNextBtnDisable(false)
-    }, [currentPage, totalCount]);
 
     useEffect(() => {
         setTitleViewList(showList)
@@ -116,13 +100,7 @@ export default function EditorListBody(
         e.target.reset();
     }
 
-    function onPageButtonClick(pageNumber) {
-        dispatch({
-            type: GetEditorAction.REQUEST_EDITOR_PAGE,
-            payload: pageNumber
 
-        })
-    }
     function checkEditorClassRow(e) {
         e.stopPropagation();
         checkedToDeleteMapRef.current.set(e.target.name, e.target.checked)
@@ -140,42 +118,13 @@ export default function EditorListBody(
     })}`;
     return <CardBody>
         <EditorSearchForm />
-        <div style={{
-            marginTop: '1.1rem',
-        }}>
-            <Button
-                color='info'
-                disabled={addEditorDisabled}
-                onClick={() => {
-                    dispatch({
-                        type: GetEditorAction.RESET_EDITOR
-                    })
-                    navigate('/admin/editorList/new')
-                }}
-            >
-                新增文章
-            </Button>
-            <Button
-                color='info'
-                disabled={prevBtnDisable}
-                onClick={() => onPageButtonClick(currentPage - 1)}
-            >
-                上一頁
-            </Button>
-            <Button
-                color='info'
-                disabled={nextBtnDisable}
-                onClick={() => onPageButtonClick(currentPage + 1)}
-            >
-                下一頁
-            </Button>
-            <Button
-                color='info'
-                onClick={() => setActive(prevActive => !prevActive)}
-            >
-                刪除文章
-            </Button>
-        </div>
+        <EditorListButtonList
+            dispatch={dispatch}
+            navigate={navigate}
+            currentPage={currentPage}
+            totalPage={totalPage}
+            setActive={setActive}
+        />
         <form name='view-editor-list-form' onSubmit={onSearchBunchDeleteList}>
             <div data-attr="data-header" className={`view-form ${styles['view-editor-list-header']}`}>
                 <div data-attr="data-header-row">
@@ -265,3 +214,53 @@ export default function EditorListBody(
     </CardBody>;
 }
 
+
+function EditorListButtonList({
+    dispatch,
+    navigate,
+    currentPage,
+    totalPage,
+    setActive
+}) {
+    function onPageButtonClick(pageNumber) {
+        dispatch({
+            type: GetEditorAction.REQUEST_EDITOR_PAGE,
+            payload: pageNumber
+
+        })
+    }
+
+    return <div style={{ marginTop: '1.1rem' }}>
+        <Button
+            color='info'
+            onClick={() => {
+                dispatch({
+                    type: GetEditorAction.RESET_EDITOR
+                });
+                navigate('/admin/editorList/new');
+            }}
+        >
+            新增文章
+        </Button>
+        <Button
+            color='info'
+            disabled={currentPage === 1}
+            onClick={() => onPageButtonClick(currentPage - 1)}
+        >
+            上一頁
+        </Button>
+        <Button
+            color='info'
+            disabled={currentPage === totalPage}
+            onClick={() => onPageButtonClick(currentPage + 1)}
+        >
+            下一頁
+        </Button>
+        <Button
+            color='info'
+            onClick={() => setActive(prevActive => !prevActive)}
+        >
+            刪除文章
+        </Button>
+    </div>;
+}

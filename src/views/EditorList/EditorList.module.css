@@ -1,5 +1,4 @@
-form[name='tag-list-form'],
-form[name='editor-list-form'] {
+form[name='tag-list-form'] {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -9,12 +8,9 @@ form[name='editor-list-form'] {
   align-items: flex-end;
 }
 
-form[name='tag-list-form'] input,
-form[name='editor-list-form'] input {
+form[name='tag-list-form'] input{
   width: 250px;
 }
-
-
 
 .view-editor-list-header {
   flex-direction: row;

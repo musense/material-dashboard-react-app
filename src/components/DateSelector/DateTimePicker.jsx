@@ -3,8 +3,11 @@ import dayjs from 'dayjs';
 import { DatePicker as MUIDatePicker } from '@mui/x-date-pickers/DatePicker';
 import { css } from '@emotion/css';
 
-const DateTimePicker = React.forwardRef((props, ref) => {
-    const { width } = props
+const DateTimePicker = React.forwardRef(({
+    title,
+    width,
+    lastMonth = null
+}, ref) => {
     const currentRef = useRef();
     useImperativeHandle(ref, () => {
         return {
@@ -15,7 +18,8 @@ const DateTimePicker = React.forwardRef((props, ref) => {
             current: () => currentRef.current
         }
     })
-    const initialState = dayjs(new Date())
+    // const lastMonth = dayjs().subtract(1, 'month')
+    const initialState = lastMonth ? dayjs().subtract(1, 'month') : dayjs(new Date())
 
     const [value, setValue] = useState(null);
 
@@ -36,7 +40,7 @@ const DateTimePicker = React.forwardRef((props, ref) => {
         display:flex;
         flex-direction: column;
             `}>
-            <label htmlFor={props.title}>{props.title}</label>
+            <label htmlFor={title}>{title}</label>
             <MUIDatePicker
                 sx={{
                     height: '40.8px',
@@ -51,7 +55,7 @@ const DateTimePicker = React.forwardRef((props, ref) => {
                 className={css`
                     background-color: #fff;
                 `}
-                name={props.title}
+                name={title}
                 value={value}
                 onChange={handleChange}
             />

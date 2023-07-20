@@ -160,3 +160,26 @@ input[type='file'] {
   margin: unset !important;
   background-color: transparent;
 }
+
+.editor-list-form {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  color: black;
+  width: 1300px;
+  margin-right: auto;
+  align-items: flex-end;
+  gap: 40px;
+}
+
+.editor-list-form>div {
+  /* width: 300px; */
+}
+
+.editor-list-form input {}
+
+.editor-list-form .button-list {
+  width: 300px;
+  display: flex;
+  gap: 40px;
+}

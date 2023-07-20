@@ -1,13 +1,11 @@
 /* eslint-disable */
-import PropTypes from 'prop-types';
 import React, { useState, useEffect, useRef } from 'react';
-import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 // creates a beautiful scrollbar
 import 'perfect-scrollbar/css/perfect-scrollbar.css';
 // @material-ui/core components
 import withStyles from '@material-ui/core/styles/withStyles';
 // core components
-import Footer from 'components/Footer/Footer.jsx';
 import Navbar from 'components/Navbars/Navbar.jsx';
 import Sidebar from 'components/Sidebar/Sidebar.jsx';
 import routes from 'routes.js';
@@ -15,8 +13,7 @@ import routes from 'routes.js';
 import dashboardStyle from 'assets/jss/material-dashboard-react/layouts/dashboardStyle.jsx';
 
 import image from 'assets/img/sidebar-1.jpg';
-import logo from 'assets/img/logo.png';
-import { Link, Outlet } from 'react-router-dom';
+import { Outlet } from 'react-router-dom';
 import PerfectScrollbar from 'perfect-scrollbar';
 
 import { useDispatch, useSelector } from 'react-redux';
@@ -26,7 +23,10 @@ import * as GetTagsAction from "actions/GetTagsAction.js";
 
 let userInfo = {};
 
+
 function Dashboard({ ...props }) {
+  const [logo, setLogo] = useState();
+  import(`${process.env.REACT_APP_LOGO_DIR}`).then(res => setLogo(res.default))
   const { classes, ...rest } = props;
   // const [image, setImage] = useState(image);
   const [color, setColor] = useState('orange');
@@ -140,7 +140,7 @@ function Dashboard({ ...props }) {
       <div className={classes.wrapper}>
         <Sidebar
           routes={routes}
-          logoText={'Zoonobet'}
+          logoText={process.env.REACT_APP_LOGO_TEXT}
           logo={logo}
           image={image}
           handleDrawerToggle={handleDrawerToggle}

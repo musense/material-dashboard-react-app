@@ -19,6 +19,7 @@ const initialState = {
   totalCount: null,
   errorMessage: null,
   previewID: null,
+ 
 }
 const getEditorReducer = (state = initialState, action) => {
   // console.log("🚀 ~ file: GetEditorReducer.js:157 ~ getEditorReducer ~ action:", action)

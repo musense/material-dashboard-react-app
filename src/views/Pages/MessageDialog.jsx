@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useCallback } from 'react'
 
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
@@ -6,14 +6,40 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
+import { useDispatch } from 'react-redux';
+import * as GetDialogAction from '../../actions/GetDialogAction';
 
 export default function MessageDialog(
   {
     open,
     setClose,
     dialogTitle,
-    dialogContent
+    dialogContent,
+    confirm = null,
+    data = null
   }) {
+  const dispatch = useDispatch();
+
+  const handleClose = useCallback(() => {
+    dispatch({
+      type: GetDialogAction.ON_MODAL_CLOSE,
+      payload: {
+        messageDialogReturnValue: false
+      }
+    })
+    setClose()
+  }, [setClose])
+
+  const handleCloseOK = useCallback((data) => {
+    console.log("🚀 ~ file: MessageDialog.jsx:34 ~ handleCloseOK ~ data:", data)
+    dispatch({
+      type: GetDialogAction.ON_MODAL_CLOSE,
+      payload: {
+        messageDialogReturnValue: data
+      }
+    })
+    setClose()
+  }, [setClose])
 
   return (
     <Dialog
@@ -31,12 +57,23 @@ export default function MessageDialog(
           {dialogContent}
         </DialogContentText>
       </DialogContent>
-      <DialogActions>
-        {/* <Button onClick={setClose}>Disagree</Button> */}
-        <Button onClick={setClose} autoFocus>
-          OK
-        </Button>
-      </DialogActions>
+      {
+        confirm
+          ? (
+            <DialogActions>
+              <Button onClick={() => handleClose()}>算了</Button>
+              <Button onClick={() => handleCloseOK(data)} autoFocus>好</Button>
+            </DialogActions>
+          )
+          : (
+            <DialogActions>
+              <Button onClick={setClose} autoFocus>
+                好
+              </Button>
+            </DialogActions>
+          )
+      }
+
     </Dialog>
   )
 }

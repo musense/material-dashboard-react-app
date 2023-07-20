@@ -35,7 +35,8 @@ export function HeaderCell({
 
         const iconClassName = `
         position: absolute;
-        top: 10px;
+        top: 50%;
+        transform: translateY(-50%);
         right: 10px;`
 
         const icon_name = sortingDirection === 'asc' ? 'arrow_upward' : 'arrow_downward'

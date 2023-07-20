@@ -1,8 +1,9 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useEffect } from "react";
 import { Stack } from '@mui/material';
 import Icon from './Icon';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { useDispatch } from 'react-redux';
+import * as GetDialogAction from '../../actions/GetDialogAction';
 import * as GetEditorAction from '../../actions/GetEditorAction';
 import { useNavigate } from 'react-router-dom';
 
@@ -14,6 +15,8 @@ export default function RowBody({
     showList,
     handleOpen,
     setMediaInfo,
+    handleOpenDialog,
+    messageDialogReturnValue
 }) {
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -25,19 +28,55 @@ export default function RowBody({
         hour: 'numeric', minute: 'numeric', hour12: 'numeric'
     })}`;
 
-
-    const onDelete = useCallback((id) => {
+    useEffect(() => {
+        const id = messageDialogReturnValue
+        if (!id) return console.log('id is null');
         dispatch({
             type: GetEditorAction.BUNCH_DELETE_EDITOR,
-            payload: id
+            payload: [id]
         });
-    }, [])
+        dispatch({
+            type: GetDialogAction.RESET_MODAL_STATUS
+        });
+    }, [messageDialogReturnValue]);
 
-    const onCopyLink = (sitemapUrl) => {
-        console.log(sitemapUrl);
+    const onDelete = useCallback((id, title) => {
+        dispatch({
+            type: GetDialogAction.ON_DELETE_EDITOR,
+            payload: {
+                data: id,
+                title: '是否刪除此文章？',
+                message: `標題：${title}`,
+                confirm: true,
+            }
+        })
+        handleOpenDialog()
+    }, [handleOpenDialog])
+
+    const generateTitle = result => {
+        return result ? '複製成功' : '複製失敗！'
     }
+    const generateMessage = (result, sitemapUrl) => {
+        return result ? `你已複製url: ${sitemapUrl}` : '有什麼地方出錯了QQ'
+    }
+    const onCopyLink = useCallback((sitemapUrl, result) => {
+        console.log(sitemapUrl);
+        console.log(result);
+        const title = generateTitle(result)
+        const message = generateMessage(result, sitemapUrl)
+        dispatch({
+            type: GetDialogAction.COPY_SITEMAP,
+            payload: {
+                title,
+                message
+            }
+        })
+        handleOpenDialog()
+    }, [handleOpenDialog])
 
     function onEdit(updateEditor) {
+
+
         dispatch({
             type: GetEditorAction.REQUEST_EDITOR_BY_ID,
             payload: {
@@ -90,7 +129,7 @@ export default function RowBody({
                     </Stack>} />
                     <BodyCell children={getUpdateDateTime(titleView.updateDate)} />
                     <BodyCell children={<Stack spacing={2} direction={'row'}>
-                        <CopyToClipboard text={titleView.sitemapUrl} onCopy={() => onCopyLink(titleView.sitemapUrl)}>
+                        <CopyToClipboard text={titleView.sitemapUrl} onCopy={(text, result) => onCopyLink(text, result)}>
                             <div className="edit-icon-wrapper">
                                 <input title="複製連結" className="edit-icon-input" type="button" />
                                 < Icon iconName={'link'} />
@@ -101,7 +140,7 @@ export default function RowBody({
                             < Icon iconName={'edit'} />
                         </div>
                         <div className="edit-icon-wrapper">
-                            <input title="刪除" className="edit-icon-input" type="button" onClick={() => onDelete(titleView._id)} />
+                            <input title="刪除" className="edit-icon-input" type="button" onClick={() => onDelete(titleView._id, titleView.content.title)} />
                             < Icon iconName={'delete_forever'} />
                         </div>
                     </Stack>} />

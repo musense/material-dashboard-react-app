@@ -96,11 +96,14 @@ input[type='file'] {
   overflow-x: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
+  border: 1px solid #999;
   flex: 1;
 }
 
 .view-list-form * .editor-list-title {
   flex-grow: 3;
+  text-align: left;
+  white-space: pre-wrap;
 }
 
 .view-list-form * .view-editor-image-container>img {
@@ -144,7 +147,8 @@ input[type='file'] {
 .edit-icon-wrapper:hover {
   background-color: #bbb;
 }
-.edit-icon-wrapper:hover > span {
+
+.edit-icon-wrapper:hover>span {
   color: #eee;
 }
 

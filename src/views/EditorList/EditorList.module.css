@@ -14,11 +14,6 @@ form[name='editor-list-form'] input {
   width: 250px;
 }
 
-form[name='view-editor-list-form']>div {
-  display: flex;
-  /* flex-direction: row; */
-}
-
 
 
 .view-editor-list-header {
@@ -37,21 +32,8 @@ form[name='view-editor-list-form']>div {
   position: relative;
 }
 
-
-
-.view-editor-image-container>img {
-  height: 100%;
-  width: 100%;
-  object-fit: cover;
-  aspect-ratio: 16/9;
-}
-
-.view-editor-image-container+div>a {
-  position: inherit;
-}
-
 .view-editor-list-body>div {
-  cursor: pointer;
+  /* cursor: pointer; */
   height: fit-content;
 }
 
@@ -81,12 +63,8 @@ form[name='view-editor-list-form']>div {
   flex: 1;
 }
 
-.view-editor-list-body>div>div.editor-list-title {
+.editor-list-title {
   flex-grow: 3;
-}
-
-.view-editor-list-body>div>div.editor-list-title>a {
-  text-decoration: underline;
 }
 
 .view-editor-list-body>div>div:last-child {
@@ -104,13 +82,6 @@ form[name='view-editor-list-form']>div {
 
 .not-published-yet {
   color: red;
-}
-
-.class-cell {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  justify-content: center;
 }
 
 /* div[data-attr="data-header-row"]>div:first-child,

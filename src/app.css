@@ -24,7 +24,6 @@ label {
 div>input[type='submit'],
 div>input[type='reset'],
 div>input[type='button'] {
-  margin: 3px auto;
   padding: 0;
   cursor: pointer;
 }
@@ -76,21 +75,22 @@ input[type='file'] {
   /* background-color: lightblue; */
 }
 
+.view-list-form>div {
+  display: flex;
+  flex-direction: column;
+}
 
 .view-form {
   position: relative;
 }
 
-.view-form>div {
+.view-list-form>div>div {
   display: flex;
-  gap: 0rem;
-  justify-content: space-between;
-  align-items: center;
-  width: 100%;
+  flex-direction: row;
   background-color: #ccc;
 }
 
-.view-form>div>div {
+.view-list-form>div>div>div {
   position: relative;
   text-align: center;
   overflow-x: hidden;
@@ -99,22 +99,26 @@ input[type='file'] {
   flex: 1;
 }
 
-.view-form>div>div.editor-list-title {
+.view-list-form * .editor-list-title {
   flex-grow: 3;
 }
 
-.view-body>div {
-  height: 100px;
+.view-list-form * .view-editor-image-container>img {
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+  aspect-ratio: 16/9;
+  cursor: pointer;
 }
 
 .view-body>div>div {
-  width: 100%;
-  height: 100%;
+  height: 100px;
   border: 1px solid #999;
   display: flex;
   flex-wrap: wrap;
   align-content: center;
   justify-content: center;
+  text-align: center;
 }
 
 .view-body>div:nth-child(2n-1) {
@@ -123,4 +127,32 @@ input[type='file'] {
 
 .view-body>div:nth-child(2n) {
   background-color: #ccc;
+}
+
+.edit-icon-wrapper {
+  --edit-icon-size: 35px;
+  position: relative;
+  width: var(--edit-icon-size);
+  height: var(--edit-icon-size);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #ddd;
+  border-radius: 5px;
+}
+
+.edit-icon-wrapper:hover {
+  background-color: #bbb;
+}
+.edit-icon-wrapper:hover > span {
+  color: #eee;
+}
+
+.edit-icon-input {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  border: unset;
+  margin: unset !important;
+  background-color: transparent;
 }

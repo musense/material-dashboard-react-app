@@ -46,7 +46,6 @@ export default function EditorListBody() {
                 handleOpenDialog={handleOpenDialog}
                 messageDialogReturnValue={messageDialogReturnValue}
             />
-            <RowHeader />
         </form>
         <MediaModal
             open={open}

@@ -4,7 +4,7 @@
 
 .view-form>div {
     display: flex;
-    gap: 1rem;
+    gap: 0.5rem;
     justify-content: space-between;
     align-items: center;
     height: 6rem;

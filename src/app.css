@@ -24,7 +24,7 @@ label {
 div>input[type='submit'],
 div>input[type='reset'],
 div>input[type='button'] {
-  margin: 0 auto;
+  margin: 3px auto;
   padding: 0;
   cursor: pointer;
 }
@@ -79,18 +79,19 @@ input[type='file'] {
 
 .view-form {
   position: relative;
-  margin-top: 1rem;
 }
 
 .view-form>div {
   display: flex;
-  gap: 1rem;
+  gap: 0rem;
   justify-content: space-between;
   align-items: center;
   width: 100%;
+  background-color: #ccc;
 }
 
 .view-form>div>div {
+  position: relative;
   text-align: center;
   overflow-x: hidden;
   white-space: nowrap;
@@ -100,4 +101,26 @@ input[type='file'] {
 
 .view-form>div>div.editor-list-title {
   flex-grow: 3;
+}
+
+.view-body>div {
+  height: 100px;
+}
+
+.view-body>div>div {
+  width: 100%;
+  height: 100%;
+  border: 1px solid #999;
+  display: flex;
+  flex-wrap: wrap;
+  align-content: center;
+  justify-content: center;
+}
+
+.view-body>div:nth-child(2n-1) {
+  background-color: #eee;
+}
+
+.view-body>div:nth-child(2n) {
+  background-color: #ccc;
 }

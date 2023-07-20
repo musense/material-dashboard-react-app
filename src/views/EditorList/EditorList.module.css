@@ -17,7 +17,6 @@ form[name='editor-list-form'] input {
 form[name='view-editor-list-form']>div {
   display: flex;
   /* flex-direction: row; */
-  gap: 0.5rem;
 }
 
 
@@ -70,8 +69,6 @@ form[name='view-editor-list-form']>div {
 
 .view-editor-list-body>div {
   display: flex;
-  gap: 1rem;
-  justify-content: space-between;
   align-items: center;
   width: 100%;
 }
@@ -112,7 +109,6 @@ form[name='view-editor-list-form']>div {
 .class-cell {
   display: flex;
   flex-direction: row;
-  gap: 0.5rem;
   flex-wrap: wrap;
   justify-content: center;
 }

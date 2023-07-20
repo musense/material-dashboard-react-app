@@ -90,6 +90,8 @@ export function toFrontendData(responseData) {
             isScheduled: item.scheduledAt ? true : false,
             scheduleTime: item.scheduledAt,
             status: item.status,
+            publishDate: item.publishedAt,
+            isPublished: item.publishedAt ? true : false,
         })
 
         )
@@ -139,14 +141,16 @@ export function toFrontendData(responseData) {
                 thumbnail: responseData.homeImagePath || '',
                 altText: responseData.altText || '',
             },
-            pageView  : responseData.pageView,
-            hide      : responseData.hidden || false,
+            pageView: responseData.pageView,
+            hide: responseData.hidden || false,
             createDate: responseData.createdAt,
             updateDate: responseData.updatedAt,
             sitemapUrl: responseData.sitemapUrl,
             isScheduled: responseData.scheduledAt ? true : false,
             scheduleTime: responseData.scheduledAt,
             status: responseData.status,
+            publishDate: responseData.publishedAt,
+            isPublished: responseData.publishedAt ? true : false,
         }
     }
 }

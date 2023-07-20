@@ -1,5 +1,5 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
 
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import CardBody from 'components/Card/CardBody.jsx';
 
 import { useDispatch, useSelector } from 'react-redux';
@@ -10,12 +10,10 @@ import styles from './EditorList.module.css'
 import Button from 'components/CustomButtons/Button';
 import MediaModal from './MediaModal';
 import EditorSearchForm from './EditorSearchForm';
+import { Stack } from '@mui/material';
+import { cx, css } from '@emotion/css'
 
-
-export default function EditorListBody(
-    // { titleViewList, 
-    //     setTitleViewList }
-) {
+export default function EditorListBody() {
 
     const navigate = useNavigate();
     const [active, setActive] = useState(false);
@@ -27,48 +25,7 @@ export default function EditorListBody(
     const currentPage = useSelector((state) => state.getEditorReducer.currentPage);
     const totalPage = useSelector((state) => state.getEditorReducer.totalPage);
 
-    const [titleViewList, setTitleViewList] = useState([]);
 
-    useEffect(() => {
-        setTitleViewList(showList)
-
-    }, [showList])
-
-    const SortingHelperFunc = {
-
-        onSerialNumberClick() {
-            dispatch({
-                type: GetEditorAction.SHOW_EDITOR_LIST_SORTING,
-                payload: {
-                    key: 'serialNumber'
-                }
-            })
-        },
-        onTitleClick() {
-            dispatch({
-                type: GetEditorAction.SHOW_EDITOR_LIST_SORTING,
-                payload: {
-                    key: 'content.title'
-                }
-            })
-        },
-        onClassificationClick() {
-            dispatch({
-                type: GetEditorAction.SHOW_EDITOR_LIST_SORTING,
-                payload: {
-                    key: 'classifications.label'
-                }
-            })
-        },
-        onCreateAtClick() {
-            dispatch({
-                type: GetEditorAction.SHOW_EDITOR_LIST_SORTING,
-                payload: {
-                    key: 'createDate'
-                }
-            })
-        },
-    }
 
     function onEdit(updateEditor) {
         // console.log(updateEditor);
@@ -100,12 +57,6 @@ export default function EditorListBody(
         e.target.reset();
     }
 
-
-    function checkEditorClassRow(e) {
-        e.stopPropagation();
-        checkedToDeleteMapRef.current.set(e.target.name, e.target.checked)
-        console.log("🚀 ~ file: EditorClassList.jsx:164 ~ checkEditorClassRow ~ checkedToDeleteMapRef.current:", checkedToDeleteMapRef.current)
-    }
     const [open, setOpen] = React.useState(false);
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
@@ -119,93 +70,20 @@ export default function EditorListBody(
     return <CardBody>
         <EditorSearchForm />
         <EditorListButtonList
-            dispatch={dispatch}
-            navigate={navigate}
             currentPage={currentPage}
             totalPage={totalPage}
             setActive={setActive}
         />
         <form name='view-editor-list-form' onSubmit={onSearchBunchDeleteList}>
-            <div data-attr="data-header" className={`view-form ${styles['view-editor-list-header']}`}>
-                <div data-attr="data-header-row">
-                    {/* <div className={`${active ? styles.show : ''}`}> <input type='submit' value='批次刪除' /> </div> */}
-                    <div> <input type='button' value='序號' onClick={SortingHelperFunc.onSerialNumberClick} /> </div>
-                    <div>圖片/影片</div>
-                    <div className={'editor-list-title'}><input type='button' value='標題' onClick={SortingHelperFunc.onTitleClick} /></div>
-                    {/* <div><input type='button' value='分類' onClick={SortingHelperFunc.onClassificationClick} /></div> */}
-                    <div><input type='button' value='分類' onClick={SortingHelperFunc.onClassificationClick} /></div>
-                    <div><input type='button' value='日期' onClick={SortingHelperFunc.onCreateAtClick} /> </div>
-                </div>
-            </div>
-            <div data-attr="data-body" className={`${styles['view-editor-list-body']}`}>
-                {titleViewList && titleViewList.length > 0 && titleViewList.map((titleView, index) => {
-
-                    return (
-                        <div data-attr="data-body-row" key={index} onClick={() => onEdit(titleView)}>
-                            {/* <div data-attr="data-body-row" key={index} > */}
-                            {/* <div className={`${active ? styles.show : ''}`}><input type='checkbox' name={titleView._id} onClick={checkEditorClassRow} /></div> */}
-                            <div>{parseInt(titleView.serialNumber)}</div>
-                            <div className={styles['view-editor-image-container']}>
-                                {titleView.media.banner !== ''
-                                    ? (
-                                        <img
-                                            src={titleView.media.thumbnail}
-                                            title={titleView.media.banner}
-                                            alt={titleView.media.altText}
-                                            onClick={(e) => {
-                                                e.stopPropagation()
-                                                handleOpen()
-                                                setMediaInfo(titleView.media)
-                                            }}
-                                        />
-                                    ) : (
-                                        <>
-                                            <div className={styles['view-editor-image-container']}>無圖片/縮圖</div>
-                                        </>
-                                    )}
-                            </div>
-                            <div className={styles['editor-list-title']}>
-                                <a href={titleView.sitemapUrl}
-                                    target='_blank'
-                                    title={titleView.sitemapUrl}
-                                    onClick={(e) => e.stopPropagation()}
-                                >
-                                    {titleView.content.title}
-                                </a>
-                            </div>
-                            <div className={styles['class-cell']}>{titleView.classifications.label}</div>
-                          
-                            <div>
-                                <span style={{
-                                    color: titleView.status === '已發布'
-                                        ? 'green'
-                                        : titleView.status === '已排程'
-                                            ? 'red'
-                                            : titleView.status === '草稿'
-                                                ? 'black'
-                                                : 'grey',
-                                    fontWeight: 'bold'
-                                }}>
-                                    {titleView.status}
-                                </span>
-                                <span>
-                                    {getUpdateDateTime(titleView.updateDate)}
-                                </span>
-                            </div>
-                        </div>);
-                })}
-            </div>
-            <div data-attr="data-footer" className={`view-form ${styles['view-editor-list-header']}`}>
-                <div data-attr="data-header-row">
-                    {/* <div className={`${active ? styles.show : ''}`}> <input type='submit' value='批次刪除' /> </div> */}
-                    <div> <input type='button' value='序號' onClick={SortingHelperFunc.onSerialNumberClick} /> </div>
-                    <div>圖片/影片</div>
-                    <div className={'editor-list-title'}><input type='button' value='標題' onClick={SortingHelperFunc.onTitleClick} /></div>
-                    {/* <div><input type='button' value='分類' onClick={SortingHelperFunc.onClassificationClick} /></div> */}
-                    <div><input type='button' value='分類' onClick={SortingHelperFunc.onClassificationClick} /></div>
-                    <div><input type='button' value='日期' onClick={SortingHelperFunc.onCreateAtClick} /> </div>
-                </div>
-            </div>
+            <RowHeader />
+            <RowBody
+                showList={showList}
+                onEdit={onEdit}
+                handleOpen={handleOpen}
+                setMediaInfo={setMediaInfo}
+                getUpdateDateTime={getUpdateDateTime}
+            />
+            <RowHeader />
         </form>
         <MediaModal
             open={open}
@@ -216,13 +94,149 @@ export default function EditorListBody(
 }
 
 
+function RowBody({
+    showList,
+    onEdit,
+    handleOpen,
+    setMediaInfo,
+    getUpdateDateTime
+}) {
+    return <div data-attr="data-body" className={`view-body ${styles['view-editor-list-body']}`}>
+        {showList && showList.length > 0 && showList.map((titleView, index) => {
+            return (
+                <div data-attr="data-body-row" key={index} onClick={() => onEdit(titleView)}>
+                    <div name="序號">{parseInt(titleView.serialNumber)}</div>
+                    <div name="圖片/影片" className={styles['view-editor-image-container']}>
+                        {titleView.media.banner !== ''
+                            ? (
+                                <img
+                                    src={titleView.media.thumbnail}
+                                    title={titleView.media.banner}
+                                    alt={titleView.media.altText}
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        handleOpen();
+                                        setMediaInfo(titleView.media);
+                                    }} />
+                            ) : (
+                                <div className={styles['view-editor-image-container']}>無圖片/縮圖</div>
+                            )}
+                    </div>
+                    <div name="分類" className={styles['class-cell']}>{titleView.classifications.label}</div>
+                    <div name="標題" className={styles['editor-list-title']}>
+                        <a href={titleView.sitemapUrl}
+                            target='_blank'
+                            title={titleView.sitemapUrl}
+                            onClick={(e) => e.stopPropagation()}
+                        >
+                            {titleView.content.title}
+                        </a>
+                    </div>
+
+                    <div name="狀態" >
+                        <Stack spacing={1} direction={'column'}>
+                            <span style={{
+                                color: titleView.status === '已發布' ? 'green'
+                                    : titleView.status === '已排程' ? 'red'
+                                        : titleView.status === '草稿' ? 'black'
+                                            : 'grey',
+                                fontWeight: 'bold'
+                            }}>
+                                {titleView.status}
+                            </span>
+                            <span>
+                                {
+                                    titleView.isPublished
+                                        ? getUpdateDateTime(titleView.publishDate)
+                                        : titleView.isScheduled
+                                            ? getUpdateDateTime(titleView.scheduleTime)
+                                            : null
+                                }
+                            </span>
+                        </Stack>
+                    </div>
+                    <div name="更新日期" className={styles['edit-cell']}>
+                        <span>
+                            {getUpdateDateTime(titleView.updateDate)}
+                        </span>
+                    </div>
+                    <div name="編輯" className={styles['edit-cell']}></div>
+                </div>);
+        })}
+    </div>;
+}
+
+function RowHeader() {
+    return <div data-attr="data-header" className={`view-form ${styles['view-editor-list-header']}`}>
+        <div data-attr="data-header-row">
+            <ColumnHeader name="序號" patchKey="serialNumber" />
+            <ColumnHeader name="圖片/影片" />
+            <ColumnHeader name="分類" patchKey="classifications.label" />
+            <ColumnHeader name="標題" patchKey="content.title" className={'editor-list-title'} />
+            <ColumnHeader name="狀態" patchKey="status" />
+            <ColumnHeader name="更新日期" patchKey="updateDate" />
+            <ColumnHeader name="編輯" />
+        </div>
+    </div>;
+}
+
+function ColumnHeader({
+    name,
+    patchKey = null,
+    className = null
+}) {
+    const dispatch = useDispatch();
+    const sortingDirection = useSelector((state) => state.getEditorReducer.sortingMap[patchKey]);
+
+    console.log(`🚀 ~ file: EditorListBody.jsx:190 ~ sortingDirection`, sortingDirection)
+
+    const onSortingClick = (key) => {
+        dispatch({
+            type: GetEditorAction.SHOW_EDITOR_LIST_SORTING,
+            payload: {
+                key: key
+            }
+        })
+    }
+    const inputProps = useMemo(() => patchKey ? ({
+        type: 'button',
+        value: name,
+        onClick: () => onSortingClick(patchKey)
+    }) : ({
+        type: 'button',
+        value: name,
+    }), [name, patchKey])
+
+    const iconClassName = cx(
+        'material-icons',
+        css`
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        font-size: 18px;
+        color    : #999;
+        vertical-align: text-bottom;`
+    )
+
+    const icon = patchKey && (
+        <span className={iconClassName}>{
+            sortingDirection === 'asc' ? 'arrow_downward' : 'arrow_upward'
+        }</span>
+    );
+    return <div className={className} >
+        <input {...inputProps} />
+        {icon}
+    </div>;
+}
+
 function EditorListButtonList({
-    dispatch,
-    navigate,
     currentPage,
     totalPage,
     setActive
 }) {
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+
     function onPageButtonClick(pageNumber) {
         dispatch({
             type: GetEditorAction.REQUEST_EDITOR_PAGE,
@@ -231,7 +245,7 @@ function EditorListButtonList({
         })
     }
 
-    return <div style={{ marginTop: '1.1rem' }}>
+    return <div style={{ marginTop: '1rem', marginBottom: '1rem' }}>
         <Button
             color='info'
             onClick={() => {

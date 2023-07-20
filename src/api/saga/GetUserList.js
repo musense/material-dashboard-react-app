@@ -12,6 +12,7 @@ function* UserLogin(payload) {
     const { username, password } = payload
     try {
         const response = yield instance.post(`/login`, { username, password });
+        console.log("🚀 ~ file: GetUserList.js:16 ~ function*UserLogin ~ response:", response)
         const user = yield response.data;
         // console.log("🚀 ~ file: GetUserList.js:16 ~ function*UserLogin ~ user:", user)
         yield put({
@@ -23,7 +24,7 @@ function* UserLogin(payload) {
             },
         })
     } catch (error) {
-        // console.log("🚀 ~ file: GetUserList.js:23 ~ function*UserLogin ~ error:", error)
+        console.log("🚀 ~ file: GetUserList.js:23 ~ function*UserLogin ~ error:", error)
         let errorMessage;
         if (error.response) {
             errorMessage = error.response.data.message
@@ -32,7 +33,7 @@ function* UserLogin(payload) {
         }
         if (error.response) {
             yield put({
-                type: REGISTER_USER_FAIL,
+                type: LOGIN_USER_FAIL,
                 errorMessage: errorMessage,
                 payload: null
             })

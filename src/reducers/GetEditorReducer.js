@@ -8,6 +8,7 @@ const initialState = {
     createDate: 'asc',
     updateDate: 'asc',
     status: 'asc',
+    pageView: 'asc',
     'classifications.label': 'asc',
   },
   showList: null,

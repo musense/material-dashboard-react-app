@@ -32,7 +32,7 @@ function Pages({ ...props }) {
   };
 
   const getActiveRoute = (routes) => {
-    let activeRoute = 'Default Brand Text';
+    let activeRoute = process.env.REACT_APP_LOGO_TEXT;
 
     for (let i = 0; i < routes.length; i++) {
       if (location.pathname.indexOf(routes[i].layout + routes[i].path) !== -1) {

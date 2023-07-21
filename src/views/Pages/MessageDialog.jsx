@@ -6,8 +6,16 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
+import Box from '@mui/material/Box';
 import { useDispatch } from 'react-redux';
 import * as GetDialogAction from '../../actions/GetDialogAction';
+
+const style = {
+  minWidth: 300,
+  height: 'fit-content',
+  m: 0,
+  p: 3
+}
 
 export default function MessageDialog(
   {
@@ -47,32 +55,35 @@ export default function MessageDialog(
       onClose={setClose}
       aria-labelledby="alert-dialog-title"
       aria-describedby="alert-dialog-description"
-      sx={{ m: 0, p: 30 }}
     >
-      <DialogTitle id="alert-dialog-title">
-        {dialogTitle}
-      </DialogTitle>
-      <DialogContent>
-        <DialogContentText id="alert-dialog-description">
-          {dialogContent}
-        </DialogContentText>
-      </DialogContent>
-      {
-        confirm
-          ? (
-            <DialogActions>
-              <Button onClick={() => handleClose()}>算了</Button>
-              <Button onClick={() => handleCloseOK(data)} autoFocus>好</Button>
-            </DialogActions>
-          )
-          : (
-            <DialogActions>
-              <Button onClick={setClose} autoFocus>
-                好
-              </Button>
-            </DialogActions>
-          )
-      }
+      <Box
+        sx={style}
+      >
+        <DialogTitle id="alert-dialog-title">
+          {dialogTitle}
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            {dialogContent}
+          </DialogContentText>
+        </DialogContent>
+        {
+          confirm
+            ? (
+              <DialogActions>
+                <Button onClick={() => handleClose()}>算了</Button>
+                <Button onClick={() => handleCloseOK(data)} autoFocus>好</Button>
+              </DialogActions>
+            )
+            : (
+              <DialogActions>
+                <Button onClick={setClose} autoFocus>
+                  好
+                </Button>
+              </DialogActions>
+            )
+        }
+      </Box>
 
     </Dialog>
   )

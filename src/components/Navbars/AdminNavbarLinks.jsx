@@ -23,7 +23,8 @@ import Button from 'components/CustomButtons/Button.jsx';
 import headerLinksStyle from 'assets/jss/material-dashboard-react/components/headerLinksStyle.jsx';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { LOGOUT_USER } from '../../actions/GetUserAction';
+import * as GetUserAction from '../../actions/GetUserAction';
+import { replace } from 'lodash';
 
 function HeaderLinks(props) {
   let anchorEl;
@@ -61,9 +62,9 @@ function HeaderLinks(props) {
 
   const logout = () => {
     dispatch({
-      type: LOGOUT_USER,
+      type: GetUserAction.LOGOUT_USER,
     });
-    navigate('/auth/login-page');
+    navigate('/auth/login-page', { replace: true });
   };
 
   return (

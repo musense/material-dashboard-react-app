@@ -26,10 +26,6 @@ function TagList() {
         }
     }, [returnMessage]);
 
-    // useEffect(() => {
-    //     dispatch({ type: GetTagsAction.REQUEST_TAG })
-    // }, []);
-
     const [isModalOpen, setIsModalOpen] = useState(true);
 
     function openModal() {

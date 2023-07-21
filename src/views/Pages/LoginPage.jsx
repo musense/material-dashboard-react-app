@@ -1,18 +1,14 @@
 import PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';
-// import axios from "axios";
-
 // @material-ui/core components
 import Checkbox from '@material-ui/core/Checkbox';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Icon from '@material-ui/core/Icon';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import withStyles from '@material-ui/core/styles/withStyles';
-
 // @material-ui/icons
 import Check from '@material-ui/icons/Check';
 import Email from '@material-ui/icons/Email';
-
 // core components
 import Card from 'components/Card/Card.jsx';
 import CardBody from 'components/Card/CardBody.jsx';
@@ -25,83 +21,35 @@ import GridItem from 'components/Grid/GridItem.jsx';
 
 import loginPageStyle from 'assets/jss/material-dashboard-react/views/loginPageStyle.jsx';
 import { useDispatch, useSelector } from 'react-redux';
-import { LOGIN_USER, REGISTER_USER_ERROR_RESET } from './../../actions/GetUserAction';
 import { useNavigate } from 'react-router-dom';
 import { useRef } from 'react';
-
-import Box from '@mui/material/Box';
-import TextField from '@mui/material/TextField';
 import MessageDialog from './MessageDialog';
 
-import * as GetClassAction from "actions/GetClassAction.js";
-import * as GetTagsAction from "actions/GetTagsAction.js";
-
+import * as GetUserAction from 'actions/GetUserAction';
+import useLoginResult from '../../hook/useLoginResult';
+import useRememberMe from '../../hook/useRememberMe';
 import Cookie from "js-cookie";
 
 function LoginPage(props) {
   const { classes } = props;
 
   const loginFormRef = useRef(null);
-  const [loginSuccess, setLoginSuccess] = useState(false);
   const [rememberMeChecked, setRememberMeChecked] = useState(false);
-  const [password, setPassword] = useState(null);
-  const [showPassword, setShowPassword] = useState(false);
   const errors = {};
   const navigate = useNavigate()
   const dispatch = new useDispatch();
   const returnMessage = useSelector((state) => state.getUserReducer.errorMessage);
+
+  const [open, setOpen] = React.useState(false);
+  const handleClickOpen = () => setOpen(true);
+
+  const { rememberMeChecked: defaultRememberMeChecked } = useRememberMe(loginFormRef)
+  const { title, content, success } = useLoginResult(returnMessage)
+  console.log("🚀 ~ file: LoginPage.jsx:72 ~ LoginPage ~ title:", title)
+
   useEffect(() => {
-    if (loginFormRef.current === null) {
-      return
-
-    } else {
-      const loginForm = loginFormRef.current;
-      if (localStorage.getItem('username')) {
-        loginForm.username.focus()
-        loginForm.username.value = localStorage.getItem('username') || '';
-        setRememberMeChecked(true);
-      }
-    }
-    if (!returnMessage) return
-    let title,
-      content;
-    console.log("🚀 ~ file: LoginPage.jsx:75 ~ LoginPage ~ returnMessage:", returnMessage)
-    switch (returnMessage) {
-      // case "can't find user!": 
-      //   title = '登入失敗'
-      //   content = '請先註冊！'
-      //   break
-      // }
-      case "can't find user!":
-      case "login failed": {
-        title = '登入失敗'
-        content = '帳號或密碼輸入錯誤'
-        break
-      }
-      case "ERR_NETWORK": {
-        title = '登入失敗'
-        content = "連線錯誤！"
-        break
-      }
-      case "login successfully": {
-        title = "登入成功";
-        content = "登入成功！"
-        setLoginSuccess(true)
-        break
-      }
-      default: {
-        title = "登入失敗"
-        content = "登入失敗！"
-        break
-      }
-    }
-    if (content) {
-      handleClickOpen()
-      setDialogTitle(title)
-      setDialogContent(content)
-    }
-
-  }, [loginFormRef, returnMessage]);
+    if (title) handleClickOpen()
+  }, [title]);
 
   const login = (e) => {
     e.preventDefault();
@@ -120,50 +68,31 @@ function LoginPage(props) {
       .reduce((current, next) => ({ ...current, ...next }));
 
     dispatch({
-      type: LOGIN_USER,
+      type: GetUserAction.LOGIN_USER,
       payload: {
         username: formValues.username,
-        // username,
         password: formValues.password,
       },
     });
-  };
-  const onInputChange = (e) => {
-    setPassword(e.target.value);
-  };
-
-  const [open, setOpen] = React.useState(false);
-  const [dialogContent, setDialogContent] = useState(null);
-  const [dialogTitle, setDialogTitle] = useState(null);
-  const handleClickOpen = () => {
-    setOpen(true);
   };
 
   const handleClose = () => {
     setOpen(false);
     dispatch({
-      type: REGISTER_USER_ERROR_RESET
+      type: GetUserAction.REGISTER_USER_ERROR_RESET
     })
-    if (loginSuccess) {
+    if (success) {
       const sid = Cookie.get('sid')
-      console.log("🚀 ~ file: LoginPage.jsx:135 ~ handleClose ~ sid:", sid) 
+      console.log("🚀 ~ file: LoginPage.jsx:135 ~ handleClose ~ sid:", sid)
       navigate('/admin/editorList', { replace: true })
     }
   };
+
   return (
     <div className={classes.container}>
-      {/* <GridContainer justify="center">
-        <GridItem xs={12} sm={8}>
-          <h4 className={classes.textCenter} style={{ marginTop: 0 }}>
-            Log in to see how you can speed up your web development with out of
-            the box CRUD for #User Management and more.{" "}
-          </h4>
-        </GridItem>
-      </GridContainer> */}
       <GridContainer justify='center'>
         <GridItem xs={12} sm={6} md={4}>
           <form ref={loginFormRef} onSubmit={login}>
-            {/* <Card className={classes[this.state.cardAnimaton]}> */}
             <Card className={classes.cardAnimaton}>
               <CardHeader
                 className={`${classes.cardHeader} ${classes.textCenter}`}
@@ -198,9 +127,9 @@ function LoginPage(props) {
                     fullWidth: true,
                     className: classes.formControlClassName,
                   }}
-                  onInputChange={onInputChange}
+                  // onInputChange={onInputChange}
                   inputProps={{
-                    type: showPassword ? null : 'password',
+                    type: 'password',
                     required: true,
                     endAdornment: (
                       <InputAdornment position='end'>
@@ -222,7 +151,7 @@ function LoginPage(props) {
                   control={
                     <Checkbox
                       tabIndex={-1}
-                      checked={rememberMeChecked}
+                      checked={defaultRememberMeChecked}
                       onChange={(e) => setRememberMeChecked(e.target.checked)}
                       checkedIcon={<Check className={classes.checkedIcon} />}
                       icon={<Check className={classes.uncheckedIcon} />}
@@ -244,13 +173,11 @@ function LoginPage(props) {
           </form>
         </GridItem>
       </GridContainer>
-
-
       <MessageDialog
+        dialogTitle={title}
+        dialogContent={content}
         open={open}
         setClose={handleClose}
-        dialogTitle={dialogTitle}
-        dialogContent={dialogContent}
       />
 
     </div>

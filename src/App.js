@@ -27,9 +27,6 @@ function App() {
         if (!lastLocation || lastLocation === '/') {
             navigate('/auth/login-page')
         } else if (lastLocation) {
-            // navigate('/auth/login-page')
-            // navigate('/admin/editorList')
-            // navigate('/admin/editorList/new')
             navigate(lastLocation)
         }
 

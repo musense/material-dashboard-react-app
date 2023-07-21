@@ -19,7 +19,7 @@ const initialState = {
   totalCount: null,
   errorMessage: null,
   previewID: null,
- 
+
 }
 const getEditorReducer = (state = initialState, action) => {
   // console.log("🚀 ~ file: GetEditorReducer.js:157 ~ getEditorReducer ~ action:", action)
@@ -144,7 +144,7 @@ const getEditorReducer = (state = initialState, action) => {
         ...state,
         errorMessage: errorMessage.getFail
       }
-    case GetEditorAction.DELETE_EDITOR_SUCCESS: 
+    case GetEditorAction.DELETE_EDITOR_SUCCESS:
       return {
         ...state,
         errorMessage: errorMessage.deleteSuccess
@@ -175,8 +175,11 @@ const getEditorReducer = (state = initialState, action) => {
         ...state,
         errorMessage: errorMessage.updateFail
       }
-    default:
-      return { ...state }
+    default: {
+      return {
+        ...state,
+      }
+    }
   }
 }
 

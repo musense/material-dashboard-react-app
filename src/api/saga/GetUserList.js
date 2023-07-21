@@ -1,11 +1,7 @@
 
 import { all, put, take } from 'redux-saga/effects';
-import {
-    DELETE_USER, DELETE_USER_FAIL, DELETE_USER_SUCCESS, LOGIN_USER, LOGIN_USER_FAIL, LOGIN_USER_SUCCESS, REGISTER_USER, REGISTER_USER_FAIL, REGISTER_USER_SUCCESS, UPDATE_USER, UPDATE_USER_FAIL, UPDATE_USER_SUCCESS
-} from "../../actions/GetUserAction";
+import * as GetUserAction from "../../actions/GetUserAction";
 import { instance } from "./AxiosInstance";
-import { errorMessage } from '../../reducers/errorMessage';
-
 
 // LOGIN
 function* UserLogin(payload) {
@@ -14,9 +10,8 @@ function* UserLogin(payload) {
         const response = yield instance.post(`/login`, { username, password });
         console.log("🚀 ~ file: GetUserList.js:16 ~ function*UserLogin ~ response:", response)
         const user = yield response.data;
-          // console.log("🚀 ~ file: GetUserList.js:16 ~ function*UserLogin ~ user:", user)
         yield put({
-            type: LOGIN_USER_SUCCESS,
+            type: GetUserAction.LOGIN_USER_SUCCESS,
             errorMessage: 'login successfully',
             payload: {
                 username: user.username,
@@ -33,7 +28,37 @@ function* UserLogin(payload) {
         }
         if (error.response) {
             yield put({
-                type: LOGIN_USER_FAIL,
+                type: GetUserAction.LOGIN_USER_FAIL,
+                errorMessage: errorMessage,
+                payload: null
+            })
+        }
+    }
+}
+
+// LOGOUT
+function* UserLogout() {
+
+    try {
+        const response = yield instance.post(`/logout`);
+        console.log("🚀 ~ file: GetUserList.js:16 ~ function*UserLogin ~ response:", response)
+        const user = yield response.data;
+          // console.log("🚀 ~ file: GetUserList.js:51 ~ function*UserLogout ~ user:", user)
+        yield put({
+            type: GetUserAction.LOGOUT_USER_SUCCESS,
+            errorMessage: 'logout successfully',
+        })
+    } catch (error) {
+        console.log("🚀 ~ file: GetUserList.js:61 ~ function*UserLogout ~ error:", error)
+        let errorMessage;
+        if (error.response) {
+            errorMessage = error.response.data.message
+        } else {
+            errorMessage = error.code
+        }
+        if (error.response) {
+            yield put({
+                type: GetUserAction.LOGOUT_USER_FAIL,
                 errorMessage: errorMessage,
                 payload: null
             })
@@ -49,21 +74,21 @@ function* UserRegister(payload) {
         const response = yield instance.post(`/register`, { username, email, password })
         const responseData = yield response.data;
         yield put({
-            type: REGISTER_USER_SUCCESS,
+            type: GetUserAction.REGISTER_USER_SUCCESS,
             payload: responseData,
             errorMessage: 'register successfully',
         })
     } catch (error) {
-        // console.log("🚀 ~ file: GetUserList.js:57 ~ function*UserRegister ~ error:", error)
+        console.log("🚀 ~ file: GetUserList.js:57 ~ function*UserRegister ~ error:", error)
         let errorMessage;
         if (error.response) {
-            errorMessage = error.response.data.message
+            errorMessage = error.response.data.message || error.response.data.messages.join(',')
         } else {
             errorMessage = error.code
         }
         if (error.response) {
             yield put({
-                type: REGISTER_USER_FAIL,
+                type: GetUserAction.REGISTER_USER_FAIL,
                 errorMessage: errorMessage,
                 payload: null
             })
@@ -78,12 +103,12 @@ function* UserUpdate(payload) {
         const response = yield instance.patch(`/user/${payload.data.id}`, payload.data);
         const responseData = yield response.data.data;
         yield put({
-            type: UPDATE_USER_SUCCESS,
+            type: GetUserAction.UPDATE_USER_SUCCESS,
             payload: null
         })
     } catch (error) {
         yield put({
-            type: UPDATE_USER_FAIL,
+            type: GetUserAction.UPDATE_USER_FAIL,
             errorMessage: error.message,
             payload: null
         })
@@ -97,12 +122,12 @@ function* UserDelete(payload) {
         const response = yield instance.delete(`/user/${payload.data}`);
         const responseData = yield response.data.data;
         yield put({
-            type: DELETE_USER_SUCCESS,
+            type: GetUserAction.DELETE_USER_SUCCESS,
             payload: null
         })
     } catch (error) {
         yield put({
-            type: DELETE_USER_FAIL,
+            type: GetUserAction.DELETE_USER_FAIL,
             errorMessage: error.message,
             payload: null
         })
@@ -117,15 +142,23 @@ function* UserDelete(payload) {
 // Watch LOGIN ACTION
 function* watchUserLoginSaga() {
     while (true) {
-        const { payload } = yield take(LOGIN_USER)
+        const { payload } = yield take(GetUserAction.LOGIN_USER)
         yield UserLogin(payload)
+    }
+}
+
+// Watch LOGIN ACTION
+function* watchUserLogoutSaga() {
+    while (true) {
+        const { payload } = yield take(GetUserAction.LOGOUT_USER)
+        yield UserLogout(payload)
     }
 }
 
 // Watch REGISTER ACTION
 function* watchUserRegisterSaga() {
     while (true) {
-        const { payload } = yield take(REGISTER_USER)
+        const { payload } = yield take(GetUserAction.REGISTER_USER)
         yield UserRegister(payload)
     }
 }
@@ -133,7 +166,7 @@ function* watchUserRegisterSaga() {
 // not implemented
 function* watchAddUserSaga() {
     while (true) {
-        const { payload } = yield take(UPDATE_USER)
+        const { payload } = yield take(GetUserAction.UPDATE_USER)
         yield UserUpdate(payload)
     }
 }
@@ -141,7 +174,7 @@ function* watchAddUserSaga() {
 // not implemented
 function* watchDeleteUserSaga() {
     while (true) {
-        const { payload } = yield take(DELETE_USER)
+        const { payload } = yield take(GetUserAction.DELETE_USER)
         yield UserDelete(payload)
     }
 }
@@ -151,6 +184,7 @@ function* mySaga() {
         // takeEvery(ADD_USER_SUCCESS, reGetUser),
         // takeEvery(REQUEST_USER, GetUser),
         watchUserLoginSaga(),
+        watchUserLogoutSaga(),
         watchUserRegisterSaga(),
         // watchDeleteUserSaga(),
     ])

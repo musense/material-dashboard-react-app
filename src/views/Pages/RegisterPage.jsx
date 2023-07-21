@@ -1,19 +1,12 @@
 import PropTypes from 'prop-types';
-import React, { useEffect, useState } from 'react';
-// import axios from "axios";
-
+import React, { useEffect } from 'react';
 // @material-ui/core components
-import Checkbox from '@material-ui/core/Checkbox';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Icon from '@material-ui/core/Icon';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import withStyles from '@material-ui/core/styles/withStyles';
-
 // @material-ui/icons
-import Check from '@material-ui/icons/Check';
 import Email from '@material-ui/icons/Email';
 import Face from '@material-ui/icons/Face';
-
 // core components
 import Card from 'components/Card/Card.jsx';
 import CardBody from 'components/Card/CardBody.jsx';
@@ -30,55 +23,22 @@ import { REGISTER_USER, REGISTER_USER_ERROR_RESET } from './../../actions/GetUse
 import { useNavigate } from 'react-router-dom';
 import MessageDialog from './MessageDialog';
 
-
+import useRegisterResult from '../../hook/useRegisterResult';
 
 function RegisterPage(props) {
   const { classes } = props;
 
-  const [registerSuccess, setRegisterSuccess] = useState(false);
   const errors = {};
   const navigate = useNavigate()
   const dispatch = new useDispatch();
   const returnMessage = useSelector((state) => state.getUserReducer.errorMessage);
 
-  useEffect(() => {
-    if (!returnMessage) return
-    let title,
-      content;
-    console.log("🚀 ~ file: RegisterPage.jsx:44 ~ useEffect ~ returnMessage:", returnMessage)
+  const { title, content, success } = useRegisterResult(returnMessage);
+  console.log("🚀 ~ file: LoginPage.jsx:72 ~ LoginPage ~ title:", title)
 
-    switch (returnMessage) {
-      case "user validation failed: email: email not valid!":
-      case "email has been used":
-      case "username has been used":
-      case "ERR_NETWORK": {
-        title = "註冊失敗";
-        content = "請重新檢查填入資訊";
-        break;
-      }
-      case "ERR_NETWORK": {
-        title = "註冊失敗";
-        content = "連線錯誤！";
-        break;
-      }
-      case "register successfully": {
-        title = "註冊成功";
-        content = "註冊成功！";
-        setRegisterSuccess(true);
-        break;
-      }
-      default: {
-        title = "註冊失敗"
-        content = "註冊失敗！"
-        break
-      }
-    }
-    if (content) {
-      handleClickOpen()
-      setDialogTitle(title)
-      setDialogContent(content)
-    }
-  }, [returnMessage]);
+  useEffect(() => {
+    if (title) handleClickOpen()
+  }, [title]);
 
   const register = (e) => {
     e.preventDefault();
@@ -106,18 +66,14 @@ function RegisterPage(props) {
   };
 
   const [open, setOpen] = React.useState(false);
-  const [dialogContent, setDialogContent] = useState(null);
-  const [dialogTitle, setDialogTitle] = useState(null);
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
+  const handleClickOpen = () => setOpen(true);
 
   const handleClose = () => {
     setOpen(false);
     dispatch({
       type: REGISTER_USER_ERROR_RESET
     })
-    if (registerSuccess) {
+    if (success) {
       navigate('/auth/login-page', { replace: true })
     }
   };
@@ -204,12 +160,11 @@ function RegisterPage(props) {
         </GridItem>
       </GridContainer>
 
-
       <MessageDialog
+        dialogTitle={title}
+        dialogContent={content}
         open={open}
         setClose={handleClose}
-        dialogTitle={dialogTitle}
-        dialogContent={dialogContent}
       />
 
     </div>
@@ -222,4 +177,3 @@ RegisterPage.propTypes = {
 };
 
 export default withStyles(registerPageStyle)(RegisterPage);
-// export default RegisterPage;

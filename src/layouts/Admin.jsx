@@ -25,38 +25,16 @@ let userInfo = {};
 
 
 function Dashboard({ ...props }) {
-  const [logo, setLogo] = useState();
   import(`${process.env.REACT_APP_LOGO_DIR}`).then(res => setLogo(res.default))
+  const [logo, setLogo] = useState();
   const { classes, ...rest } = props;
-  // const [image, setImage] = useState(image);
-  const [color, setColor] = useState('orange');
-  const [hasImage, setHasImage] = useState(true);
-  const [fixedClasses, setFixedClasses] = useState('dropdown show');
+  const color = "orange";
   const [mobileOpen, setMobileOpen] = useState(false);
 
   const mainPanel = useRef(null);
-
-  // const handleImageClick = (image) => {
-  //   setImage(image);
-  // };
-  const [logoImage, setLogoImage] = useState(null);
-  const [logoText, setLogoText] = useState(null);
   const location = useLocation()
-  const editorClassList = useSelector((state) => state.getClassReducer.editorClassList);
-  const tagList = useSelector((state) => state.getTagsReducer.tagList);
-
   const dispatch = new useDispatch();
 
-  const handleColorClick = (color) => {
-    setColor(color);
-  };
-  const handleFixedClick = () => {
-    if (fixedClasses === 'dropdown') {
-      setFixedClasses('dropdown show');
-    } else {
-      setFixedClasses('dropdown');
-    }
-  };
   const handleDrawerToggle = () => {
     setMobileOpen((preMobileOpen) => !preMobileOpen);
   };
@@ -92,9 +70,6 @@ function Dashboard({ ...props }) {
       window.addEventListener('resize', resizeFunction);
     } else {
       //componentDidUpdate
-      import(process.env.REACT_APP_LOGO_DIR)
-        .then(res => setLogoImage(res.default));
-      setLogoText(process.env.REACT_APP_LOGO_TEXT);
     }
     return () => {
       //componentWillUnmount

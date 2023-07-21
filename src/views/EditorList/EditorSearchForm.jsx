@@ -7,6 +7,7 @@ import * as GetEditorAction from 'actions/GetEditorAction';
 import * as GetClassAction from 'actions/GetClassAction';
 import { useDispatch } from 'react-redux';
 import SingleClassificationSelect from 'components/Select/SingleClassificationSelect';
+import SingleStatusSelect from 'components/Select/SingleStatusSelect';
 
 export default function EditorSearchForm() {
 
@@ -15,9 +16,11 @@ export default function EditorSearchForm() {
     const dateRef = useRef(null);
 
     const classRef = useRef(null);
+    const statusRef = useRef(null);
 
     useEffect(() => {
         classRef.current = null
+        statusRef.current = null
     }, []);
     usePressEnterEventHandler(submitRef);
 
@@ -29,6 +32,7 @@ export default function EditorSearchForm() {
             {},
             Object.fromEntries(formData),
             classRef.current && { classification: classRef.current.label },
+            statusRef.current && { status: statusRef.current.label },
             { createDate: dateRef.current.current() }
         );
         console.log("🚀 ~ file: EditorList.jsx:136 ~ onSearchEditorList ~ searchData:", searchData)

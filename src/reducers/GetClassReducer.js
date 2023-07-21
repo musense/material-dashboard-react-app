@@ -16,7 +16,14 @@ const initialState = {
     errorMessage: null,
     currentPage: null,
     totalCount: null,
-    reset: null
+    reset: null,
+    editorStatus: [
+        { _id: 0, name: '全部' },
+        { _id: 1, name: '草稿' },
+        { _id: 2, name: '已排程' },
+        { _id: 3, name: '隱藏文章' },
+        { _id: 4, name: '已發布' },
+    ]
 }
 const getClassReducer = (state = initialState, action) => {
     // console.log(action);
@@ -109,12 +116,6 @@ const getClassReducer = (state = initialState, action) => {
                 }).slice(0, 10),
                 currentPage: 1
             }
-        // case GetClassAction.REQUEST_ALL_CLASS_LIST_SUCCESS:
-        //     return {
-        //         ...state,
-        //         classifications: action.payload,
-        //         errorMessage: errorMessage.getFinish
-        //     }
         case GetClassAction.REQUEST_CLASS:
             return {
                 ...state,
@@ -137,22 +138,6 @@ const getClassReducer = (state = initialState, action) => {
                 ...state,
                 editorClass: action.payload.editorClass,
             }
-        // case GetClassAction.EDIT_SAVING_CLASS:
-        //     return {
-        //         ...state,
-        //         editorClassList:
-        //             state.editorClassList
-        //                 .map(editorClass => {
-        //                     if (editorClass._id !== action.payload.data._id) return editorClass
-        //                     return {
-        //                         ...editorClass,
-        //                         ...action.payload.data
-        //                     }
-        //                 })
-        //         ,
-        //         editorClass: emptyEditorClass,
-        //         errorMessage: errorMessage.updateSuccess
-        //     }
         case GetClassAction.EDIT_CLASS_SUCCESS:
             return {
                 ...state,

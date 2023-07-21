@@ -26,7 +26,7 @@ let userInfo = {};
 
 function Dashboard({ ...props }) {
   const [logo, setLogo] = useState();
-  import(`${process.env.REACT_APP_LOGO_DIR}`).then(res => setLogo(res.default))
+  const [logoText, setLogoText] = useState();
   const { classes, ...rest } = props;
   const color = "orange";
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -70,6 +70,11 @@ function Dashboard({ ...props }) {
       window.addEventListener('resize', resizeFunction);
     } else {
       //componentDidUpdate
+
+      import(`${process.env.REACT_APP_LOGO_DIR}`).then(res => {
+        setLogo(res.default)
+        setLogoText(process.env.REACT_APP_LOGO_TEXT)
+      })
     }
     return () => {
       //componentWillUnmount
@@ -81,7 +86,7 @@ function Dashboard({ ...props }) {
       <div className={classes.wrapper}>
         <Sidebar
           routes={routes}
-          logoText={process.env.REACT_APP_LOGO_TEXT}
+          logoText={logoText}
           logo={logo}
           image={image}
           handleDrawerToggle={handleDrawerToggle}

@@ -19,7 +19,6 @@ function EditorList() {
   console.log("🚀 ~ file: index.jsx:20 ~ EditorList ~ returnMessage:", returnMessage)
 
   useEffect(() => {
-    if (!returnMessage) return
     if (reDispatchMessage.includes(returnMessage)) {
       dispatch({ type: GetEditorAction.REQUEST_EDITOR })
     }
@@ -27,7 +26,6 @@ function EditorList() {
   }, [returnMessage]);
 
   useEffect(() => {
-    if (!returnMessage) return
     dispatch({ type: GetEditorAction.REQUEST_EDITOR });
   }, [])
 

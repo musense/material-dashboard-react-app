@@ -89,7 +89,8 @@ export default function EditorSearchForm() {
                 />
             </div>
             <DateSelector
-                width={'250px'}
+                width={'160px'}
+                height={'40px'}
                 ref={dateRef} />
             <div className="button-list">
                 <input type='button' value='清空' onClick={reset} />

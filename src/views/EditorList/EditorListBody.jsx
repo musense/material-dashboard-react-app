@@ -3,7 +3,6 @@ import React, { useState } from 'react';
 import CardBody from 'components/Card/CardBody.jsx';
 import { useSelector } from 'react-redux';
 import MediaModal from './MediaModal';
-import MessageModal from "./MessageModal";
 
 import EditorSearchForm from './EditorSearchForm';
 import EditorListButtonList from './EditorListButtonList';
@@ -16,6 +15,7 @@ export default function EditorListBody() {
     const showList = useSelector((state) => state.getEditorReducer.showList);
     const currentPage = useSelector((state) => state.getEditorReducer.currentPage);
     const totalPage = useSelector((state) => state.getEditorReducer.totalPage);
+    console.log("🚀 ~ file: EditorListBody.jsx:28 ~ totalPage:", totalPage)
     console.log("🚀 ~ file: EditorListBody.jsx:28 ~ showList:", showList)
 
     const title = useSelector((state) => state.getDialogReducer.title);

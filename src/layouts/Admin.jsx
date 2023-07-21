@@ -25,8 +25,8 @@ let userInfo = {};
 
 
 function Dashboard({ ...props }) {
-  import(`${process.env.REACT_APP_LOGO_DIR}`).then(res => setLogo(res.default))
   const [logo, setLogo] = useState();
+  import(`${process.env.REACT_APP_LOGO_DIR}`).then(res => setLogo(res.default))
   const { classes, ...rest } = props;
   const color = "orange";
   const [mobileOpen, setMobileOpen] = useState(false);

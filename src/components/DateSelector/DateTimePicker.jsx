@@ -6,7 +6,8 @@ import { css } from '@emotion/css';
 const DateTimePicker = React.forwardRef(({
     title,
     width,
-    lastMonth = null
+    height,
+    lastThreeMonth = null
 }, ref) => {
     const currentRef = useRef();
     useImperativeHandle(ref, () => {
@@ -19,7 +20,7 @@ const DateTimePicker = React.forwardRef(({
         }
     })
     // const lastMonth = dayjs().subtract(1, 'month')
-    const initialState = lastMonth ? dayjs().subtract(1, 'month') : dayjs(new Date())
+    const initialState = lastThreeMonth ? dayjs().subtract(3, 'month') : dayjs(new Date())
 
     const [value, setValue] = useState(null);
 
@@ -43,13 +44,15 @@ const DateTimePicker = React.forwardRef(({
             <label htmlFor={title}>{title}</label>
             <MUIDatePicker
                 sx={{
-                    height: '40.8px',
+                    height: height,
                     border: '1px solid black',
                     borderRadius: '4px',
                     width: width,
                     '& input': {
                         paddingTop: '9px',
                         paddingBottom: '9px',
+                        boxSizing: 'border-box',
+                        height: height
                     }
                 }}
                 className={css`

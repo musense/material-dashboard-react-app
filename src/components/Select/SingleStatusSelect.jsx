@@ -9,7 +9,8 @@ import { RESET_SELECTED_CLASS } from 'actions/GetClassAction';
 export default function SingleStatusSelect({
   creatable,
   statusRef,
-  width = null
+  width = null,
+  height = null
 }) {
   console.log("🚀 ~ file: SingleStatusSelect.jsx:10 ~ SingleStatusSelect ~ width:", width)
 
@@ -49,6 +50,7 @@ export default function SingleStatusSelect({
       selectedRef={statusRef}
       options={statusOptions}
       controlWidth={width}
+      controlHeight={height}
     />
   );
 }

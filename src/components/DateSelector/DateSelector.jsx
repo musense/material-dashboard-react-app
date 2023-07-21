@@ -38,13 +38,15 @@ const DateSelector = React.forwardRef((props, ref) => {
                         ref={startDateRef}
                         title={'開始日期'}
                         width={props.width}
-                        lastMonth
+                        height={props.height}
+                        lastThreeMonth
                     />
                     ~
                     <DateTimePicker
                         ref={endDateRef}
                         title={'結束日期'}
                         width={props.width}
+                        height={props.height}
                     />
                 </div>
             </DemoContainer>

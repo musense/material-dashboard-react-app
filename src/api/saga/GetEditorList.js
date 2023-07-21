@@ -3,14 +3,15 @@ import * as GetEditorAction from "../../actions/GetEditorAction";
 import { formInstance, instance } from "./AxiosInstance";
 import { toBackendData, toBackendFormData, toFrontendData } from "./../apiHelperFunc";
 import { errorMessage } from '../../reducers/errorMessage';
+import dayjs from 'dayjs';
 
 // GET
 function* GetEditorTitleList(payload = 1) {
-    const nowTime = new Date();
-
     try {
-        const response = instance.get(`/editor?limit=10000&pageNumber=${payload}`);
-        const responseDraft = instance.get(encodeURI(`/editor?limit=10000&pageNumber=${payload}&status=草稿`));
+        const startDate = new Date(`${dayjs().subtract(3, 'month').format('YYYY-MM-DD')} 00:00:00`).getTime()
+        const endDate = new Date(`${dayjs().format('YYYY-MM-DD')} 23:59:59`).getTime()
+        const response = instance.get(`/editor?limit=10000&startData=${startDate}&endDate=${endDate}&pageNumber=${payload}`);
+        const responseDraft = instance.get(encodeURI(`/editor?limit=10000&startData=${startDate}&endDate=${endDate}&pageNumber=${payload}&status=草稿`));
         const responseData = yield Promise.all([response, responseDraft]).then(res => {
             const resData = res.reduce((acc, curr) => {
                 return [...acc, curr.data.data]
@@ -234,9 +235,9 @@ function* DeleteEditor(payload) {
         });
         const responseData = yield response.data.data;
         yield put({
-            type   : GetEditorAction.DELETE_EDITOR_SUCCESS,
+            type: GetEditorAction.DELETE_EDITOR_SUCCESS,
             payload: responseData
-            
+
         })
     } catch (error) {
         yield put({

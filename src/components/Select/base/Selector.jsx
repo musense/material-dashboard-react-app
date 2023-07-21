@@ -50,6 +50,7 @@ const Selector = ({
   options: defaultOptions,
   selectedRef,
   controlWidth = null,
+  controlHeight = null
 }) => {
   console.log("🚀 ~ file: Selector.jsx:14 ~ creatable:", creatable)
   console.log("🚀 ~ file: Selector.jsx:14 ~ isMulti:", isMulti)
@@ -112,7 +113,7 @@ const Selector = ({
         paddingBottom: 'unset',
         marginTop: 'unset',
         marginBottom: 'unset',
-
+        height: controlHeight
       }),
       menuPortal: (base) => ({
         ...base,
@@ -128,7 +129,7 @@ const Selector = ({
         border: '1px solid black'
       }),
     }
-  }, [controlWidth])
+  }, [controlWidth, controlHeight])
 
   const props = useMemo(() => {
     const returnProps = (isMulti) => {

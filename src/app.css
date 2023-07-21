@@ -182,6 +182,24 @@ input[type='file'] {
   gap: 40px;
 }
 
+.editor-list-form {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  color: black;
+  width: 1300px;
+  margin-right: auto;
+  align-items: flex-end;
+  gap: 40px;
+}
+
+.editor-list-form .title>input {
+  height: 40px;
+  width: 150px;
+  border: 1px solid black;
+  border-radius: 4px;
+}
+
 .editor-list-form .button-list {
   width: 300px;
   display: flex;

@@ -104,7 +104,7 @@ export default function RowBody({
                                 }} />
                         ) : '無圖片/縮圖'} className={'view-editor-image-container'} />
                     <BodyCell children={titleView.classifications.label} />
-                    <BodyCell children={titleView.content.title} className={'editor-list-title'} />
+                    <BodyCell children={<span style={{ margin: '0 15px', }}>{titleView.content.title}</span>} className={'editor-list-title'} />
                     <BodyCell children={<Stack spacing={1} direction={'column'}>
                         <span style={{
                             color: titleView.status === '已發布' ? 'green'

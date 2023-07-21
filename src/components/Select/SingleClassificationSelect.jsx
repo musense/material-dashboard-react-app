@@ -9,7 +9,8 @@ import { RESET_SELECTED_CLASS } from 'actions/GetClassAction';
 export default function SingleClassificationSelect({
   creatable,
   classRef,
-  width = null
+  width = null,
+  height = null
 }) {
   console.log("🚀 ~ file: SingleClassificationSelect.jsx:10 ~ SingleClassificationSelect ~ width:", width)
 
@@ -65,6 +66,7 @@ export default function SingleClassificationSelect({
       selectedRef={classRef}
       options={classOptions}
       controlWidth={width}
+      controlHeight={height}
     />
   );
 }

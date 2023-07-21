@@ -1,6 +1,5 @@
 import React, { useEffect, useRef } from 'react'
 import DateSelector from 'components/DateSelector/DateSelector';
-import { css } from '@emotion/css'
 import usePressEnterEventHandler from 'hook/usePressEnterEventHandler';
 import { Box } from '@mui/material';
 import * as GetEditorAction from 'actions/GetEditorAction';
@@ -8,6 +7,18 @@ import * as GetClassAction from 'actions/GetClassAction';
 import { useDispatch } from 'react-redux';
 import SingleClassificationSelect from 'components/Select/SingleClassificationSelect';
 import SingleStatusSelect from 'components/Select/SingleStatusSelect';
+
+const style = {
+    width: '100%',
+    height: 'fit-content',
+    backgroundColor: 'transparent',
+    margin: '0 auto 1rem',
+    '& h3': {
+        textAlign: 'center',
+        m: 'unset',
+        mb: 2
+    },
+}
 
 export default function EditorSearchForm() {
 
@@ -55,51 +66,26 @@ export default function EditorSearchForm() {
     }
 
     return <Box
-        sx={{
-            width: '100%',
-            height: 'fit-content',
-            backgroundColor: 'transparent',
-            margin: '0 auto 1rem',
-            '& h3': {
-                textAlign: 'center',
-                m: 'unset',
-                mb: 2
-            },
-        }}>
-        {/* <h3>搜尋文章</h3> */}
+        sx={style}>
         <form name='editor-list-form' className="editor-list-form" onSubmit={onSearchEditorList}>
-            <div className={css`
-                       
-                        & input {
-                            height: 40.8px;
-                            border: 1px solid black;
-                            border-radius: 4px;
-                        }
-                    `}>
+            <div className="title" >
                 <label htmlFor="title">標題</label>
                 <input type="text" name='title' />
             </div>
-            <div className={css`
-                        .control{
-                            border-color: black;
-                        }
-                        * .ValueContainer {
-                            padding-top: unset;
-                            padding-bottom: unset;
-                        }
-                        & .Input{
-                            padding: unset;
-                            margin: unset;
-                        }
-                        & input {
-                            height: 40.8px;
-                        }
-                    `}>
+            <div >
                 <label htmlFor="classification">分類</label>
-                {/* <input type="text" name='classification' /> */}
                 <SingleClassificationSelect
                     classRef={classRef}
-                    width={'250px'}
+                    width={'150px'}
+                    height={'40px'}
+                />
+            </div>
+            <div >
+                <label htmlFor="classification">狀態</label>
+                <SingleStatusSelect
+                    statusRef={statusRef}
+                    width={'150px'}
+                    height={'40px'}
                 />
             </div>
             <DateSelector

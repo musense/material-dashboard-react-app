@@ -75,8 +75,6 @@ export default function RowBody({
     }, [handleOpenDialog])
 
     function onEdit(updateEditor) {
-
-
         dispatch({
             type: GetEditorAction.REQUEST_EDITOR_BY_ID,
             payload: {

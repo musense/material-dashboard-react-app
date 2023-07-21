@@ -182,12 +182,6 @@ input[type='file'] {
   gap: 40px;
 }
 
-.editor-list-form>div {
-  /* width: 300px; */
-}
-
-.editor-list-form input {}
-
 .editor-list-form .button-list {
   width: 300px;
   display: flex;

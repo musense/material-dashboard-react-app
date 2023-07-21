@@ -51,49 +51,49 @@ export default function TagLeftWrapper() {
 
     usePressEnterEventHandler(formRef)
 
-    useEffect(() => {
-        if (!returnMessage) return
-        switch (returnMessage) {
-            case 'add successfully': {
-                setModalTitle('Success')
-                setModalContext('標籤新增成功！')
-                handleOpen()
-                console.log('🚀 ~ file: TagLeftWrapper.jsx:69 ~ onAddNewEditor ~ formData: 標籤新增成功！');
-                return
-            }
-            case 'update successfully': {
-                setModalTitle('Success')
-                setModalContext('標籤更新成功！')
-                handleOpen()
-                console.log('🚀 ~ file: TagLeftWrapper.jsx:69 ~ onAddNewEditor ~ formData: 標籤更新成功！');
-                return
-            }
+    // useEffect(() => {
+    //     if (!returnMessage) return
+    //     switch (returnMessage) {
+    //         case 'add successfully': {
+    //             setModalTitle('Success')
+    //             setModalContext('標籤新增成功！')
+    //             handleOpen()
+    //             console.log('🚀 ~ file: TagLeftWrapper.jsx:69 ~ onAddNewEditor ~ formData: 標籤新增成功！');
+    //             return
+    //         }
+    //         case 'update successfully': {
+    //             setModalTitle('Success')
+    //             setModalContext('標籤更新成功！')
+    //             handleOpen()
+    //             console.log('🚀 ~ file: TagLeftWrapper.jsx:69 ~ onAddNewEditor ~ formData: 標籤更新成功！');
+    //             return
+    //         }
 
-            default:
-                break;
-        }
-    }, [returnMessage]);
-    console.log("🚀 ~ file: TagLeftWrapper.jsx:54 ~ useEffect ~ returnMessage:", returnMessage)
+    //         default:
+    //             break;
+    //     }
+    // }, [returnMessage]);
+    // console.log("🚀 ~ file: TagLeftWrapper.jsx:54 ~ useEffect ~ returnMessage:", returnMessage)
 
-    useMemo(() => {
-        if (selectedTag && selectedTag._id !== '') {
-            setIsEditing(true)
-        }
-        console.log("🚀 ~ file: EditorClassList.jsx:142 ~ setFormData ~ selectedTag:", selectedTag)
-        const form = getForm();
-        if (form === null) return
-        form.reset()
-        setManualUrl('')
-        setCustomUrl('')
-        form.elements['_id'].value = selectedTag._id
-        form.elements.name.value = selectedTag.name
-        form.elements.title.value = selectedTag.webHeader.title ? selectedTag.webHeader.title : ''
-        form.elements.description.value = selectedTag.webHeader.description ? selectedTag.webHeader.description : ''
-        form.elements.keywords.value = selectedTag.webHeader.keywords ? selectedTag.webHeader.keywords : ''
-        // form.elements.sorting.value = selectedTag.sorting ? selectedTag.sorting : ''
-        // form.elements.hotTag.checked = selectedTag.isHot || false
-        setCustomUrl(selectedTag.webHeader.customUrl)
-    }, [selectedTag])
+    // useMemo(() => {
+    //     if (selectedTag && selectedTag._id !== '') {
+    //         setIsEditing(true)
+    //     }
+    //     console.log("🚀 ~ file: EditorClassList.jsx:142 ~ setFormData ~ selectedTag:", selectedTag)
+    //     const form = getForm();
+    //     if (form === null) return
+    //     form.reset()
+    //     setManualUrl('')
+    //     setCustomUrl('')
+    //     form.elements['_id'].value = selectedTag._id
+    //     form.elements.name.value = selectedTag.name
+    //     form.elements.title.value = selectedTag.webHeader.title ? selectedTag.webHeader.title : ''
+    //     form.elements.description.value = selectedTag.webHeader.description ? selectedTag.webHeader.description : ''
+    //     form.elements.keywords.value = selectedTag.webHeader.keywords ? selectedTag.webHeader.keywords : ''
+    //     // form.elements.sorting.value = selectedTag.sorting ? selectedTag.sorting : ''
+    //     // form.elements.hotTag.checked = selectedTag.isHot || false
+    //     setCustomUrl(selectedTag.webHeader.customUrl)
+    // }, [selectedTag])
 
     function onAddNewEditor(e) {
         e.preventDefault()

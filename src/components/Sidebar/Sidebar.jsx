@@ -47,46 +47,38 @@ const Sidebar = ({ ...props }) => {
             key={key}
           >
             {prop.name === '新增文章'
-              ? <ListItem button
-              onClick={() => dispatch({
-                type: RESET_EDITOR
-              })}
-              className={classes.itemLink + listItemClasses}>
+              ? (<ListItem button
+                onClick={() => dispatch({
+                  type: RESET_EDITOR
+                })}
+                className={classes.itemLink + listItemClasses}>
                 {typeof prop.icon === 'string' ? (
-                  <Icon
-                    className={classNames(classes.itemIcon, whiteFontClasses)}
-                  >
+                  <Icon className={classNames(classes.itemIcon, whiteFontClasses)}>
                     {prop.icon}
                   </Icon>
                 ) : (
-                  <prop.icon
-                    className={classNames(classes.itemIcon, whiteFontClasses)}
-                  />
+                  <prop.icon className={classNames(classes.itemIcon, whiteFontClasses)} />
                 )}
                 <ListItemText
                   primary={prop.name}
                   className={classNames(classes.itemText, whiteFontClasses)}
                   disableTypography={true}
                 />
-              </ListItem>
-              : <ListItem button className={classes.itemLink + listItemClasses}>
+              </ListItem>)
+              : (<ListItem button className={classes.itemLink + listItemClasses}>
                 {typeof prop.icon === 'string' ? (
-                  <Icon
-                    className={classNames(classes.itemIcon, whiteFontClasses)}
-                  >
+                  <Icon className={classNames(classes.itemIcon, whiteFontClasses)}>
                     {prop.icon}
                   </Icon>
                 ) : (
-                  <prop.icon
-                    className={classNames(classes.itemIcon, whiteFontClasses)}
-                  />
+                  <prop.icon className={classNames(classes.itemIcon, whiteFontClasses)} />
                 )}
                 <ListItemText
                   primary={prop.name}
                   className={classNames(classes.itemText, whiteFontClasses)}
                   disableTypography={true}
                 />
-              </ListItem>
+              </ListItem>)
             }
           </NavLink>
         );

@@ -1,7 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import classNames from 'classnames';
 import { NavLink } from 'react-router-dom';
-import axios from 'axios';
 // @material-ui/core components
 import withStyles from '@material-ui/core/styles/withStyles';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -13,18 +12,13 @@ import Hidden from '@material-ui/core/Hidden';
 import Poppers from '@material-ui/core/Popper';
 // @material-ui/icons
 import Person from '@material-ui/icons/Person';
-import Notifications from '@material-ui/icons/Notifications';
-import Dashboard from '@material-ui/icons/Dashboard';
-import Search from '@material-ui/icons/Search';
 // core components
-import CustomInput from 'components/CustomInput/CustomInput.jsx';
 import Button from 'components/CustomButtons/Button.jsx';
 
 import headerLinksStyle from 'assets/jss/material-dashboard-react/components/headerLinksStyle.jsx';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import * as GetUserAction from '../../actions/GetUserAction';
-import { replace } from 'lodash';
 
 function HeaderLinks(props) {
   let anchorEl;

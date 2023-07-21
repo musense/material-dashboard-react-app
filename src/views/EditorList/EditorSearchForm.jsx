@@ -65,8 +65,7 @@ export default function EditorSearchForm() {
         dateRef.current.reset()
     }
 
-    return <Box
-        sx={style}>
+    return <Box sx={style}>
         <form name='editor-list-form' className="editor-list-form" onSubmit={onSearchEditorList}>
             <div className="title" >
                 <label htmlFor="title">標題</label>

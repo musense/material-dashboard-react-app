@@ -6,6 +6,18 @@ import { Box } from '@mui/material';
 import * as GetTagsAction from '../../actions/GetTagsAction';
 import { useDispatch } from 'react-redux';
 
+const style = {
+    width: '100%',
+    height: 'fit-content',
+    backgroundColor: 'transparent',
+    margin: '0 auto 1rem',
+    '& h3': {
+        textAlign: 'center',
+        m: 'unset',
+        mb: 2
+    },
+}
+
 export default function TagSearchForm() {
 
     const dispatch = useDispatch()
@@ -38,54 +50,19 @@ export default function TagSearchForm() {
         form.reset();
         dateRef.current.reset()
     }
-    return <Box
-        sx={{
-            width: '100%',
-            height: 'fit-content',
-            backgroundColor: 'transparent',
-            margin: '0 auto 1rem',
-            '& h3': {
-                textAlign: 'center',
-                m: 'unset',
-                mb: 2
-            },
-        }}>
-        {/* <h3>搜尋標籤</h3> */}
-        <form name='tag-list-form' onSubmit={onSearchEditorList}>
+    return <Box sx={style}>
+        <form name='tag-list-form' className="tag-list-form" onSubmit={onSearchEditorList}>
 
-            <div className={css`
-                    display: flex;
-                    flex-direction: column;
-                `}>
-                <div className={css`
-                    display: flex;
-                    flex-direction: column;
-                    gap: 1rem;
-                `}>
-
-                    <div className={css`
-                        width: 100%;
-                        & input {
-                            height: 40.8px;
-                            border: 1px solid black;
-                            border-radius: 4px;
-                        }
-                    `}>
-                        <label htmlFor="title">標籤名稱</label>
-                        <input type="text" name='title' />
-                    </div>
-
-                    <DateSelector
-                        width={'250px'}
-                        ref={dateRef} />
-                </div>
+            <div className="title" >
+                <label htmlFor="title">標籤名稱</label>
+                <input type="text" name='title' />
             </div>
-            <div className={css`
-                display: flex;
-                flex-direction: row;
-                justify-content: flex-end;
-                gap: 2rem;
-            `}>
+
+            <DateSelector
+                width={'160px'}
+                height={'40px'}
+                ref={dateRef} />
+            <div className="button-list">
                 <input type='button' value='清空' onClick={reset} />
                 <input ref={submitRef} type="submit" value="查詢" />
             </div>

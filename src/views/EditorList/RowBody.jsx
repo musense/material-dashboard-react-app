@@ -1,15 +1,11 @@
 import React, { useCallback, useEffect } from "react";
 import { Stack } from '@mui/material';
-import Icon from './Icon';
-import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { useDispatch } from 'react-redux';
 import * as GetDialogAction from '../../actions/GetDialogAction';
 import * as GetEditorAction from '../../actions/GetEditorAction';
 import { useNavigate } from 'react-router-dom';
-
-function BodyCell({ children, className = null }) {
-    return <div className={className}>{children}</div>;
-}
+import BodyCell from "../../components/BodyCell/BodyCell";
+import EditBodyCell from "../../components/EditBodyCell/EditBodyCell";
 
 export default function RowBody({
     showList,
@@ -126,23 +122,17 @@ export default function RowBody({
                         </span>
                     </Stack>} />
                     <BodyCell children={getUpdateDateTime(titleView.updateDate)} />
-                    <BodyCell children={<Stack spacing={2} direction={'row'}>
-                        <CopyToClipboard text={titleView.sitemapUrl} onCopy={(text, result) => onCopyLink(text, result)}>
-                            <div className="edit-icon-wrapper">
-                                <input title="複製連結" className="edit-icon-input" type="button" />
-                                < Icon iconName={'link'} />
-                            </div>
-                        </CopyToClipboard>
-                        <div className="edit-icon-wrapper">
-                            <input title="編輯" className="edit-icon-input" type="button" onClick={() => onEdit(titleView)} />
-                            < Icon iconName={'edit'} />
-                        </div>
-                        <div className="edit-icon-wrapper">
-                            <input title="刪除" className="edit-icon-input" type="button" onClick={() => onDelete(titleView._id, titleView.content.title)} />
-                            < Icon iconName={'delete_forever'} />
-                        </div>
-                    </Stack>} />
+                    <EditBodyCell
+                        onCopy={onCopyLink}
+                        copyText={titleView.sitemapUrl}
+                        onEdit={onEdit}
+                        editData={titleView}
+                        onDelete={onDelete}
+                        deleteID={titleView._id}
+                        deleteTitle={titleView.content.title}
+                    />
                 </div>);
         })}
     </div>;
 }
+

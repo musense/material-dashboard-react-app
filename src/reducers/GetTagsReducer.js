@@ -13,6 +13,7 @@ const initialState = {
     selectedTag: null,
     selectedIndex: -1,
     currentPage: null,
+    totalPage: null,
     totalCount: null,
     errorMessage: null,
 }
@@ -63,9 +64,10 @@ const getTagsReducer = (state = initialState, action) => {
                 showTagList: action.payload.tagList.slice(0, 10),
                 currentPage: action.payload.currentPage,
                 totalCount: action.payload.totalCount,
+                totalPage: Math.ceil(action.payload.totalCount / 10),
                 errorMessage: errorMessage.getFinish
             }
-        case GetTagsAction.REQUEST_PAGE_TAG:
+        case GetTagsAction.REQUEST_TAG_PAGE:
             const start = (action.payload - 1) * 10;
             const end = start + 10
             return {

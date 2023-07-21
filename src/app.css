@@ -171,6 +171,7 @@ input[type='file'] {
   background-color: transparent;
 }
 
+.tag-list-form,
 .editor-list-form {
   display: flex;
   flex-direction: row;
@@ -182,17 +183,11 @@ input[type='file'] {
   gap: 40px;
 }
 
-.editor-list-form {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  color: black;
-  width: 1300px;
-  margin-right: auto;
-  align-items: flex-end;
-  gap: 40px;
+.tag-list-form {
+  width: 1000px;
 }
 
+.tag-list-form .title>input ,
 .editor-list-form .title>input {
   height: 40px;
   width: 150px;
@@ -200,6 +195,7 @@ input[type='file'] {
   border-radius: 4px;
 }
 
+.tag-list-form .button-list ,
 .editor-list-form .button-list {
   width: 300px;
   display: flex;

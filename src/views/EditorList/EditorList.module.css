@@ -79,13 +79,3 @@ form[name='tag-list-form'] input{
 .not-published-yet {
   color: red;
 }
-
-/* div[data-attr="data-header-row"]>div:first-child,
-div[data-attr="data-body-row"]>div:first-child {
-  display: none;
-}
-
-div[data-attr="data-header-row"]>div:first-child.show,
-div[data-attr="data-body-row"]>div:first-child.show {
-  display: block;
-} */

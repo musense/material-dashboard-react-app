@@ -81,13 +81,3 @@ input {
   text-overflow: ellipsis;
   flex: 1;
 }
-/* 
-div[data-attr="data-header-row"]>div:first-child,
-div[data-attr="data-body-row"]>div:first-child {
-  display: none;
-}
-
-div[data-attr="data-header-row"]>div:first-child.show,
-div[data-attr="data-body-row"]>div:first-child.show {
-  display: block;
-} */

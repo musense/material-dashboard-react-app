@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux';
 import * as GetEditorAction from '../../actions/GetEditorAction';
 import { useNavigate } from 'react-router-dom';
 import Button from 'components/CustomButtons/Button';
-import PageButtonList from "./PageButtonList";
+import PageButtonList from "components/PageButtonList/PageButtonList";
 
 export default function EditorListButtonList({
     currentPage,
@@ -40,9 +40,12 @@ export default function EditorListButtonList({
         >
             上一頁
         </Button>
+        
         <PageButtonList
             totalPage={totalPage}
-            currentPage={currentPage} />
+            currentPage={currentPage} 
+            patchType={GetEditorAction.REQUEST_EDITOR_PAGE}
+            />
         <Button
             color='info'
             disabled={currentPage === totalPage}

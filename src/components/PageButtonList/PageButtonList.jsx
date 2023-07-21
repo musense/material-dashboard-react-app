@@ -1,9 +1,8 @@
-import React, { useMemo, useCallback } from "react";
+import React from "react";
 import Button from 'components/CustomButtons/Button';
 import { useDispatch } from "react-redux";
-import * as GetEditorAction from "../../actions/GetEditorAction";
 
-export default function PageButtonList({ totalPage, currentPage }) {
+export default function PageButtonList({ totalPage, currentPage, patchType }) {
     const dispatch = useDispatch();
 
     const pageList = Array.from({ length: totalPage }, (_, i) => i + 1);
@@ -12,7 +11,7 @@ export default function PageButtonList({ totalPage, currentPage }) {
     const buttonProps = (page, currentPage) => ({
         color: currentPage === page ? 'rose' : 'info',
         onClick: () => dispatch({
-            type: GetEditorAction.REQUEST_EDITOR_PAGE,
+            type: patchType,
             payload: page
         })
     })

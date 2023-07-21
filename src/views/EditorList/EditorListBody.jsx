@@ -3,12 +3,27 @@ import React, { useState } from 'react';
 import CardBody from 'components/Card/CardBody.jsx';
 import { useSelector } from 'react-redux';
 import MediaModal from './MediaModal';
-
+import * as GetEditorAction from '../../actions/GetEditorAction';
 import EditorSearchForm from './EditorSearchForm';
 import EditorListButtonList from './EditorListButtonList';
 import RowHeader from './RowHeader';
 import RowBody from './RowBody';
 import MessageDialog from '../Pages/MessageDialog';
+
+
+const headerMap = {
+    headerRow: [
+        { name: "序號", patchKey: "serialNumber" },
+        { name: "圖片/影片" },
+        { name: "分類", patchKey: "classifications.label" },
+        { name: "標題", patchKey: "content.title", className: "editor-list-title" },
+        { name: "狀態", patchKey: "status" },
+        { name: "更新日期", patchKey: "updateDate" },
+        { name: "編輯" }
+    ],
+    patchType: GetEditorAction.SHOW_EDITOR_LIST_SORTING,
+    reducerName: 'getEditorReducer'
+}
 
 export default function EditorListBody() {
 
@@ -41,7 +56,7 @@ export default function EditorListBody() {
             totalPage={totalPage}
         />
         <form className='view-list-form' name='view-editor-list-form' >
-            <RowHeader />
+            <RowHeader headerConfig={headerMap} />
             <RowBody
                 showList={showList}
                 handleOpen={handleOpen}

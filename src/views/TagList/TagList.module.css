@@ -77,7 +77,7 @@ input {
 }
 
 
-div[data-attr="data-header-row"]>div:first-child,
+/* div[data-attr="data-header-row"]>div:first-child,
 div[data-attr="data-body-row"]>div:first-child {
   display: none;
 }
@@ -85,7 +85,7 @@ div[data-attr="data-body-row"]>div:first-child {
 div[data-attr="data-header-row"]>div:first-child.show,
 div[data-attr="data-body-row"]>div:first-child.show {
   display: block;
-}
+} */
 /* .view-form>div>div:first-child {
   flex-basis: 100px;
 }

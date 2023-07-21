@@ -24,7 +24,6 @@ label {
 div>input[type='submit'],
 div>input[type='reset'],
 div>input[type='button'] {
-  margin: 0 auto;
   padding: 0;
   cursor: pointer;
 }
@@ -76,28 +75,115 @@ input[type='file'] {
   /* background-color: lightblue; */
 }
 
+.view-list-form>div {
+  display: flex;
+  flex-direction: column;
+}
 
 .view-form {
   position: relative;
-  margin-top: 1rem;
+  padding-right: 17px;
+  background-color: #ccc;
 }
 
-.view-form>div {
+.view-search-form {
+  position: sticky;
+}
+
+.view-list-form>div>div {
   display: flex;
-  gap: 1rem;
-  justify-content: space-between;
-  align-items: center;
-  width: 100%;
+  flex-direction: row;
 }
 
-.view-form>div>div {
+.view-list-form>div>div>div {
+  position: relative;
   text-align: center;
   overflow-x: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
+  border: 1px solid #999;
   flex: 1;
 }
 
-.view-form>div>div.editor-list-title {
+.view-list-form * .editor-list-title {
   flex-grow: 3;
+  text-align: left;
+  white-space: pre-wrap;
+}
+
+.view-list-form * .view-editor-image-container>img {
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+  aspect-ratio: 16/9;
+  cursor: pointer;
+}
+
+.view-body {
+  height: 560px;
+  overflow-y: scroll;
+}
+
+.view-body>div>div {
+  height: 100px;
+  border: 1px solid #999;
+  display: flex;
+  flex-wrap: wrap;
+  align-content: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.view-body>div:nth-child(2n-1) {
+  background-color: #eee;
+}
+
+.view-body>div:nth-child(2n) {
+  background-color: #ccc;
+}
+
+.edit-icon-wrapper {
+  --edit-icon-size: 35px;
+  position: relative;
+  width: var(--edit-icon-size);
+  height: var(--edit-icon-size);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #ddd;
+  border-radius: 5px;
+}
+
+.edit-icon-wrapper:hover {
+  background-color: #bbb;
+}
+
+.edit-icon-wrapper:hover>span {
+  color: #eee;
+}
+
+.edit-icon-input {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  border: unset;
+  margin: unset !important;
+  background-color: transparent;
+}
+
+.editor-list-form {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  color: black;
+  width: 1300px;
+  margin-right: auto;
+  align-items: flex-end;
+  gap: 40px;
+}
+
+.editor-list-form .button-list {
+  width: 300px;
+  display: flex;
+  gap: 40px;
 }

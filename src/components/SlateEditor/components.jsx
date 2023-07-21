@@ -51,8 +51,8 @@ export const Button = React.forwardRef((
           color: ${reversed
                     ? active
                         ? 'white'
-                    :  '#aaa'
-                    :  active
+                        : '#aaa'
+                    : active
                         ? 'black'
                         : '#ccc'};
           `

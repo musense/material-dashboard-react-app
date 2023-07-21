@@ -45,19 +45,19 @@ function HeaderLinks(props) {
   };
 
   const handleClose = (event) => {
-    if (anchorEl.contains(event.target)) {
-      return;
-    }
+    // if (anchorEl.contains(event.target)) {
+    //   return;
+    // }
     setNotifyPopupOpen(false);
     setProfilePopupOpen(false);
   };
 
-  useEffect(() => {
-    // window.addEventListener('resize', handleResize);
-    return () => {
-      // window.removeEventListener('resize', handleResize);
-    };
-  }, [anchorEl, window.innerWidth]);
+  // useEffect(() => {
+  //   window.addEventListener('resize', handleResize);
+  //   return () => {
+  //     window.removeEventListener('resize', handleResize);
+  //   };
+  // }, [anchorEl, window.innerWidth]);
 
   const logout = () => {
     dispatch({
@@ -68,7 +68,7 @@ function HeaderLinks(props) {
 
   return (
     <div>
-      <div className={classes.searchWrapper}>
+      {/* <div className={classes.searchWrapper}>
         <CustomInput
           formControlProps={{
             className: classes.margin + ' ' + classes.search,
@@ -112,7 +112,6 @@ function HeaderLinks(props) {
           <Notifications className={classes.icons} />
           <span className={classes.notifications}>5</span>
           <Hidden mdUp implementation='css'>
-            {/* <p onClick={handleClick} className={classes.linkText}> */}
             <p className={classes.linkText}>Notification</p>
           </Hidden>
         </Button>
@@ -175,7 +174,7 @@ function HeaderLinks(props) {
             </Grow>
           )}
         </Poppers>
-      </div>
+      </div> */}
       <div className={classes.manager}>
         <Button
           color={window.innerWidth > 959 ? 'transparent' : 'white'}

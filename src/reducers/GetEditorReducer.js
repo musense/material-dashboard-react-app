@@ -8,15 +8,18 @@ const initialState = {
     createDate: 'asc',
     updateDate: 'asc',
     status: 'asc',
+    pageView: 'asc',
     'classifications.label': 'asc',
   },
   showList: null,
   titleList: null,
   editor: null,
   currentPage: null,
+  totalPage: null,
   totalCount: null,
   errorMessage: null,
   previewID: null,
+ 
 }
 const getEditorReducer = (state = initialState, action) => {
   // console.log("🚀 ~ file: GetEditorReducer.js:157 ~ getEditorReducer ~ action:", action)
@@ -64,6 +67,7 @@ const getEditorReducer = (state = initialState, action) => {
         titleList: action.payload.titleList,
         showList: action.payload.titleList.slice(0, 10),
         currentPage: action.payload.currentPage,
+        totalPage: Math.ceil(action.payload.totalCount / 10),
         totalCount: action.payload.totalCount,
         errorMessage: errorMessage.getFinish
       }

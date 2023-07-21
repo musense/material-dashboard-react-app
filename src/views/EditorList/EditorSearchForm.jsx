@@ -63,20 +63,8 @@ export default function EditorSearchForm() {
             },
         }}>
         {/* <h3>搜尋文章</h3> */}
-        <form name='editor-list-form' onSubmit={onSearchEditorList}>
+        <form name='editor-list-form' className="editor-list-form" onSubmit={onSearchEditorList}>
             <div className={css`
-                    display: flex;
-                    flex-direction: column;
-                `}>
-                <div className={css`
-                    display: flex;
-                    flex-direction: row;
-                    gap: 1rem;
-                    align-items: flex-start;
-                `}>
-                    <div>
-                        <div className={css`
-                        width: 50%;
                        
                         & input {
                             height: 40.8px;
@@ -84,11 +72,10 @@ export default function EditorSearchForm() {
                             border-radius: 4px;
                         }
                     `}>
-                            <label htmlFor="title">標題</label>
-                            <input type="text" name='title' />
-                        </div>
-                        <div className={css`
-                        width: 50%;
+                <label htmlFor="title">標題</label>
+                <input type="text" name='title' />
+            </div>
+            <div className={css`
                         .control{
                             border-color: black;
                         }
@@ -104,27 +91,17 @@ export default function EditorSearchForm() {
                             height: 40.8px;
                         }
                     `}>
-                            <label htmlFor="classification">分類</label>
-                            {/* <input type="text" name='classification' /> */}
-                            <SingleClassificationSelect
-                                classRef={classRef}
-                                width={'250px'}
-                            />
-                        </div>
-                    </div>
-                    <div>
-                        <DateSelector
-                            width={'250px'}
-                            ref={dateRef} />
-                    </div>
-                </div>
+                <label htmlFor="classification">分類</label>
+                {/* <input type="text" name='classification' /> */}
+                <SingleClassificationSelect
+                    classRef={classRef}
+                    width={'250px'}
+                />
             </div>
-            <div className={css`
-                display: flex;
-                flex-direction: row;
-                justify-content: flex-end;
-                gap: 2rem;
-            `}>
+            <DateSelector
+                width={'250px'}
+                ref={dateRef} />
+            <div className="button-list">
                 <input type='button' value='清空' onClick={reset} />
                 <input ref={submitRef} type="submit" value="查詢" />
             </div>

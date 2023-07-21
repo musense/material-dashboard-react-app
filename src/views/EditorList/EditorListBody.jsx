@@ -1,368 +1,67 @@
-import React, { useEffect, useMemo, useRef, useState, useCallback } from 'react';
 
+import React, { useState } from 'react';
 import CardBody from 'components/Card/CardBody.jsx';
-
-import { useDispatch, useSelector } from 'react-redux';
-import * as GetEditorAction from '../../actions/GetEditorAction';
-
-import { useNavigate } from 'react-router-dom';
-import styles from './EditorList.module.css'
-import Button from 'components/CustomButtons/Button';
+import { useSelector } from 'react-redux';
 import MediaModal from './MediaModal';
 import MessageModal from "./MessageModal";
 
 import EditorSearchForm from './EditorSearchForm';
-import { Stack } from '@mui/system';
+import EditorListButtonList from './EditorListButtonList';
+import RowHeader from './RowHeader';
+import RowBody from './RowBody';
+import MessageDialog from '../Pages/MessageDialog';
 
-
-export default function EditorListBody(
-    // { titleViewList, 
-    //     setTitleViewList }
-) {
-
-    const navigate = useNavigate();
-    const [active, setActive] = useState(false);
-    const checkedToDeleteMapRef = useRef(new Map())
-    const [addEditorDisabled, setAddEditorDisabled] = useState(false);
-    const dispatch = useDispatch();
-
-    const [prevBtnDisable, setPrevBtnDisable] = useState(false);
-    const [nextBtnDisable, setNextBtnDisable] = useState(false);
-
+export default function EditorListBody() {
 
     const showList = useSelector((state) => state.getEditorReducer.showList);
-    console.log("🚀 ~ file: EditorListBody.jsx:28 ~ showList:", showList)
     const currentPage = useSelector((state) => state.getEditorReducer.currentPage);
-    const totalCount = useSelector((state) => state.getEditorReducer.totalCount);
-    const returnMessage = useSelector((state) => state.getEditorReducer.errorMessage);
+    const totalPage = useSelector((state) => state.getEditorReducer.totalPage);
+    console.log("🚀 ~ file: EditorListBody.jsx:28 ~ showList:", showList)
 
-    const [dialogTitle, setDialogTitle] = useState(null);
+    const title = useSelector((state) => state.getDialogReducer.title);
+    const message = useSelector((state) => state.getDialogReducer.message);
+    const confirm = useSelector((state) => state.getDialogReducer.confirm);
+    const data = useSelector((state) => state.getDialogReducer.data);
+    const messageDialogReturnValue = useSelector((state) => state.getDialogReducer.messageDialogReturnValue);
 
-    const [success, setSuccess] = useState(true);
-    const [dialogContent, setDialogContent] = useState(null);
-
-    const [titleViewList, setTitleViewList] = useState([]);
-    useEffect(() => {
-        console.log("🚀 ~ file: EditorListBody.jsx:62 ~ returnMessage:", returnMessage)
-
-        if (returnMessage === 'Request failed with status code 400') {
-            console.log('刪除失敗！');
-            setSuccess(false)
-            setDialogTitle('刪除失敗！')
-            setDialogContent('請選擇項目後再刪除！')
-            handleClickOpen()
-        }
-
-        if (returnMessage === 'delete successfully') {
-
-            console.log('刪除成功！');
-            setSuccess(true)
-            setDialogTitle('刪除成功！')
-            setDialogContent('刪除成功！')
-            handleClickOpen()
-        }
-    }, [returnMessage]);
-    useEffect(() => {
-        if (currentPage === 1)
-            setPrevBtnDisable(true)
-        else
-            setPrevBtnDisable(false)
-        if (currentPage * 10 - totalCount >= 0 && currentPage * 10 - totalCount < 10)
-            setNextBtnDisable(true)
-        else
-            setNextBtnDisable(false)
-    }, [currentPage, totalCount]);
-
-    useEffect(() => {
-        if (!showList) return
-        setTitleViewList(showList)
-
-    }, [showList])
-
-    const SortingHelperFunc = {
-
-        onSerialNumberClick() {
-            dispatch({
-                type: GetEditorAction.SHOW_EDITOR_LIST_SORTING,
-                payload: {
-                    key: 'serialNumber'
-                }
-            })
-        },
-        onTitleClick() {
-            dispatch({
-                type: GetEditorAction.SHOW_EDITOR_LIST_SORTING,
-                payload: {
-                    key: 'content.title'
-                }
-            })
-        },
-        onClassificationClick() {
-            dispatch({
-                type: GetEditorAction.SHOW_EDITOR_LIST_SORTING,
-                payload: {
-                    key: 'classifications.label'
-                }
-            })
-        },
-        onCreateAtClick() {
-            dispatch({
-                type: GetEditorAction.SHOW_EDITOR_LIST_SORTING,
-                payload: {
-                    key: 'createDate'
-                }
-            })
-        },
-        onUpdateAtClick() {
-            dispatch({
-                type: GetEditorAction.SHOW_EDITOR_LIST_SORTING,
-                payload: {
-                    key: 'updateDate'
-                }
-            })
-        },
-        onStatusClick() {
-            dispatch({
-                type: GetEditorAction.SHOW_EDITOR_LIST_SORTING,
-                payload: {
-                    key: 'status'
-                }
-            })
-        },
-    }
-
-    function onEdit(updateEditor) {
-        // console.log(updateEditor);
-        // return
-        dispatch({
-            type: GetEditorAction.REQUEST_EDITOR_BY_ID,
-            payload: {
-                data: {
-                    _id: updateEditor._id,
-                },
-            },
-        });
-        // return
-        navigate(`/admin/editorList/${updateEditor._id}`);
-    }
-    function onSearchBunchDeleteList(e) {
-        e.preventDefault()
-        const deleteIds = []
-        for (const [key, value] of checkedToDeleteMapRef.current.entries()) {
-            if (!value) continue
-            deleteIds.push(key)
-        }
-        console.log("🚀 ~ file: EditorClassList.jsx:142 ~ onDelete ~ deleteKeys:", deleteIds)
-
-        setDialogTitle('確定要刪除以下文章？')
-        setDialogContent(deleteIds.join(','))
-        handleClickConfirmOpen()
-
-        dispatch({
-            type: GetEditorAction.BUNCH_DELETE_EDITOR,
-            payload: deleteIds
-        });
-        e.target.reset();
-    }
-
-    function onPageButtonClick(pageNumber) {
-        dispatch({
-            type: GetEditorAction.REQUEST_EDITOR_PAGE,
-            payload: pageNumber
-
-        })
-    }
-    function checkEditorClassRow(e) {
-        e.stopPropagation();
-        checkedToDeleteMapRef.current.set(e.target.name, e.target.checked)
-        console.log("🚀 ~ file: EditorClassList.jsx:164 ~ checkEditorClassRow ~ checkedToDeleteMapRef.current:", checkedToDeleteMapRef.current)
-    }
-
-    const [open, setOpen] = React.useState(false);
-    const [confirm, setConfirm] = useState(false);
-    const handleClickConfirmOpen = new Promise((res) => {
-
-
-        setConfirm(true);
-    });
-    const handleClickOpen = () => {
-        setOpen(true);
-    };
-    const [openMedia, setOpenMedia] = React.useState(false);
-    const handleOpenMedia = () => setOpenMedia(true);
-    const handleCloseMedia = () => setOpenMedia(false);
+    const [open, setOpen] = useState(false);
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
 
     const [mediaInfo, setMediaInfo] = useState(null);
-    const getUpdateDateTime = (date) => `
-    ${new Date(date).toLocaleDateString('zh-TW', {
-        year: 'numeric', month: 'long', day: 'numeric'
-    })} ${new Date(date).toLocaleTimeString('zh-TW', {
-        hour: 'numeric', minute: 'numeric', hour12: 'numeric'
-    })}`;
 
-    const handleConfirmClose = useCallback(() => {
-        setConfirm(false);
-    }, [setConfirm, setOpen])
-
-    const dialogConfirmProps = useMemo(() => ({
-        confirm: true,
-        open: confirm,
-        handleClose: () => setConfirm(false),
-        dialogTitle,
-        dialogContent,
-    }), [confirm, setConfirm, dialogTitle, dialogContent])
-
-    const dialogProps = useMemo(() => ({
-        open,
-        success,
-        handleClose: () => setOpen(false),
-        dialogTitle,
-        dialogContent,
-    }), [open, success, setOpen, dialogTitle, dialogContent])
-
-
+    const [openDialog, setOpenDialog] = useState(false);
+    const handleOpenDialog = () => setOpenDialog(true);
+    const handleCloseDialog = () => setOpenDialog(false);
 
     return <CardBody>
-        <Button onClick={handleOpen}>Open modal</Button>
-        <MessageModal
-            {...dialogProps}
-        />
-        <MessageModal
-            {...dialogConfirmProps}
-        />
         <EditorSearchForm />
-        <div style={{
-            marginTop: '1.1rem',
-        }}>
-            <Button
-                color='info'
-                disabled={addEditorDisabled}
-                onClick={() => {
-                    dispatch({
-                        type: GetEditorAction.RESET_EDITOR
-                    })
-                    navigate('/admin/editorList/new')
-                }}
-            >
-                新增文章
-            </Button>
-            <Button
-                color='info'
-                disabled={prevBtnDisable}
-                onClick={() => onPageButtonClick(currentPage - 1)}
-            >
-                上一頁
-            </Button>
-            <Button
-                color='info'
-                disabled={nextBtnDisable}
-                onClick={() => onPageButtonClick(currentPage + 1)}
-            >
-                下一頁
-            </Button>
-            <Button
-                color='info'
-                onClick={() => setActive(prevActive => !prevActive)}
-            >
-                刪除文章
-            </Button>
-        </div>
-        <form name='view-editor-list-form' onSubmit={onSearchBunchDeleteList}>
-            <div data-attr="data-header" className={`view-form ${styles['view-editor-list-header']}`}>
-                <div data-attr="data-header-row">
-                    <div className={`${active ? styles.show : ''}`}> <input type='submit' value='批次刪除' /> </div>
-                    <div> <input type='button' value='序號' onClick={SortingHelperFunc.onSerialNumberClick} /> </div>
-                    <div className={'editor-list-title'}><input type='button' value='標題' onClick={SortingHelperFunc.onTitleClick} /></div>
-                    {/* <div><input type='button' value='分類' onClick={SortingHelperFunc.onClassificationClick} /></div> */}
-                    <div><input type='button' value='分類' onClick={SortingHelperFunc.onClassificationClick} /></div>
-                    <div>圖片/影片</div>
-                    <div><input type='button' value='狀態' onClick={SortingHelperFunc.onStatusClick} /> </div>
-                    <div><input type='button' value='更新日期' onClick={SortingHelperFunc.onUpdateAtClick} /> </div>
-                </div>
-            </div>
-            <div data-attr="data-body" className={`${styles['view-editor-list-body']}`}>
-                {titleViewList && titleViewList.length > 0 && titleViewList.map((titleView, index) => {
-
-                    return (
-                        <div data-attr="data-body-row" key={index} onClick={() => onEdit(titleView)}>
-                            {/* <div data-attr="data-body-row" key={index} > */}
-                            <div className={`${active ? styles.show : ''}`}><input type='checkbox' name={titleView._id} onClick={checkEditorClassRow} /></div>
-                            <div>{parseInt(titleView.serialNumber)}</div>
-                            <div className={styles['editor-list-title']}>
-                                <a href={titleView.sitemapUrl}
-                                    target='_blank'
-                                    title={titleView.sitemapUrl}
-                                    onClick={(e) => e.stopPropagation()}
-                                >
-                                    {titleView.content.title}
-                                </a>
-                            </div>
-                            <div className={styles['class-cell']}>{titleView.classifications.label}</div>
-                            <div className={styles['view-editor-image-container']}>
-                                {titleView.media.banner !== ''
-                                    ? (
-                                        <img
-                                            src={titleView.media.thumbnail}
-                                            title={titleView.media.banner}
-                                            alt={titleView.media.altText}
-                                            onClick={(e) => {
-                                                e.stopPropagation()
-                                                handleOpenMedia()
-                                                setMediaInfo(titleView.media)
-                                            }}
-                                        />
-                                    ) : (
-                                        <>
-                                            <div className={styles['view-editor-image-container']}>無圖片/縮圖</div>
-                                        </>
-                                    )}
-                            </div>
-                            <div>
-                                <Stack direction={"column"} spacing={0}>
-                                    <span style={{
-                                        color: titleView.status === '已發布'
-                                            ? 'green'
-                                            : titleView.status === '已排程'
-                                                ? 'red'
-                                                : titleView.status === '草稿'
-                                                    ? 'black'
-                                                    : 'grey',
-                                        fontWeight: 'bold'
-                                    }}>
-                                        {titleView.status}
-                                    </span>
-                                    <span>
-                                        {getUpdateDateTime(titleView.publishDate)}
-                                    </span>
-                                </Stack>
-                            </div>
-                            <div>
-                                <span>
-                                    {getUpdateDateTime(titleView.updateDate)}
-                                </span>
-                            </div>
-                        </div>);
-                })}
-            </div>
-            <div data-attr="data-footer" className={`view-form ${styles['view-editor-list-header']}`}>
-                <div data-attr="data-header-row">
-                    <div className={`${active ? styles.show : ''}`}> <input type='submit' value='批次刪除' /> </div>
-                    <div> <input type='button' value='序號' onClick={SortingHelperFunc.onSerialNumberClick} /> </div>
-                    <div className={'editor-list-title'}><input type='button' value='標題' onClick={SortingHelperFunc.onTitleClick} /></div>
-                    {/* <div><input type='button' value='分類' onClick={SortingHelperFunc.onClassificationClick} /></div> */}
-                    <div><input type='button' value='分類' onClick={SortingHelperFunc.onClassificationClick} /></div>
-                    <div>圖片/影片</div>
-                    <div><input type='button' value='狀態' onClick={SortingHelperFunc.onStatusClick} /> </div>
-                    <div><input type='button' value='更新日期' onClick={SortingHelperFunc.onCreateAtClick} /> </div>
-                </div>
-            </div>
+        <EditorListButtonList
+            currentPage={currentPage}
+            totalPage={totalPage}
+        />
+        <form className='view-list-form' name='view-editor-list-form' >
+            <RowHeader />
+            <RowBody
+                showList={showList}
+                handleOpen={handleOpen}
+                setMediaInfo={setMediaInfo}
+                handleOpenDialog={handleOpenDialog}
+                messageDialogReturnValue={messageDialogReturnValue}
+            />
         </form>
         <MediaModal
-            open={openMedia}
-            handleClose={handleCloseMedia}
+            open={open}
+            handleClose={handleClose}
             mediaInfo={mediaInfo}
+        />
+        <MessageDialog
+            dialogTitle={title}
+            dialogContent={message}
+            open={openDialog}
+            setClose={handleCloseDialog}
+            confirm={confirm}
+            data={data}
         />
     </CardBody>;
 }

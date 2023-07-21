@@ -54,6 +54,33 @@ export function toBackendData(requestData) {
     }
 }
 
+function* GetPopularTagList() {
+    try {
+
+        const response = yield instance.get(`/tags/getPopularTags`);
+        const { currentPage, totalCount, data: responseData } = yield response.data
+        const tagList = toFrontendData(responseData)
+        console.log("🚀 ~ file: GetTagList.js:44 ~ function*GetTagList ~ tagList:", tagList)
+        // const tagList = yield response.data;
+        // console.log("🚀 ~ file: GetTagList.js:14 ~ function*GetTagList ~ tagList:", tagList)
+
+        // console.log("🚀 ~ file: GetTagList.js:19 ~ tagMapped ~ tagMapped:", tagMapped)
+        // return
+        yield put({
+            type: GetTagsAction.REQUEST_POPULAR_TAG_SUCCESS,
+            payload: {
+                tagList
+            },
+        })
+    } catch (error) {
+        yield put({
+            type: GetTagsAction.REQUEST_POPULAR_TAG_FAIL,
+            errorMessage: error.message,
+            payload: null
+        })
+    }
+}
+
 function* GetTagList(payload = 1) {
     try {
 
@@ -201,10 +228,13 @@ function* watchGetTagListSaga() {
         yield GetTagList(payload)
     }
 }
-function* reGetTagList() {
-    yield GetTagList()
-}
 
+function* watchGetPopularTagListSaga() {
+    while (true) {
+        const { payload } = yield take(GetTagsAction.REQUEST_POPULAR_TAG)
+        yield GetPopularTagList(payload)
+    }
+}
 
 function* watchAddTagSaga() {
     while (true) {
@@ -236,7 +266,7 @@ function* watchDeleteTagSaga() {
 
 function* mySaga() {
     yield all([
-        // takeEvery(GetTagsAction.ADD_TAG_SUCCESS, reGetTagList),
+        watchGetPopularTagListSaga(),
         watchSearchTagSaga(),
         watchGetTagListSaga(),
         watchUpdateTagSaga(),

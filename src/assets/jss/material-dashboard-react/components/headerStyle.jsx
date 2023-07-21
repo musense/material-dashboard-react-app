@@ -34,7 +34,9 @@ const headerStyle = theme => ({
     minHeight: "50px"
   },
   flex: {
-    flex: 1
+    flexBasis: '94%',
+    flexShrink: '0',
+    flexGrow: '0',
   },
   title: {
     ...defaultFont,

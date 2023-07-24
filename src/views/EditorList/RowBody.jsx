@@ -8,6 +8,7 @@ import BodyCell from "../../components/BodyCell/BodyCell";
 import EditBodyCell from "../../components/EditBodyCell/EditBodyCell";
 
 export default function RowBody({
+    headerConfig,
     showList,
     handleOpen,
     setMediaInfo,
@@ -81,56 +82,77 @@ export default function RowBody({
         });
         navigate(`/admin/editorList/${updateEditor._id}`);
     }
-
+    const headerRow = headerConfig.headerRow
     return <div data-attr="data-body" className={`view-body`}>
         {showList && showList.length > 0 && showList.map((titleView, index) => {
             return (
                 <div data-attr="data-body-row" key={index}>
-                    <BodyCell children={titleView.serialNumber} />
-                    <BodyCell children={titleView.media.banner !== ''
-                        ? (
-                            <img
-                                src={titleView.media.thumbnail}
-                                title={titleView.media.banner}
-                                alt={titleView.media.altText}
-                                onClick={(e) => {
-                                    e.stopPropagation();
-                                    handleOpen();
-                                    setMediaInfo(titleView.media);
-                                }} />
-                        ) : '無圖片/縮圖'} className={'view-editor-image-container'} />
-                    <BodyCell children={titleView.classifications.label} />
-                    <BodyCell children={<span style={{ margin: '0 15px', }}>{titleView.content.title}</span>} className={'editor-list-title'} />
-                    <BodyCell children={<Stack spacing={1} direction={'column'}>
-                        <span style={{
-                            color: titleView.status === '已發布' ? 'green'
-                                : titleView.status === '已排程' ? 'red'
-                                    : titleView.status === '草稿' ? 'black'
-                                        : 'grey',
-                            fontWeight: 'bold'
-                        }}>
-                            {titleView.status}
-                        </span>
-                        <span>
-                            {
-                                titleView.isPublished
-                                    ? getUpdateDateTime(titleView.publishDate)
-                                    : titleView.isScheduled
-                                        ? getUpdateDateTime(titleView.scheduleTime)
-                                        : null
+                    {headerRow.map((rowItem, index) => {
+                        if (rowItem.patchKey && rowItem.patchKey.includes(".")) {
+                            const patchKeys = rowItem.patchKey.split(".");
+                            if (patchKeys[1] === 'title') {
+                                return <BodyCell key={index} children={<span style={{ margin: '0 15px', }}>{titleView.content.title}</span>} className={'editor-list-title'} />
                             }
-                        </span>
-                    </Stack>} />
-                    <BodyCell children={getUpdateDateTime(titleView.updateDate)} />
-                    <EditBodyCell
-                        onCopy={onCopyLink}
-                        copyText={titleView.sitemapUrl}
-                        onEdit={onEdit}
-                        editData={titleView}
-                        onDelete={onDelete}
-                        deleteID={titleView._id}
-                        deleteTitle={titleView.content.title}
-                    />
+                            return <BodyCell key={index} children={titleView[patchKeys[0]][patchKeys[1]]} />
+                        }
+                        if (rowItem.patchKey === 'createDate' || rowItem.patchKey === 'updateDate') {
+                            return (
+                                <BodyCell
+                                    key={index}
+                                    children={getUpdateDateTime(titleView[rowItem.patchKey])}
+                                />
+                            )
+                        }
+                        if (rowItem.patchKey === 'status') {
+                            return <BodyCell key={index} children={<Stack spacing={1} direction={'column'}>
+                                <span style={{
+                                    color: titleView.status === '已發布' ? 'green'
+                                        : titleView.status === '已排程' ? 'red'
+                                            : titleView.status === '草稿' ? 'black'
+                                                : 'grey',
+                                    fontWeight: 'bold'
+                                }}>
+                                    {titleView.status}
+                                </span>
+                                <span>
+                                    {
+                                        titleView.isPublished
+                                            ? getUpdateDateTime(titleView.publishDate)
+                                            : titleView.isScheduled
+                                                ? getUpdateDateTime(titleView.scheduleTime)
+                                                : null
+                                    }
+                                </span>
+                            </Stack>} />
+                        }
+                        if (rowItem.name === '圖片/影片') {
+                            return <BodyCell key={index} children={titleView.media.banner !== ''
+                                ? (
+                                    <img
+                                        src={titleView.media.thumbnail}
+                                        title={titleView.media.banner}
+                                        alt={titleView.media.altText}
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            handleOpen();
+                                            setMediaInfo(titleView.media);
+                                        }} />
+                                ) : '無圖片/縮圖'} className={'view-editor-image-container'} />
+                        }
+                        if (rowItem.name === '編輯') {
+                            return <EditBodyCell
+                                key={index}
+                                onCopy={onCopyLink}
+                                copyText={titleView.sitemapUrl}
+                                onEdit={onEdit}
+                                editData={titleView}
+                                onDelete={onDelete}
+                                deleteID={titleView._id}
+                                deleteTitle={titleView.content.title}
+                            />
+                        }
+                        return <BodyCell key={index} children={titleView[rowItem.patchKey]} />
+                    })}
                 </div>);
         })}
     </div>;

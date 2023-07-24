@@ -58,6 +58,7 @@ export default function EditorListBody() {
         <form className='view-list-form' name='view-editor-list-form' >
             <RowHeader headerConfig={headerMap} />
             <RowBody
+                headerConfig={headerMap}
                 showList={showList}
                 handleOpen={handleOpen}
                 setMediaInfo={setMediaInfo}

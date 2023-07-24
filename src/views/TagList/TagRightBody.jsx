@@ -12,6 +12,7 @@ const headerMap = {
     headerRow: [
         { name: "標籤名稱", patchKey: "name" },
         { name: "創建日期", patchKey: "createDate" },
+        { name: "標籤觸及次數", patchKey: "pageView" },
         { name: "熱門標籤排序", patchKey: "sorting" },
         { name: "編輯" }
     ],
@@ -44,6 +45,7 @@ export default function TagRightBody() {
         <form name='view-class-form' className={'view-list-form'}>
             <RowHeader headerConfig={headerMap} />
             <RowBody
+                headerConfig={headerMap}
                 showList={showTagList}
                 handleOpenDialog={handleOpenDialog}
                 messageDialogReturnValue={messageDialogReturnValue}

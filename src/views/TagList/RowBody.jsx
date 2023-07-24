@@ -6,6 +6,7 @@ import * as GetTagsAction from '../../actions/GetTagsAction';
 import { useDispatch } from 'react-redux';
 
 export default function RowBody({
+    headerConfig,
     showList,
     handleOpenDialog,
     messageDialogReturnValue
@@ -71,22 +72,49 @@ export default function RowBody({
             },
         });
     }
+    const headerRow = headerConfig.headerRow
     return <div data-attr="data-body" className='view-body'>
         {showList && showList.length > 0 && showList.map((tag, index) => {
             return (
                 <div data-attr="data-body-row" key={index} >
-                    <BodyCell children={tag.name} />
-                    <BodyCell children={getUpdateDateTime(tag.createDate)} />
-                    <BodyCell children={tag.sorting} />
-                    <EditBodyCell
-                        onCopy={onCopyLink}
-                        copyText={tag.webHeader.customUrl}
-                        onEdit={onEdit}
-                        editData={tag}
-                        onDelete={onDelete}
-                        deleteID={tag._id}
-                        deleteTitle={tag.name}
-                    />
+                    {headerRow.map((rowItem, index) => {
+                        if (rowItem.patchKey === 'createDate') {
+                            return (
+                                <BodyCell
+                                    key={index}
+                                    children={getUpdateDateTime(tag[rowItem.patchKey])}
+                                />
+                            )
+                        }
+                        if (rowItem.patchKey === 'sorting') {
+                            return tag.sorting
+                                ? (
+                                    <BodyCell
+                                        key={index}
+                                        children={tag.sorting}
+                                    />
+                                )
+                                : (
+                                    <BodyCell
+                                        key={index}
+                                        children={<span>-</span>}
+                                    />
+                                )
+                        }
+                        if (rowItem.name === '編輯') {
+                            return <EditBodyCell
+                                key={index}
+                                onCopy={onCopyLink}
+                                copyText={tag.webHeader.customUrl}
+                                onEdit={onEdit}
+                                editData={tag}
+                                onDelete={onDelete}
+                                deleteID={tag._id}
+                                deleteTitle={tag.name}
+                            />
+                        }
+                        return <BodyCell key={index} children={tag[rowItem.patchKey]} />
+                    })}
                 </div>);
         })}
     </div>;

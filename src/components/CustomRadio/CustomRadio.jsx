@@ -4,23 +4,14 @@ import styles from './CustomRadio.module.css'
 const CustomRadio = React.forwardRef(({ ...props }, ref) => {
 
     const defaultValue = props.defaultValue || false;
-    console.log("🚀 ~ file: CustomRadio.jsx:7 ~ CustomRadio ~ defaultValue:", defaultValue)
+    // console.log("🚀 ~ file: CustomRadio.jsx:7 ~ CustomRadio ~ defaultValue:", defaultValue)
     const [checked, setChecked] = useState(defaultValue);
     const [checkHistory, setCheckHistory] = useState([]);
     useEffect(() => {
         if (!props.setState) return
         props.setState(checked)
     }, [props.setState, checked]);
-    // useEffect(() => {
-    //     setCheckHistory(prevState => [
-    //         ...prevState, checked
-    //     ])
-    // }, [checked]);
-    // useEffect(() => {
-    //     if (!props.defaultValue) return
-    //     setChecked(props.defaultValue)
-    // }, [props.defaultValue]);
-
+    
     useImperativeHandle(ref, () => {
         return {
             checkHistory: () => checkHistory,
@@ -32,7 +23,7 @@ const CustomRadio = React.forwardRef(({ ...props }, ref) => {
         <input
             type='checkbox'
             checked={checked}
-            defaultValue={defaultValue}
+            // defaultValue={defaultValue}
             onChange={e => {
                 setChecked(e.target.checked)
                 setCheckHistory(prevState => [

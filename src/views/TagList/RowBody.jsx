@@ -77,6 +77,7 @@ export default function RowBody({
                 <div data-attr="data-body-row" key={index} >
                     <BodyCell children={tag.name} />
                     <BodyCell children={getUpdateDateTime(tag.createDate)} />
+                    <BodyCell children={tag.sorting} />
                     <EditBodyCell
                         onCopy={onCopyLink}
                         copyText={tag.webHeader.customUrl}

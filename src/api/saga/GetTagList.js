@@ -17,7 +17,7 @@ export function toFrontendData(responseData) {
             },
             pageView: item.pageView,
             createDate: item.createdAt || '',
-            isHot: item.popular || false,
+            popular: item.popular,
         })
 
         )
@@ -36,7 +36,7 @@ export function toFrontendData(responseData) {
             },
             pageView: responseData.pageView,
             createDate: responseData.createdAt || '',
-            isHot: responseData.popular || '',
+            popular: responseData.popular,
         }
     }
 }
@@ -46,7 +46,7 @@ export function toBackendData(requestData) {
         _id: requestData._id,
         name: requestData.name,
         sorting: requestData.sorting,
-        popular: requestData.isHot,
+        popular: requestData.popular,
         headTitle: requestData.webHeader.title,
         headKeyword: requestData.webHeader.keywords,
         headDescription: requestData.webHeader.description,

@@ -134,6 +134,12 @@ const getTagsReducer = (state = initialState, action) => {
                 ...state,
                 errorMessage: action.payload
             }
+        case GetTagsAction.SET_ERROR_MESSAGE:{
+            return {
+                ...state,
+                errorMessage: action.payload.message
+            }
+        }
         case GetTagsAction.UPDATE_TAG:
         case GetTagsAction.DELETE_TAG:
             return {

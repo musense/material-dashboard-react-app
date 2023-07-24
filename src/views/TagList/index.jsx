@@ -1,13 +1,7 @@
-import React, { useEffect, useState } from 'react'; // useState
-
-// core components
-
-// import { Outlet, useNavigate, Link } from 'react-router-dom';
+import React, { useEffect, useState } from 'react'; 
 import styles from './TagList.module.css'
-
 import TagLeftWrapper from "./TagLeftWrapper";
 import TagRightWrapper from "./TagRightWrapper";
-
 import { useDispatch, useSelector } from 'react-redux';
 import * as GetTagsAction from '../../actions/GetTagsAction';
 import { reDispatchMessage, errorMessage } from './../../reducers/errorMessage';

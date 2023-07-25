@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import ContentEditorForm from "./ContentEditorForm.jsx"
 import DetailForm from "./DetailForm.jsx"
 import * as GetEditorAction from 'actions/GetEditorAction.js';
-import EditorDialog from './EditorDialog.jsx';
+import EditorDialog from '../../components/Modal/EditorDialog.jsx';
 
 function NewIEditor() {
 

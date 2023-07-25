@@ -5,6 +5,7 @@ const initialState = {
     sortingMap: {
         name: 'asc',
         customUrl: 'asc',
+        keyName: 'asc',
         parentClass: 'asc',
     },
     showList: null,
@@ -16,6 +17,7 @@ const initialState = {
     errorMessage: null,
     currentPage: null,
     totalCount: null,
+    totalPage: null,
     reset: null,
     editorStatus: [
         { _id: 0, name: '全部' },
@@ -47,6 +49,7 @@ const getClassReducer = (state = initialState, action) => {
                 editorClassList: action.payload.editorClassList,
                 currentPage: action.payload.currentPage,
                 totalCount: action.payload.totalCount,
+                totalPage: Math.ceil(action.payload.totalCount / 10),
                 errorMessage: errorMessage.getFinish
             }
         case GetClassAction.REQUEST_CLASS_PAGE:
@@ -133,6 +136,16 @@ const getClassReducer = (state = initialState, action) => {
                 ...state,
                 errorMessage: errorMessage.addSuccess
             }
+        case GetClassAction.ADD_CLASS_FAIL:
+        case GetClassAction.EDIT_CLASS_FAIL:
+        case GetClassAction.DELETE_CLASS_FAIL:
+        case GetClassAction.REQUEST_CLASS_LIST_FAIL:
+        case GetClassAction.REQUEST_CLASS_FAIL: {
+            return {
+                ...state,
+                errorMessage: action.payload.errorMessage,
+            }
+        }
         case GetClassAction.EDITING_CLASS:
             return {
                 ...state,
@@ -143,20 +156,17 @@ const getClassReducer = (state = initialState, action) => {
                 ...state,
                 errorMessage: errorMessage.updateSuccess
             }
-        case GetClassAction.DELETE_CLASS:
-            return {
-                ...state,
-                editorClassList:
-                    state.editorClassList
-                        .filter(editorClass => editorClass._id !== action.payload.data._id),
-                errorMessage: errorMessage.deleteSuccess
-            }
         case GetClassAction.DELETE_CLASS_SUCCESS:
             return {
                 ...state,
+                editorClassList: action.payload,
                 errorMessage: errorMessage.deleteSuccess
             }
-
+        case GetClassAction.SET_ERROR_MESSAGE:
+            return {
+                ...state,
+                errorMessage: action.payload.message
+            }
         default:
             return { ...state }
     }

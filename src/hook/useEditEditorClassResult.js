@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 
-export default function useEditTagResult(message) {
+export default function useEditEditorClassResult(message) {
 
     const [title, setTitle] = useState(null);
     const [content, setContent] = useState(null);
@@ -8,41 +8,29 @@ export default function useEditTagResult(message) {
 
     useEffect(() => {
         if (!message) return
-        console.log("🚀 ~ file: useEditTagResult.js:11 ~ useEffect ~ message:", message)
+        console.log("🚀 ~ file: useEditEditorClassResult.js:11 ~ useEffect ~ message:", message)
         switch (message) {
             case 'add fail!': {
                 setTitle('Failed!')
-                setContent('標籤新增失敗！')
+                setContent('文章分類新增失敗！')
                 setSuccess(false)
                 return
             }
             case 'add successfully': {
                 setTitle('Success')
-                setContent('標籤新增成功！')
+                setContent('文章分類新增成功！')
                 setSuccess(true)
                 return
             }
             case 'update successfully': {
                 setTitle('Success')
-                setContent('標籤更新成功！')
+                setContent('文章分類更新成功！')
                 setSuccess(true)
                 return
             }
             case 'please add title': {
                 setTitle('Warning')
-                setContent('請輸入 [標籤名稱]！')
-                setSuccess(false)
-                return
-            }
-            case 'sorting should be typeof number': {
-                setTitle('Warning')
-                setContent('熱門標籤排序為數字！')
-                setSuccess(false)
-                return
-            }
-            case 'sorting should be equal or greater than 0': {
-                setTitle('Warning')
-                setContent('熱門標籤排序必須大於等於0！')
+                setContent('請輸入 [文章分類名稱]！')
                 setSuccess(false)
                 return
             }

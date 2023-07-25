@@ -29,15 +29,12 @@ input {
 }
 
 .editor-left-wrapper {
-  width: 400px;
+  min-width: 400px;
+  width: fit-content;
 }
 
 .editor-right-wrapper {
   width: 1200px;
-}
-
-.editor-table-wrapper {
-  /* background-color: hotpink; */
 }
 
 .editor-table-body>div {
@@ -55,12 +52,6 @@ input {
 
 .editor-table-body>div:hover {
   background-color: #eee;
-}
-
-.editor-table-header {
-  background-color: #ddd;
-  color: #333;
-  font-weight: bold;
 }
 
 .editor-table-body {

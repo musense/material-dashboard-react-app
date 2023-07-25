@@ -1,7 +1,6 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import * as GetClassAction from 'actions/GetClassAction';
-// import md5 from 'crypto-js/md5'
 import Card from 'components/Card/Card.jsx';
 import CardBody from 'components/Card/CardBody.jsx';
 import CardHeader from 'components/Card/CardHeader.jsx';
@@ -10,47 +9,55 @@ import GridItem from 'components/Grid/GridItem.jsx';
 import styles from './EditorClassList.module.css'
 
 import usePressEnterEventHandler from 'hook/usePressEnterEventHandler';
+import useEditEditorClassResult from '../../hook/useEditEditorClassResult';
+import useSetEditorClassValue from '../../hook/useSetEditorClassValue';
 
+import MessageDialog from '../../components/Modal/MessageDialog';
 
 export default function EditorLeftWrapper() {
 
-    const [isEditing, setIsEditing] = useState(false);
-    const [manualUrl, setManualUrl] = useState('');
-    const [customUrl, setCustomUrl] = useState('');
     const formRef = useRef(null);
-
     const dispatch = useDispatch();
-
-    const parentClassRef = useRef();
-    // const classRef = useRef(null);
-
     const editorClass = useSelector((state) => state.getClassReducer.editorClass);
-    console.log("🚀 ~ file: EditorLeftWrapper.jsx:25 ~ EditorLeftWrapper ~ editorClass:", editorClass)
+    const returnMessage = useSelector((state) => state.getClassReducer.errorMessage);
+    console.log("🚀 ~ file: EditorLeftWrapper.jsx:23 ~ EditorLeftWrapper ~ editorClass:", editorClass)
+    console.log("🚀 ~ file: EditorLeftWrapper.jsx:24 ~ EditorLeftWrapper ~ returnMessage:", returnMessage)
 
-    // useEffect(() => {
-    //     classRef.current = null
-    // }, []);
+    const [open, setOpen] = useState(false);
+    const handleOpen = () => setOpen(true);
+    const handleClose = () => {
+        setOpen(false)
+        dispatch({
+            type: GetClassAction.SET_ERROR_MESSAGE,
+            payload: {
+                message: '--reset-error-message',
+            }
+        })
+    }
+
     usePressEnterEventHandler(formRef)
+    const {
+        title,
+        content,
+        success
+    } = useEditEditorClassResult(returnMessage)
+
+    console.log("🚀 ~ file: TagLeftWrapper.jsx:58 ~ TagLeftWrapper ~ title:", title)
 
     useEffect(() => {
-        if (!editorClass) return
-        if (editorClass._id !== '') {
-            setIsEditing(true)
-        }
-        console.log("🚀 ~ file: EditorClassList.jsx:142 ~ setFormData ~ editorClass:", editorClass)
-        const form = getForm();
-        if (form === null) return
-        form.reset()
-        setManualUrl('')
-        setCustomUrl('')
-        form.elements['_id'].value = editorClass._id
-        form.elements['classification'].value = editorClass.name
-        form.elements['title'].value = editorClass.title
-        form.elements['description'].value = editorClass.description
-        form.elements['keywords'].value = editorClass.keywords
-        setManualUrl(editorClass.manualUrl)
-        setCustomUrl(editorClass.customUrl)
-    }, [editorClass])
+        if (title) handleOpen()
+    }, [title, content]);
+
+    const {
+        customUrl,
+        setCustomUrl,
+        manualUrl,
+        setManualUrl,
+        popularTag,
+        setPopularTag,
+        isEditing,
+        setIsEditing
+    } = useSetEditorClassValue(editorClass, formRef)
 
     function onAddNewEditor(e) {
         e.preventDefault()
@@ -59,25 +66,24 @@ export default function EditorLeftWrapper() {
         console.log(Object.fromEntries(formData));
         const classData = Object.fromEntries(formData);
 
-        console.log("🚀 ~ file: EditorLeftWrapper.jsx:77 ~ onAddNewEditor ~ parentClassRef.current:", parentClassRef.current)
-        // console.log("🚀 ~ file: EditorLeftWrapper.jsx:77 ~ onAddNewEditor ~ classRef.current:", classRef.current)
-        // if (!parentClassRef.current) {
-        //     console.log('請輸入 [上層分類] 選項');
-        //     return
-        // }
+
         if (!classData.classification || classData.classification === '') {
+            dispatch({
+                type: GetClassAction.SET_ERROR_MESSAGE,
+                payload: {
+                    message: 'please add title',
+                }
+            })
             console.log('請輸入 [分類名稱] 選項');
             return
         }
-        // if (!classRef.current) {
-        //     console.log('請輸入 [分類名稱] 選項');
-        //     return
-        // }
+
         const tempData = {
             // parentClassification: parentClassRef.current.label,
             classification: classData.classification,
             webHeader: {
                 title: classData.title,
+                keyname: classData.keyname,
                 description: classData.description,
                 keywords: classData.keywords,
                 href: classData.customUrl,
@@ -118,10 +124,6 @@ export default function EditorLeftWrapper() {
         form.reset()
         setManualUrl('')
         setCustomUrl('')
-        dispatch({
-            type: GetClassAction.RESET_SELECTED_CLASS,
-            payload: '--reset-all'
-        })
     }
 
     function onCancel(e) {
@@ -138,24 +140,39 @@ export default function EditorLeftWrapper() {
                     <CardBody>
                         <form ref={formRef} name='class-form' onSubmit={onAddNewEditor}>
                             <input type="hidden" name='_id' />
-                            <label htmlFor="classification">分類名稱</label>
-                            {/* <SingleClassificationSelect creatable classRef={classRef} /> */}
-                            <input type="text" name='classification' />
-                            <label htmlFor="title">title</label>
-                            <input type="text" name='title' />
-                            <label htmlFor="description">description</label>
-                            <input type="text" name='description' />
-                            <label htmlFor="keywords">keywords</label>
-                            <input type="text" name='keywords' />
-                            <label htmlFor="manualUrl">自訂網址</label>
-                            <input type="text" name='manualUrl' onChange={e => setManualUrl(e.target.value)} value={manualUrl} />
-                            <label htmlFor="customUrl">前台顯示網址</label>
-                            {/* {manualUrl && manualUrl.length > 0 */}
-                            {/* ? <input readOnly disabled type="text" name='manualUrl' value={manualUrl} /> */}
-                            {/* :  */}
-                            <input readOnly disabled type="text" name='customUrl' value={customUrl} />
-                            {/* } */}
-
+                            <div>
+                                <label htmlFor="classification">分類名稱</label>
+                                <input disabled={isEditing} type="text" name='classification' />
+                            </div>
+                            <div>
+                                <label htmlFor="keyname">英文名稱</label>
+                                <input disabled={isEditing} type="text" name='keyname' />
+                            </div>
+                            <div>
+                                <label htmlFor="title">title</label>
+                                <input type="text" name='title' />
+                            </div>
+                            <div>
+                                <label htmlFor="description">description</label>
+                                <input type="text" name='description' />
+                            </div>
+                            <div>
+                                <label htmlFor="keywords">keywords</label>
+                                <input type="text" name='keywords' />
+                            </div>
+                            <div>
+                                <label htmlFor="manualUrl">自訂網址</label>
+                                <input type="text" name='manualUrl' onChange={e => setManualUrl(e.target.value)} value={manualUrl} />
+                            </div>
+                            {(manualUrl.length > 0 || customUrl) && (
+                                <div >
+                                    <label htmlFor="customUrl">前台顯示網址</label>
+                                    {manualUrl.length > 0
+                                        ? <input readOnly disabled type="text" name='manualUrl' value={`p_${manualUrl}.html`} />
+                                        : <div><a target="_blank" rel="noopener noreferrer" href={customUrl}>{customUrl}</a></div>
+                                    }
+                                </div>
+                            )}
                             <div className={styles['left-button-container']}>
                                 {isEditing === true && (<>
                                     <input type='button' value='取消'
@@ -174,5 +191,11 @@ export default function EditorLeftWrapper() {
                 </Card>
             </GridItem>
         </GridContainer>
+        <MessageDialog
+            dialogTitle={title}
+            dialogContent={content}
+            open={open}
+            setClose={handleClose}
+        />
     </div>;
 }

@@ -23,7 +23,7 @@ import loginPageStyle from 'assets/jss/material-dashboard-react/views/loginPageS
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { useRef } from 'react';
-import MessageDialog from './MessageDialog';
+import MessageDialog from '../../components/Modal/MessageDialog';
 
 import * as GetUserAction from 'actions/GetUserAction';
 import useLoginResult from '../../hook/useLoginResult';

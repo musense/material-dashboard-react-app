@@ -2,7 +2,7 @@ import React from "react";
 import HeaderCell from '../../components/HeaderCell/HeaderCell'
 
 export default function RowHeader({ headerConfig }) {
-    return <div data-attr="data-header" className={`view-form`}>
+    return <div data-attr="data-header" className={`view-header`}>
         <Header
             headerMap={headerConfig.headerRow}
             patchType={headerConfig.patchType}

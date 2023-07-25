@@ -1,10 +1,8 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
 import Modal from '@mui/material/Modal';
 import Iframe from "react-iframe";
-import { Icon } from '@mui/material';
-import CloseIcon from "./../../components/Icon/CloseIcon";
+import CloseIcon from "../Icon/CloseIcon";
 const style = {
     position: 'absolute',
     top: '50%',

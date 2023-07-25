@@ -5,7 +5,7 @@ import ContentEditorForm from "./../ContentEditorForm.jsx"
 import DetailForm from "./../DetailForm.jsx"
 import * as GetEditorAction from "actions/GetEditorAction.js";
 import * as GetClassAction from "actions/GetClassAction.js";
-import EditorDialog from '../EditorDialog.jsx';
+import EditorDialog from '../../../components/Modal/EditorDialog.jsx';
 
 
 function IEditor() {

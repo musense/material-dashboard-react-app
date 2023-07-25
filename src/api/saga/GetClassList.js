@@ -1,55 +1,15 @@
 import { all, put, take, takeEvery } from 'redux-saga/effects';
 import * as GetClassAction from "../../actions/GetClassAction";
 import { instance } from "./AxiosInstance";
+import { getErrorMessage, getGetErrorMessage } from '../apiHelperFunc';
 
-function toFrontendData(responseData) {
-    return {
-        _id: responseData._id,
-        content: {
-            title: responseData.title,
-            // content: responseData.content,
-            content: `[{"type":"paragraph","children":[{"text":"Wilson完整測試資料2","bold":true}]},
-            {"type":"paragraph","children":[{"bold":true,"text":"Wilson完整測試資料2","italic":true}]},
-            {"type":"paragraph","children":[{"bold":true,"italic":true,"text":"Wilson完整測試資料2","underline":true}]},
-            {"type":"paragraph","children":[{"bold":true,"italic":true,"underline":true,"text":"Wilson完整測試資料2","code":true}]},
-            {"type":"h1","children":[{"bold":true,"italic":true,"underline":true,"text":"Wilson完整測試資料2"}]}]`,
-        },
-        tags: responseData.tags.map(tag => ({
-            value: tag._id,
-            label: tag.name,
-        }
-        )),
-        classifications: responseData.categories.map(cat => ({
-            value: cat._id,
-            label: cat.name,
-        }
-        )),
-        // classifications: responseData.categories.map(cat => ({
-        //     value: cat._id,
-        //     label: cat.name,
-        // }
-        // )),
-        webHeader: {
-            title: responseData.headTitle || '',
-            description: responseData.headDescription || '',
-            keywords: responseData.headKeyword || '',
-            customUrl: responseData.headKeyword || '',
-        },
-        media: {
-            banner: responseData.homeImagePath || '',
-            thumbnail: responseData.contentImagePath || '',
-            altText: responseData.altText || '',
-        },
-        setTop: responseData.top || false,
-        hide: responseData.hidden || false,
-    }
-}
 
 function toBackendData(requestData) {
     const request = {
         name: requestData.classification,
         upperCategory: requestData.parentClassification,
         headTitle: requestData.webHeader.title,
+        keyName: requestData.webHeader.keyname,
         headDescription: requestData.webHeader.description,
         headKeyword: requestData.webHeader.keywords,
         manualUrl: requestData.webHeader.route,
@@ -59,33 +19,6 @@ function toBackendData(requestData) {
     return { _id, request }
 }
 
-function foFrontEndCatDate(responseData) {
-    if (!Array.isArray(responseData)) return
-    const dataArray = responseData.map(data => ({
-        _id: data._id,
-        name: data.name,
-    }))
-    return dataArray
-}
-
-// function* GetAllClassList() {
-//     try {
-//         const response = yield instance.get(`/categories`);
-//         const classList = yield response.data.data;
-//         const mappedClassList = foFrontEndCatDate(classList)
-//         // return
-//         yield put({
-//             type: GetClassAction.REQUEST_ALL_CLASS_LIST_SUCCESS,
-//             payload: mappedClassList
-//         })
-//     } catch (error) {
-//         yield put({
-//             type: GetClassAction.REQUEST_ALL_CLASS_LIST_FAIL,
-//             errorMessage: error.message,
-//             payload: null
-//         })
-//     }
-// }
 // GET
 function* GetClassList(payload = 1) {
     try {
@@ -96,12 +29,13 @@ function* GetClassList(payload = 1) {
                 return {
                     _id: item._id,
                     name: item.name,
+                    keyName: item.keyName || '',
                     parentClass: item.upperCategory,
-                    title: item.headTitle ? item.headTitle : '',
-                    description: item.headDescription ? item.headDescription : '',
-                    keywords: item.headKeyword ? item.headKeyword : '',
+                    title: item.headTitle || '',
+                    description: item.headDescription || '',
+                    keywords: item.headKeyword || '',
                     customUrl: item.sitemapUrl,
-                    manualUrl: item.manualUrl ? item.manualUrl : '',
+                    manualUrl: '',
                 }
             })
         // return
@@ -114,27 +48,7 @@ function* GetClassList(payload = 1) {
             }
         })
     } catch (error) {
-        yield put({
-            type: GetClassAction.REQUEST_CLASS_LIST_FAIL,
-            errorMessage: error.message,
-            payload: null
-        })
-    }
-}
-function* GetClassByTitle(payload) {
-    try {
-        const response = yield instance.get(`/editor/${payload.data.id}`);
-        const responseData = yield response.data;
-        yield put({
-            type: GetClassAction.REQUEST_CLASS_LIST_SUCCESS,
-            payload: responseData,
-        })
-    } catch (error) {
-        yield put({
-            type: GetClassAction.REQUEST_CLASS_FAIL,
-            errorMessage: error.message,
-            payload: null
-        })
+        yield getGetErrorMessage(error, GetClassAction.REQUEST_CLASS_LIST_FAIL)
     }
 }
 
@@ -153,20 +67,10 @@ function* GetCategories() {
             payload: responseMap,
         })
     } catch (error) {
-        yield put({
-            type: GetClassAction.REQUEST_CLASS_FAIL,
-            errorMessage: error.message,
-            payload: null
-        })
+        yield getGetErrorMessage(error, GetClassAction.REQUEST_CLASS_FAIL)
     }
 }
-// function* generateID() {
-//     let id = 0;
-//     while (true) {
-//         yield id++;
-//     }
-// }
-// const idGenerator = generateID();
+
 // POST
 function* AddClass(payload) {
 
@@ -183,11 +87,7 @@ function* AddClass(payload) {
         })
 
     } catch (error) {
-        yield put({
-            type: GetClassAction.ADD_CLASS_FAIL,
-            errorMessage: error.message,
-            payload: null
-        })
+        yield getErrorMessage(error, GetClassAction.ADD_CLASS_FAIL)
     }
 }
 
@@ -204,10 +104,7 @@ function* UpdateClass(payload) {
             payload: responseData
         })
     } catch (error) {
-        yield put({
-            type: GetClassAction.EDIT_CLASS_FAIL,
-            payload: null
-        })
+        yield getErrorMessage(error, GetClassAction.EDIT_CLASS_FAIL)
     }
 }
 
@@ -226,11 +123,7 @@ function* DeleteClass(payload) {
             payload: responseData
         })
     } catch (error) {
-        yield put({
-            type: GetClassAction.DELETE_CLASS_FAIL,
-            errorMessage: error.message,
-            payload: null
-        })
+        yield getErrorMessage(error, GetClassAction.DELETE_CLASS_FAIL)
     }
 }
 
@@ -262,13 +155,6 @@ function* watchGetClassList() {
         yield GetClassList(payload)
     }
 }
-// function* watchGetAllClassList() {
-//     while (true) {
-//         const { payload } = yield take(GetClassAction.REQUEST_All_CLASS_LIST)
-//         yield GetAllClassList(payload)
-//     }
-// }
-
 
 
 function* mySaga() {

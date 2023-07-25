@@ -1,9 +1,10 @@
-import { all, put, take, takeEvery } from 'redux-saga/effects';
+import { all, put, take } from 'redux-saga/effects';
 import * as GetEditorAction from "../../actions/GetEditorAction";
 import { formInstance, instance } from "./AxiosInstance";
-import { toBackendData, toBackendFormData, toFrontendData } from "./../apiHelperFunc";
+import { toBackendFormData, toFrontendData } from "./../apiHelperFunc";
 import { errorMessage } from '../../reducers/errorMessage';
 import dayjs from 'dayjs';
+import { getErrorMessage, getGetErrorMessage } from '../apiHelperFunc';
 
 // GET
 function* GetEditorTitleList(payload = 1) {
@@ -33,36 +34,7 @@ function* GetEditorTitleList(payload = 1) {
             }
         })
     } catch (error) {
-        yield put({
-            type: GetEditorAction.REQUEST_EDITOR_TITLE_LIST_FAIL,
-            errorMessage: error.message,
-            payload: null
-        })
-    }
-}
-
-function* GetEditorTitleListByPageNumber(payload) {
-    const nowTime = new Date();
-
-    try {
-        const response = yield instance.get(`/editor?limit=10&pageNumber=${payload}`);
-        const { currentPage, totalCount, data: responseData } = yield response.data
-        // const titleList = toFrontendData(titleViewListFakeData)
-        const titleList = toFrontendData(responseData)
-        yield put({
-            type: GetEditorAction.REQUEST_EDITOR_TITLE_LIST_SUCCESS,
-            payload: {
-                titleList,
-                totalCount: parseInt(totalCount),
-                currentPage: parseInt(currentPage),
-            }
-        })
-    } catch (error) {
-        yield put({
-            type: GetEditorAction.REQUEST_EDITOR_TITLE_LIST_FAIL,
-            errorMessage: error.message,
-            payload: null
-        })
+        yield getGetErrorMessage(error, GetEditorAction.REQUEST_EDITOR_TITLE_LIST_FAIL)
     }
 }
 
@@ -81,11 +53,7 @@ function* GetEditorByID(_id) {
             payload: mappedEditorData,
         })
     } catch (error) {
-        yield put({
-            type: GetEditorAction.REQUEST_EDITOR_FAIL,
-            errorMessage: error.message,
-            payload: null
-        })
+        yield getGetErrorMessage(error, GetEditorAction.REQUEST_EDITOR_FAIL)
     }
 }
 
@@ -94,6 +62,7 @@ function* GetEditorByID(_id) {
 /// category=${category}
 /// startDate=${startDate}
 /// endDate=${endDate}
+// GET
 function* SearchEditor(payload) {
     try {
 
@@ -123,11 +92,7 @@ function* SearchEditor(payload) {
             }
         })
     } catch (error) {
-        yield put({
-            type: GetEditorAction.REQUEST_EDITOR_TITLE_LIST_FAIL,
-            errorMessage: error.message,
-            payload: null
-        })
+        yield getGetErrorMessage(error, GetEditorAction.REQUEST_EDITOR_TITLE_LIST_FAIL)
     }
 }
 
@@ -164,10 +129,7 @@ function* AddEditor(payload) {
         })
 
     } catch (error) {
-        yield put({
-            type: GetEditorAction.ADD_EDITOR_FAIL,
-            errorMessage: error.message,
-        })
+        yield getErrorMessage(error, GetEditorAction.ADD_EDITOR_FAIL)
     }
 }
 
@@ -191,10 +153,7 @@ function* PreviewEditor(payload) {
         })
 
     } catch (error) {
-        yield put({
-            type: GetEditorAction.PREVIEW_EDITOR_FAIL,
-            errorMessage: error.message,
-        })
+        yield getErrorMessage(error, GetEditorAction.ADD_EDITOR_FAIL)
     }
 }
 
@@ -217,10 +176,7 @@ function* UpdateEditor(payload) {
             payload: { message }
         })
     } catch (error) {
-        yield put({
-            type: GetEditorAction.UPDATE_EDITOR_FAIL,
-            errorMessage: error.message,
-        })
+        yield getErrorMessage(error, GetEditorAction.UPDATE_EDITOR_FAIL)
     }
 }
 
@@ -240,11 +196,7 @@ function* DeleteEditor(payload) {
 
         })
     } catch (error) {
-        yield put({
-            type: GetEditorAction.DELETE_EDITOR_FAIL,
-            errorMessage: error.message,
-            payload: null
-        })
+        yield getErrorMessage(error, GetEditorAction.DELETE_EDITOR_FAIL)
     }
 }
 
@@ -298,8 +250,6 @@ function* watchGetEditorByIDSaga() {
 
 function* mySaga() {
     yield all([
-        // takeEvery(GetEditorAction.ADD_EDITOR_SUCCESS, reGetEditorList),
-        // takeEvery(GetEditorAction.REQUEST_EDITOR, GetEditorTitleList),
         watchUpdateEditorSaga(),
         watchPreviewEditorSaga(),
         watchGetEditorTitleListSaga(),

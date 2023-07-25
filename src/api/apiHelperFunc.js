@@ -1,3 +1,5 @@
+import { put } from 'redux-saga/effects';
+
 const bend2FendMap = new Map([
     ['_id', '_id'],
     ['headTitle', 'webHeader.title'],
@@ -205,3 +207,38 @@ export function toBackendFormData(requestData) {
     console.groupEnd('toBackendFormData');
     return requestForm
 }
+
+
+export function* getErrorMessage(error, patchType) {
+    console.log("🚀 ~ file: apiHelperFunc.js:213 ~ getErrorMessage ~ error:", error)
+    console.log("🚀 ~ file: apiHelperFunc.js:213 ~ *getErrorMessage ~ patchType:", patchType)
+    let errorMessage;
+    if (error.response) {
+        errorMessage = error.response.data.message || error.response.data.messages.join(',')
+    } else {
+        errorMessage = error.code
+    }
+    console.log("🚀 ~ file: apiHelperFunc.js:213 ~ *getErrorMessage ~ errorMessage:", errorMessage)
+
+    if (error.response) {
+        yield put({
+            type: patchType,
+            payload: {
+                errorMessage: errorMessage
+            }
+
+        })
+    }
+}
+
+export function* getGetErrorMessage(error, patchType) {
+    console.log("🚀 ~ file: apiHelperFunc.js:235 ~ function*getGetErrorMessage ~ error:", error)
+    console.log("🚀 ~ file: apiHelperFunc.js:235 ~ function*getGetErrorMessage ~ patchType:", patchType)
+    yield put({
+        type: patchType,
+        payload: {
+            errorMessage: error.message
+        }
+    })
+}
+

@@ -80,7 +80,7 @@ input[type='file'] {
   flex-direction: column;
 }
 
-.view-form {
+.view-header {
   position: relative;
   padding-right: 17px;
   background-color: #ccc;

@@ -57,10 +57,13 @@ const getEditorReducer = (state = initialState, action) => {
         errorMessage: errorMessage.addSuccess
       }
     case GetEditorAction.ADD_EDITOR_FAIL:
+    case GetEditorAction.UPDATE_EDITOR_FAIL:
+    case GetEditorAction.DELETE_EDITOR_FAIL: {
       return {
         ...state,
-        errorMessage: errorMessage.addFail
+        errorMessage: action.payload.errorMessage
       }
+    }
     case GetEditorAction.REQUEST_EDITOR_TITLE_LIST_SUCCESS:
       return {
         ...state,
@@ -139,20 +142,17 @@ const getEditorReducer = (state = initialState, action) => {
         }).slice(0, 10),
         currentPage: 1
       }
-    case GetEditorAction.REQUEST_EDITOR_TITLE_LIST_FAIL:
+    case GetEditorAction.REQUEST_EDITOR_FAIL: 
+    case GetEditorAction.REQUEST_EDITOR_TITLE_LIST_FAIL: {
       return {
         ...state,
-        errorMessage: errorMessage.getFail
+        errorMessage: action.payload.errorMessage
       }
+    }
     case GetEditorAction.DELETE_EDITOR_SUCCESS:
       return {
         ...state,
         errorMessage: errorMessage.deleteSuccess
-      }
-    case GetEditorAction.DELETE_EDITOR_FAIL:
-      return {
-        ...state,
-        errorMessage: action.errorMessage
       }
     case GetEditorAction.REQUEST_EDITOR_SUCCESS:
       return {
@@ -160,20 +160,10 @@ const getEditorReducer = (state = initialState, action) => {
         editor: action.payload,
         errorMessage: errorMessage.getFinish
       }
-    case GetEditorAction.REQUEST_EDITOR_FAIL:
-      return {
-        ...state,
-        errorMessage: errorMessage.getFinish
-      }
     case GetEditorAction.UPDATE_EDITOR_SUCCESS:
       return {
         ...state,
         errorMessage: action.payload.message
-      }
-    case GetEditorAction.UPDATE_EDITOR_FAIL:
-      return {
-        ...state,
-        errorMessage: errorMessage.updateFail
       }
     default: {
       return {

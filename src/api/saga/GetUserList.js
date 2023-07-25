@@ -2,6 +2,7 @@
 import { all, put, take } from 'redux-saga/effects';
 import * as GetUserAction from "../../actions/GetUserAction";
 import { instance } from "./AxiosInstance";
+import { getErrorMessage, getGetErrorMessage } from '../apiHelperFunc';
 
 // LOGIN
 function* UserLogin(payload) {
@@ -19,20 +20,7 @@ function* UserLogin(payload) {
             },
         })
     } catch (error) {
-        console.log("🚀 ~ file: GetUserList.js:23 ~ function*UserLogin ~ error:", error)
-        let errorMessage;
-        if (error.response) {
-            errorMessage = error.response.data.message
-        } else {
-            errorMessage = error.code
-        }
-        if (error.response) {
-            yield put({
-                type: GetUserAction.LOGIN_USER_FAIL,
-                errorMessage: errorMessage,
-                payload: null
-            })
-        }
+        yield getErrorMessage(error, GetUserAction.LOGIN_USER_FAIL)
     }
 }
 
@@ -49,20 +37,7 @@ function* UserLogout() {
             errorMessage: 'logout successfully',
         })
     } catch (error) {
-        console.log("🚀 ~ file: GetUserList.js:61 ~ function*UserLogout ~ error:", error)
-        let errorMessage;
-        if (error.response) {
-            errorMessage = error.response.data.message
-        } else {
-            errorMessage = error.code
-        }
-        if (error.response) {
-            yield put({
-                type: GetUserAction.LOGOUT_USER_FAIL,
-                errorMessage: errorMessage,
-                payload: null
-            })
-        }
+        yield getErrorMessage(error, GetUserAction.LOGOUT_USER_FAIL)
     }
 }
 
@@ -79,21 +54,7 @@ function* UserRegister(payload) {
             errorMessage: 'register successfully',
         })
     } catch (error) {
-        console.log("🚀 ~ file: GetUserList.js:57 ~ function*UserRegister ~ error:", error)
-        let errorMessage;
-        if (error.response) {
-            errorMessage = error.response.data.message || error.response.data.messages.join(',')
-        } else {
-            errorMessage = error.code
-        }
-        if (error.response) {
-            yield put({
-                type: GetUserAction.REGISTER_USER_FAIL,
-                errorMessage: errorMessage,
-                payload: null
-            })
-        }
-
+        yield getErrorMessage(error, GetUserAction.REGISTER_USER_FAIL)
     }
 }
 
@@ -107,11 +68,7 @@ function* UserUpdate(payload) {
             payload: null
         })
     } catch (error) {
-        yield put({
-            type: GetUserAction.UPDATE_USER_FAIL,
-            errorMessage: error.message,
-            payload: null
-        })
+        yield getErrorMessage(error, GetUserAction.UPDATE_USER_FAIL)
     }
 }
 
@@ -126,11 +83,7 @@ function* UserDelete(payload) {
             payload: null
         })
     } catch (error) {
-        yield put({
-            type: GetUserAction.DELETE_USER_FAIL,
-            errorMessage: error.message,
-            payload: null
-        })
+        yield getErrorMessage(error, GetUserAction.DELETE_USER_FAIL)
     }
 }
 

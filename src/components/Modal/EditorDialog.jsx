@@ -7,7 +7,14 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import Box from '@mui/material/Box';
-import CloseIcon from './../../components/Icon/CloseIcon'
+import CloseIcon from '../Icon/CloseIcon'
+
+const style = {
+    minWidth: 300,
+    height: 'fit-content',
+    m: 0,
+    p: 3
+}
 
 export default function EditorDialog({
     open = true,
@@ -47,11 +54,7 @@ export default function EditorDialog({
             aria-describedby="alert-dialog-description"
         >
             <Box
-                sx={{
-                    px: 2,
-                    py: 3,
-                    textAlign: 'center',
-                }}
+                sx={style}
             >
                 <CloseIcon
                     onClose={onClose}

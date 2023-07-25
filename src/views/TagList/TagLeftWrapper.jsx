@@ -1,5 +1,6 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+
 import * as GetTagsAction from '../../actions/GetTagsAction';
 // import md5 from 'crypto-js/md5'
 import Card from 'components/Card/Card.jsx';
@@ -10,15 +11,14 @@ import GridItem from 'components/Grid/GridItem.jsx';
 import styles from './TagList.module.css'
 import usePressEnterEventHandler from '../../hook/usePressEnterEventHandler';
 import useEditTagResult from '../../hook/useEditTagResult';
-import TagMessageModal from './TagMessageModal';
 
 import useSetTagFormValue from '../../hook/useSetTagFormValue';
+import MessageDialog from '../../components/Modal/MessageDialog';
 
 export default function TagLeftWrapper() {
 
     const formRef = useRef(null);
     const dispatch = useDispatch();
-
     const selectedTag = useSelector((state) => state.getTagsReducer.selectedTag);
     const returnMessage = useSelector((state) => state.getTagsReducer.errorMessage);
     console.log("🚀 ~ file: TagLeftWrapper.jsx:25 ~ TagLeftWrapper ~ selectedTag:", selectedTag)
@@ -45,7 +45,7 @@ export default function TagLeftWrapper() {
 
     useEffect(() => {
         if (title) handleOpen()
-    }, [title]);
+    }, [title, content]);
 
     const {
         customUrl,
@@ -220,11 +220,11 @@ export default function TagLeftWrapper() {
                 </Card>
             </GridItem>
         </GridContainer>
-        <TagMessageModal
-            title={title}
-            context={content}
+        <MessageDialog
+            dialogTitle={title}
+            dialogContent={content}
             open={open}
-            handleClose={handleClose}
+            setClose={handleClose}
         />
     </div >;
 }

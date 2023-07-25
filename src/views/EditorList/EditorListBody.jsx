@@ -2,13 +2,13 @@
 import React, { useState } from 'react';
 import CardBody from 'components/Card/CardBody.jsx';
 import { useSelector } from 'react-redux';
-import MediaModal from './MediaModal';
+import MediaModal from '../../components/Modal/MediaModal';
 import * as GetEditorAction from '../../actions/GetEditorAction';
 import EditorSearchForm from './EditorSearchForm';
 import EditorListButtonList from './EditorListButtonList';
 import RowHeader from './RowHeader';
 import RowBody from './RowBody';
-import MessageDialog from '../Pages/MessageDialog';
+import MessageDialog from '../../components/Modal/MessageDialog';
 
 
 const headerMap = {

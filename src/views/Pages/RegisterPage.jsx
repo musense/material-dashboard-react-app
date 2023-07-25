@@ -21,7 +21,7 @@ import registerPageStyle from 'assets/jss/material-dashboard-react/views/registe
 import { useDispatch, useSelector } from 'react-redux';
 import { REGISTER_USER, REGISTER_USER_ERROR_RESET } from './../../actions/GetUserAction';
 import { useNavigate } from 'react-router-dom';
-import MessageDialog from './MessageDialog';
+import MessageDialog from '../../components/Modal/MessageDialog';
 
 import useRegisterResult from '../../hook/useRegisterResult';
 

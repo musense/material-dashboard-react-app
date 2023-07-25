@@ -43,20 +43,13 @@ const getTagsReducer = (state = initialState, action) => {
                 errorMessage: errorMessage.deleteSuccess
             }
         case GetTagsAction.ADD_TAG_FAIL:
-            return {
-                ...state,
-                errorMessage: errorMessage.addFail
-            }
         case GetTagsAction.UPDATE_TAG_FAIL:
+        case GetTagsAction.DELETE_TAG_FAIL: {
             return {
                 ...state,
-                errorMessage: errorMessage.updateFail
+                errorMessage: action.payload.errorMessage
             }
-        case GetTagsAction.DELETE_TAG_FAIL:
-            return {
-                ...state,
-                errorMessage: errorMessage.deleteFail
-            }
+        }
         case GetTagsAction.REQUEST_TAG_SUCCESS:
             return {
                 ...state,
@@ -129,12 +122,15 @@ const getTagsReducer = (state = initialState, action) => {
                 tagList: action.payload,
                 errorMessage: null
             }
+
         case GetTagsAction.GET_TAG_FAIL:
+        case GetTagsAction.REQUEST_POPULAR_TAG_FAIL: {
             return {
                 ...state,
-                errorMessage: action.payload
+                errorMessage: action.payload.errorMessage
             }
-        case GetTagsAction.SET_ERROR_MESSAGE:{
+        }
+        case GetTagsAction.SET_ERROR_MESSAGE: {
             return {
                 ...state,
                 errorMessage: action.payload.message
@@ -151,7 +147,7 @@ const getTagsReducer = (state = initialState, action) => {
                 ...state,
             }
         }
-            
+
     }
 }
 

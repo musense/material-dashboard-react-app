@@ -18,11 +18,6 @@ const getUserReducer = (state = initialState, action) => {
                 ...state,
                 errorMessage: null
             }
-        case GetUserAction.REGISTER_USER_FAIL:
-            return {
-                ...state,
-                errorMessage: action.errorMessage
-            }
         case GetUserAction.LOGIN_USER_SUCCESS:
             return {
                 ...state,
@@ -30,10 +25,25 @@ const getUserReducer = (state = initialState, action) => {
                 email: action.payload.email,
                 errorMessage: action.errorMessage
             }
-        case GetUserAction.LOGIN_USER_FAIL:
+        case GetUserAction.LOGOUT_USER_SUCCESS:
             return {
                 ...state,
                 errorMessage: action.errorMessage
+            }
+        case GetUserAction.LOGIN_USER_FAIL:
+        case GetUserAction.LOGOUT_USER_FAIL:
+        case GetUserAction.REGISTER_USER_FAIL:
+        case GetUserAction.UPDATE_USER_FAIL:
+        case GetUserAction.DELETE_USER_FAIL: {
+            return {
+                ...state,
+                errorMessage: action.payload.errorMessage
+            }
+        }
+        case GetUserAction.SET_ERROR_MESSAGE:
+            return {
+                ...state,
+                errorMessage: action.payload.message
             }
         default:
             return { ...state }

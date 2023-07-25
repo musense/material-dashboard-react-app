@@ -1,6 +1,7 @@
 import { all, put, take, takeEvery } from 'redux-saga/effects';
 import * as GetTagsAction from "../../actions/GetTagsAction";
 import { instance } from "./AxiosInstance";
+import { getErrorMessage, getGetErrorMessage } from '../apiHelperFunc';
 
 export function toFrontendData(responseData) {
     if (Array.isArray(responseData)) {
@@ -61,11 +62,6 @@ function* GetPopularTagList() {
         const { currentPage, totalCount, data: responseData } = yield response.data
         const tagList = toFrontendData(responseData)
         console.log("🚀 ~ file: GetTagList.js:44 ~ function*GetTagList ~ tagList:", tagList)
-        // const tagList = yield response.data;
-        // console.log("🚀 ~ file: GetTagList.js:14 ~ function*GetTagList ~ tagList:", tagList)
-
-        // console.log("🚀 ~ file: GetTagList.js:19 ~ tagMapped ~ tagMapped:", tagMapped)
-        // return
         yield put({
             type: GetTagsAction.REQUEST_POPULAR_TAG_SUCCESS,
             payload: {
@@ -73,11 +69,7 @@ function* GetPopularTagList() {
             },
         })
     } catch (error) {
-        yield put({
-            type: GetTagsAction.REQUEST_POPULAR_TAG_FAIL,
-            errorMessage: error.message,
-            payload: null
-        })
+        yield getGetErrorMessage(error, GetTagsAction.REQUEST_POPULAR_TAG_FAIL)
     }
 }
 
@@ -87,12 +79,6 @@ function* GetTagList(payload = 1) {
         const response = yield instance.get(`/tags?limit=100000&pageNumber=${payload}`);
         const { currentPage, totalCount, data: responseData } = yield response.data
         const tagList = toFrontendData(responseData)
-          // console.log("🚀 ~ file: GetTagList.js:44 ~ function*GetTagList ~ tagList:", tagList)
-          // const tagList = yield response.data;
-          // console.log("🚀 ~ file: GetTagList.js:14 ~ function*GetTagList ~ tagList:", tagList)
-
-        // console.log("🚀 ~ file: GetTagList.js:19 ~ tagMapped ~ tagMapped:", tagMapped)
-        // return
         yield put({
             type: GetTagsAction.REQUEST_TAG_SUCCESS,
             payload: {
@@ -102,11 +88,7 @@ function* GetTagList(payload = 1) {
             },
         })
     } catch (error) {
-        yield put({
-            type: GetTagsAction.GET_TAG_FAIL,
-            errorMessage: error.message,
-            payload: null
-        })
+        yield getGetErrorMessage(error, GetTagsAction.GET_TAG_FAIL)
     }
 }
 
@@ -143,11 +125,7 @@ function* SearchTag(payload) {
             }
         })
     } catch (error) {
-        yield put({
-            type: GetTagsAction.GET_TAG_FAIL,
-            errorMessage: error.message,
-            payload: null
-        })
+        yield getGetErrorMessage(error, GetTagsAction.GET_TAG_FAIL)
     }
 }
 
@@ -164,11 +142,7 @@ function* AddTag(payload) {
             payload: null
         })
     } catch (error) {
-        // console.log("🚀 ~ file: GetTagList.js:140 ~ function*AddTag ~ error:", error)
-        yield put({
-            type: GetTagsAction.ADD_TAG_FAIL,
-            errorMessage: error.message
-        })
+        yield getErrorMessage(error, GetTagsAction.ADD_TAG_FAIL)
     }
 }
 
@@ -188,11 +162,7 @@ function* UpdateTag(payload) {
             payload: tagList
         })
     } catch (error) {
-        yield put({
-            type: GetTagsAction.UPDATE_TAG_FAIL,
-            errorMessage: error.message,
-            payload: null
-        })
+        yield getErrorMessage(error, GetTagsAction.UPDATE_TAG_FAIL)
     }
 }
 
@@ -203,9 +173,9 @@ function* DeleteTag(payload) {
             'ids': payload
         }
         // console.log("🚀 ~ file: GetTagList.js:175 ~ function*DeleteTag ~ data:", data)
-     
-        
-        const response = yield instance.delete(`/tags/bunchDeleteByIds`,{
+
+
+        const response = yield instance.delete(`/tags/bunchDeleteByIds`, {
             "data": data
         });
         const responseData = yield response.data.data;
@@ -214,11 +184,7 @@ function* DeleteTag(payload) {
             payload: responseData
         })
     } catch (error) {
-        yield put({
-            type: GetTagsAction.DELETE_TAG_FAIL,
-            errorMessage: error.message,
-            payload: null
-        })
+        yield getErrorMessage(error, GetTagsAction.DELETE_TAG_FAIL)
     }
 }
 

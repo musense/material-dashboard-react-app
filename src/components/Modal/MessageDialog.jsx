@@ -9,6 +9,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 import Box from '@mui/material/Box';
 import { useDispatch } from 'react-redux';
 import * as GetDialogAction from '../../actions/GetDialogAction';
+import { useNavigate } from 'react-router-dom'
 
 const style = {
   minWidth: 300,
@@ -27,8 +28,9 @@ export default function MessageDialog(
     data = null
   }) {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
-  const handleClose = useCallback(() => {
+  const handleClose = useCallback((dialogContent) => {
     dispatch({
       type: GetDialogAction.ON_MODAL_CLOSE,
       payload: {
@@ -36,7 +38,11 @@ export default function MessageDialog(
       }
     })
     setClose()
-  }, [setClose])
+    if (dialogContent === '您已被登出！' 
+    || dialogContent === '您已登出！') {
+      // navigate('/auth/login-page', { replace: true })
+    }
+  }, [setClose, navigate])
 
   const handleCloseOK = useCallback((data) => {
     console.log("🚀 ~ file: MessageDialog.jsx:34 ~ handleCloseOK ~ data:", data)
@@ -71,15 +77,13 @@ export default function MessageDialog(
           confirm
             ? (
               <DialogActions>
-                <Button onClick={() => handleClose()}>算了</Button>
+                <Button onClick={() => handleClose(dialogContent)}>算了</Button>
                 <Button onClick={() => handleCloseOK(data)} autoFocus>好</Button>
               </DialogActions>
             )
             : (
               <DialogActions>
-                <Button onClick={setClose} autoFocus>
-                  好
-                </Button>
+                <Button onClick={() => handleClose(dialogContent)} autoFocus>好</Button>
               </DialogActions>
             )
         }

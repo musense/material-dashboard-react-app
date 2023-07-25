@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 import * as GetTagsAction from '../../actions/GetTagsAction';
 import CardBody from 'components/Card/CardBody.jsx';
 import TagSearchForm from './TagSearchForm';
-import MessageDialog from '../Pages/MessageDialog';
+import MessageDialog from '../../components/Modal/MessageDialog';
 import RowHeader from '../EditorList/RowHeader';
 import RowBody from './RowBody';
 import TagButtonList from './TagButtonList';

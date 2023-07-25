@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 
-export default function useLoginResult(message) {
+export default function useLogoutResult(message) {
 
     const [title, setTitle] = useState(null);
     const [content, setContent] = useState(null);
@@ -27,18 +27,19 @@ export default function useLoginResult(message) {
                 setSuccess(false)
                 break
             }
-            case "login successfully": {
-                setTitle("登入成功")
-                setContent("登入成功！")
+            case "logout successfully": {
+                setTitle("Success")
+                setContent("您已登出！")
                 setSuccess(true)
                 break
             }
-            case "login failed":{
+            case "login failed": {
                 setTitle("登入失敗")
                 setContent("登入失敗！")
                 setSuccess(false)
                 break
             }
+
             default: {
                 break
             }

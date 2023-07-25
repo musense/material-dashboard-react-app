@@ -88,7 +88,7 @@ const DetailForm = React.forwardRef(({
                     console.log("🚀 ~ file: index.jsx:145 ~ onEditorSave ~ webHeader:", webHeader)
 
                     const media = new Map()
-                    bannerRef.current !== editor.media.banner && (media.set('banner', bannerRef.current))
+                    thumbnailRef.current && bannerRef.current !== editor.media.banner && (media.set('banner', bannerRef.current))
                     thumbnailRef.current && thumbnailRef.current !== editor.media.thumbnail && (media.set('thumbnail', thumbnailRef.current))
                     console.log("🚀 ~ file: index.jsx:150 ~ onEditorSave ~ editor.media.thumbnail:", editor.media.thumbnail)
                     imageAltTextRef.current.value !== editor.media.altText && (media.set('altText', imageAltTextRef.current.value))

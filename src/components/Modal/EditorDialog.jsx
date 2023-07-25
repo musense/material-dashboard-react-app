@@ -7,7 +7,9 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import Box from '@mui/material/Box';
+import { useDispatch } from 'react-redux';
 import CloseIcon from '../Icon/CloseIcon'
+import * as GetDialogAction from '../../actions/GetDialogAction';
 
 const style = {
     minWidth: 300,
@@ -17,21 +19,25 @@ const style = {
 }
 
 export default function EditorDialog({
-    open = true,
+    open,
+    setClose,
+    dialogTitle,
+    dialogContent,
     success,
     editorID = null,
     sitemapUrl = null,
-    handleClose,
-    dialogTitle,
-    dialogContent
+    confirm = null,
+    data = null
 }) {
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
 
     const onClose = useCallback(() => {
         if (success) {
             navigate(`/admin/editorList/${editorID}`)
-            handleClose()
+            setClose()
         } else {
-            handleClose()
+            setClose()
         }
     }, [success, editorID])
 
@@ -39,58 +45,63 @@ export default function EditorDialog({
         if (success) {
             window.open(sitemapUrl, "_blank")
             navigate(`/admin/editorList/${editorID}`)
-            handleClose()
+            setClose()
         } else {
             navigate(-1)
         }
     }, [success, sitemapUrl])
 
+    const handleFailureClose = useCallback((dialogContent) => {
+        dispatch({
+            type: GetDialogAction.ON_MODAL_CLOSE,
+            payload: {
+                messageDialogReturnValue: false
+            }
+        })
+        setClose()
+        if (dialogContent === '您已被登出！'
+            || dialogContent === '您已登出！') {
+            navigate('/auth/login-page', { replace: true })
+        }
+    }, [setClose, navigate])
 
-    const navigate = useNavigate();
+
     return (
         <Dialog
             open={open}
             aria-labelledby="alert-dialog-title"
             aria-describedby="alert-dialog-description"
         >
-            <Box
-                sx={style}
-            >
+            <Box sx={style}>
                 <CloseIcon
                     onClose={onClose}
                     distance={5}
                     color="black"
                 />
-                <DialogTitle
-                    sx={{
-                        pt: 0,
-                        px: 2,
-                        pb: 1,
-                    }}
-                    id="alert-dialog-title">
+                <DialogTitle id="alert-dialog-title">
                     {dialogTitle}
                 </DialogTitle>
-                <DialogContent
-                    sx={{
-                        p: 0,
-                        my: 1,
-                        textAlign: 'center',
-                    }}
-
-                >
-                    <DialogContentText id="alert-dialog-description" className=''>
+                <DialogContent>
+                    <DialogContentText id="alert-dialog-description" >
                         {dialogContent}
                     </DialogContentText>
                 </DialogContent>
-                <DialogActions
-                    sx={{
-                        pt: 1,
-                        px: 2,
-                        pb: 0,
-                    }}
-                >
-                    <Button onClick={goTo}>{success ? '前往網頁' : '回前頁'}</Button>
-                    <Button onClick={onClose} autoFocus>{success ? '繼續編輯' : '確定'}</Button>
+                <DialogActions >
+                    {success
+                        ? (<>
+                            <Button onClick={goTo}>{'前往網頁'}</Button>
+                            <Button onClick={onClose} autoFocus>{'繼續編輯'}</Button>
+                        </>)
+                        : (
+                            dialogTitle === 'Warning'
+                                ? (<>
+                                    <Button onClick={goTo}>{'回前頁'}</Button>
+                                    <Button onClick={onClose} autoFocus>{'確定'}</Button>
+                                </>)
+                                : (<>
+                                    <Button onClick={() => handleFailureClose(dialogContent)} autoFocus>{'確定'}</Button>
+                                </>)
+                        )}
                 </DialogActions>
             </Box>
         </Dialog >

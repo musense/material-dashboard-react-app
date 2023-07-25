@@ -78,6 +78,17 @@ export default function EditorLeftWrapper() {
             return
         }
 
+        if (!classData.keyname || classData.keyname === '') {
+            dispatch({
+                type: GetClassAction.SET_ERROR_MESSAGE,
+                payload: {
+                    message: 'please add keyname',
+                }
+            })
+            console.log('請輸入 [英文名稱] 選項');
+            return
+        }
+
         const tempData = {
             // parentClassification: parentClassRef.current.label,
             classification: classData.classification,

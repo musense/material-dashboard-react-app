@@ -3,67 +3,60 @@ import { useDispatch, useSelector } from 'react-redux';
 import ContentEditorForm from "./ContentEditorForm.jsx"
 import DetailForm from "./DetailForm.jsx"
 import * as GetEditorAction from 'actions/GetEditorAction.js';
-import EditorDialog from '../../components/Modal/EditorDialog.jsx';
+import MessageDialog from '../../components/Modal/MessageDialog.jsx';
 
+import useIEditorResult from '../../hook/useIEditorResult.js';
 function NewIEditor() {
 
-  const [state, setState] = React.useState(null);
   const containRef = useRef(null);
 
-  useEffect(() => {
-    const handleBeforeUnload = (event) => {
-      // Perform actions before the component unloads
-      console.log('🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀beforeunload Hola!');
-      event.preventDefault();
-      onDraftEditorSave()
-      event.returnValue = 'beforeunload Hola!';
-    };
-    window.addEventListener('beforeunload', handleBeforeUnload);
-    return () => {
-      window.removeEventListener('beforeunload', handleBeforeUnload);
-    };
-  }, []);
+  // useEffect(() => {
+  //   const handleBeforeUnload = (event) => {
+  //     console.log('🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀beforeunload Hola!');
+  //     event.preventDefault();
+  //     onDraftEditorSave()
+  //     event.returnValue = 'beforeunload Hola!';
+  //   };
+  //   window.addEventListener('beforeunload', handleBeforeUnload);
+  //   return () => {
+  //     window.removeEventListener('beforeunload', handleBeforeUnload);
+  //   };
+  // }, []);
 
   const dispatch = useDispatch();
   const contentFormRef = useRef(null)
   const detailFormRef = useRef(null)
 
   const editor = useSelector((state) => state.getEditorReducer.editor);
-
   const returnMessage = useSelector((state) => state.getEditorReducer.errorMessage);
+  console.log("🚀 ~ file: index.jsx:35 ~ NewIEditor ~ editor:", editor)
+  console.log("🚀 ~ file: index.jsx:35 ~ NewIEditor ~ returnMessage:", returnMessage)
 
-  const [dialogTitle, setDialogTitle] = useState(null);
+  const [open, setOpen] = React.useState(false);
+  const handleClickOpen = () => setOpen(true);
+  const handleClose = () => {
+    setOpen(false)
+    dispatch({
+      type: GetEditorAction.SET_ERROR_MESSAGE,
+      payload: {
+        message: '--reset-error-message',
+      }
+    })
+  }
 
-  const [success, setSuccess] = useState(true);
-  const [id, setId] = useState(null);
-  const [sitemapUrl, setSitemapUrl] = useState(null);
-  const [dialogContent, setDialogContent] = useState(null);
+  const {
+    title,
+    content,
+    id,
+    sitemapUrl,
+    success
+  } = useIEditorResult(returnMessage, editor)
+
+  useEffect(() => {
+    if (title) handleClickOpen()
+  }, [title, content]);
 
   const [preview, setPreview] = useState(false);
-  useEffect(() => {
-    console.log("🚀 ~ file: index.jsx:45 ~ useEffect ~ returnMessage:", returnMessage)
-    if (!editor) return
-    if (returnMessage === 'add successfully') {
-      console.log("🚀 ~ file: index.jsx:54 ~ useEffect ~ editor:", editor)
-
-      console.log('新增成功！');
-      setSuccess(true)
-      setId(editor._id)
-      setSitemapUrl(editor.sitemapUrl)
-      setDialogContent('新增成功！')
-      handleClickOpen()
-    }
-
-    if (returnMessage === 'add fail!') {
-      // setDialogContent(editor.sitemapUrl)
-
-      console.log('新增失敗！');
-      setSuccess(false)
-      setDialogContent('新增失敗！')
-      handleClickOpen()
-    }
-  }, [returnMessage, editor]);
-
 
   function onDraftEditorSave() {
     onEditorSave(null, false)
@@ -87,11 +80,14 @@ function NewIEditor() {
       if (checkFormSizeData === undefined || checkFormSizeData.size === 0) {
         console.log('nothing to add!!!');
         if (e) {
-          setSuccess(false)
-          setDialogContent('沒有新增任何資訊！')
-          handleClickOpen()
+          dispatch({
+            type: GetEditorAction.SET_ERROR_MESSAGE,
+            payload: {
+              message: 'nothing to add!',
+            }
+          })
+          return
         }
-        return
       }
     }
     const formData = new Map([
@@ -108,30 +104,33 @@ function NewIEditor() {
 
     if (checkValidity) {
       if (!contentState) {
-        console.log('content title required!!!');
-        if (e) {
-          setSuccess(false)
-          setDialogContent('文章標題與文案為必填！')
-          handleClickOpen()
-        }
+        console.log('content title required!');
+        dispatch({
+          type: GetEditorAction.SET_ERROR_MESSAGE,
+          payload: {
+            message: 'content title required!',
+          }
+        })
         return
       }
       if (contentState && !contentTitleState) {
-        console.log('content title required!!!');
-        if (e) {
-          setSuccess(false)
-          setDialogContent('文章標題為必填！')
-          handleClickOpen()
-        }
+        console.log('title required!');
+        dispatch({
+          type: GetEditorAction.SET_ERROR_MESSAGE,
+          payload: {
+            message: 'title required!',
+          }
+        })
         return
       }
       if (contentState && !contentContentState) {
-        console.log('content title required!!!');
-        if (e) {
-          setSuccess(false)
-          setDialogContent('文案為必填！')
-          handleClickOpen()
-        }
+        console.log('content required!');
+        dispatch({
+          type: GetEditorAction.SET_ERROR_MESSAGE,
+          payload: {
+            message: 'content required!',
+          }
+        })
         return
       }
     }
@@ -147,10 +146,13 @@ function NewIEditor() {
     }
     if (checkValidity) {
       if (formData === undefined || formData.size === 0) {
-        console.log('nothing to add!!!');
-        setSuccess(false)
-        setDialogContent('沒有新增任何資訊！')
-        handleClickOpen()
+        console.log('nothing to add!');
+        dispatch({
+          type: GetEditorAction.SET_ERROR_MESSAGE,
+          payload: {
+            message: 'nothing to add!',
+          }
+        })
         return
       }
     }
@@ -167,11 +169,7 @@ function NewIEditor() {
     })
   }
 
-  const [open, setOpen] = React.useState(false);
 
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
 
   const detailFormProps = useMemo(() => ({
     editor,
@@ -183,23 +181,11 @@ function NewIEditor() {
     onEditorSave,
   }), [editor, onEditorSave])
 
-  const dialogProps = useMemo(() => ({
-    open,
-    success,
-    editorID: id,
-    sitemapUrl,
-    handleClose: () => setOpen(false),
-    dialogTitle,
-    dialogContent,
-  }), [open, success, id, sitemapUrl, setOpen, dialogTitle, dialogContent])
-
   return (
     <div ref={containRef} className={'container'}>
       <div className={'wrapper'}>
         <div className={'left-side'}>
-          <EditorDialog
-            {...dialogProps}
-          />
+
           <ContentEditorForm
             ref={contentFormRef}
             {...contentFormProps}
@@ -212,6 +198,16 @@ function NewIEditor() {
           />
         </div>
       </div>
+      <MessageDialog
+        dialogTitle={title}
+        dialogContent={content}
+        editorID={id}
+        sitemapUrl={sitemapUrl}
+        success={success}
+        open={open}
+        setClose={handleClose}
+        editor={true}
+      />
     </div>
   );
 }

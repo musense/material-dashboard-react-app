@@ -30,7 +30,13 @@ export default function useEditEditorClassResult(message) {
             }
             case 'please add title': {
                 setTitle('Warning')
-                setContent('請輸入 [文章分類名稱]！')
+                setContent('請輸入 [分類名稱]！')
+                setSuccess(false)
+                return
+            }
+            case 'please add keyname': {
+                setTitle('Warning')
+                setContent('請輸入 [英文名稱]！')
                 setSuccess(false)
                 return
             }

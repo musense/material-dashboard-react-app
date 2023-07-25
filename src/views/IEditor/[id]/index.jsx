@@ -4,10 +4,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import ContentEditorForm from "./../ContentEditorForm.jsx"
 import DetailForm from "./../DetailForm.jsx"
 import * as GetEditorAction from "actions/GetEditorAction.js";
-import * as GetClassAction from "actions/GetClassAction.js";
-import EditorDialog from '../../../components/Modal/EditorDialog.jsx';
-
-
+import MessageDialog from '../../../components/Modal/MessageDialog.jsx';
+import useIEditorResult from '../../../hook/useIEditorResult.js';
 function IEditor() {
   const alertUser = (e) => {
     window.alert('are you sure?')
@@ -19,6 +17,31 @@ function IEditor() {
   const editor = useSelector((state) => state.getEditorReducer.editor);
   const returnMessage = useSelector((state) => state.getEditorReducer.errorMessage);
   const previewID = useSelector((state) => state.getEditorReducer.previewID);
+
+
+  const [open, setOpen] = React.useState(false);
+  const handleClickOpen = () => setOpen(true);
+  const handleClose = () => {
+    setOpen(false)
+    dispatch({
+      type: GetEditorAction.SET_ERROR_MESSAGE,
+      payload: {
+        message: '--reset-error-message',
+      }
+    })
+  }
+
+  const {
+    title,
+    content,
+    sitemapUrl,
+    success
+  } = useIEditorResult(returnMessage, editor)
+
+  useEffect(() => {
+    if (title) handleClickOpen()
+    if (title === '更新成功') requestEditorByID(id)
+  }, [title, content, id]);
 
   function requestEditorByID(id) {
     dispatch({
@@ -34,7 +57,7 @@ function IEditor() {
   useEffect(() => {
     if (!editor) {
       requestEditorByID(id)
-    } 
+    }
   }, [editor]);
 
   console.log("🚀 ~ file: index.jsx:49 ~ IEditor ~ editor:", editor)
@@ -44,29 +67,8 @@ function IEditor() {
 
   const idRef = useRef()
 
-  const [success, setSuccess] = useState(true);
-  const [sitemapUrl, setSitemapUrl] = useState(null);
-  const [dialogTitle, setDialogTitle] = useState(null);
-  const [dialogContent, setDialogContent] = useState(null);
-
   const [preview, setPreview] = useState(false);
-  useEffect(() => {
-    if (!returnMessage) return
-
-    if (returnMessage === "Editor update successfully") {
-      setSitemapUrl(editor.sitemapUrl)
-      console.log('更新成功！');
-      setSuccess(true)
-      setDialogContent('更新成功！')
-      handleClickOpen()
-
-      console.log('Editor update successfully');
-      console.log("🚀 ~ file: index.jsx:79 ~ useEffect ~ id:", id)
-      requestEditorByID(id)
-    }
-  }, [returnMessage, id]);
-
-
+ 
   function onEditorSave(e) {
     e.preventDefault(e);
 
@@ -82,9 +84,12 @@ function IEditor() {
 
     if (formData === undefined || formData.size === 0) {
       console.log('nothing to update!!!');
-      setSuccess(false)
-      setDialogContent('沒有更新任何資訊！')
-      handleClickOpen()
+      dispatch({
+        type: GetEditorAction.SET_ERROR_MESSAGE,
+        payload: {
+          message: 'nothing to update!',
+        }
+      })
       return
     }
 
@@ -107,12 +112,6 @@ function IEditor() {
       },
     })
   }
-  const [open, setOpen] = React.useState(false);
-
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
-
 
   const detailFormProps = useMemo(() => ({
     editor,
@@ -124,23 +123,10 @@ function IEditor() {
     onEditorSave,
   }), [editor, onEditorSave])
 
-  const dialogProps = useMemo(() => ({
-    open,
-    success,
-    editorID: id,
-    sitemapUrl,
-    handleClose: () => setOpen(false),
-    dialogTitle,
-    dialogContent,
-  }), [open, success, id, sitemapUrl, setOpen, dialogTitle, dialogContent])
-
   return (
     <div className={'container'}>
       <div className={'wrapper'}>
         <div className={'left-side'}>
-          <EditorDialog
-            {...dialogProps}
-          />
           <ContentEditorForm
             ref={contentFormRef}
             {...contentFormProps}
@@ -153,6 +139,16 @@ function IEditor() {
           />
         </div>
       </div>
+      <MessageDialog
+        dialogTitle={title}
+        dialogContent={content}
+        editorID={id}
+        sitemapUrl={sitemapUrl}
+        success={success}
+        open={open}
+        setClose={handleClose}
+        editor={true}
+      />
     </div>
   );
 }

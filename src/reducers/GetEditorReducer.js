@@ -142,7 +142,7 @@ const getEditorReducer = (state = initialState, action) => {
         }).slice(0, 10),
         currentPage: 1
       }
-    case GetEditorAction.REQUEST_EDITOR_FAIL: 
+    case GetEditorAction.REQUEST_EDITOR_FAIL:
     case GetEditorAction.REQUEST_EDITOR_TITLE_LIST_FAIL: {
       return {
         ...state,
@@ -161,6 +161,11 @@ const getEditorReducer = (state = initialState, action) => {
         errorMessage: errorMessage.getFinish
       }
     case GetEditorAction.UPDATE_EDITOR_SUCCESS:
+      return {
+        ...state,
+        errorMessage: errorMessage.updateSuccess
+      }
+    case GetEditorAction.SET_ERROR_MESSAGE:
       return {
         ...state,
         errorMessage: action.payload.message

@@ -10,9 +10,6 @@ import * as GetSlateAction from "actions/GetSlateAction";
 import useSetEditorDefaultValue from '../../../hook/useSetEditorDefaultValue.js';
 
 function IEditor() {
-  const alertUser = (e) => {
-    window.alert('are you sure?')
-  }
 
   const dispatch = useDispatch();
   const { id } = useParams();
@@ -57,7 +54,13 @@ function IEditor() {
     });
   }
 
-
+  useEffect(() => {
+    return () => {
+      dispatch({
+        type: GetSlateAction.RESET_FORM_VALUE,
+      })
+    }
+  }, []);
 
 
 
@@ -71,8 +74,6 @@ function IEditor() {
 
   const contentFormRef = useRef(null)
   const detailFormRef = useRef(null)
-
-  const idRef = useRef()
 
   const [preview, setPreview] = useState(false);
 
@@ -120,15 +121,6 @@ function IEditor() {
     })
   }
 
-  const detailFormProps = useMemo(() => ({
-    editor,
-    onEditorSave,
-  }), [editor, onEditorSave])
-
-  const contentFormProps = useMemo(() => ({
-    editor,
-    onEditorSave,
-  }), [editor, onEditorSave])
 
   return (
     <div className={'container'}>

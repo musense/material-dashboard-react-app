@@ -17,7 +17,7 @@ export default function useSetEditorDefaultValue(editor) {
         dispatch({
             type: GetSlateAction.SET_DEFAULT_FORM_VALUE,
             payload: {
-                form: editor
+                allProps: editor
             },
         })
     }, [editor]);

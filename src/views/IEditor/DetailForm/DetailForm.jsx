@@ -109,41 +109,35 @@ const DetailForm = () => {
     }
 
     return (
-        <>
-            <form ref={detailFormRef} name='ieditor-detail-form' >
-                <WebHeader
-                    title={title}
-                    onPropertyChange={onPropertyChange}
-                    description={description}
-                    keywords={keywords}
-                    manualUrl={manualUrl}
-                    customUrl={customUrl} />
-                <Tags
-                    tags={tags}
-                    onPropertyChange={onPropertyChange}
-                />
-                <Classification
-                    classifications={classifications} 
-                    onPropertyChange={onPropertyChange}
-                    />
-                <Media
-                    styles={styles}
-                    onPropertyChange={onPropertyChange}
-                    isError={isError}
-                    altText={altText}
-                    mediaHelperFunc={mediaHelperFunc}
-                    isImage={isImage}
-                    iframeUrl={iframeUrl} />
-                <PublishInfo
-                    styles={styles}
-                    hidden={hidden}
-                    onPropertyChange={onPropertyChange}
-                    isScheduled={isScheduled}
-                    reservedPublishDateTime={reservedPublishDateTime} />
-                <DetailFormButtonList
-                    styles={styles} />
-            </form >
-        </>
+        <form name='ieditor-detail-form' >
+            <WebHeader title={title}
+                onPropertyChange={onPropertyChange}
+                description={description}
+                keywords={keywords}
+                manualUrl={manualUrl}
+                customUrl={customUrl} />
+            <Tags
+                tags={tags}
+                onPropertyChange={onPropertyChange} />
+            <Classification
+                classifications={classifications}
+                onPropertyChange={onPropertyChange} />
+            <Media
+                styles={styles}
+                onPropertyChange={onPropertyChange}
+                isError={isError}
+                altText={altText}
+                mediaHelperFunc={mediaHelperFunc}
+                isImage={isImage}
+                iframeUrl={iframeUrl} />
+            <PublishInfo
+                styles={styles}
+                hidden={hidden}
+                onPropertyChange={onPropertyChange}
+                isScheduled={isScheduled}
+                reservedPublishDateTime={reservedPublishDateTime} />
+            <DetailFormButtonList styles={styles} />
+        </form >
     );
 }
 

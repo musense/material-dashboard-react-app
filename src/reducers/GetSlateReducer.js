@@ -26,9 +26,9 @@ const initialState = {
       altText: '',
     },
     publishInfo: {
-      hidden: null,
-      isScheduled: null,
-      reservedPublishDateTime: null
+      hidden: false,
+      isScheduled: false,
+      reservedPublishDateTime: ''
     }
   },
   errorMessage: null,
@@ -40,23 +40,23 @@ const getSlateReducer = (state = initialState, action) => {
     case GetSlateAction.SET_DEFAULT_FORM_VALUE: {
       const {
         ...props
-      } = action.payload.form
+      } = action.payload.allProps
       return {
         ...state,
         contentForm: {
-          title: props.content.title,
-          content: props.content.content,
+          title: props.content.title || '',
+          content: props.content.content || initialState.contentForm.content,
         },
         detailForm: {
           webHeader: {
-            title: props.webHeader.headTitle,
-            description: props.webHeader.headDescription,
-            keywords: props.webHeader.headKeyword,
-            manualUrl: props.webHeader.manualUrl,
+            title: props.webHeader.headTitle || '',
+            description: props.webHeader.headDescription || '',
+            keywords: props.webHeader.headKeyword || '',
+            manualUrl: props.webHeader.manualUrl || '',
             sitemapUrl: props.sitemapUrl,
           },
-          tags: props.tags,
-          classifications: props.classifications,
+          tags: props.tags || initialState.detailForm.tags,
+          classifications: props.classifications || initialState.detailForm.classifications,
           media: {
             banner: props.media.banner,
             image: props.media.thumbnail,
@@ -77,6 +77,10 @@ const getSlateReducer = (state = initialState, action) => {
     }    
     case GetSlateAction.SET_PROPERTY: {
       const { form, info, property, value } = action.payload.allProps
+      console.log("🚀 ~ file: GetSlateReducer.js:80 ~ getSlateReducer ~ form:", form)
+      console.log("🚀 ~ file: GetSlateReducer.js:80 ~ getSlateReducer ~ info:", info)
+      console.log("🚀 ~ file: GetSlateReducer.js:80 ~ getSlateReducer ~ property:", property)
+      console.log("🚀 ~ file: GetSlateReducer.js:80 ~ getSlateReducer ~ value:", value)
 
       return info ? {
         ...state,

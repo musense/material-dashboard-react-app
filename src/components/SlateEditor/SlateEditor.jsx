@@ -1,70 +1,40 @@
-import React, { useMemo, useCallback, useState, useRef, useEffect } from 'react'
-import { createEditor, Transforms } from 'slate'
-import { Slate, Editable, withReact } from 'slate-react'
-import { withHistory } from 'slate-history'
+import React, { useCallback, useState, useRef, useEffect } from 'react'
+import { Slate, Editable } from 'slate-react'
 import { css } from '@emotion/css'
 import { CustomEditor } from './CustomEditor'
-import HoveringPopupToolbar from "./HoveringPopupToolbar";
 import Toolbar from "./Toolbar";
 import "./SlateEditor.module.css";
 
 import { Element, Leaf } from "./Elements";
 import ImageDialog from './ImageDialog'
-import withCorrectVoidBehavior from "./withCorrectVoidBehavior";
 
+import useCreateSlateEditor from '../../hook/useCreateSlateEditor'
+import useSetSlateEditorInitialValueAfterwards from '../../hook/useSetSlateEditorInitialValueAfterwards'
 
-function SlateEditor({ editorContentRef }) {
-  // console.log("🚀 ~ file: SlateEditor.jsx:15 ~ SlateEditor ~ editorContentRef.current:", editorContentRef.current)
+function SlateEditor({
+  slateValue,
+  setState
+}) {
+  console.log("🚀 ~ file: SlateEditor.jsx:15 ~ SlateEditor ~ defaultValue:", slateValue)
 
-  const editor = useMemo(() =>
-    withCorrectVoidBehavior(
-      CustomEditor.withInlines(
-        CustomEditor.withImages(
-          withHistory(
-            withReact(createEditor())
-          )
-        ))
-    ), [])
+  const slateEditor = useCreateSlateEditor()
+  useSetSlateEditorInitialValueAfterwards(slateEditor, slateValue)
 
-  const urlRef     = useRef(null);
+  const urlRef = useRef(null);
   const altTextRef = useRef(null);
-  const hrefRef    = useRef(null);
-
-  useEffect(() => {
-    if (!editorContentRef.current) return
-    if (editorContentRef.current.length <= 0) return
-
-    const totalNodes = editor.children.length;
-    const savedDefaultNodes = editorContentRef.current;
-    if (totalNodes > 1) return
-
-    for (let i = 0; i < totalNodes - 1; i++) {
-      Transforms.removeNodes(editor, {
-        at: [totalNodes - i - 1],
-      });
-    }
-
-    for (const value of savedDefaultNodes) {
-      Transforms.insertNodes(editor, value, {
-        at: [editor.children.length]
-      })
-    }
-
-    Transforms.removeNodes(editor, {
-      at: [0],
-    });
-
-  }, [editor, editorContentRef.current]);
+  const hrefRef = useRef(null);
 
   const [open, setOpen] = useState(false);
-
   const handleClickOpen = () => {
     setOpen(true);
   };
 
-
   const renderElement = useCallback(props => <Element {...props} />, [])
   const renderLeaf = useCallback(props => <Leaf {...props} />, [])
+
+  const onSlateChange = useCallback(newValue => {
+    setState(newValue)
+  }, [setState])
 
   return (
     <div className={css` 
@@ -74,44 +44,37 @@ function SlateEditor({ editorContentRef }) {
     margin-top: 36px;
     padding-top: 0;
     `}>
-      <ImageDialog
-        open       = {open} setClose = {() => setOpen(false)}
-        urlRef     = {urlRef}
-        altTextRef = {altTextRef}
-        hrefRef    = {hrefRef}
-      />
       <Slate
-        editor   = {editor}
-        value    = {editorContentRef.current}
-        onChange = {newValue => editorContentRef.current = newValue
-        }>
-        {/* <HoveringPopupToolbar /> */}
+        editor={slateEditor}
+        value={slateValue}
+        onChange={onSlateChange}
+      >
         <Toolbar
-          handleClickOpen = {handleClickOpen}
-          currentUrl      = {urlRef.current}
-          currentAltText  = {altTextRef.current}
-          currentHref     = {hrefRef.current}
+          handleClickOpen={handleClickOpen}
+          currentUrl={urlRef.current}
+          currentAltText={altTextRef.current}
+          currentHref={hrefRef.current}
         />
         <Editable
           style={{
-            fontSize : '1rem',
+            fontSize: '1rem',
             minHeight: '30rem',
-            height   : 'auto',
+            height: 'auto',
             maxHeight: '57rem',
-            overflow : 'hidden scroll',
+            overflow: 'hidden scroll',
           }}
-          renderElement = {renderElement}
-          renderLeaf    = {renderLeaf}
-          placeholder   = "請輸入文案..."
-          onKeyDown     = {event => {
-              // console.log("🚀 ~ file: SlateEditor.jsx:155 ~ SlateEditor ~ event:", event)
+          renderElement={renderElement}
+          renderLeaf={renderLeaf}
+          placeholder="請輸入文案..."
+          onKeyDown={event => {
+            // console.log("🚀 ~ file: SlateEditor.jsx:155 ~ SlateEditor ~ event:", event)
             if (event.ctrlKey && event.key === 'Enter') {
               event.preventDefault()
-              CustomEditor.toggleBlock(editor, 'numbered-list');
+              CustomEditor.toggleBlock(slateEditor, 'numbered-list');
             }
             if (event.shiftKey && event.key === 'Enter') {
               event.preventDefault()
-              CustomEditor.toggleBlock(editor, 'bulleted-list');
+              CustomEditor.toggleBlock(slateEditor, 'bulleted-list');
             }
 
             if (!event.ctrlKey) {
@@ -121,76 +84,76 @@ function SlateEditor({ editorContentRef }) {
             switch (event.key) {
               case '1': {
                 event.preventDefault();
-                CustomEditor.toggleBlock(editor, 'h1');
+                CustomEditor.toggleBlock(slateEditor, 'h1');
                 break;
               }
               case '2': {
                 event.preventDefault();
-                CustomEditor.toggleBlock(editor, 'h2');
+                CustomEditor.toggleBlock(slateEditor, 'h2');
                 break;
               }
               case '3': {
                 event.preventDefault();
-                CustomEditor.toggleBlock(editor, 'h3');
+                CustomEditor.toggleBlock(slateEditor, 'h3');
                 break;
               }
               case 'q': {
                 event.preventDefault();
-                CustomEditor.toggleBlock(editor, 'block-quote');
+                CustomEditor.toggleBlock(slateEditor, 'block-quote');
                 break
               }
               case 'b': {
                 event.preventDefault()
-                CustomEditor.toggleMark(editor, 'bold')
+                CustomEditor.toggleMark(slateEditor, 'bold')
                 break
               }
               case 'i': {
                 event.preventDefault()
-                CustomEditor.toggleMark(editor, 'italic')
+                CustomEditor.toggleMark(slateEditor, 'italic')
                 break
               }
               case 'u': {
                 event.preventDefault()
-                CustomEditor.toggleMark(editor, 'underline')
+                CustomEditor.toggleMark(slateEditor, 'underline')
                 break
               }
               case '`': {
                 event.preventDefault()
-                CustomEditor.toggleMark(editor, 'code')
+                CustomEditor.toggleMark(slateEditor, 'code')
                 break
               }
               case 'h': {
                 event.preventDefault()
 
-                const { selection } = editor
-                const allTextArray = editor.children
-                const anchorPath   = selection.anchor.path[0]
-                const focusPath    = selection.focus.path[0]
+                const { selection } = slateEditor
+                const allTextArray = slateEditor.children
+                const anchorPath = selection.anchor.path[0]
+                const focusPath = selection.focus.path[0]
 
                 let selectedText
                 if (anchorPath === focusPath) {
-                    selectedText = CustomEditor.getSingleParagraphText(allTextArray, selection)
+                  selectedText = CustomEditor.getSingleParagraphText(allTextArray, selection)
                 } else {
-                    selectedText = CustomEditor.getMultiParagraphText(allTextArray, selection)
+                  selectedText = CustomEditor.getMultiParagraphText(allTextArray, selection)
                 }
                 const url = window.prompt(`${selectedText && `顯示的文字: ${selectedText}\n`}請輸入超連結：`)
                 if (!url) return
-                CustomEditor.insertLink(editor, url)
+                CustomEditor.insertLink(slateEditor, url)
                 break
               }
               case 'r': {
                 event.preventDefault()
-                if (CustomEditor.isLinkActive(editor)) {
-                  CustomEditor.unwrapLink(editor)
+                if (CustomEditor.isLinkActive(slateEditor)) {
+                  CustomEditor.unwrapLink(slateEditor)
                 }
                 break
               }
               case 'g': {
                 event.preventDefault()
-                if (CustomEditor.isButtonActive(editor)) {
-                  CustomEditor.unwrapButton(editor)
+                if (CustomEditor.isButtonActive(slateEditor)) {
+                  CustomEditor.unwrapButton(slateEditor)
                 } else {
-                  CustomEditor.insertButton(editor)
+                  CustomEditor.insertButton(slateEditor)
                 }
                 break
               }
@@ -198,40 +161,40 @@ function SlateEditor({ editorContentRef }) {
             }
             if (event.shiftKey && event.ctrlKey) {
               switch (event.key) {
-                case 'm': 
+                case 'm':
                 case 'M': {
                   event.preventDefault()
                   handleClickOpen()
                   break
                 }
-                case 'l': 
+                case 'l':
                 case 'L': {
                   event.preventDefault();
-                  CustomEditor.toggleBlock(editor, 'left');
+                  CustomEditor.toggleBlock(slateEditor, 'left');
                   break
                 }
-                case 'c': 
+                case 'c':
                 case 'C': {
                   event.preventDefault();
-                  CustomEditor.toggleBlock(editor, 'center');
+                  CustomEditor.toggleBlock(slateEditor, 'center');
                   break
                 }
-                case 'r': 
+                case 'r':
                 case 'R': {
                   event.preventDefault();
-                  CustomEditor.toggleBlock(editor, 'right');
+                  CustomEditor.toggleBlock(slateEditor, 'right');
                   break
                 }
-            case 'f': 
+                case 'f':
                 case 'F': {
                   event.preventDefault();
-                  CustomEditor.toggleBlock(editor, 'justify');
+                  CustomEditor.toggleBlock(slateEditor, 'justify');
                   break
                 }
                 case 'x':
                 case 'X': {
                   event.preventDefault()
-                  CustomEditor.toggleMark(editor, 'hide')
+                  CustomEditor.toggleMark(slateEditor, 'hide')
                   break
                 }
               }
@@ -239,19 +202,25 @@ function SlateEditor({ editorContentRef }) {
           }}
           onDOMBeforeInput={event => {
             switch (event.inputType) {
-              case 'formatBold': 
+              case 'formatBold':
                 event.preventDefault()
-                return CustomEditor.toggleFormat(editor, 'bold')
-              case 'formatItalic': 
+                return CustomEditor.toggleFormat(slateEditor, 'bold')
+              case 'formatItalic':
                 event.preventDefault()
-                return CustomEditor.toggleFormat(editor, 'italic')
-              case 'formatUnderline': 
+                return CustomEditor.toggleFormat(slateEditor, 'italic')
+              case 'formatUnderline':
                 event.preventDefault()
-                return CustomEditor.toggleFormat(editor, 'underlined')
+                return CustomEditor.toggleFormat(slateEditor, 'underlined')
             }
           }}
         />
       </Slate>
+      <ImageDialog
+        open={open} setClose={() => setOpen(false)}
+        urlRef={urlRef}
+        altTextRef={altTextRef}
+        hrefRef={hrefRef}
+      />
 
     </div >
   )

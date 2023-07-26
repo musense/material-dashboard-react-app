@@ -2,10 +2,13 @@ import React, { useEffect, useRef, useState, useMemo } from 'react';
 import { useParams } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux';
 import ContentEditorForm from "./../ContentEditorForm.jsx"
-import DetailForm from "./../DetailForm.jsx"
+import DetailForm from "../DetailForm/DetailForm.jsx"
 import * as GetEditorAction from "actions/GetEditorAction.js";
 import MessageDialog from '../../../components/Modal/MessageDialog.jsx';
 import useIEditorResult from '../../../hook/useIEditorResult.js';
+import * as GetSlateAction from "actions/GetSlateAction";
+import useSetEditorDefaultValue from '../../../hook/useSetEditorDefaultValue.js';
+
 function IEditor() {
   const alertUser = (e) => {
     window.alert('are you sure?')
@@ -18,7 +21,7 @@ function IEditor() {
   const returnMessage = useSelector((state) => state.getEditorReducer.errorMessage);
   const previewID = useSelector((state) => state.getEditorReducer.previewID);
 
-
+  useSetEditorDefaultValue(editor)
   const [open, setOpen] = React.useState(false);
   const handleClickOpen = () => setOpen(true);
   const handleClose = () => {
@@ -54,6 +57,10 @@ function IEditor() {
     });
   }
 
+
+
+
+
   useEffect(() => {
     if (!editor) {
       requestEditorByID(id)
@@ -68,7 +75,7 @@ function IEditor() {
   const idRef = useRef()
 
   const [preview, setPreview] = useState(false);
- 
+
   function onEditorSave(e) {
     e.preventDefault(e);
 
@@ -127,16 +134,10 @@ function IEditor() {
     <div className={'container'}>
       <div className={'wrapper'}>
         <div className={'left-side'}>
-          <ContentEditorForm
-            ref={contentFormRef}
-            {...contentFormProps}
-          />
+          <ContentEditorForm />
         </div>
         <div className={'right-side'}>
-          <DetailForm
-            ref={detailFormRef}
-            {...detailFormProps}
-          />
+          <DetailForm />
         </div>
       </div>
       <MessageDialog

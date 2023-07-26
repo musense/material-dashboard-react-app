@@ -20,6 +20,10 @@ const DateTimeSelector = React.forwardRef((props, ref) => {
         setDate(dayjs(props.defaultValue))
         setTime(dayjs(props.defaultValue))
     }, [props.defaultValue]);
+    useEffect(() => {
+        if (!currentRef.current) return
+        props.setState(currentRef.current)
+    }, [props.setState, currentRef.current])
     useImperativeHandle(ref, () => {
         return {
             reset: () => {

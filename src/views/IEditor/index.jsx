@@ -1,11 +1,13 @@
 import React, { useEffect, useRef, useState, useMemo, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import ContentEditorForm from "./ContentEditorForm.jsx"
-import DetailForm from "./DetailForm.jsx"
+import DetailForm from "./DetailForm/DetailForm.jsx"
 import * as GetEditorAction from 'actions/GetEditorAction.js';
 import MessageDialog from '../../components/Modal/MessageDialog.jsx';
 
 import useIEditorResult from '../../hook/useIEditorResult.js';
+import useSetEditorDefaultValue from '../../hook/useSetEditorDefaultValue.js';
+
 function NewIEditor() {
 
   const containRef = useRef(null);
@@ -26,12 +28,13 @@ function NewIEditor() {
   const dispatch = useDispatch();
   const contentFormRef = useRef(null)
   const detailFormRef = useRef(null)
-
+  // SET_DEFAULT_FORM_VALUE
   const editor = useSelector((state) => state.getEditorReducer.editor);
   const returnMessage = useSelector((state) => state.getEditorReducer.errorMessage);
   console.log("🚀 ~ file: index.jsx:35 ~ NewIEditor ~ editor:", editor)
   console.log("🚀 ~ file: index.jsx:35 ~ NewIEditor ~ returnMessage:", returnMessage)
 
+  useSetEditorDefaultValue('reset')
   const [open, setOpen] = React.useState(false);
   const handleClickOpen = () => setOpen(true);
   const handleClose = () => {
@@ -186,16 +189,10 @@ function NewIEditor() {
       <div className={'wrapper'}>
         <div className={'left-side'}>
 
-          <ContentEditorForm
-            ref={contentFormRef}
-            {...contentFormProps}
-          />
+          <ContentEditorForm />
         </div>
         <div className={'right-side'}>
-          <DetailForm
-            ref={detailFormRef}
-            {...detailFormProps}
-          />
+          <DetailForm />
         </div>
       </div>
       <MessageDialog

@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo } from 'react';
 
 import { useDispatch, useSelector } from 'react-redux';
 import SingleSelector from './base/Selector';
@@ -10,7 +10,8 @@ export default function SingleClassificationSelect({
   creatable,
   classRef,
   width = null,
-  height = null
+  height = null,
+  setState = null
 }) {
   console.log("🚀 ~ file: SingleClassificationSelect.jsx:10 ~ SingleClassificationSelect ~ width:", width)
 
@@ -61,12 +62,11 @@ export default function SingleClassificationSelect({
   return (
     <SingleSelector
       creatable={creatable}
-      // parentSelected={selected}
-      // parentSetSelected={setSelected}
       selectedRef={classRef}
       options={classOptions}
       controlWidth={width}
       controlHeight={height}
+      setState={setState}
     />
   );
 }

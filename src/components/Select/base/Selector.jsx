@@ -50,7 +50,8 @@ const Selector = ({
   options: defaultOptions,
   selectedRef,
   controlWidth = null,
-  controlHeight = null
+  controlHeight = null,
+  setState = null
 }) => {
   console.log("🚀 ~ file: Selector.jsx:14 ~ creatable:", creatable)
   console.log("🚀 ~ file: Selector.jsx:14 ~ isMulti:", isMulti)
@@ -79,11 +80,12 @@ const Selector = ({
     }
   }, [selectedRef.current]);
 
-  const onChange = (newValue, actionMeta) => {
+  const onChange = useCallback((newValue, actionMeta) => {
     setSelected(newValue);
     // parentSetSelected(newValue)
     selectedRef.current = newValue;
-  }
+    setState && setState(newValue)
+  }, [setState])
 
   const onSortEnd = ({ oldIndex, newIndex }) => {
     const newValue = arrayMove(selected, oldIndex, newIndex);

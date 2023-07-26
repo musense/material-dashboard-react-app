@@ -73,12 +73,9 @@ input[name='film-checkbox'] {
 
 .preview-image-wrapper {
   position: relative;
-  /* background-size: cover; */
-  background-size: contain;
-  background-position: center;
-  background-repeat: no-repeat;
   background-color: blueviolet;
   aspect-ratio: 16 / 9;
+  overflow: hidden;
 }
 
 .preview-image-wrapper::before {
@@ -95,13 +92,13 @@ input[name='film-checkbox'] {
   white-space: nowrap;
 }
 
-.preview-image-wrapper::after {
+/* .preview-image-wrapper::after {
   content: attr(data-attr);
   display: block;
   position: absolute;
   top: -1.5rem;
   left: 0;
-}
+} */
 
 .preview-image-wrapper>iframe {
   position: absolute;

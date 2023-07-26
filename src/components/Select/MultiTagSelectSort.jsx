@@ -9,7 +9,8 @@ import { RESET_SELECTED_CLASS } from 'actions/GetClassAction';
 export default function MultiTagSelectSort({
   creatable = false,
   tagArrayRef,
-  width = null
+  width = null,
+  setState = null
 }) {
   console.log("🚀 ~ file: MultiTagSelectSort.jsx:9 ~ MultiTagSelectSort ~ tagArrayRef:", tagArrayRef)
 
@@ -19,6 +20,8 @@ export default function MultiTagSelectSort({
   //   '🚀 ~ file: MultiTagSelectSort.tsx:18 ~ MultiTagSelectSort ~ tagList:',
   //   tagList
   // );
+
+
   const dispatch = useDispatch();
   useEffect(() => {
     switch (reset) {
@@ -43,6 +46,7 @@ export default function MultiTagSelectSort({
     }));
   }, [tagList]);
 
+
   return (
     <Selector
       isMulti
@@ -50,6 +54,7 @@ export default function MultiTagSelectSort({
       selectedRef={tagArrayRef}
       options={tagOptions}
       controlWidth={width}
+      setState={setState}
     />
   );
 }

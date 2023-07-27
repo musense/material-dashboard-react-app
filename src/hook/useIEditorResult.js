@@ -19,6 +19,12 @@ export default function useIEditorResult(message, editor) {
                 setSuccess(false)
                 return
             }
+            case 'duplicate key error': {
+                setTitle('Failed!')
+                setContent('文章標題不可重複！')
+                setSuccess(false)
+                return
+            }
             case 'add successfully': {
                 if (!editor) return
                 setTitle('Success')
@@ -37,6 +43,7 @@ export default function useIEditorResult(message, editor) {
             }
             case 'content title required!': {
                 setTitle('Warning')
+                setContent('文章標題與文案為必填！')
                 setSuccess(false)
                 return
             }
@@ -70,13 +77,14 @@ export default function useIEditorResult(message, editor) {
                 setSuccess(false)
                 return
             }
+            
             case '--reset-error-message': {
                 setTitle(null)
                 setContent(null)
                 setSuccess(null)
                 return
             }
-
+            case 'check__OK!':
             default:
                 break;
         }

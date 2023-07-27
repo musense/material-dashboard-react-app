@@ -2,37 +2,37 @@ import { put } from 'redux-saga/effects';
 
 const bend2FendMap = new Map([
     ['_id', '_id'],
-    ['headTitle', 'webHeader.title'],
-    ['headKeyword', 'webHeader.keywords'],
-    ['headDescription', 'webHeader.description'],
+    ['headTitle', 'webHeader.headTitle'],
+    ['headKeyword', 'webHeader.headKeyword'],
+    ['headDescription', 'webHeader.headDescription'],
     ['manualUrl', 'webHeader.manualUrl'],
     ['sitemapUrl', 'webHeader.customUrl'],
     ['title', 'content.title'],
     ['content', 'content.content'],
-    ['categories', 'classifications'],
+    ['categories', 'categories'],
     ['tags', 'tags'],
     ['media.altText', 'media.altText'],
-    ['contentImagePath', 'media.banner'],
-    ['homeImagePath', 'media.thumbnail'],
-    ['hidden', 'hide'],
+    ['contentImagePath', 'media.contentImagePath'],
+    ['homeImagePath', 'media.homeImagePath'],
+    ['hide', 'hide'],
     ['scheduledAt', 'scheduleTime'],
 ])
 
 const fend2BendMap = new Map([
     ['_id', '_id'],
-    ['webHeader.title', 'headTitle'],
-    ['webHeader.keywords', 'headKeyword'],
-    ['webHeader.description', 'headDescription'],
+    ['webHeader.headTitle', 'headTitle'],
+    ['webHeader.headKeyword', 'headKeyword'],
+    ['webHeader.headDescription', 'headDescription'],
     ['webHeader.manualUrl', 'manualUrl'],
     ['webHeader.customUrl', 'sitemapUrl'],
     ['content.title', 'title'],
     ['content.content', 'content'],
-    ['classifications', 'categories'],
+    ['categories', 'categories'],
     ['tags', 'tags'],
     ['media.altText', 'altText'],
-    ['media.banner', 'contentImagePath'],
-    ['media.thumbnail', 'homeImagePath'],
-    ['hide', 'hidden'],
+    ['media.contentImagePath', 'contentImagePath'],
+    ['media.homeImagePath', 'homeImagePath'],
+    ['hide', 'hide'],
     ['scheduleTime', 'scheduledAt'],
     ['draft', 'draft'],
 ])
@@ -68,24 +68,24 @@ export function toFrontendData(responseData) {
                 }
                 ))
                 : [],
-            classifications: item.categories ? {
+            categories: item.categories ? {
                 value: item.categories._id,
                 label: item.categories.name,
             } : null,
             webHeader: {
-                title: item.headTitle || '',
-                description: item.headDescription || '',
-                keywords: item.headKeyword || '',
+                headTitle: item.headTitle || '',
+                headDescription: item.headDescription || '',
+                headKeyword: item.headKeyword || '',
                 manualUrl: item.manualUrl || '',
                 customUrl: item.sitemapUrl || '',
             },
             media: {
-                banner: item.contentImagePath || '',
-                thumbnail: item.homeImagePath || '',
+                contentImagePath: item.contentImagePath || '',
+                homeImagePath: item.homeImagePath || '',
                 altText: item.altText || '',
             },
             pageView: item.pageView,
-            hide: item.hidden || false,
+            hide: item.hide || false,
             createDate: item.createdAt,
             updateDate: item.updatedAt,
             sitemapUrl: item.sitemapUrl,
@@ -127,24 +127,24 @@ export function toFrontendData(responseData) {
                 }
                 ))
                 : [],
-            classifications: responseData.categories ? {
+            categories: responseData.categories ? {
                 value: responseData.categories._id,
                 label: responseData.categories.name,
             } : null,
             webHeader: {
-                title: responseData.headTitle || '',
-                description: responseData.headDescription || '',
-                keywords: responseData.headKeyword || '',
+                headTitle: responseData.headTitle || '',
+                headDescription: responseData.headDescription || '',
+                headKeyword: responseData.headKeyword || '',
                 manualUrl: responseData.manualUrl || '',
                 customUrl: responseData.sitemapUrl || '',
             },
             media: {
-                banner: responseData.contentImagePath || '',
-                thumbnail: responseData.homeImagePath || '',
+                contentImagePath: responseData.contentImagePath || '',
+                homeImagePath: responseData.homeImagePath || '',
                 altText: responseData.altText || '',
             },
             pageView: responseData.pageView,
-            hide: responseData.hidden || false,
+            hide: responseData.hide || false,
             createDate: responseData.createdAt,
             updateDate: responseData.updatedAt,
             sitemapUrl: responseData.sitemapUrl,
@@ -157,55 +157,41 @@ export function toFrontendData(responseData) {
     }
 }
 
-export function toBackendData(requestData) {
-    return {
-        headTitle: requestData.webHeader.title,
-        headKeyword: requestData.webHeader.keywords,
-        headDescription: requestData.webHeader.description,
-        title: requestData.content.title,
-        content: requestData.content.content,
-        categories: requestData.classifications,
-        manualUrl: requestData.webHeader.href,
-        altText: requestData.media.altText,
-        tags: requestData.tags,
-        // top: requestData.setTop,
-        hidden: requestData.hide,
-        draft: requestData.draft,
-        // homeImagePath: requestData.media.banner,
-    }
-}
-
 export function toBackendFormData(requestData) {
-    console.group('toBackendFormData');
-    console.log("🚀 ~ file: apiHelperFunc.js:128 ~ toBackendFormData ~ requestData:", requestData)
-    const requestForm = new FormData();
+    const formData = new FormData()
+    formData.append('title', requestData.title)
+    formData.append('content', JSON.stringify(requestData.content))
+    if (requestData.webHeader) {
+        Object.entries(requestData.webHeader).forEach(([key, value]) => {
+            formData.append(key, JSON.stringify(value))
+        })
+    }
+    if (requestData.tags) {
+        formData.append('tags', JSON.stringify(requestData.tags))
+    }
+    if (requestData.categories) {
+        formData.append('categories', JSON.stringify([requestData.categories]))
+    }
+    if (requestData.media) {
+        Object.entries(requestData.media).forEach(([key, value]) => {
+            if (key.toLowerCase().includes('image')) {
+                formData.append(key, new Blob([value], { type: 'text/plain' }))
+            } else {
+                formData.append(key, JSON.stringify(value))
+            }
 
-    requestData.forEach((value, key) => {
-        if (Array.isArray(value)) {
-            requestForm.append(fend2BendMap.get(`${key}`), JSON.stringify(value))
-        } else if (value && typeof value === 'object') {
-            value.forEach((v, k) => {
-                if (`${key}.${k}` === `media.banner`) {
-                    typeof v === 'object' && requestForm.append(fend2BendMap.get(`${key}.${k}`), v)
-                    typeof v === 'string' && requestForm.append(fend2BendMap.get(`${key}.${k}`), new Blob([v], { type: 'text/plain' }))
-                } else if (`${key}.${k}` === `media.thumbnail`) {
-                    console.log(`🚀 ~ file: apiHelperFunc.js:179 ~ value.forEach ~ v === null ?:`, v === null)
-                    v !== null && requestForm.append(fend2BendMap.get(`${key}.${k}`), new Blob([v], { type: 'text/plain' }))
-                } else {
-                    requestForm.append(fend2BendMap.get(`${key}.${k}`), JSON.stringify(v))
-                }
-            })
-        } else {
-            requestForm.append(fend2BendMap.get(`${key}`), JSON.stringify(value))
-        }
-    })
+        })
+    }
+    if (requestData.publishInfo) {
+        Object.entries(requestData.publishInfo).forEach(([key, value]) => {
+            formData.append(key, JSON.stringify(value))
+        })
+    }
+    if (requestData.draft) {
+        formData.append('draft', JSON.stringify(requestData.draft))
+    }
 
-    // console.log("🚀 ~ file: apiHelperFunc.js:170 ~ toBackendFormData ~ requestForm:", requestForm)
-    const formDataObject = Object.fromEntries(requestForm)
-    console.log("🚀 ~ file: apiHelperFunc.js:172 ~ toBackendFormData ~ formDataObject:", formDataObject)
-
-    console.groupEnd('toBackendFormData');
-    return requestForm
+    return formData
 }
 
 

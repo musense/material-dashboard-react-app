@@ -1,4 +1,5 @@
 import * as GetEditorAction from '../actions/GetEditorAction';
+import * as GetSlateAction from '../actions/GetSlateAction';
 import { errorMessage } from './errorMessage';
 
 const initialState = {
@@ -9,7 +10,7 @@ const initialState = {
     updateDate: 'asc',
     status: 'asc',
     pageView: 'asc',
-    'classifications.label': 'asc',
+    'categories.label': 'asc',
   },
   showList: null,
   titleList: null,
@@ -59,9 +60,15 @@ const getEditorReducer = (state = initialState, action) => {
     case GetEditorAction.ADD_EDITOR_FAIL:
     case GetEditorAction.UPDATE_EDITOR_FAIL:
     case GetEditorAction.DELETE_EDITOR_FAIL: {
+      let errorMessage;
+      if (action.payload.errorMessage.indexOf('E11000 duplicate key error') !== -1) {
+        errorMessage = 'duplicate key error'
+      } else {
+        errorMessage = action.payload.errorMessage
+      }
       return {
         ...state,
-        errorMessage: action.payload.errorMessage
+        errorMessage: errorMessage
       }
     }
     case GetEditorAction.REQUEST_EDITOR_TITLE_LIST_SUCCESS:
@@ -169,6 +176,11 @@ const getEditorReducer = (state = initialState, action) => {
       return {
         ...state,
         errorMessage: action.payload.message
+      }
+    case GetSlateAction.CHECK_BEFORE_SUBMIT:
+      return {
+        ...state,
+        errorMessage: action.payload.errorMessage
       }
     default: {
       return {

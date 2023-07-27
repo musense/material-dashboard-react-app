@@ -15,8 +15,11 @@ function IEditor() {
   const { id } = useParams();
   console.log("🚀 ~ file: index.jsx:30 ~ IEditor ~ id:", id)
   const editor = useSelector((state) => state.getEditorReducer.editor);
-  const returnMessage = useSelector((state) => state.getEditorReducer.errorMessage);
+  // const returnMessage = useSelector((state) => state.getEditorReducer.errorMessage);
   const previewID = useSelector((state) => state.getEditorReducer.previewID);
+  
+  const returnMessage = useSelector((state) => state.getSlateReducer.errorMessage);
+  console.log("🚀 ~ file: index.jsx:22 ~ IEditor ~ returnMessage:", returnMessage)
 
   useSetEditorDefaultValue(editor)
   const [open, setOpen] = React.useState(false);

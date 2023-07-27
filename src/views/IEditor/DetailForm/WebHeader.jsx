@@ -1,21 +1,21 @@
 import React from "react";
 
-export default function WebHeader({ title, onPropertyChange, description, keywords, manualUrl, customUrl }) {
+export default function WebHeader({ headTitle, onPropertyChange, headDescription, headKeyword, manualUrl, customUrl }) {
     return <section id="webHeader">
         <div >
-            <label htmlFor='title'>title</label>
-            <input type='text' name='title'
-                value={title} onChange={e => onPropertyChange(e.target.value, 'title', 'webHeader')} />
+            <label htmlFor='headTitle'>headTitle</label>
+            <input type='text' name='headTitle'
+                value={headTitle} onChange={e => onPropertyChange(e.target.value, 'headTitle', 'webHeader')} />
         </div>
         <div >
-            <label htmlFor='description'>description</label>
-            <input type='text' name='description'
-                value={description} onChange={e => onPropertyChange(e.target.value, 'description', 'webHeader')} />
+            <label htmlFor='headDescription'>headDescription</label>
+            <input type='text' name='headDescription'
+                value={headDescription} onChange={e => onPropertyChange(e.target.value, 'headDescription', 'webHeader')} />
         </div>
         <div >
-            <label htmlFor='keywords'>keywords</label>
-            <input type='text' name='keywords'
-                value={keywords} onChange={e => onPropertyChange(e.target.value, 'keywords', 'webHeader')} />
+            <label htmlFor='headKeyword'>headKeyword</label>
+            <input type='text' name='headKeyword'
+                value={headKeyword} onChange={e => onPropertyChange(e.target.value, 'headKeyword', 'webHeader')} />
         </div>
         <div >
             <label htmlFor='custom-url'>自訂網址</label>
@@ -25,8 +25,9 @@ export default function WebHeader({ title, onPropertyChange, description, keywor
         <div >
             <label htmlFor='real-url'>前台顯示網址</label>
             {manualUrl && manualUrl.length > 0
-                ? <div><span
-                >{`p_${manualUrl}.html`}</span></div>
+                ? <div><input readOnly disabled
+                    value={`p_${manualUrl}.html`}
+                /></div>
                 : <div><a
                     target="_blank"
                     rel="noopener noreferrer"

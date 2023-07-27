@@ -15,7 +15,7 @@ const headerMap = {
     headerRow: [
         { name: "序號", patchKey: "serialNumber" },
         { name: "圖片/影片" },
-        { name: "分類", patchKey: "classifications.label" },
+        { name: "分類", patchKey: "categories.label" },
         { name: "標題", patchKey: "content.title", className: "editor-list-title" },
         { name: "狀態", patchKey: "status" },
         { name: "更新日期", patchKey: "updateDate" },

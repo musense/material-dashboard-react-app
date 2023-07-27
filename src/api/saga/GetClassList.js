@@ -8,9 +8,9 @@ function toBackendData(requestData) {
     const request = {
         name: requestData.classification,
         upperCategory: requestData.parentClassification,
-        headTitle: requestData.webHeader.title,
+        headTitle: requestData.webHeader.headTitle,
         keyName: requestData.webHeader.keyname,
-        headDescription: requestData.webHeader.description,
+        headDescription: requestData.webHeader.headDescription,
         headKeyword: requestData.webHeader.keywords,
         manualUrl: requestData.webHeader.route,
     }
@@ -32,7 +32,7 @@ function* GetClassList(payload = 1) {
                     keyName: item.keyName || '',
                     parentClass: item.upperCategory,
                     title: item.headTitle || '',
-                    description: item.headDescription || '',
+                    headDescription: item.headDescription || '',
                     keywords: item.headKeyword || '',
                     customUrl: item.sitemapUrl,
                     manualUrl: '',

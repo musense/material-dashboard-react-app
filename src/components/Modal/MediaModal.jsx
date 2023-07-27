@@ -39,23 +39,23 @@ export default function MediaModal({ open, handleClose, mediaInfo }) {
     const [iframeUrl, setIframeUrl] = useState(undefined);
 
     const getProperty = useCallback((propertyName) => {
-        const indexOf = mediaInfo.banner.indexOf(`${propertyName}="`) + `${propertyName}="`.length;
-        const endIndexOf = mediaInfo.banner.indexOf(`"`, indexOf);
-        const property = mediaInfo.banner.substr(indexOf, endIndexOf - indexOf);
+        const indexOf = mediaInfo.contentImagePath.indexOf(`${propertyName}="`) + `${propertyName}="`.length;
+        const endIndexOf = mediaInfo.contentImagePath.indexOf(`"`, indexOf);
+        const property = mediaInfo.contentImagePath.substr(indexOf, endIndexOf - indexOf);
         return property
     }, [mediaInfo])
 
     useEffect(() => {
         if (!mediaInfo) return
         console.log("🚀 ~ file: MediaModal.jsx:32 ~ MediaModal ~ mediaInfo:", mediaInfo)
-        if (mediaInfo.banner.indexOf('<iframe') !== -1) {
+        if (mediaInfo.contentImagePath.indexOf('<iframe') !== -1) {
             const src = getProperty('src');
             console.log("🚀 ~ file: MediaModal.jsx:41 ~ useEffect ~ src:", src)
             setIsImage(false)
             setIframeUrl(src)
         } else {
             setIsImage(true)
-            setIframeUrl(mediaInfo.banner)
+            setIframeUrl(mediaInfo.contentImagePath)
         }
 
     }, [mediaInfo]);

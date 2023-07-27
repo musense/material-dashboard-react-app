@@ -13,8 +13,8 @@ export default function Media({
     iframeUrl
 }) {
     const onRemoveClick = useCallback(() => {
-        onPropertyChange('', 'banner', 'media')
-        onPropertyChange('', 'thumbnail', 'media')
+        onPropertyChange('', 'contentImagePath', 'media')
+        onPropertyChange('', 'homeImagePath', 'media')
     }, [onPropertyChange])
     const onMediaAltTextChange = useCallback((value) => {
         onPropertyChange(value, 'altText', 'media')

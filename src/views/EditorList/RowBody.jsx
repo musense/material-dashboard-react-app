@@ -126,11 +126,11 @@ export default function RowBody({
                             </Stack>} />
                         }
                         if (rowItem.name === '圖片/影片') {
-                            return <BodyCell key={index} children={titleView.media.banner !== ''
+                            return <BodyCell key={index} children={titleView.media.contentImagePath !== ''
                                 ? (
                                     <img
-                                        src={titleView.media.thumbnail}
-                                        title={titleView.media.banner}
+                                        src={titleView.media.homeImagePath}
+                                        title={titleView.media.contentImagePath}
                                         alt={titleView.media.altText}
                                         onClick={(e) => {
                                             e.stopPropagation();

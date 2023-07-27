@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useCallback, useState } from "react";
 
 import { fetchYoutubeInfo } from '../youtube';
 import styles from '../IEditor.module.css';
@@ -16,43 +16,42 @@ import DetailFormButtonList from "./DetailFormButtonList";
 import useIsImageOrVideo from "../../../hook/useIsImageOrVideo";
 const allowedFileTypes = ["image/png", "image/jpeg", "image/gif"];
 
-const DetailForm = () => {
+const DetailForm = ({ onEditorSave }) => {
 
     const dispatch = useDispatch();
     const detailForm = useSelector((state) => state.getSlateReducer.detailForm);
 
     const { webHeader, media, publishInfo, ...props } = detailForm;
     const {
-        title,
-        description,
-        keywords,
+        headTitle,
+        headDescription,
+        headKeyword,
         manualUrl,
         sitemapUrl: customUrl
     } = webHeader;
 
     const {
         tags,
-        classifications
+        categories
     } = props
-    console.log("🚀 ~ file: DetailForm.jsx:37 ~ DetailForm ~ classifications:", classifications)
+    console.log("🚀 ~ file: DetailForm.jsx:37 ~ DetailForm ~ categories:", categories)
     console.log("🚀 ~ file: DetailForm.jsx:37 ~ DetailForm ~ tags:", tags)
 
     const {
-        banner,
-        thumbnail,
+        contentImagePath,
+        homeImagePath,
         altText
     } = media
 
     const {
-        hidden,
+        hide,
         isScheduled,
-        reservedPublishDateTime
+        scheduledAt
     } = publishInfo
-    const detailFormRef = useRef(null);
 
     const [isError, setIsError] = useState(false);
 
-    const { isImage, iframeUrl } = useIsImageOrVideo(banner)
+    const { isImage, iframeUrl } = useIsImageOrVideo(contentImagePath)
 
     const onPropertyChange = useCallback((value, property, info) => {
         dispatch({
@@ -79,8 +78,8 @@ const DetailForm = () => {
             }
             setIsError(false)
             if (image) {
-                onPropertyChange(URL.createObjectURL(image), 'banner', 'media')
-                onPropertyChange('', 'thumbnail', 'media')
+                onPropertyChange(URL.createObjectURL(image), 'contentImagePath', 'media')
+                onPropertyChange('', 'homeImagePath', 'media')
             }
         },
         removeImage() {
@@ -98,29 +97,29 @@ const DetailForm = () => {
             );
             const youtubeInfo = await fetchYoutubeInfo(youtubeID);
             if (youtubeInfo) {
-                onPropertyChange(youtubeInfo.html, 'banner', 'media')
-                onPropertyChange(youtubeInfo.thumbnail_url, 'thumbnail', 'media')
+                onPropertyChange(youtubeInfo.html, 'contentImagePath', 'media')
+                onPropertyChange(youtubeInfo.thumbnail_url, 'homeImagePath', 'media')
             }
         },
         removeFilm() {
-            onPropertyChange('', 'banner', 'media')
-            onPropertyChange('', 'thumbnail', 'media')
+            onPropertyChange('', 'contentImagePath', 'media')
+            onPropertyChange('', 'homeImagePath', 'media')
         },
     }
 
     return (
         <form name='ieditor-detail-form' >
-            <WebHeader title={title}
+            <WebHeader headTitle={headTitle}
                 onPropertyChange={onPropertyChange}
-                description={description}
-                keywords={keywords}
+                headDescription={headDescription}
+                headKeyword={headKeyword}
                 manualUrl={manualUrl}
                 customUrl={customUrl} />
             <Tags
                 tags={tags}
                 onPropertyChange={onPropertyChange} />
             <Classification
-                classifications={classifications}
+                categories={categories}
                 onPropertyChange={onPropertyChange} />
             <Media
                 styles={styles}
@@ -132,11 +131,14 @@ const DetailForm = () => {
                 iframeUrl={iframeUrl} />
             <PublishInfo
                 styles={styles}
-                hidden={hidden}
+                hide={hide}
                 onPropertyChange={onPropertyChange}
                 isScheduled={isScheduled}
-                reservedPublishDateTime={reservedPublishDateTime} />
-            <DetailFormButtonList styles={styles} />
+                scheduledAt={scheduledAt} />
+            <DetailFormButtonList
+                styles={styles}
+                onEditorSave={onEditorSave}
+            />
         </form >
     );
 }

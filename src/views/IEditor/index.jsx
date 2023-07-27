@@ -1,16 +1,15 @@
-import React, { useEffect, useRef, useState, useMemo, useCallback } from 'react';
+import React, { useEffect, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import ContentEditorForm from "./ContentEditorForm.jsx"
 import DetailForm from "./DetailForm/DetailForm.jsx"
 import * as GetEditorAction from 'actions/GetEditorAction.js';
+import * as GetSlateAction from 'actions/GetSlateAction.js';
 import MessageDialog from '../../components/Modal/MessageDialog.jsx';
 
 import useIEditorResult from '../../hook/useIEditorResult.js';
 import useSetEditorDefaultValue from '../../hook/useSetEditorDefaultValue.js';
 
 function NewIEditor() {
-
-  const containRef = useRef(null);
 
   // useEffect(() => {
   //   const handleBeforeUnload = (event) => {
@@ -26,23 +25,38 @@ function NewIEditor() {
   // }, []);
 
   const dispatch = useDispatch();
-  const contentFormRef = useRef(null)
-  const detailFormRef = useRef(null)
-  // SET_DEFAULT_FORM_VALUE
-  const editor = useSelector((state) => state.getEditorReducer.editor);
-  const returnMessage = useSelector((state) => state.getEditorReducer.errorMessage);
-  console.log("🚀 ~ file: index.jsx:35 ~ NewIEditor ~ editor:", editor)
-  console.log("🚀 ~ file: index.jsx:35 ~ NewIEditor ~ returnMessage:", returnMessage)
 
+  const {
+    submitState: editor,
+    errorMessage: returnMessage
+  } = useSelector((state) => state.getSlateReducer);
+  const errorMessage = useSelector((state) => state.getEditorReducer.errorMessage);
+  const message = getErrorMessage(errorMessage, returnMessage)
+
+  function getErrorMessage(errorMessage, returnMessage) {
+    console.log("🚀 ~ file: index.jsx:40 ~ getErrorMessage ~ returnMessage:", returnMessage)
+    console.log("🚀 ~ file: index.jsx:40 ~ getErrorMessage ~ errorMessage:", errorMessage)
+    if (errorMessage) {
+      return errorMessage;
+    }
+    if (returnMessage) {
+      return returnMessage;
+    }
+    return null;
+
+  }
+
+  console.log("🚀 ~ file: index.jsx:35 ~ NewIEditor ~ editor:", editor)
+  console.log("🚀 ~ file: index.jsx:35 ~ NewIEditor ~ message:", message)
   useSetEditorDefaultValue('reset')
   const [open, setOpen] = React.useState(false);
   const handleClickOpen = () => setOpen(true);
   const handleClose = () => {
     setOpen(false)
     dispatch({
-      type: GetEditorAction.SET_ERROR_MESSAGE,
+      type: GetSlateAction.CHECK_BEFORE_SUBMIT,
       payload: {
-        message: '--reset-error-message',
+        errorMessage: '--reset-error-message',
       }
     })
   }
@@ -53,146 +67,49 @@ function NewIEditor() {
     id,
     sitemapUrl,
     success
-  } = useIEditorResult(returnMessage, editor)
+  } = useIEditorResult(message, editor)
+  console.log("🚀 ~ file: index.jsx:74 ~ NewIEditor ~ id:", id)
 
   useEffect(() => {
     if (title) handleClickOpen()
   }, [title, content]);
 
-  const [preview, setPreview] = useState(false);
+  useEffect(() => {
+    if (message !== 'check__OK!') return
+    onEditorSave(editor)
+  }, [message, editor]);
 
-  function onDraftEditorSave() {
-    onEditorSave(null, false)
-  }
-  //* e exists means that the context was not draft
-  function onEditorSave(e = null, checkValidity = true) {
+  const onEditorSave = useCallback((data) => {
+    console.log("🚀 ~ file: index.jsx:74 ~ onEditorSave ~ data:", data)
 
-    e && e.preventDefault();
+    // if (preview) {
+    //   dispatch({
+    //     type: GetEditorAction.PREVIEW_EDITOR,
+    //     payload: {
+    //       data: formData
+    //     },
+    //   })
+    //   return
+    // }
 
-    const contentFormData = contentFormRef.current.getFormData();
-    const detailFormData = detailFormRef.current.getFormData();
-    const checkFormSizeData = new Map([
-      ...contentFormData,
-      ...detailFormData
-    ])
-
-    console.log("🚀 ~ file: index.jsx:121 ~ onEditorSave ~ checkFormSizeData:", checkFormSizeData)
-    console.log("🚀 ~ file: index.jsx:121 ~ onEditorSave ~ contentFormData:", contentFormData)
-    console.log("🚀 ~ file: index.jsx:121 ~ onEditorSave ~ detailFormData:", detailFormData)
-    if (checkValidity) {
-      if (checkFormSizeData === undefined || checkFormSizeData.size === 0) {
-        console.log('nothing to add!!!');
-        if (e) {
-          dispatch({
-            type: GetEditorAction.SET_ERROR_MESSAGE,
-            payload: {
-              message: 'nothing to add!',
-            }
-          })
-          return
-        }
-      }
-    }
-    const formData = new Map([
-      ...checkFormSizeData
-    ])
-    console.log("🚀 ~ file: index.jsx:121 ~ onEditorSave ~ formData:", formData)
-
-    const contentState = formData.has('content')
-    console.log("🚀 ~ file: index.jsx:121 ~ onEditorSave ~ noContentState:", contentState)
-    const contentTitleState = formData.has('content') && formData.get('content').has('title')
-    const contentContentState = formData.has('content') && formData.get('content').has('content')
-    console.log("🚀 ~ file: index.jsx:121 ~ onEditorSave ~ noContentTitleState:", contentTitleState)
-    console.log("🚀 ~ file: index.jsx:121 ~ onEditorSave ~ noContentContentState:", contentContentState)
-
-    if (checkValidity) {
-      if (!contentState) {
-        console.log('content title required!');
-        dispatch({
-          type: GetEditorAction.SET_ERROR_MESSAGE,
-          payload: {
-            message: 'content title required!',
-          }
-        })
-        return
-      }
-      if (contentState && !contentTitleState) {
-        console.log('title required!');
-        dispatch({
-          type: GetEditorAction.SET_ERROR_MESSAGE,
-          payload: {
-            message: 'title required!',
-          }
-        })
-        return
-      }
-      if (contentState && !contentContentState) {
-        console.log('content required!');
-        dispatch({
-          type: GetEditorAction.SET_ERROR_MESSAGE,
-          payload: {
-            message: 'content required!',
-          }
-        })
-        return
-      }
-    }
-
-    if (preview) {
-      dispatch({
-        type: GetEditorAction.PREVIEW_EDITOR,
-        payload: {
-          data: formData
-        },
-      })
-      return
-    }
-    if (checkValidity) {
-      if (formData === undefined || formData.size === 0) {
-        console.log('nothing to add!');
-        dispatch({
-          type: GetEditorAction.SET_ERROR_MESSAGE,
-          payload: {
-            message: 'nothing to add!',
-          }
-        })
-        return
-      }
-    }
-    if (!checkValidity) {
-      formData.set('draft', true)
-    }
     // return
     dispatch({
       type: GetEditorAction.ADD_EDITOR,
       payload: {
-        data: formData,
-        draft: formData.get('draft')
+        data: data,
+        draft: false
       },
     })
-  }
-
-
-
-  const detailFormProps = useMemo(() => ({
-    editor,
-    onEditorSave,
-  }), [editor, onEditorSave])
-
-  const contentFormProps = useMemo(() => ({
-    editor,
-    onEditorSave,
-  }), [editor, onEditorSave])
+  }, [dispatch])
 
   return (
-    <div ref={containRef} className={'container'}>
+    <div className={'container'}>
       <div className={'wrapper'}>
         <div className={'left-side'}>
-
           <ContentEditorForm />
         </div>
         <div className={'right-side'}>
-          <DetailForm />
+          <DetailForm onEditorSave={onEditorSave} />
         </div>
       </div>
       <MessageDialog

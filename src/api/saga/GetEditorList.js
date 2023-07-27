@@ -99,14 +99,18 @@ function* SearchEditor(payload) {
 // POST
 function* AddEditor(payload) {
     try {
-        const { draft } = payload
+        const { data, draft } = payload
+        console.log("🚀 ~ file: GetEditorList.js:103 ~ function*AddEditor ~ data:", data)
         let response
-        const requestFormData = toBackendFormData(payload.data)
+        const requestFormData = toBackendFormData(data)
+        console.log("🚀 ~ file: GetEditorList.js:105 ~ function*AddEditor ~ requestFormData:", requestFormData)
         if (!draft) {
             //* 不是草稿時執行以下程式
             if (typeof requestFormData.get('contentImagePath') === 'object') {
                 response = yield formInstance.post(`/editor`, requestFormData);
             } else if (typeof requestFormData.get('contentImagePath') === 'string') {
+                response = yield instance.post(`/editor`, requestFormData);
+            } else {
                 response = yield instance.post(`/editor`, requestFormData);
             }
         } else {
@@ -115,6 +119,8 @@ function* AddEditor(payload) {
                 response = yield formInstance.post(`/draftEditor`, requestFormData);
             } else if (typeof requestFormData.get('contentImagePath') === 'string') {
                 response = yield instance.post(`/draftEditor`, requestFormData);
+            } else {
+                response = yield instance.post(`/editor`, requestFormData);
             }
         }
 

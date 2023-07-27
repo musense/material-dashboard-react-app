@@ -18,7 +18,7 @@ export default function useSetTagFormValue(tag, formRef) {
 
         form._id.value = tag._id
         form.name.value = tag.name
-        form.title.value = tag.webHeader.title
+        form.title.value = tag.webHeader.headTitle
         form.description.value = tag.webHeader.description
         form.keywords.value = tag.webHeader.keywords
         setCustomUrl(tag.webHeader.customUrl)

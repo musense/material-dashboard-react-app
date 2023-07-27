@@ -1,8 +1,7 @@
-import React, { useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState } from "react";
+import React, { useCallback } from "react";
 import SlateEditor from '../../components/SlateEditor/SlateEditor';
 import { useDispatch, useSelector } from "react-redux";
 import * as GetSlateAction from 'actions/GetSlateAction';
-import useSetDefaultRef from "../../hook/useSetDefaultRef";
 
 const ContentEditorForm = () => {
   const dispatch = useDispatch();
@@ -50,7 +49,5 @@ const ContentEditorForm = () => {
     </form>
   );
 }
-
-
 
 export default ContentEditorForm;

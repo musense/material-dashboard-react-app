@@ -48,7 +48,7 @@ export function toBackendData(requestData) {
         name: requestData.name,
         sorting: requestData.sorting,
         popular: requestData.popular,
-        headTitle: requestData.webHeader.title,
+        headTitle: requestData.webHeader.headTitle,
         headKeyword: requestData.webHeader.keywords,
         headDescription: requestData.webHeader.description,
         manualUrl: requestData.webHeader.route,

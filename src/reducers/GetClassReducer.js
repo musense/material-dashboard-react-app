@@ -10,7 +10,7 @@ const initialState = {
     },
     showList: null,
     parentClassOptions: null,
-    classifications: null,
+    categories: null,
     classList: new Map(),
     editorClassList: null,
     editorClass: null,
@@ -122,7 +122,7 @@ const getClassReducer = (state = initialState, action) => {
         case GetClassAction.REQUEST_CLASS:
             return {
                 ...state,
-                classifications: state.classList.get(action.payload),
+                categories: state.classList.get(action.payload),
                 errorMessage: errorMessage.getFinish
             }
         case GetClassAction.REQUEST_CLASS_SUCCESS:

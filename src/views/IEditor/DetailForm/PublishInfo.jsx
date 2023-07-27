@@ -3,9 +3,9 @@ import CustomRadio from '../../../components/CustomRadio/CustomRadio';
 import DateTimeSelector from "../../../components/DateSelector/DateTimeSelector";
 import { Stack } from "@mui/system";
 
-export default function PublishInfo({ styles, hidden, isScheduled, onPropertyChange, reservedPublishDateTime }) {
+export default function PublishInfo({ styles, hide, isScheduled, onPropertyChange, scheduledAt }) {
     const onPublishInfoHiddenChange = useCallback((value) => {
-        onPropertyChange(value, 'hidden', 'publishInfo')
+        onPropertyChange(value, 'hide', 'publishInfo')
     }, [onPropertyChange])
 
     const onPublishInfoIsScheduledChange = useCallback((value) => {
@@ -13,22 +13,22 @@ export default function PublishInfo({ styles, hidden, isScheduled, onPropertyCha
     }, [onPropertyChange])
 
     const onPublishReservedPublishDateTimeChange = useCallback((value) => {
-        onPropertyChange(value, 'reservedPublishDateTime', 'publishInfo')
+        onPropertyChange(value, 'scheduledAt', 'publishInfo')
     }, [onPropertyChange])
     return <section id="publishInfo">
         <div className={styles['input-group']}>
             <Stack direction={"column"} spacing={2}>
                 <CustomRadio
-                    value={hidden}
+                    value={hide}
                     label={'將這篇文章「隱藏」'}
                     setState={onPublishInfoHiddenChange} />
-                {hidden && <CustomRadio
-                    disabled={!hidden}
+                {hide && <CustomRadio
+                    disabled={!hide}
                     defaultValue={isScheduled}
                     label={'是否排程上版'}
                     setState={onPublishInfoIsScheduledChange} />}
-                {hidden && isScheduled && <DateTimeSelector
-                    defaultValue={reservedPublishDateTime}
+                {hide && isScheduled && <DateTimeSelector
+                    defaultValue={scheduledAt}
                     width={'250px'}
                     title={'排程日期'}
                     setState={onPublishReservedPublishDateTimeChange} />}

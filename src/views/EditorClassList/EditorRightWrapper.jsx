@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect } from 'react';
 
 import { useSelector } from 'react-redux';
 import * as GetClassAction from 'actions/GetClassAction';
@@ -27,16 +27,21 @@ const headerMap = {
 };
 
 export default function EditorRightWrapper() {
-    const showList = useSelector((state) => state.getClassReducer.showList);
-    const serverMessage = useSelector((state) => state.getClassReducer.errorMessage);
-    const currentPage = useSelector((state) => state.getClassReducer.currentPage);
-    const totalPage = useSelector((state) => state.getClassReducer.totalPage);
 
-    const dialogMessage = useSelector((state) => state.getDialogReducer.message);
-    const contentData = useSelector((state) => state.getDialogReducer.contentData);
-    const data = useSelector((state) => state.getDialogReducer.data);
-    const confirm = useSelector((state) => state.getDialogReducer.confirm);
-    const messageDialogReturnValue = useSelector((state) => state.getDialogReducer.messageDialogReturnValue);
+    const {
+        showList,
+        currentPage,
+        totalPage,
+        errorMessage: serverMessage
+    } = useSelector((state) => state.getClassReducer);
+
+    const {
+        message: dialogMessage,
+        contentData,
+        data,
+        confirm,
+        messageDialogReturnValue
+    } = useSelector((state) => state.getDialogReducer);
 
     const errorMessage = getErrorMessage(dialogMessage, serverMessage)
     function getErrorMessage(errorMessage, returnMessage) {
@@ -56,6 +61,10 @@ export default function EditorRightWrapper() {
         content,
         success
     } = useEditorListResult(errorMessage, contentData, data)
+
+    useEffect(() => {
+        if (title) handleOpenDialog()
+    }, [title, content]);
 
     const {
         open: openDialog,

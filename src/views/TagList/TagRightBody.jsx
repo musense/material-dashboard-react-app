@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect } from "react";
 import { useSelector } from 'react-redux';
 import * as GetTagsAction from '../../actions/GetTagsAction';
 import CardBody from 'components/Card/CardBody.jsx';
@@ -7,6 +7,8 @@ import MessageDialog from '../../components/Modal/MessageDialog';
 import RowHeader from '../EditorList/RowHeader';
 import RowBody from './RowBody';
 import TagButtonList from './TagButtonList';
+import useModal from "../../hook/useModal";
+import useEditorListResult from "../../hook/useEditorListResult";
 
 const headerMap = {
     headerRow: [
@@ -22,19 +24,48 @@ const headerMap = {
 
 export default function TagRightBody() {
 
-    const showTagList = useSelector((state) => state.getTagsReducer.showTagList);
-    const currentPage = useSelector((state) => state.getTagsReducer.currentPage);
-    const totalPage = useSelector((state) => state.getTagsReducer.totalPage);
+    const {
+        showTagList,
+        currentPage,
+        totalPage,
+        errorMessage: serverMessage
+    } = useSelector((state) => state.getTagsReducer);
 
-    const title = useSelector((state) => state.getDialogReducer.title);
-    const message = useSelector((state) => state.getDialogReducer.message);
-    const confirm = useSelector((state) => state.getDialogReducer.confirm);
-    const data = useSelector((state) => state.getDialogReducer.data);
-    const messageDialogReturnValue = useSelector((state) => state.getDialogReducer.messageDialogReturnValue);
+    const {
+        message: dialogMessage,
+        contentData,
+        data,
+        confirm,
+        messageDialogReturnValue
+    } = useSelector((state) => state.getDialogReducer);
 
-    const [openDialog, setOpenDialog] = useState(false);
-    const handleOpenDialog = () => setOpenDialog(true);
-    const handleCloseDialog = () => setOpenDialog(false);
+    const errorMessage = getErrorMessage(dialogMessage, serverMessage)
+    function getErrorMessage(errorMessage, returnMessage) {
+        console.log("🚀 ~ file: index.jsx:40 ~ getErrorMessage ~ returnMessage:", returnMessage)
+        console.log("🚀 ~ file: index.jsx:40 ~ getErrorMessage ~ errorMessage:", errorMessage)
+        if (errorMessage) {
+            return errorMessage;
+        }
+        if (returnMessage) {
+            return returnMessage;
+        }
+        return null;
+    }
+    const {
+        title,
+        content,
+        success
+    } = useEditorListResult(errorMessage, contentData, data)
+
+    useEffect(() => {
+        if (title) handleOpenDialog()
+    }, [title, content]);
+
+    const {
+        open: openDialog,
+        handleOpen: handleOpenDialog,
+        handleClose: handleCloseDialog
+    } = useModal()
 
     return <CardBody>
         <TagSearchForm />
@@ -54,7 +85,8 @@ export default function TagRightBody() {
         </form>
         <MessageDialog
             dialogTitle={title}
-            dialogContent={message}
+            dialogContent={content}
+            success={success}
             open={openDialog}
             setClose={handleCloseDialog}
             confirm={confirm}

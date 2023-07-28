@@ -1,4 +1,4 @@
-import React,{useEffect, useCallback} from "react";
+import React, { useEffect, useCallback } from "react";
 import BodyCell from '../../components/BodyCell/BodyCell';
 import EditBodyCell from '../../components/EditBodyCell/EditBodyCell';
 import * as GetDialogAction from '../../actions/GetDialogAction';
@@ -37,23 +37,15 @@ export default function RowBody({
         });
     }, [messageDialogReturnValue]);
 
-    const generateTitle = (result) => {
-        return result ? '複製成功' : '複製失敗！';
-    };
-    const generateMessage = (result, sitemapUrl) => {
-        return result ? `你已複製url: ${sitemapUrl}` : '有什麼地方出錯了QQ';
-    };
     const onCopyLink = useCallback(
         (sitemapUrl, result) => {
             console.log(sitemapUrl);
             console.log(result);
-            const title = generateTitle(result);
-            const message = generateMessage(result, sitemapUrl);
             dispatch({
                 type: GetDialogAction.COPY_SITEMAP,
                 payload: {
-                    title,
-                    message,
+                    contentData: result ? sitemapUrl : '',
+                    message: result ? 'copy sitemapUrl successfully' : 'copy sitemapUrl failed',
                 },
             });
             handleOpenDialog();
@@ -67,8 +59,8 @@ export default function RowBody({
                 type: GetDialogAction.ON_DELETE_EDITOR,
                 payload: {
                     data: id,
-                    title: '是否刪除此標籤？',
-                    message: `標籤名稱：${name}`,
+                    contentData: name,
+                    message: `delete class`,
                     confirm: true,
                 },
             });

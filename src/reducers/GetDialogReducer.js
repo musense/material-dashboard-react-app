@@ -1,7 +1,7 @@
 import * as GetDialogAction from '../actions/GetDialogAction';
 
 const initialState = {
-  title: null,
+  contentData: null,
   message: null,
   confirm: null,
   messageDialogReturnValue: null,
@@ -14,14 +14,14 @@ const getDialogReducer = (state = initialState, action) => {
     case GetDialogAction.COPY_SITEMAP:
       return {
         ...state,
-        title: action.payload.title,
+        contentData: action.payload.contentData,
         message: action.payload.message,
       }
     case GetDialogAction.ON_DELETE_EDITOR:
       return {
         ...state,
         data: action.payload.data,
-        title: action.payload.title,
+        contentData: action.payload.contentData,
         message: action.payload.message,
         confirm: action.payload.confirm,
       }
@@ -29,7 +29,7 @@ const getDialogReducer = (state = initialState, action) => {
       return {
         ...state,
         messageDialogReturnValue: action.payload.messageDialogReturnValue,
-        title: null,
+        contentData: null,
         message: null,
         confirm: null,
         data: null

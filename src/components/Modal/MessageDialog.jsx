@@ -64,7 +64,7 @@ export default function MessageDialog({
     setClose()
     if (dialogContent === '您已被登出！'
       || dialogContent === '您已登出！') {
-      navigate('/auth/login-page', { replace: true })
+      // navigate('/auth/login-page', { replace: true })
     }
   }, [setClose, navigate, dispatch])
 

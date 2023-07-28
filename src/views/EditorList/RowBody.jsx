@@ -37,39 +37,34 @@ export default function RowBody({
         });
     }, [messageDialogReturnValue]);
 
-    const onDelete = useCallback((id, title) => {
+    const onDelete = useCallback((id, title) => {     
         dispatch({
             type: GetDialogAction.ON_DELETE_EDITOR,
             payload: {
                 data: id,
-                title: '是否刪除此文章？',
-                message: `標題：${title}`,
+                contentData: title,
+                message: `delete editor`,
                 confirm: true,
-            }
-        })
+            },
+        });
         handleOpenDialog()
     }, [handleOpenDialog])
 
-    const generateTitle = result => {
-        return result ? '複製成功' : '複製失敗！'
-    }
-    const generateMessage = (result, sitemapUrl) => {
-        return result ? `你已複製url: ${sitemapUrl}` : '有什麼地方出錯了QQ'
-    }
-    const onCopyLink = useCallback((sitemapUrl, result) => {
-        console.log(sitemapUrl);
-        console.log(result);
-        const title = generateTitle(result)
-        const message = generateMessage(result, sitemapUrl)
-        dispatch({
-            type: GetDialogAction.COPY_SITEMAP,
-            payload: {
-                title,
-                message
-            }
-        })
-        handleOpenDialog()
-    }, [handleOpenDialog])
+    const onCopyLink = useCallback(
+        (sitemapUrl, result) => {
+            console.log(sitemapUrl);
+            console.log(result);
+            dispatch({
+                type: GetDialogAction.COPY_SITEMAP,
+                payload: {
+                    contentData: result ? sitemapUrl : '',
+                    message: result ? 'copy sitemapUrl successfully' : 'copy sitemapUrl failed',
+                },
+            });
+            handleOpenDialog();
+        },
+        [handleOpenDialog]
+    );
 
     function onEdit(updateEditor) {
         dispatch({

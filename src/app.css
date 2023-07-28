@@ -93,6 +93,7 @@ input[type='file'] {
 .view-list-form>div>div {
   display: flex;
   flex-direction: row;
+  height: fit-content;
 }
 
 .view-list-form>div>div>div {
@@ -105,18 +106,22 @@ input[type='file'] {
   flex: 1;
 }
 
-.view-list-form * .editor-list-title {
-  flex-grow: 3;
-  text-align: left;
-  white-space: pre-wrap;
-}
-
-.view-list-form * .view-editor-image-container>img {
+.view-list-form * .image-container>img {
   height: 100%;
   width: 100%;
   object-fit: cover;
   aspect-ratio: 16/9;
   cursor: pointer;
+}
+
+.view-list-form * .flex-2 {
+  flex-grow: 2;
+}
+
+.view-list-form * .flex-3 {
+  flex-grow: 3;
+  text-align: left;
+  white-space: pre-wrap;
 }
 
 .view-body {
@@ -125,13 +130,12 @@ input[type='file'] {
 }
 
 .view-body>div>div {
-  height: 100px;
-  border: 1px solid #999;
+  min-height: 100px;
+  height: auto;
   display: flex;
   flex-wrap: wrap;
   align-content: center;
   justify-content: center;
-  text-align: center;
 }
 
 .view-body>div:nth-child(2n-1) {
@@ -187,7 +191,7 @@ input[type='file'] {
   width: 1000px;
 }
 
-.tag-list-form .title>input ,
+.tag-list-form .title>input,
 .editor-list-form .title>input {
   height: 40px;
   width: 150px;
@@ -195,7 +199,7 @@ input[type='file'] {
   border-radius: 4px;
 }
 
-.tag-list-form .button-list ,
+.tag-list-form .button-list,
 .editor-list-form .button-list {
   width: 300px;
   display: flex;

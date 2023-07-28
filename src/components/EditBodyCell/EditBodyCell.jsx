@@ -12,8 +12,9 @@ export default function EditBodyCell({
     onDelete,
     deleteID,
     deleteTitle,
+    className
 }) {
-    return <BodyCell children={<Stack spacing={2} direction={'row'}>
+    return <BodyCell className={className} children={<Stack spacing={2} direction={'row'} >
         <CopyToClipboard text={copyText} onCopy={(text, result) => onCopy(text, result)}>
             <div className="edit-icon-wrapper">
                 <input title="複製連結" className="edit-icon-input" type="button" />

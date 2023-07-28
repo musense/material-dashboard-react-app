@@ -84,22 +84,20 @@ export default function RowBody({
                 <div data-attr="data-body-row" key={index}>
                     {headerRow.map((rowItem, index) => {
                         if (rowItem.patchKey && rowItem.patchKey.includes(".")) {
-                            const patchKeys = rowItem.patchKey.split(".");
-                            if (patchKeys[1] === 'title') {
-                                return <BodyCell key={index} children={<span style={{ margin: '0 15px', }}>{titleView.content.title}</span>} className={'editor-list-title'} />
-                            }
-                            return <BodyCell key={index} children={titleView[patchKeys[0]][patchKeys[1]]} />
+                            const patchKeys = rowItem.patchKey.split(".");                           
+                            return <BodyCell key={index} children={titleView[patchKeys[0]][patchKeys[1]]} className={rowItem.className}/>
                         }
                         if (rowItem.patchKey === 'createDate' || rowItem.patchKey === 'updateDate') {
                             return (
                                 <BodyCell
                                     key={index}
                                     children={getUpdateDateTime(titleView[rowItem.patchKey])}
+                                    className={rowItem.className}
                                 />
                             )
                         }
                         if (rowItem.patchKey === 'status') {
-                            return <BodyCell key={index} children={<Stack spacing={1} direction={'column'}>
+                            return <BodyCell key={index} className={rowItem.className} children={<Stack spacing={1} direction={'column'} >
                                 <span style={{
                                     color: titleView.status === '已發布' ? 'green'
                                         : titleView.status === '已排程' ? 'red'
@@ -132,7 +130,10 @@ export default function RowBody({
                                             handleOpen();
                                             setMediaInfo(titleView.media);
                                         }} />
-                                ) : '無圖片/縮圖'} className={'view-editor-image-container'} />
+                                ) : '無圖片/縮圖'} 
+                                className={rowItem.className}
+                                
+                                />
                         }
                         if (rowItem.name === '編輯') {
                             return <EditBodyCell
@@ -144,9 +145,10 @@ export default function RowBody({
                                 onDelete={onDelete}
                                 deleteID={titleView._id}
                                 deleteTitle={titleView.content.title}
+                                className={rowItem.className}
                             />
                         }
-                        return <BodyCell key={index} children={titleView[rowItem.patchKey]} />
+                        return <BodyCell key={index} children={titleView[rowItem.patchKey]} className={rowItem.className} />
                     })}
                 </div>);
         })}

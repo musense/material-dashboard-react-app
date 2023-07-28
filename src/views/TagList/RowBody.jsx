@@ -31,7 +31,7 @@ export default function RowBody({
             type: GetDialogAction.RESET_MODAL_STATUS
         });
     }, [messageDialogReturnValue]);
-    
+
     const onCopyLink = useCallback(
         (sitemapUrl, result) => {
             console.log(sitemapUrl);
@@ -88,12 +88,14 @@ export default function RowBody({
                                     <BodyCell
                                         key={index}
                                         children={tag.sorting}
+                                        className={`is-popular-tag`}
                                     />
                                 )
                                 : (
                                     <BodyCell
                                         key={index}
                                         children={<span>-</span>}
+                                        className={`not-popular-tag`}
                                     />
                                 )
                         }

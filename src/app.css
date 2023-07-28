@@ -124,6 +124,16 @@ input[type='file'] {
   white-space: pre-wrap;
 }
 
+.view-list-form * .is-popular-tag {
+  font-weight: bolder;
+  color: red;
+}
+
+.view-list-form * .not-popular-tag {
+  font-weight: bolder;
+  color: green;
+}
+
 .view-body {
   height: 560px;
   overflow-y: scroll;

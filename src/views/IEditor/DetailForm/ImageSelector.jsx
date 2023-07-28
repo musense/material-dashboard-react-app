@@ -1,15 +1,17 @@
-import React
-    from "react";
+import React, { useRef } from "react";
 import { css, cx } from '@emotion/css';
+import useUploadImage from "../../../hook/useUploadImage";
 
-export default function ImageSelector({ 
-    styles, 
-    onRemoveClick, 
-    onMediaAltTextChange, 
-    isError, 
+export default function ImageSelector({
+    styles,
     altText,
-    mediaHelperFunc 
+    onRemoveClick,
+    onImageChange,
+    onMediaAltTextChange,
 }) {
+
+    const imageUploadRef = useRef(null)
+    const { isError } = useUploadImage(imageUploadRef, onImageChange)
 
     return <div className={`${styles['upload-wrapper']}`}>
         <div>
@@ -21,7 +23,7 @@ export default function ImageSelector({
                                             font-size: 12px;`
                 : css`display:none`}>請選取圖片!!! (jpeg, png, gif)</span>
             <input
-                type='text' 
+                type='text'
                 name='altText'
                 value={altText}
                 onChange={e => onMediaAltTextChange(e.target.value)}
@@ -39,11 +41,12 @@ export default function ImageSelector({
             <label htmlFor='uploadImage'>
                 上傳圖片
                 <input
+                    ref={imageUploadRef}
                     id='uploadImage'
                     type='file'
                     name='uploadImage'
                     accept='image/png, image/jpeg'
-                    onChange={(e) => mediaHelperFunc.previewImage(e)}
+                    // onChange={previewImage}
                     className='image-group' />
             </label>
             <input

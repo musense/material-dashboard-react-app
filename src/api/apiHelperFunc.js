@@ -157,10 +157,12 @@ export function toFrontendData(responseData) {
     }
 }
 
-export function toBackendFormData(requestData) {
+export function toBackendFormData(requestData, createType) {
     const formData = new FormData()
-    formData.append('title', requestData.title)
-    formData.append('content', JSON.stringify(requestData.content))
+    if (createType === 'add_new') {
+        formData.append('title', JSON.stringify(requestData.title))
+        formData.append('content', JSON.stringify(requestData.content))
+    }
     if (requestData.webHeader) {
         Object.entries(requestData.webHeader).forEach(([key, value]) => {
             formData.append(key, JSON.stringify(value))
@@ -174,10 +176,17 @@ export function toBackendFormData(requestData) {
     }
     if (requestData.media) {
         Object.entries(requestData.media).forEach(([key, value]) => {
-            if (key.toLowerCase().includes('image')) {
-                formData.append(key, new Blob([value], { type: 'text/plain' }))
+            if (key === 'contentImagePath') {
+                if (value.indexOf('data:image') !== -1) {
+                    const imageFile = generateImageFile(value);
+                    formData.append('contentImagePath', imageFile)
+                } else {
+                    formData.append('contentImagePath', new Blob([value], { type: 'text/plain' }))
+                }
+            } else if (key === 'homeImagePath') {
+                value !== null && formData.append('homeImagePath', new Blob([value], { type: 'text/plain' }))
             } else {
-                formData.append(key, JSON.stringify(value))
+                formData.append('altText', JSON.stringify(value))
             }
 
         })
@@ -194,6 +203,26 @@ export function toBackendFormData(requestData) {
     return formData
 }
 
+
+function generateImageFile(value) {
+    const dataUrl = value;
+    // Extract the base64-encoded data from the data URI
+    const dataType = dataUrl.split(',')[0].split(':')[1].split(';')[0];
+    const ext = dataType.split('/')[1];
+    const base64Data = dataUrl.split(',')[1];
+    // Decode the base64 data to binary data
+    const binaryData = atob(base64Data);
+    // Convert the binary data to a Uint8Array
+    const uint8Array = new Uint8Array(binaryData.length);
+    for (let i = 0; i < binaryData.length; i++) {
+        uint8Array[i] = binaryData.charCodeAt(i);
+    }
+    // Create a new Blob using the Uint8Array
+    const imageBlob = new Blob([uint8Array]);
+    // Create a new File using the Blob
+    const imageFile = new File([imageBlob], `imageFile.${ext}`, { type: dataType, lastModified: Date.now() });
+    return imageFile;
+}
 
 export function* getErrorMessage(error, patchType) {
     console.log("🚀 ~ file: apiHelperFunc.js:213 ~ getErrorMessage ~ error:", error)

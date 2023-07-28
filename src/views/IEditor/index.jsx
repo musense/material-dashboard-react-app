@@ -109,7 +109,8 @@ function NewIEditor() {
           <ContentEditorForm />
         </div>
         <div className={'right-side'}>
-          <DetailForm onEditorSave={onEditorSave} />
+          <DetailForm
+            createType={'add_new'} />
         </div>
       </div>
       <MessageDialog

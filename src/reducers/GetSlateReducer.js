@@ -32,6 +32,8 @@ const initialState = {
       scheduledAt: ''
     }
   },
+  showUrl:'',
+  updateInitialState: null,
   submitState: null,
   errorMessage: null,
 }
@@ -43,38 +45,51 @@ const getSlateReducer = (state = initialState, action) => {
       const {
         ...props
       } = action.payload.allProps
+      const contentForm = {
+        title: props.content.title || '',
+        content: props.content.content || initialState.contentForm.content,
+      }
+      const detailForm = {
+        webHeader: {
+          headTitle: props.webHeader.headTitle || '',
+          headDescription: props.webHeader.headDescription || '',
+          headKeyword: props.webHeader.headKeyword || '',
+          manualUrl: props.webHeader.manualUrl || '',
+          sitemapUrl: props.sitemapUrl,
+        },
+        tags: props.tags || initialState.detailForm.tags,
+        categories: props.categories || initialState.detailForm.categories,
+        media: {
+          contentImagePath: props.media.contentImagePath,
+          homeImagePath: props.media.homeImagePath,
+          altText: props.media.altText,
+        },
+        publishInfo: {
+          hide: props.hide,
+          isScheduled: props.isScheduled,
+          scheduledAt: props.scheduleTime
+        }
+      }
+
       return {
         ...state,
-        contentForm: {
-          title: props.content.title || '',
-          content: props.content.content || initialState.contentForm.content,
-        },
-        detailForm: {
-          webHeader: {
-            headTitle: props.webHeader.headTitle || '',
-            headDescription: props.webHeader.headDescription || '',
-            headKeyword: props.webHeader.headKeyword || '',
-            manualUrl: props.webHeader.manualUrl || '',
-            sitemapUrl: props.sitemapUrl,
-          },
-          tags: props.tags || initialState.detailForm.tags,
-          categories: props.categories || initialState.detailForm.categories,
-          media: {
-            contentImagePath: props.media.contentImagePath,
-            homeImagePath: props.media.homeImagePath,
-            altText: props.media.altText,
-          },
-          publishInfo: {
-            hide: props.hide,
-            isScheduled: props.isScheduled,
-            scheduledAt: props.scheduleTime
-          }
-        },
+        contentForm: JSON.parse(JSON.stringify(contentForm)),
+        detailForm: JSON.parse(JSON.stringify(detailForm)),
+        updateInitialState: {
+          contentForm: JSON.parse(JSON.stringify(contentForm)),
+          detailForm: JSON.parse(JSON.stringify(detailForm)),
+        }
       }
     }
     case GetSlateAction.RESET_FORM_VALUE: {
       return {
         ...initialState,
+      }
+    }
+    case GetSlateAction.SET_SHOW_URL: {
+      return {
+        ...state,
+        showUrl: action.payload.showUrl,
       }
     }
     case GetSlateAction.SET_PROPERTY: {
@@ -117,24 +132,42 @@ const getSlateReducer = (state = initialState, action) => {
         }
       } else {
         // cloneDeep
-        const trimState = JSON.parse(JSON.stringify({...state.contentForm, ...state.detailForm}))
+        const createType = action.payload.createType
+        console.log("🚀 ~ file: GetSlateReducer.js:129 ~ getSlateReducer ~ createType:", createType)
+        let
+          cachedInitialState,
+          trimmedState
 
-        const trimmedState = recurseCheckAndDelete({...state.contentForm,...state.detailForm}, trimState)
-        console.log("🚀 ~ file: GetSlateReducer.js:141 ~ getSlateReducer ~ state:", state)
-        console.log("🚀 ~ file: GetSlateReducer.js:141 ~ getSlateReducer ~ trimmedState:", trimmedState)
+        const submitState = JSON.parse(JSON.stringify({ ...state.contentForm, ...state.detailForm }))
+
+        if (createType === "add_new") {
+          cachedInitialState = JSON.parse(JSON.stringify({ ...initialState.contentForm, ...initialState.detailForm }))
+          trimmedState = recurseCheckAndDelete(submitState, cachedInitialState, createType)
+        } else if (createType === "update") {
+          cachedInitialState = JSON.parse(JSON.stringify({ ...state.updateInitialState.contentForm, ...state.updateInitialState.detailForm }))
+          trimmedState = recurseCheckAndDelete(submitState, cachedInitialState, createType)
+          errorMessage = generateErrorMessage(trimmedState)
+        } else {
+          throw new Error('invalid createType')
+        }
+
+        console.log("🚀 ~ file: GetSlateReducer.js:139 ~ getSlateReducer ~ cachedInitialState:", cachedInitialState)
+        console.log("🚀 ~ file: GetSlateReducer.js:139 ~ getSlateReducer ~ submitState:", submitState)
+        console.log("🚀 ~ file: GetSlateReducer.js:139 ~ getSlateReducer ~ trimmedState:", trimmedState)
+        // return
         return {
           ...state,
           submitState: trimmedState,
-          errorMessage: 'check__OK!'
+          errorMessage: errorMessage || 'check__OK!'
         }
       }
     }
     case GetUserAction.LOGOUT_USER: {
-          return {
-           ...initialState,
-           errorMessage: '--reset-error-message'
-          }
-        }
+      return {
+        ...initialState,
+        errorMessage: '--reset-error-message'
+      }
+    }
     default:
       return { ...state }
   }
@@ -144,21 +177,58 @@ const getSlateReducer = (state = initialState, action) => {
 export default getSlateReducer
 
 
-function recurseCheckAndDelete(state, trimState) {
-  for (const key in state) {
-    const value = state[key];
-    if (!value || value === '') { delete trimState[key] }
-    else if (typeof value === 'object') {
-      const trimmedState = recurseCheckAndDelete(value, trimState[key])
-      if (Object.values(trimmedState).length === 0) {
-        delete trimState[key]
+function recurseCheckAndDelete(state, initialState, createType) {
+  if (createType === "add_new") {
+    for (const key in initialState) {
+      console.log("🚀 ~ file: GetSlateReducer.js:176 ~ recurseCheckAndDelete ~ key:", key)
+      const value = initialState[key];
+      console.log("🚀 ~ file: GetSlateReducer.js:176 ~ recurseCheckAndDelete ~ value:", value)
+      if (key.toLowerCase().includes('image')) {
+        console.log("🚀 ~ file: GetSlateReducer.js:180 ~ recurseCheckAndDelete ~ key:", key)
+        console.log("🚀 ~ file: GetSlateReducer.js:180 ~ recurseCheckAndDelete ~ state["+key+"]:", state[key])
+        if (state[key] === '') {
+          delete state[key]
+        }
+      } else if (Array.isArray(value)) {
+        if (JSON.stringify(value) === JSON.stringify(state[key])) {
+          delete state[key]
+        }
+      } else if (value && typeof value === 'object') {
+        const trimmedState = recurseCheckAndDelete(state[key], value, createType)
+        if (trimmedState && Object.values(trimmedState).length === 0) {
+          delete state[key]
+        }
+      }
+      if (JSON.stringify(value) === JSON.stringify(state[key])) {
+        delete state[key]
+      }
+    }
+  } else if (createType === "update") {
+    for (const key in initialState) {
+      const value = initialState[key];
+      if (typeof value === 'object' && Array.isArray(value)) {
+        if (JSON.stringify(value) === JSON.stringify(state[key])) {
+          delete state[key]
+        }
+      } else if (typeof value === 'object') {
+        const trimmedState = recurseCheckAndDelete(state[key], value, createType)
+        if (trimmedState && Object.values(trimmedState).length === 0) {
+          delete state[key]
+        }
+      }
+      if (JSON.stringify(value) === JSON.stringify(state[key])) {
+        delete state[key]
       }
     }
   }
 
-  return trimState
+  return state
 }
-function generateErrorMessage(state, initialState) {
+function generateErrorMessage(state, initialState = null) {
+  if (Object.keys(state).length === 0) {
+    return 'nothing to update!'
+  }
+  if (!initialState) return
   if (`${JSON.stringify(state.contentForm)}${JSON.stringify(state.detailForm)}`
     === `${JSON.stringify(initialState.contentForm)}${JSON.stringify(initialState.detailForm)}`) {
     return 'nothing to add!'

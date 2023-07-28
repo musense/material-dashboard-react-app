@@ -1,7 +1,31 @@
-import React from "react";
+import React, { useCallback } from "react";
 import { css, cx } from '@emotion/css';
+import { fetchYoutubeInfo } from '../youtube';
 
-export default function VideoSelector({ styles, onRemoveClick, mediaHelperFunc }) {
+export default function VideoSelector({
+    styles,
+    onRemoveClick,
+    onVideoChange
+}) {
+
+    const previewFilm = useCallback(async () => {
+        onRemoveClick()
+
+        const filmUrl = document.getElementsByName('filmUrl')[0].value;
+
+        // https://www.youtube.com/watch?v=n-WbAWqZ7t4
+        const youtubeID = filmUrl.substring(
+            filmUrl.indexOf('?v=') + 3,
+            filmUrl.length
+        );
+        const youtubeInfo = await fetchYoutubeInfo(youtubeID);
+        if (youtubeInfo) {
+            onVideoChange({
+                iframeUrl: youtubeInfo.html,
+                imageUrl: youtubeInfo.thumbnail_url
+            })
+        }
+    }, [onRemoveClick, onVideoChange])
 
     return <div className={`${styles['upload-wrapper']} `}>
         <div>
@@ -25,7 +49,7 @@ export default function VideoSelector({ styles, onRemoveClick, mediaHelperFunc }
                     id='film-url-preview'
                     type='button'
                     name='film-url-preview'
-                    onClick={() => mediaHelperFunc.previewFilm()}
+                    onClick={previewFilm}
                     className='film-group' />
             </label>
             <input

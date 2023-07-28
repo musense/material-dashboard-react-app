@@ -102,8 +102,11 @@ function* AddEditor(payload) {
         const { data, draft } = payload
         console.log("🚀 ~ file: GetEditorList.js:103 ~ function*AddEditor ~ data:", data)
         let response
-        const requestFormData = toBackendFormData(data)
+        const requestFormData = toBackendFormData(data, 'add_new')
         console.log("🚀 ~ file: GetEditorList.js:105 ~ function*AddEditor ~ requestFormData:", requestFormData)
+        console.log("🚀 ~ file: GetEditorList.js:105 ~ function*AddEditor ~ requestFormData.get('contentImagePath'):", requestFormData.get('contentImagePath'))
+        console.log("🚀 ~ file: GetEditorList.js:105 ~ function*AddEditor ~ typeof requestFormData.get('contentImagePath'):", typeof requestFormData.get('contentImagePath'))
+        // return
         if (!draft) {
             //* 不是草稿時執行以下程式
             if (typeof requestFormData.get('contentImagePath') === 'object') {
@@ -166,15 +169,15 @@ function* PreviewEditor(payload) {
 // PATCH
 function* UpdateEditor(payload) {
     // return
-
+    const { id, data } = payload
     try {
-        const requestFormData = toBackendFormData(payload.data)
+        const requestFormData = toBackendFormData(data, 'update')
         // return
         let response
         if (typeof requestFormData.get('contentImagePath') === 'object') {
-            response = yield formInstance.patch(`/editor/${payload.id}`, requestFormData);
+            response = yield formInstance.patch(`/editor/${id}`, requestFormData);
         } else if (typeof requestFormData.get('contentImagePath') === 'string') {
-            response = yield instance.patch(`/editor/${payload.id}`, requestFormData);
+            response = yield instance.patch(`/editor/${id}`, requestFormData);
         }
         const { message } = yield response.data;
         yield put({

@@ -10,7 +10,18 @@ const initialState = {
     },
     tagList: null,
     showTagList: null,
-    selectedTag: null,
+    selectedTag: {
+        id: null,
+        tagName: '',
+        title: '',
+        description: '',
+        keywords: '',
+        manualUrl: '',
+        customUrl: '',
+        isPopularTag: false,
+        sorting: 0,
+        isEditing: false,
+    },
     selectedIndex: -1,
     currentPage: null,
     totalPage: null,
@@ -20,10 +31,44 @@ const initialState = {
 
 const getTagsReducer = (state = initialState, action) => {
     switch (action.type) {
-        case GetTagsAction.EDITING_TAG:
+        case GetTagsAction.CANCEL_EDITING_TAG: {
             return {
                 ...state,
-                selectedTag: action.payload.data,
+                selectedTag: {
+                    ...initialState.selectedTag,
+                    isEditing: false
+                },
+            }
+        }
+        case GetTagsAction.SET_TAG_PROPERTY: {
+            const { property, value } = action.payload.allProps
+            console.log("🚀 ~ file: GetSlateReducer.js:80 ~ getSlateReducer ~ property:", property)
+            console.log("🚀 ~ file: GetSlateReducer.js:80 ~ getSlateReducer ~ value:", value)
+
+            return {
+                ...state,
+                selectedTag: {
+                    ...state.selectedTag,
+                    [property]: value
+                },
+            }
+        }
+        case GetTagsAction.EDITING_TAG:
+            const tag = action.payload.data
+            return {
+                ...state,
+                selectedTag: {
+                    id: tag._id,
+                    tagName: tag.name,
+                    title: tag.webHeader.title,
+                    description: tag.webHeader.description,
+                    keywords: tag.webHeader.keywords,
+                    manualUrl: tag.webHeader.manualUrl,
+                    customUrl: tag.webHeader.customUrl,
+                    isPopularTag: tag.popular,
+                    sorting: tag.sorting,
+                    isEditing: true,
+                },
             }
         case GetTagsAction.ADD_TAG_SUCCESS:
             return {

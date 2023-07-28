@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useRef, useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import * as GetTagsAction from '../../actions/GetTagsAction';
@@ -14,49 +14,60 @@ import useEditTagResult from '../../hook/useEditTagResult';
 
 import useSetTagFormValue from '../../hook/useSetTagFormValue';
 import MessageDialog from '../../components/Modal/MessageDialog';
+import useModal from '../../hook/useModal';
+import CustomRadio from '../../components/CustomRadio/CustomRadio';
 
 export default function TagLeftWrapper() {
 
     const formRef = useRef(null);
     const dispatch = useDispatch();
     const selectedTag = useSelector((state) => state.getTagsReducer.selectedTag);
-    const returnMessage = useSelector((state) => state.getTagsReducer.errorMessage);
+    const serverMessage = useSelector((state) => state.getTagsReducer.errorMessage);
     console.log("🚀 ~ file: TagLeftWrapper.jsx:25 ~ TagLeftWrapper ~ selectedTag:", selectedTag)
-    console.log("🚀 ~ file: TagLeftWrapper.jsx:54 ~ useEffect ~ returnMessage:", returnMessage)
+    console.log("🚀 ~ file: TagLeftWrapper.jsx:54 ~ useEffect ~ serverMessage:", serverMessage)
 
-    const [open, setOpen] = useState(false);
-    const handleOpen = () => setOpen(true);
-    const handleClose = () => {
-        setOpen(false)
+    const {
+        open,
+        handleOpen,
+        handleClose
+    } = useModal()
+
+    const setClose = useCallback(() => {
+        handleClose()
         dispatch({
             type: GetTagsAction.SET_ERROR_MESSAGE,
             payload: {
                 message: '--reset-error-message',
             }
         })
-    }
+    }, handleClose)
+
     usePressEnterEventHandler(formRef)
     const {
         title,
         content,
         success
-    } = useEditTagResult(returnMessage)
+    } = useEditTagResult(serverMessage)
     console.log("🚀 ~ file: TagLeftWrapper.jsx:58 ~ TagLeftWrapper ~ title:", title)
 
     useEffect(() => {
         if (title) handleOpen()
     }, [title, content]);
 
+
     const {
-        customUrl,
-        setCustomUrl,
+        id,
+        name: tagName,
+        title: tagTitle,
+        description,
+        keywords,
         manualUrl,
-        setManualUrl,
-        popularTag,
-        setPopularTag,
+        customUrl,
+        isPopularTag,
+        sorting,
         isEditing,
-        setIsEditing
     } = useSetTagFormValue(selectedTag, formRef)
+
 
     function onAddNewEditor(e) {
         e.preventDefault()
@@ -64,32 +75,32 @@ export default function TagLeftWrapper() {
         const formData = new FormData(form);
         console.log(Object.fromEntries(formData));
 
-        if (!formData.get('name')) {
+        if (!tagName) {
             dispatch({
                 type: GetTagsAction.SET_ERROR_MESSAGE,
                 payload: {
-                    message: 'please add title',
+                    message: 'please add tag name',
                 }
             })
             return
         }
 
         let tempData = {
-            name: formData.get('name'),
-            sorting: formData.get('sorting'),
+            name: tagName,
+            sorting: sorting,
             webHeader: {
-                title: formData.get('title'),
-                description: formData.get('description'),
-                keywords: formData.get('keywords'),
-                href: formData.get('customUrl'),
-                route: formData.get('manualUrl'),
+                title: tagTitle,
+                description: description,
+                keywords: keywords,
+                href: customUrl,
+                route: manualUrl,
             },
 
         }
 
-        if (formData.get('sorting') !== '') {
-            console.log(`🚀 ~ file: TagLeftWrapper.jsx:101 ~ onAddNewEditor ~ typeof ${parseInt(formData.get('sorting'))}:`, typeof parseInt(formData.get('sorting')))
-            if (typeof parseInt(formData.get('sorting')) !== 'number') {
+        if (sorting !== '') {
+            console.log(`🚀 ~ file: TagLeftWrapper.jsx:101 ~ onAddNewEditor ~ typeof ${parseInt(sorting)}:`, typeof parseInt(sorting))
+            if (typeof parseInt(sorting) !== 'number') {
                 dispatch({
                     type: GetTagsAction.SET_ERROR_MESSAGE,
                     payload: {
@@ -98,7 +109,7 @@ export default function TagLeftWrapper() {
                 })
                 return
             }
-            if (formData.get('sorting') < 0) {
+            if (sorting < 0) {
                 dispatch({
                     type: GetTagsAction.SET_ERROR_MESSAGE,
                     payload: {
@@ -110,7 +121,7 @@ export default function TagLeftWrapper() {
             tempData = {
                 ...tempData,
                 popular: true,
-                sorting: formData.get('sorting')
+                sorting: sorting
             }
 
         }
@@ -125,7 +136,7 @@ export default function TagLeftWrapper() {
                 payload: {
                     data: {
                         ...tempData,
-                        _id: formData.get('_id')
+                        _id: id
                     }
                 },
             });
@@ -142,20 +153,32 @@ export default function TagLeftWrapper() {
     function getForm() {
         return formRef.current;
     }
-    function onReset(e) {
-        e.preventDefault()
-        const form = getForm()
-        form.reset()
-        setManualUrl('')
-        setCustomUrl('')
-    }
 
-    function onCancel(e) {
-        onReset(e)
-        setIsEditing(false)
-    }
+    const onReset = useCallback(() => {
+        dispatch({
+            type: GetTagsAction.CANCEL_EDITING_TAG
+        })
+    }, [dispatch])
 
+    const onCancel = useCallback(() => {
+        onReset()
+    }, [onReset])
 
+    const onPropertyChange = useCallback((value, property) => {
+        dispatch({
+            type: GetTagsAction.SET_TAG_PROPERTY,
+            payload: {
+                allProps: {
+                    property: property,
+                    value: value
+                }
+            }
+        })
+    }, [dispatch])
+
+    const onPopularTagChange = useCallback((value) => {
+        onPropertyChange(value, 'isPopularTag')
+    }, [onPropertyChange])
     return <div className={styles['tag-left-wrapper']}>
         <GridContainer>
             <GridItem xs={12} sm={12} md={12}>
@@ -166,41 +189,51 @@ export default function TagLeftWrapper() {
                     <CardBody>
                         <form ref={formRef} name='class-form' onSubmit={onAddNewEditor}>
                             <div className={styles['input-group']}>
-                                <input type="hidden" name='_id' />
+                                <input type="hidden" name='_id' value={id} onChange={e => onPropertyChange(e.target.value, 'id')} />
                             </div>
                             <div className={styles['input-group']}>
                                 <label htmlFor="name">標籤名稱</label>
-                                <input type="text" name='name' />
+                                <input type="text" name='name' value={tagName} onChange={e => onPropertyChange(e.target.value, 'tagName')} />
                             </div>
                             <div className={styles['input-group']}>
                                 <label htmlFor="title">title</label>
-                                <input type="text" name='title' />
+                                <input type="text" name='title' value={tagTitle} onChange={e => onPropertyChange(e.target.value, 'title')} />
                             </div>
                             <div className={styles['input-group']}>
                                 <label htmlFor="description">description</label>
-                                <input type="text" name='description' />
+                                <input type="text" name='description' value={description} onChange={e => onPropertyChange(e.target.value, 'description')} />
                             </div>
                             <div className={styles['input-group']}>
                                 <label htmlFor="keywords">keywords</label>
-                                <input type="text" name='keywords' />
+                                <input type="text" name='keywords' value={keywords} onChange={e => onPropertyChange(e.target.value, 'keywords')} />
                             </div>
                             <div className={styles['input-group']}>
                                 <label htmlFor="manualUrl">自訂網址</label>
-                                <input type="text" name='manualUrl' onChange={e => setManualUrl(e.target.value)} value={manualUrl} />
+                                <input type="text" name='manualUrl'
+                                    value={manualUrl} onChange={e => onPropertyChange(e.target.value, 'manualUrl')} />
                             </div>
-                            {(manualUrl.length > 0 || customUrl) && (
-                                <div className={styles['input-group']}>
+                            {manualUrl.length > 0 || customUrl
+                                ? <div className={styles['input-group']}>
                                     <label htmlFor="customUrl">前台顯示網址</label>
                                     {manualUrl.length > 0
                                         ? <input readOnly disabled type="text" name='manualUrl' value={`p_${manualUrl}.html`} />
                                         : <div><a target="_blank" rel="noopener noreferrer" href={customUrl}>{customUrl}</a></div>
                                     }
                                 </div>
-                            )}
-                            <div disabled={popularTag} className={styles['input-group']}>
+                                : null
+                            }
+                            <div className={styles['input-group']}>
                                 <label htmlFor="sorting">熱門標籤排序</label>
-                                <input type="number" name='sorting' min={0} />
+                                <CustomRadio
+                                    value={isPopularTag}
+                                    label={'熱門標籤'}
+                                    setState={onPopularTagChange} />
                             </div>
+                            {isPopularTag && <div className={styles['input-group']}>
+                                <label htmlFor="sorting">熱門標籤排序</label>
+                                <input type="number" name='sorting' min={0}
+                                    value={sorting} onChange={e => onPropertyChange(e.target.value, 'sorting')} />
+                            </div>}
                             <div className={styles['left-button-container']}>
                                 {isEditing
                                     ? (<>
@@ -223,8 +256,9 @@ export default function TagLeftWrapper() {
         <MessageDialog
             dialogTitle={title}
             dialogContent={content}
+            success={success}
             open={open}
-            setClose={handleClose}
+            setClose={setClose}
         />
     </div >;
 }

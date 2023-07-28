@@ -28,7 +28,7 @@ export default function useEditTagResult(message) {
                 setSuccess(true)
                 return
             }
-            case 'please add title': {
+            case 'please add tag name': {
                 setTitle('Warning')
                 setContent('請輸入 [標籤名稱]！')
                 setSuccess(false)

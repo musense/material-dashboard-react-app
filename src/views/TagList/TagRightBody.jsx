@@ -25,11 +25,12 @@ const headerMap = {
 export default function TagRightBody() {
 
     const {
-        showTagList,
+        showTagList: showList,
         currentPage,
         totalPage,
         errorMessage: serverMessage
     } = useSelector((state) => state.getTagsReducer);
+    console.log("🚀 ~ file: TagRightBody.jsx:29 ~ TagRightBody ~ showList:", showList)
 
     const {
         message: dialogMessage,
@@ -77,7 +78,7 @@ export default function TagRightBody() {
             <RowHeader headerConfig={headerMap} />
             <RowBody
                 headerConfig={headerMap}
-                showList={showTagList}
+                showList={showList}
                 handleOpenDialog={handleOpenDialog}
                 messageDialogReturnValue={messageDialogReturnValue}
             />

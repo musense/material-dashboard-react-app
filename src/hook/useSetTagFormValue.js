@@ -1,31 +1,36 @@
-import React, { useEffect ,useState} from "react";
+import React, { useEffect, useState } from "react";
 
 export default function useSetTagFormValue(tag, formRef) {
 
-    const [isEditing, setIsEditing] = useState(false);
+    const [id, setId] = useState();
+    const [name, setName] = useState();
+    const [title, setTitle] = useState();
+    const [description, setDescription] = useState();
+    const [keywords, setKeywords] = useState();
     const [manualUrl, setManualUrl] = useState('');
     const [customUrl, setCustomUrl] = useState('');
-    const [popularTag, setPopularTag] = useState(false);
+    const [isPopularTag, setIsPopularTag] = useState();
+    const [sorting, setSorting] = useState(false);
+    const [isEditing, setIsEditing] = useState(false);
+
+
+
 
     function setEditingValue(tag, form) {
         console.log("🚀 ~ file: TagLeftWrapper.jsx:74 ~ setEditingValue ~ tag:", tag)
         if (tag && tag._id !== '') {
             setIsEditing(true)
         }
-        form.reset()
-        setManualUrl('')
-        setCustomUrl('')
-
-        form._id.value = tag._id
-        form.name.value = tag.name
-        form.title.value = tag.webHeader.headTitle
-        form.description.value = tag.webHeader.description
-        form.keywords.value = tag.webHeader.keywords
-        setCustomUrl(tag.webHeader.customUrl)
-        if (tag.sorting) {
-            setPopularTag(true)
-            form.sorting.value = tag.sorting
-        }
+        setId(tag._id)
+        setName(tag.tagName)
+        setTitle(tag.title)
+        setDescription(tag.description)
+        setKeywords(tag.keywords)
+        setManualUrl(tag.manualUrl)
+        setCustomUrl(tag.customUrl)
+        setIsPopularTag(tag.isPopularTag)
+        setSorting(tag.sorting)
+        setIsEditing(tag.isEditing)
     }
 
     useEffect(() => {
@@ -39,19 +44,21 @@ export default function useSetTagFormValue(tag, formRef) {
             setIsEditing(false)
             setManualUrl('')
             setCustomUrl('')
-            setPopularTag(false)
+            // setPopularTag(false)
         }
     }, [tag, formRef]);
 
 
-    return { 
-        customUrl, 
-        setCustomUrl,
-        manualUrl, 
-        setManualUrl,
-        popularTag, 
-        setPopularTag,
-        isEditing ,
-        setIsEditing
+    return {
+        id,
+        name,
+        title,
+        description,
+        keywords,
+        manualUrl,
+        customUrl,
+        isPopularTag,
+        sorting,
+        isEditing,
     }
 }

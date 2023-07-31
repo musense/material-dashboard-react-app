@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
-export default function useSetTagFormValue(tag, formRef) {
+export default function useSetTagFormValue(tag) {
 
     const [id, setId] = useState();
     const [name, setName] = useState();
@@ -9,18 +9,14 @@ export default function useSetTagFormValue(tag, formRef) {
     const [keywords, setKeywords] = useState();
     const [manualUrl, setManualUrl] = useState('');
     const [customUrl, setCustomUrl] = useState('');
-    const [isPopularTag, setIsPopularTag] = useState();
-    const [sorting, setSorting] = useState(false);
+    const [isPopularTag, setIsPopularTag] = useState(false);
+    const [sorting, setSorting] = useState(0);
     const [isEditing, setIsEditing] = useState(false);
 
 
-
-
-    function setEditingValue(tag, form) {
-        console.log("🚀 ~ file: TagLeftWrapper.jsx:74 ~ setEditingValue ~ tag:", tag)
-        if (tag && tag._id !== '') {
-            setIsEditing(true)
-        }
+    function setEditingValue(tag) {
+        console.log("🚀 ~ file: setEditingValue.jsx:74 ~ setEditingValue ~ tag:", tag)
+      
         setId(tag._id)
         setName(tag.tagName)
         setTitle(tag.title)
@@ -34,19 +30,9 @@ export default function useSetTagFormValue(tag, formRef) {
     }
 
     useEffect(() => {
-        if (!formRef.current) return
         if (!tag) return
-
-
-        setEditingValue(tag, formRef.current)
-
-        return () => {
-            setIsEditing(false)
-            setManualUrl('')
-            setCustomUrl('')
-            // setPopularTag(false)
-        }
-    }, [tag, formRef]);
+        setEditingValue(tag)
+    }, [tag]);
 
 
     return {

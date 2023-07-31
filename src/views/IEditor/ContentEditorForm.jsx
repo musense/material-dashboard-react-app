@@ -5,8 +5,9 @@ import * as GetSlateAction from 'actions/GetSlateAction';
 
 const ContentEditorForm = () => {
   const dispatch = useDispatch();
-  const contentForm = useSelector((state) => state.getSlateReducer.contentForm);
-  const { title, content } = contentForm;
+  const title = useSelector((state) => state.getSlateReducer.contentForm.title);
+  const content = useSelector((state) => state.getSlateReducer.contentForm.content);
+
   console.log("🚀 ~ file: ContentEditorForm.jsx:17 ~ ContentEditorForm ~ title:", title)
   console.log("🚀 ~ file: ContentEditorForm.jsx:17 ~ ContentEditorForm ~ content:", content)
 
@@ -26,6 +27,7 @@ const ContentEditorForm = () => {
   }, [dispatch, content])
 
   const onSlateEditorChange = useCallback((value) => {
+    console.log("🚀 ~ file: ContentEditorForm.jsx:30 ~ onSlateEditorChange ~ value:", value)
     onPropertyChange(value, 'content')
   }, [onPropertyChange])
 

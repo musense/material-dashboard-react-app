@@ -18,39 +18,22 @@ import DetailFormButtonList from "./DetailFormButtonList";
 const DetailForm = ({ createType }) => {
 
     const dispatch = useDispatch();
-    const detailForm = useSelector((state) => state.getSlateReducer.detailForm);
 
-    const { webHeader, media, publishInfo, ...props } = detailForm;
-    const {
-        headTitle,
-        headDescription,
-        headKeyword,
-        manualUrl,
-        sitemapUrl: customUrl
-    } = webHeader;
+    const headTitle = useSelector((state) => state.getSlateReducer.detailForm.webHeader.headTitle);
+    const headDescription = useSelector((state) => state.getSlateReducer.detailForm.webHeader.headDescription);
+    const headKeyword = useSelector((state) => state.getSlateReducer.detailForm.webHeader.headKeyword);
+    const manualUrl = useSelector((state) => state.getSlateReducer.detailForm.webHeader.manualUrl);
+    const customUrl = useSelector((state) => state.getSlateReducer.detailForm.webHeader.sitemapUrl);
 
-    const {
-        tags,
-        categories
-    } = props
-    console.log("🚀 ~ file: DetailForm.jsx:37 ~ DetailForm ~ categories:", categories)
-    console.log("🚀 ~ file: DetailForm.jsx:37 ~ DetailForm ~ tags:", tags)
+    const tags = useSelector((state) => state.getSlateReducer.detailForm.tags);
 
-    const {
-        contentImagePath,
-        homeImagePath,
-        altText
-    } = media
+    const categories = useSelector((state) => state.getSlateReducer.detailForm.categories);
 
-    const {
-        hide,
-        isScheduled,
-        scheduledAt
-    } = publishInfo
+    const altText = useSelector((state) => state.getSlateReducer.detailForm.media.altText);
 
-
-
-
+    const hidden = useSelector((state) => state.getSlateReducer.detailForm.publishInfo.hidden);
+    const isScheduled = useSelector((state) => state.getSlateReducer.detailForm.publishInfo.isScheduled);
+    const scheduledAt = useSelector((state) => state.getSlateReducer.detailForm.publishInfo.scheduledAt);
 
     const onPropertyChange = useCallback((value, property, info) => {
         dispatch({
@@ -86,7 +69,7 @@ const DetailForm = ({ createType }) => {
                 altText={altText} />
             <PublishInfo
                 styles={styles}
-                hide={hide}
+                hidden={hidden}
                 onPropertyChange={onPropertyChange}
                 isScheduled={isScheduled}
                 scheduledAt={scheduledAt} />

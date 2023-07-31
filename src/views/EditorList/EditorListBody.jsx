@@ -29,21 +29,19 @@ const headerMap = {
 
 export default function EditorListBody() {
 
-    const {
-        showList,
-        currentPage,
-        totalPage,
-        errorMessage: serverMessage
-    } = useSelector((state) => state.getEditorReducer);
+    const showList = useSelector((state) => state.getEditorReducer.showList);
+    const currentPage = useSelector((state) => state.getEditorReducer.currentPage);
+    const totalPage = useSelector((state) => state.getEditorReducer.totalPage);
+    const serverMessage = useSelector((state) => state.getEditorReducer.errorMessage);
+
     console.log("🚀 ~ file: EditorListBody.jsx:34 ~ EditorListBody ~ showList:", showList)
 
-    const {
-        message: dialogMessage,
-        contentData,
-        data,
-        confirm,
-        messageDialogReturnValue
-    } = useSelector((state) => state.getDialogReducer);
+    const contentData = useSelector((state) => state.getDialogReducer.contentData);
+    const data = useSelector((state) => state.getDialogReducer.data);
+    const confirm = useSelector((state) => state.getDialogReducer.confirm);
+    const messageDialogReturnValue = useSelector((state) => state.getDialogReducer.messageDialogReturnValue);
+    const dialogMessage = useSelector((state) => state.getDialogReducer.message);
+
 
     const errorMessage = getErrorMessage(dialogMessage, serverMessage)
     function getErrorMessage(errorMessage, returnMessage) {

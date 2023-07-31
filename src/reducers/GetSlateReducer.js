@@ -27,20 +27,36 @@ const initialState = {
       altText: '',
     },
     publishInfo: {
-      hide: false,
+      hidden: false,
       isScheduled: false,
       scheduledAt: ''
     }
   },
-  showUrl:'',
+  showUrl: '',
   updateInitialState: null,
   submitState: null,
+  isPreview: false,
+  isDraft: false,
+  previewID: null,
   errorMessage: null,
 }
 
 const getSlateReducer = (state = initialState, action) => {
   console.log("🚀 ~ file: GetSlateReducer.js:30 ~ getSlateReducer ~ action:", action)
   switch (action.type) {
+    case GetSlateAction.PREVIEW_EDITOR_SUCCESS: {
+      return {
+        ...state,
+        previewID: action.payload.previewID,
+        errorMessage: action.payload.errorMessage,
+      }
+    }
+    case GetSlateAction.PREVIEW_EDITOR_FAIL: {
+      return {
+        ...state,
+        errorMessage: action.payload.errorMessage,
+      }
+    }
     case GetSlateAction.SET_DEFAULT_FORM_VALUE: {
       const {
         ...props
@@ -65,7 +81,7 @@ const getSlateReducer = (state = initialState, action) => {
           altText: props.media.altText,
         },
         publishInfo: {
-          hide: props.hide,
+          hidden: props.hidden,
           isScheduled: props.isScheduled,
           scheduledAt: props.scheduleTime
         }
@@ -78,7 +94,8 @@ const getSlateReducer = (state = initialState, action) => {
         updateInitialState: {
           contentForm: JSON.parse(JSON.stringify(contentForm)),
           detailForm: JSON.parse(JSON.stringify(detailForm)),
-        }
+        },
+        showUrl: detailForm.media.contentImagePath
       }
     }
     case GetSlateAction.RESET_FORM_VALUE: {
@@ -118,7 +135,20 @@ const getSlateReducer = (state = initialState, action) => {
     }
 
     case GetSlateAction.CHECK_BEFORE_SUBMIT: {
-      let errorMessage
+      const isPreview = action.payload.isPreview
+      const submitState = JSON.parse(JSON.stringify({ ...state.contentForm, ...state.detailForm }))
+      let errorMessage,
+        cachedInitialState,
+        trimmedState
+      if (isPreview) {
+        trimmedState = { ...submitState }
+        return {
+          ...state,
+          submitState: trimmedState,
+          isPreview: isPreview,
+          errorMessage: 'check__OK!'
+        }
+      }
       if (action.payload.errorMessage) {
         errorMessage = action.payload.errorMessage
       } else {
@@ -134,11 +164,6 @@ const getSlateReducer = (state = initialState, action) => {
         // cloneDeep
         const createType = action.payload.createType
         console.log("🚀 ~ file: GetSlateReducer.js:129 ~ getSlateReducer ~ createType:", createType)
-        let
-          cachedInitialState,
-          trimmedState
-
-        const submitState = JSON.parse(JSON.stringify({ ...state.contentForm, ...state.detailForm }))
 
         if (createType === "add_new") {
           cachedInitialState = JSON.parse(JSON.stringify({ ...initialState.contentForm, ...initialState.detailForm }))
@@ -150,16 +175,16 @@ const getSlateReducer = (state = initialState, action) => {
         } else {
           throw new Error('invalid createType')
         }
-
-        console.log("🚀 ~ file: GetSlateReducer.js:139 ~ getSlateReducer ~ cachedInitialState:", cachedInitialState)
-        console.log("🚀 ~ file: GetSlateReducer.js:139 ~ getSlateReducer ~ submitState:", submitState)
-        console.log("🚀 ~ file: GetSlateReducer.js:139 ~ getSlateReducer ~ trimmedState:", trimmedState)
-        // return
-        return {
-          ...state,
-          submitState: trimmedState,
-          errorMessage: errorMessage || 'check__OK!'
-        }
+      }
+      console.log("🚀 ~ file: GetSlateReducer.js:139 ~ getSlateReducer ~ cachedInitialState:", cachedInitialState)
+      console.log("🚀 ~ file: GetSlateReducer.js:139 ~ getSlateReducer ~ submitState:", submitState)
+      console.log("🚀 ~ file: GetSlateReducer.js:139 ~ getSlateReducer ~ trimmedState:", trimmedState)
+      // return
+      return {
+        ...state,
+        submitState: trimmedState,
+        isPreview: false,
+        errorMessage: errorMessage || 'check__OK!'
       }
     }
     case GetUserAction.LOGOUT_USER: {
@@ -185,7 +210,7 @@ function recurseCheckAndDelete(state, initialState, createType) {
       console.log("🚀 ~ file: GetSlateReducer.js:176 ~ recurseCheckAndDelete ~ value:", value)
       if (key.toLowerCase().includes('image')) {
         console.log("🚀 ~ file: GetSlateReducer.js:180 ~ recurseCheckAndDelete ~ key:", key)
-        console.log("🚀 ~ file: GetSlateReducer.js:180 ~ recurseCheckAndDelete ~ state["+key+"]:", state[key])
+        console.log("🚀 ~ file: GetSlateReducer.js:180 ~ recurseCheckAndDelete ~ state[" + key + "]:", state[key])
         if (state[key] === '') {
           delete state[key]
         }

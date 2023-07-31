@@ -14,24 +14,18 @@ const initialState = {
   },
   showList: null,
   titleList: null,
+  _id: '',
+  editorID: null,
   editor: null,
   currentPage: null,
   totalPage: null,
   totalCount: null,
   errorMessage: null,
-  previewID: null,
 
 }
 const getEditorReducer = (state = initialState, action) => {
   // console.log("🚀 ~ file: GetEditorReducer.js:157 ~ getEditorReducer ~ action:", action)
-  switch (action.type) {
-    case GetEditorAction.PREVIEW_EDITOR_SUCCESS: {
-      return {
-        ...state,
-        previewID: action.payload.previewID,
-        errorMessage: action.payload.errorMessage,
-      }
-    }
+  switch (action.type) {  
     case GetEditorAction.RESET_EDITOR: {
       return {
         ...state,

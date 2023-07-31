@@ -24,12 +24,10 @@ const headerMap = {
 
 export default function TagRightBody() {
 
-    const {
-        showTagList: showList,
-        currentPage,
-        totalPage,
-        errorMessage: serverMessage
-    } = useSelector((state) => state.getTagsReducer);
+    const showList = useSelector((state) => state.getTagsReducer.showTagList);
+    const currentPage = useSelector((state) => state.getTagsReducer.currentPage);
+    const totalPage = useSelector((state) => state.getTagsReducer.totalPage);
+    const serverMessage = useSelector((state) => state.getTagsReducer.errorMessage);
     console.log("🚀 ~ file: TagRightBody.jsx:29 ~ TagRightBody ~ showList:", showList)
 
     const {

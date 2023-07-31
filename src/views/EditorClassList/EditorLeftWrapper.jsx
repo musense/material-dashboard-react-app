@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import * as GetClassAction from 'actions/GetClassAction';
 import Card from 'components/Card/Card.jsx';
@@ -10,37 +10,52 @@ import styles from './EditorClassList.module.css'
 
 import usePressEnterEventHandler from 'hook/usePressEnterEventHandler';
 import useEditEditorClassResult from '../../hook/useEditEditorClassResult';
-import useSetEditorClassValue from '../../hook/useSetEditorClassValue';
 
 import MessageDialog from '../../components/Modal/MessageDialog';
+import useModal from '../../hook/useModal';
 
 export default function EditorLeftWrapper() {
 
     const formRef = useRef(null);
     const dispatch = useDispatch();
-    const editorClass = useSelector((state) => state.getClassReducer.editorClass);
-    const returnMessage = useSelector((state) => state.getClassReducer.errorMessage);
-    console.log("🚀 ~ file: EditorLeftWrapper.jsx:23 ~ EditorLeftWrapper ~ editorClass:", editorClass)
-    console.log("🚀 ~ file: EditorLeftWrapper.jsx:24 ~ EditorLeftWrapper ~ returnMessage:", returnMessage)
+    const id = useSelector((state) => state.getClassReducer.editorClass.id);
+    const name = useSelector((state) => state.getClassReducer.editorClass.name);
+    const keyName = useSelector((state) => state.getClassReducer.editorClass.keyName);
+    const editorClassTitle = useSelector((state) => state.getClassReducer.editorClass.title);
+    const description = useSelector((state) => state.getClassReducer.editorClass.description);
+    const keywords = useSelector((state) => state.getClassReducer.editorClass.keywords);
+    const manualUrl = useSelector((state) => state.getClassReducer.editorClass.manualUrl);
+    const customUrl = useSelector((state) => state.getClassReducer.editorClass.customUrl);
+    const isEditing = useSelector((state) => state.getClassReducer.editorClass.isEditing);
 
-    const [open, setOpen] = useState(false);
-    const handleOpen = () => setOpen(true);
-    const handleClose = () => {
-        setOpen(false)
+    const serverMessage = useSelector((state) => state.getClassReducer.errorMessage);
+    console.log("🚀 ~ file: EditorLeftWrapper.jsx:24 ~ EditorLeftWrapper ~ returnMessage:", serverMessage)
+
+
+    console.log("🚀 ~ file: EditorLeftWrapper.jsx:67 ~ EditorLeftWrapper ~ isEditing:", isEditing)
+
+    const {
+        open,
+        handleOpen,
+        handleClose
+    } = useModal()
+
+    const setClose = useCallback(() => {
+        handleClose()
         dispatch({
             type: GetClassAction.SET_ERROR_MESSAGE,
             payload: {
                 message: '--reset-error-message',
             }
         })
-    }
+    }, [handleClose])
 
     usePressEnterEventHandler(formRef)
     const {
         title,
         content,
         success
-    } = useEditEditorClassResult(returnMessage)
+    } = useEditEditorClassResult(serverMessage)
 
     console.log("🚀 ~ file: TagLeftWrapper.jsx:58 ~ TagLeftWrapper ~ title:", title)
 
@@ -48,26 +63,11 @@ export default function EditorLeftWrapper() {
         if (title) handleOpen()
     }, [title, content]);
 
-    const {
-        customUrl,
-        setCustomUrl,
-        manualUrl,
-        setManualUrl,
-        popularTag,
-        setPopularTag,
-        isEditing,
-        setIsEditing
-    } = useSetEditorClassValue(editorClass, formRef)
 
     function onAddNewEditor(e) {
         e.preventDefault()
-        const form = getForm();
-        const formData = new FormData(form);
-        console.log(Object.fromEntries(formData));
-        const classData = Object.fromEntries(formData);
 
-
-        if (!classData.classification || classData.classification === '') {
+        if (!name || name === '') {
             dispatch({
                 type: GetClassAction.SET_ERROR_MESSAGE,
                 payload: {
@@ -78,7 +78,7 @@ export default function EditorLeftWrapper() {
             return
         }
 
-        if (!classData.keyname || classData.keyname === '') {
+        if (!keyName || keyName === '') {
             dispatch({
                 type: GetClassAction.SET_ERROR_MESSAGE,
                 payload: {
@@ -91,14 +91,14 @@ export default function EditorLeftWrapper() {
 
         const tempData = {
             // parentClassification: parentClassRef.current.label,
-            classification: classData.classification,
+            classification: name,
+            keyName: keyName,
             webHeader: {
-                title: classData.title,
-                keyname: classData.keyname,
-                description: classData.description,
-                keywords: classData.keywords,
-                href: classData.customUrl,
-                route: classData.manualUrl,
+                title: editorClassTitle,
+                description: description,
+                keywords: keywords,
+                href: customUrl,
+                route: manualUrl,
             },
         }
 
@@ -108,39 +108,44 @@ export default function EditorLeftWrapper() {
             dispatch({
                 type: GetClassAction.EDIT_SAVING_CLASS,
                 payload: {
-                    data: {
-                        ...tempData,
-                        _id: classData._id
-                    }
+                    ...tempData,
+                    _id: id
+
                 },
             });
-            setIsEditing(false)
         } else {
             dispatch({
                 type: GetClassAction.ADD_CLASS,
                 payload: {
-                    data: tempData
+                    tempData
                 },
             });
         }
-        // onReset(e)
     }
 
-    function getForm() {
-        return formRef.current;
-    }
-    function onReset(e) {
-        e && e.preventDefault()
-        const form = getForm()
-        form.reset()
-        setManualUrl('')
-        setCustomUrl('')
-    }
+    const onReset = useCallback(() => {
+        dispatch({
+            type: GetClassAction.CANCEL_EDITING_CLASS
+        })
+    }, [dispatch])
 
-    function onCancel(e) {
-        onReset(e)
-        setIsEditing(false)
-    }
+    const onCancel = useCallback(() => {
+        onReset()
+    }, [onReset])
+
+    const onPropertyChange = useCallback((value, property) => {
+        dispatch({
+            type: GetClassAction.SET_CLASS_PROPERTY,
+            payload: {
+                allProps: {
+                    property: property,
+                    value: value
+                }
+            }
+        })
+    }, [dispatch])
+
+
     return <div className={styles['editor-left-wrapper']}>
         <GridContainer>
             <GridItem xs={12} sm={12} md={12}>
@@ -150,30 +155,36 @@ export default function EditorLeftWrapper() {
                     </CardHeader>
                     <CardBody>
                         <form ref={formRef} name='class-form' onSubmit={onAddNewEditor}>
-                            <input type="hidden" name='_id' />
+                            <input type="hidden" name='_id' value={id} />
                             <div>
                                 <label htmlFor="classification">分類名稱</label>
-                                <input disabled={isEditing} type="text" name='classification' />
+                                <input disabled={isEditing} type="text" name='classification'
+                                    value={name} onChange={e => onPropertyChange(e.target.value, 'name')} />
                             </div>
                             <div>
                                 <label htmlFor="keyname">英文名稱</label>
-                                <input disabled={isEditing} type="text" name='keyname' />
+                                <input disabled={isEditing} type="text" name='keyname'
+                                    value={keyName} onChange={e => onPropertyChange(e.target.value, 'keyName')} />
                             </div>
                             <div>
                                 <label htmlFor="title">title</label>
-                                <input type="text" name='title' />
+                                <input type="text" name='title'
+                                    value={editorClassTitle} onChange={e => onPropertyChange(e.target.value, 'title')} />
                             </div>
                             <div>
                                 <label htmlFor="description">description</label>
-                                <input type="text" name='description' />
+                                <input type="text" name='description'
+                                    value={description} onChange={e => onPropertyChange(e.target.value, 'description')} />
                             </div>
                             <div>
                                 <label htmlFor="keywords">keywords</label>
-                                <input type="text" name='keywords' />
+                                <input type="text" name='keywords'
+                                    value={keywords} onChange={e => onPropertyChange(e.target.value, 'keywords')} />
                             </div>
                             <div>
                                 <label htmlFor="manualUrl">自訂網址</label>
-                                <input type="text" name='manualUrl' onChange={e => setManualUrl(e.target.value)} value={manualUrl} />
+                                <input type="text" name='manualUrl'
+                                    value={manualUrl} onChange={e => onPropertyChange(e.target.value, 'manualUrl')} />
                             </div>
                             {(manualUrl.length > 0 || customUrl) && (
                                 <div >
@@ -205,8 +216,9 @@ export default function EditorLeftWrapper() {
         <MessageDialog
             dialogTitle={title}
             dialogContent={content}
+            success={success}
             open={open}
-            setClose={handleClose}
+            setClose={setClose}
         />
     </div>;
 }

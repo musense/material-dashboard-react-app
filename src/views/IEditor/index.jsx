@@ -26,11 +26,12 @@ function NewIEditor() {
 
   const dispatch = useDispatch();
 
-  const {
-    submitState: editor,
-    errorMessage: returnMessage
-  } = useSelector((state) => state.getSlateReducer);
+  const submitState = useSelector((state) => state.getSlateReducer.submitState);
+  const isPreview = useSelector((state) => state.getSlateReducer.isPreview);
+  const returnMessage = useSelector((state) => state.getSlateReducer.errorMessage);
+  const _id = useSelector((state) => state.getEditorReducer._id);
   const errorMessage = useSelector((state) => state.getEditorReducer.errorMessage);
+  const previewID = useSelector((state) => state.getSlateReducer.previewID);
   const message = getErrorMessage(errorMessage, returnMessage)
 
   function getErrorMessage(errorMessage, returnMessage) {
@@ -46,9 +47,9 @@ function NewIEditor() {
 
   }
 
-  console.log("🚀 ~ file: index.jsx:35 ~ NewIEditor ~ editor:", editor)
+  console.log("🚀 ~ file: index.jsx:35 ~ NewIEditor ~ editor:", submitState)
   console.log("🚀 ~ file: index.jsx:35 ~ NewIEditor ~ message:", message)
-  useSetEditorDefaultValue('reset')
+  useSetEditorDefaultValue()
   const [open, setOpen] = React.useState(false);
   const handleClickOpen = () => setOpen(true);
   const handleClose = () => {
@@ -64,11 +65,9 @@ function NewIEditor() {
   const {
     title,
     content,
-    id,
     sitemapUrl,
     success
-  } = useIEditorResult(message, editor)
-  console.log("🚀 ~ file: index.jsx:74 ~ NewIEditor ~ id:", id)
+  } = useIEditorResult(message, submitState)
 
   useEffect(() => {
     if (title) handleClickOpen()
@@ -76,23 +75,31 @@ function NewIEditor() {
 
   useEffect(() => {
     if (message !== 'check__OK!') return
-    onEditorSave(editor)
-  }, [message, editor]);
+    if(!isPreview){
+      onEditorSave(submitState)
+      return
+    }
+    onPreviewSave(submitState)
+  }, [message, submitState, isPreview]);
+
+  useEffect(() => {
+    if (!isPreview) return
+    if (!previewID) return
+    window.open(`http://10.88.0.103:3001/preview/${previewID}`, '_blank')
+  }, [isPreview, previewID]);
+
+  const onPreviewSave = useCallback((data) => {
+    console.log("🚀 ~ file: index.jsx:92 ~ onPreviewSave ~ data:", data)
+    dispatch({
+      type: GetSlateAction.PREVIEW_EDITOR,
+      payload: {
+        data: data
+      },
+    })
+  },[dispatch])
 
   const onEditorSave = useCallback((data) => {
     console.log("🚀 ~ file: index.jsx:74 ~ onEditorSave ~ data:", data)
-
-    // if (preview) {
-    //   dispatch({
-    //     type: GetEditorAction.PREVIEW_EDITOR,
-    //     payload: {
-    //       data: formData
-    //     },
-    //   })
-    //   return
-    // }
-
-    // return
     dispatch({
       type: GetEditorAction.ADD_EDITOR,
       payload: {
@@ -116,7 +123,7 @@ function NewIEditor() {
       <MessageDialog
         dialogTitle={title}
         dialogContent={content}
-        editorID={id}
+        editorID={_id}
         sitemapUrl={sitemapUrl}
         success={success}
         open={open}

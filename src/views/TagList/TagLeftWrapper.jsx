@@ -21,9 +21,20 @@ export default function TagLeftWrapper() {
 
     const formRef = useRef(null);
     const dispatch = useDispatch();
-    const selectedTag = useSelector((state) => state.getTagsReducer.selectedTag);
+
+    const id = useSelector((state) => state.getTagsReducer.selectedTag.id);
+    const tagName = useSelector((state) => state.getTagsReducer.selectedTag.name);
+    const tagTitle = useSelector((state) => state.getTagsReducer.selectedTag.title);
+    const description = useSelector((state) => state.getTagsReducer.selectedTag.description);
+    const keywords = useSelector((state) => state.getTagsReducer.selectedTag.manualUrl);
+    const manualUrl = useSelector((state) => state.getTagsReducer.selectedTag.customUrl);
+    const customUrl = useSelector((state) => state.getTagsReducer.selectedTag.customUrl);
+    const isPopularTag = useSelector((state) => state.getTagsReducer.selectedTag.isPopularTag);
+    const sorting = useSelector((state) => state.getTagsReducer.selectedTag.sorting);
+    const isEditing = useSelector((state) => state.getTagsReducer.selectedTag.isEditing);
+
     const serverMessage = useSelector((state) => state.getTagsReducer.errorMessage);
-    console.log("🚀 ~ file: TagLeftWrapper.jsx:25 ~ TagLeftWrapper ~ selectedTag:", selectedTag)
+
     console.log("🚀 ~ file: TagLeftWrapper.jsx:54 ~ useEffect ~ serverMessage:", serverMessage)
 
     const {
@@ -53,21 +64,6 @@ export default function TagLeftWrapper() {
     useEffect(() => {
         if (title) handleOpen()
     }, [title, content]);
-
-
-    const {
-        id,
-        name: tagName,
-        title: tagTitle,
-        description,
-        keywords,
-        manualUrl,
-        customUrl,
-        isPopularTag,
-        sorting,
-        isEditing,
-    } = useSetTagFormValue(selectedTag, formRef)
-
 
     function onAddNewEditor(e) {
         e.preventDefault()
@@ -134,10 +130,8 @@ export default function TagLeftWrapper() {
             dispatch({
                 type: GetTagsAction.EDIT_SAVING_TAG,
                 payload: {
-                    data: {
-                        ...tempData,
-                        _id: id
-                    }
+                    ...tempData,
+                    _id: id
                 },
             });
             return

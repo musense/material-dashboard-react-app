@@ -149,7 +149,7 @@ function* AddTag(payload) {
 // PATCH
 function* UpdateTag(payload) {
     try {
-        const { _id, ...data } = payload.data;
+        const { _id, ...data } = payload;
         const requestData = toBackendData(data)
         // console.log("🚀 ~ file: GetTagList.js:55 ~ function*UpdateTag ~ _id:", { _id })
         // console.log("🚀 ~ file: GetTagList.js:55 ~ function*UpdateTag ~ data:", { data })

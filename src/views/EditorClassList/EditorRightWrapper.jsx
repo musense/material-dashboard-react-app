@@ -28,20 +28,18 @@ const headerMap = {
 
 export default function EditorRightWrapper() {
 
-    const {
-        showList,
-        currentPage,
-        totalPage,
-        errorMessage: serverMessage
-    } = useSelector((state) => state.getClassReducer);
+    const showList = useSelector((state) => state.getClassReducer.showList);
+    const currentPage = useSelector((state) => state.getClassReducer.currentPage);
+    const totalPage = useSelector((state) => state.getClassReducer.totalPage);
+    const serverMessage = useSelector((state) => state.getClassReducer.errorMessage);
 
-    const {
-        message: dialogMessage,
-        contentData,
-        data,
-        confirm,
-        messageDialogReturnValue
-    } = useSelector((state) => state.getDialogReducer);
+    console.log("🚀 ~ file: EditorRightWrapper.jsx:33 ~ EditorRightWrapper ~ showList:", showList)
+
+    const contentData = useSelector((state) => state.getDialogReducer.contentData);
+    const data = useSelector((state) => state.getDialogReducer.data);
+    const confirm = useSelector((state) => state.getDialogReducer.confirm);
+    const messageDialogReturnValue = useSelector((state) => state.getDialogReducer.messageDialogReturnValue);
+    const dialogMessage = useSelector((state) => state.getDialogReducer.message);
 
     const errorMessage = getErrorMessage(dialogMessage, serverMessage)
     function getErrorMessage(errorMessage, returnMessage) {

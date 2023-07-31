@@ -3,6 +3,8 @@ import { Stack } from '@mui/material';
 import { useDispatch } from 'react-redux';
 import * as GetDialogAction from '../../actions/GetDialogAction';
 import * as GetEditorAction from '../../actions/GetEditorAction';
+import * as GetSlateAction from '../../actions/GetSlateAction';
+import * as GetClassAction from '../../actions/GetClassAction';
 import { useNavigate } from 'react-router-dom';
 import BodyCell from "../../components/BodyCell/BodyCell";
 import EditBodyCell from "../../components/EditBodyCell/EditBodyCell";
@@ -37,7 +39,7 @@ export default function RowBody({
         });
     }, [messageDialogReturnValue]);
 
-    const onDelete = useCallback((id, title) => {     
+    const onDelete = useCallback((id, title) => {
         dispatch({
             type: GetDialogAction.ON_DELETE_EDITOR,
             payload: {
@@ -67,12 +69,20 @@ export default function RowBody({
     );
 
     function onEdit(updateEditor) {
+        console.log("🚀 ~ file: RowBody.jsx:70 ~ onEdit ~ updateEditor:", updateEditor)
+        // reset form values
+        dispatch({
+            type: GetSlateAction.RESET_FORM_VALUE,
+        })
+        // reset selected dropdown list
+        dispatch({
+            type: GetClassAction.RESET_SELECTED_CLASS,
+            payload: '--reset-all'
+        })
         dispatch({
             type: GetEditorAction.REQUEST_EDITOR_BY_ID,
             payload: {
-                data: {
-                    _id: updateEditor._id,
-                },
+                _id: updateEditor._id,
             },
         });
         navigate(`/admin/editorList/${updateEditor._id}`);
@@ -84,8 +94,8 @@ export default function RowBody({
                 <div data-attr="data-body-row" key={index}>
                     {headerRow.map((rowItem, index) => {
                         if (rowItem.patchKey && rowItem.patchKey.includes(".")) {
-                            const patchKeys = rowItem.patchKey.split(".");                           
-                            return <BodyCell key={index} children={titleView[patchKeys[0]][patchKeys[1]]} className={rowItem.className}/>
+                            const patchKeys = rowItem.patchKey.split(".");
+                            return <BodyCell key={index} children={titleView[patchKeys[0]][patchKeys[1]]} className={rowItem.className} />
                         }
                         if (rowItem.patchKey === 'createDate' || rowItem.patchKey === 'updateDate') {
                             return (
@@ -130,10 +140,10 @@ export default function RowBody({
                                             handleOpen();
                                             setMediaInfo(titleView.media);
                                         }} />
-                                ) : '無圖片/縮圖'} 
+                                ) : '無圖片/縮圖'}
                                 className={rowItem.className}
-                                
-                                />
+
+                            />
                         }
                         if (rowItem.name === '編輯') {
                             return <EditBodyCell

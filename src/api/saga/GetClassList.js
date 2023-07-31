@@ -7,10 +7,10 @@ import { getErrorMessage, getGetErrorMessage } from '../apiHelperFunc';
 function toBackendData(requestData) {
     const request = {
         name: requestData.classification,
+        keyName: requestData.keyName,
         upperCategory: requestData.parentClassification,
-        headTitle: requestData.webHeader.headTitle,
-        keyName: requestData.webHeader.keyname,
-        headDescription: requestData.webHeader.headDescription,
+        headTitle: requestData.webHeader.title,
+        headDescription: requestData.webHeader.description,
         headKeyword: requestData.webHeader.keywords,
         manualUrl: requestData.webHeader.route,
     }
@@ -32,10 +32,10 @@ function* GetClassList(payload = 1) {
                     keyName: item.keyName || '',
                     parentClass: item.upperCategory,
                     title: item.headTitle || '',
-                    headDescription: item.headDescription || '',
+                    description: item.headDescription || '',
                     keywords: item.headKeyword || '',
                     customUrl: item.sitemapUrl,
-                    manualUrl: '',
+                    manualUrl: item.manualUrl || '',
                 }
             })
         // return
@@ -73,10 +73,13 @@ function* GetCategories() {
 
 // POST
 function* AddClass(payload) {
-
+    const { tempData } = payload
+    console.log("🚀 ~ file: GetClassList.js:77 ~ function*AddClass ~ tempData:", tempData)
     try {
 
-        const requestData = toBackendData(payload.data)
+        const requestData = toBackendData(tempData)
+        console.log("🚀 ~ file: GetClassList.js:81 ~ function*AddClass ~ requestData:", requestData)
+
         // return
         const response = yield instance.post(`/categories`, requestData);
         const responseData = yield response.data.data;
@@ -93,8 +96,9 @@ function* AddClass(payload) {
 
 // PATCH
 function* UpdateClass(payload) {
+    // const { _id, ...rest: tempData } = payload
     try {
-        const { _id, request: requestData } = toBackendData(payload.data)
+        const { _id, request: requestData } = toBackendData(payload)
         const response = yield instance.patch(`/categories/${_id}`, requestData);
         const responseData = yield response.data.data;
 

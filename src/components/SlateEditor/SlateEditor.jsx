@@ -1,4 +1,4 @@
-import React, { useCallback, useState, useRef, useEffect } from 'react'
+import React, { useCallback, useRef } from 'react'
 import { Slate, Editable } from 'slate-react'
 import { css } from '@emotion/css'
 import { CustomEditor } from './CustomEditor'
@@ -9,7 +9,7 @@ import { Element, Leaf } from "./Elements";
 import ImageDialog from './ImageDialog'
 
 import useCreateSlateEditor from '../../hook/useCreateSlateEditor'
-import useSetSlateEditorInitialValueAfterwards from '../../hook/useSetSlateEditorInitialValueAfterwards'
+import useModal from '../../hook/useModal';
 
 function SlateEditor({
   slateValue,
@@ -18,23 +18,20 @@ function SlateEditor({
   console.log("🚀 ~ file: SlateEditor.jsx:15 ~ SlateEditor ~ defaultValue:", slateValue)
 
   const slateEditor = useCreateSlateEditor()
-  useSetSlateEditorInitialValueAfterwards(slateEditor, slateValue)
 
   const urlRef = useRef(null);
   const altTextRef = useRef(null);
   const hrefRef = useRef(null);
 
-  const [open, setOpen] = useState(false);
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
+  const {
+    open,
+    handleOpen,
+    handleClose
+  } = useModal()
+
 
   const renderElement = useCallback(props => <Element {...props} />, [])
   const renderLeaf = useCallback(props => <Leaf {...props} />, [])
-
-  const onSlateChange = useCallback(newValue => {
-    setState(newValue)
-  }, [setState])
 
   return (
     <div className={css` 
@@ -47,10 +44,10 @@ function SlateEditor({
       <Slate
         editor={slateEditor}
         value={slateValue}
-        onChange={onSlateChange}
+        onChange={setState}
       >
         <Toolbar
-          handleClickOpen={handleClickOpen}
+          handleClickOpen={handleOpen}
           currentUrl={urlRef.current}
           currentAltText={altTextRef.current}
           currentHref={hrefRef.current}
@@ -164,7 +161,7 @@ function SlateEditor({
                 case 'm':
                 case 'M': {
                   event.preventDefault()
-                  handleClickOpen()
+                  handleOpen()
                   break
                 }
                 case 'l':
@@ -216,7 +213,8 @@ function SlateEditor({
         />
       </Slate>
       <ImageDialog
-        open={open} setClose={() => setOpen(false)}
+        open={open}
+        setClose={handleClose}
         urlRef={urlRef}
         altTextRef={altTextRef}
         hrefRef={hrefRef}

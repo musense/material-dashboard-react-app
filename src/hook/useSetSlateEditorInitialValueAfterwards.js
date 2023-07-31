@@ -1,18 +1,15 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { Transforms } from 'slate'
 
-export default function useSetSlateEditorInitialValueAfterwards(slateEditor, value) {
+export default function useSetSlateEditorInitialValueAfterwards(slateEditor, initialValue) {
 
 
-
-    // const [selected, setSelected] = useState(initialValue);
     useEffect(() => {
-        if (!value) return
-        if (value.length <= 0) return
-        // setSelected(value)
-
+        if (!initialValue) return
+        if (initialValue.length <= 0) return
+        setValue(initialValue)
         const totalNodes = slateEditor.children.length;
-        const savedDefaultNodes = value;
+        const savedDefaultNodes = initialValue;
         if (totalNodes > 1) return
 
         for (let i = 0; i < totalNodes - 1; i++) {
@@ -31,7 +28,6 @@ export default function useSetSlateEditorInitialValueAfterwards(slateEditor, val
             at: [0],
         });
 
-    }, [slateEditor, value]);    
+    }, [slateEditor, initialValue]);
 
-    // return { selected, setSelected }
 }

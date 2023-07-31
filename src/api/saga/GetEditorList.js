@@ -1,5 +1,6 @@
 import { all, put, take } from 'redux-saga/effects';
 import * as GetEditorAction from "../../actions/GetEditorAction";
+import * as GetSlateAction from "../../actions/GetSlateAction";
 import { formInstance, instance } from "./AxiosInstance";
 import { toBackendFormData, toFrontendData } from "./../apiHelperFunc";
 import { errorMessage } from '../../reducers/errorMessage';
@@ -39,7 +40,9 @@ function* GetEditorTitleList(payload = 1) {
 }
 
 // GET :_id
-function* GetEditorByID(_id) {
+function* GetEditorByID(payload) {
+    const { _id } = payload
+    console.log("🚀 ~ file: GetEditorList.js:45 ~ function*GetEditorByID ~ _id:", _id)
     try {
 
         // const response = yield instance.get(`/editor/${payload.data._id}`);
@@ -133,6 +136,7 @@ function* AddEditor(payload) {
         yield put({
             type: GetEditorAction.ADD_EDITOR_SUCCESS,
             payload: {
+                _id: mappedEditorData._id,
                 editor: mappedEditorData,
             }
         })
@@ -156,13 +160,15 @@ function* PreviewEditor(payload) {
         const { id: previewID } = yield response.data.data;
         // return
         yield put({
-            type: GetEditorAction.PREVIEW_EDITOR_SUCCESS,
-            payload: { previewID },
+            type: GetSlateAction.PREVIEW_EDITOR_SUCCESS,
+            payload: {
+                previewID: previewID
+            },
             errorMessage: errorMessage.addSuccess
         })
 
     } catch (error) {
-        yield getErrorMessage(error, GetEditorAction.ADD_EDITOR_FAIL)
+        yield getErrorMessage(error, GetSlateAction.PREVIEW_EDITOR_FAIL)
     }
 }
 
@@ -218,7 +224,7 @@ function* watchAddEditorSaga() {
 
 function* watchPreviewEditorSaga() {
     while (true) {
-        const { payload } = yield take(GetEditorAction.PREVIEW_EDITOR)
+        const { payload } = yield take(GetSlateAction.PREVIEW_EDITOR)
         yield PreviewEditor(payload)
     }
 }
@@ -253,7 +259,7 @@ function* watchDeleteEditorSaga() {
 function* watchGetEditorByIDSaga() {
     while (true) {
         const { payload } = yield take(GetEditorAction.REQUEST_EDITOR_BY_ID)
-        yield GetEditorByID(payload.data._id)
+        yield GetEditorByID(payload)
     }
 }
 

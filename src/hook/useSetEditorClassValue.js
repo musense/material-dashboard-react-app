@@ -1,54 +1,46 @@
-import React, { useEffect ,useState} from "react";
+import { useEffect, useState } from "react";
 
-export default function useSetEditorClassValue(selectedEditorClass, formRef) {
-    const [isEditing, setIsEditing] = useState(false);
+export default function useSetEditorClassValue(editorClass) {
+
+    const [id, setId] = useState();
+    const [name, setName] = useState();
+    const [keyName, setKeyName] = useState();
+    const [title, setTitle] = useState();
+    const [description, setDescription] = useState();
+    const [keywords, setKeywords] = useState();
     const [manualUrl, setManualUrl] = useState('');
     const [customUrl, setCustomUrl] = useState('');
-    const [popularTag, setPopularTag] = useState(false);
+    const [isEditing, setIsEditing] = useState(false);
 
-    function setEditorClassValue(editorClass, form) {
-        console.log("🚀 ~ file: TagLeftWrapper.jsx:74 ~ setEditingValue ~ tag:", editorClass)
-        if (editorClass && editorClass._id !== '') {
-            setIsEditing(true)
-        }
-        form.reset()
-        setManualUrl('')
-        setCustomUrl('')
+    function setEditorClassValue(editorClass) {
+        console.log("🚀 ~ file: setEditorClassValue.jsx:74 ~ setEditingValue ~ editorClass:", editorClass)
 
-        form._id.value = editorClass._id
-        form.classification.value = editorClass.name
-        form.keyname.value = editorClass.keyName
-        form.title.value = editorClass.title
-        form.description.value = editorClass.description
-        form.keywords.value = editorClass.keywords
-
+        setId(editorClass._id)
+        setName(editorClass.name)
+        setKeyName(editorClass.keyName)
+        setTitle(editorClass.title)
+        setDescription(editorClass.description)
+        setKeywords(editorClass.keywords)
         setManualUrl(editorClass.manualUrl)
         setCustomUrl(editorClass.customUrl)
+        setIsEditing(editorClass.isEditing)
     }
 
     useEffect(() => {
-        if (!formRef.current) return
-        if (!selectedEditorClass) return
-
-        setEditorClassValue(selectedEditorClass, formRef.current)
-
-        return () => {
-            setIsEditing(false)
-            setManualUrl('')
-            setCustomUrl('')
-            setPopularTag(false)
-        }
-    }, [selectedEditorClass])
+        if (!editorClass) return
+        setEditorClassValue(editorClass)
+    }, [editorClass])
 
 
     return {
-        customUrl,
-        setCustomUrl,
+        id,
+        name,
+        keyName,
+        title,
+        description,
+        keywords,
         manualUrl,
-        setManualUrl,
-        popularTag,
-        setPopularTag,
+        customUrl,
         isEditing,
-        setIsEditing
     }
 }

@@ -1,42 +1,5 @@
 import { put } from 'redux-saga/effects';
 
-const bend2FendMap = new Map([
-    ['_id', '_id'],
-    ['headTitle', 'webHeader.headTitle'],
-    ['headKeyword', 'webHeader.headKeyword'],
-    ['headDescription', 'webHeader.headDescription'],
-    ['manualUrl', 'webHeader.manualUrl'],
-    ['sitemapUrl', 'webHeader.customUrl'],
-    ['title', 'content.title'],
-    ['content', 'content.content'],
-    ['categories', 'categories'],
-    ['tags', 'tags'],
-    ['media.altText', 'media.altText'],
-    ['contentImagePath', 'media.contentImagePath'],
-    ['homeImagePath', 'media.homeImagePath'],
-    ['hide', 'hide'],
-    ['scheduledAt', 'scheduleTime'],
-])
-
-const fend2BendMap = new Map([
-    ['_id', '_id'],
-    ['webHeader.headTitle', 'headTitle'],
-    ['webHeader.headKeyword', 'headKeyword'],
-    ['webHeader.headDescription', 'headDescription'],
-    ['webHeader.manualUrl', 'manualUrl'],
-    ['webHeader.customUrl', 'sitemapUrl'],
-    ['content.title', 'title'],
-    ['content.content', 'content'],
-    ['categories', 'categories'],
-    ['tags', 'tags'],
-    ['media.altText', 'altText'],
-    ['media.contentImagePath', 'contentImagePath'],
-    ['media.homeImagePath', 'homeImagePath'],
-    ['hide', 'hide'],
-    ['scheduleTime', 'scheduledAt'],
-    ['draft', 'draft'],
-])
-
 export function toFrontendData(responseData) {
     console.log("🚀 ~ file: apiHelperFunc.js:34 ~ toFrontendData ~ responseData:", responseData)
     if (Array.isArray(responseData)) {
@@ -85,7 +48,7 @@ export function toFrontendData(responseData) {
                 altText: item.altText || '',
             },
             pageView: item.pageView,
-            hide: item.hide || false,
+            hidden: item.hidden || false,
             createDate: item.createdAt,
             updateDate: item.updatedAt,
             sitemapUrl: item.sitemapUrl,
@@ -144,7 +107,7 @@ export function toFrontendData(responseData) {
                 altText: responseData.altText || '',
             },
             pageView: responseData.pageView,
-            hide: responseData.hide || false,
+            hidden: responseData.hidden || false,
             createDate: responseData.createdAt,
             updateDate: responseData.updatedAt,
             sitemapUrl: responseData.sitemapUrl,
@@ -159,12 +122,14 @@ export function toFrontendData(responseData) {
 
 export function toBackendFormData(requestData, createType) {
     const formData = new FormData()
-    if (createType === 'add_new') {
-        formData.append('title', JSON.stringify(requestData.title))
-        formData.append('content', JSON.stringify(requestData.content))
-    }
+    // if (createType === 'add_new') {
+    formData.append('title', JSON.stringify(requestData.title))
+    formData.append('content', JSON.stringify(requestData.content))
+    // }
     if (requestData.webHeader) {
         Object.entries(requestData.webHeader).forEach(([key, value]) => {
+            if (key === 'sitemapUrl') return;
+
             formData.append(key, JSON.stringify(value))
         })
     }

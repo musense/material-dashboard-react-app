@@ -15,7 +15,7 @@ export default function Media({
     const showUrl = useSelector((state) => state.getSlateReducer.showUrl);
     const { isImage, iframeUrl } = useIsImageOrVideo(showUrl)
 
-    const onShowUrlChange = useCallback((value,) => {
+    const onShowUrlChange = useCallback((value) => {
         dispatch({
             type: GetSlateAction.SET_SHOW_URL,
             payload: {
@@ -24,7 +24,7 @@ export default function Media({
         })
     }, [dispatch])
 
-    const onRemoveClick = useCallback(() => {
+    const onRemoveClick = useCallback(() => { 
         onShowUrlChange('')
         onPropertyChange('', 'contentImagePath', 'media')
         onPropertyChange('', 'homeImagePath', 'media')

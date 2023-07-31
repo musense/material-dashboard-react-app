@@ -3,9 +3,9 @@ import CustomRadio from '../../../components/CustomRadio/CustomRadio';
 import DateTimeSelector from "../../../components/DateSelector/DateTimeSelector";
 import { Stack } from "@mui/system";
 
-export default function PublishInfo({ styles, hide, isScheduled, onPropertyChange, scheduledAt }) {
+export default function PublishInfo({ styles, hidden, isScheduled, onPropertyChange, scheduledAt }) {
     const onPublishInfoHiddenChange = useCallback((value) => {
-        onPropertyChange(value, 'hide', 'publishInfo')
+        onPropertyChange(value, 'hidden', 'publishInfo')
     }, [onPropertyChange])
 
     const onPublishInfoIsScheduledChange = useCallback((value) => {
@@ -19,15 +19,15 @@ export default function PublishInfo({ styles, hide, isScheduled, onPropertyChang
         <div className={styles['input-group']}>
             <Stack direction={"column"} spacing={2}>
                 <CustomRadio
-                    value={hide}
+                    value={hidden}
                     label={'將這篇文章「隱藏」'}
                     setState={onPublishInfoHiddenChange} />
-                {hide && <CustomRadio
-                    disabled={!hide}
+                {hidden && <CustomRadio
+                    disabled={!hidden}
                     defaultValue={isScheduled}
                     label={'是否排程上版'}
                     setState={onPublishInfoIsScheduledChange} />}
-                {hide && isScheduled && <DateTimeSelector
+                {hidden && isScheduled && <DateTimeSelector
                     defaultValue={scheduledAt}
                     width={'250px'}
                     title={'排程日期'}

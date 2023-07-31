@@ -17,11 +17,15 @@ function IEditor() {
   const dispatch = useDispatch();
 
   const editor = useSelector((state) => state.getEditorReducer.editor);
-  const {
-    submitState,
-    errorMessage: returnMessage
-  } = useSelector((state) => state.getSlateReducer);
+  console.log("🚀 ~ file: index.jsx:20 ~ IEditor ~ id:", id)
+  console.log("🚀 ~ file: index.jsx:20 ~ IEditor ~ editor:", editor)
+
+  const submitState = useSelector((state) => state.getSlateReducer.submitState);
+  const isPreview = useSelector((state) => state.getSlateReducer.isPreview);
+  const returnMessage = useSelector((state) => state.getSlateReducer.errorMessage);
   const errorMessage = useSelector((state) => state.getEditorReducer.errorMessage);
+  const previewID = useSelector((state) => state.getSlateReducer.previewID);
+  console.log("🚀 ~ file: index.jsx:26 ~ IEditor ~ previewID:", previewID)
   const message = getErrorMessage(errorMessage, returnMessage)
 
   function getErrorMessage(errorMessage, returnMessage) {
@@ -63,40 +67,50 @@ function IEditor() {
 
   useEffect(() => {
     if (message !== 'check__OK!') return
-    onEditorSave(submitState, id)
-  }, [message, submitState, id]);
+    if (!isPreview) {
+      onEditorSave(submitState, id)
+      return
+    }
+    onPreviewSave(submitState)
+  }, [message, submitState, id, isPreview]);
 
   useEffect(() => {
     if (!editor) requestEditorByID(id)
+  }, [id, editor]);
+
+  useEffect(() => {
     if (title) handleClickOpen()
     if (title === '更新成功') requestEditorByID(id)
-  }, [title, id, editor]);
+  }, [title, id]);
+
+  useEffect(() => {
+    if (!isPreview) return
+    if (!previewID) return
+    window.open(`http://10.88.0.103:3001/preview/${previewID}`, '_blank')
+
+  }, [isPreview, previewID]);
 
   function requestEditorByID(id) {
     dispatch({
       type: GetEditorAction.REQUEST_EDITOR_BY_ID,
       payload: {
-        data: {
-          _id: id
-        },
+        _id: id
       },
     });
   }
 
+  const onPreviewSave = useCallback((data) => {
+    console.log("🚀 ~ file: index.jsx:92 ~ onPreviewSave ~ data:", data)
+    dispatch({
+      type: GetSlateAction.PREVIEW_EDITOR,
+      payload: {
+        data: data
+      },
+    })
+  }, [dispatch])
+
   const onEditorSave = useCallback((data, id) => {
-    console.log("🚀 ~ file: index.jsx:74 ~ onEditorSave ~ data:", data)
-
-    // if (preview) {
-    //   dispatch({
-    //     type: GetEditorAction.PREVIEW_EDITOR,
-    //     payload: {
-    //       data: formData
-    //     },
-    //   })
-    //   return
-    // }
-
-    // return
+    console.log("🚀 ~ file: index.jsx:113 ~ onEditorSave ~ data:", data)
     dispatch({
       type: GetEditorAction.UPDATE_EDITOR,
       payload: {

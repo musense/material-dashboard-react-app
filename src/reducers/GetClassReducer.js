@@ -13,7 +13,18 @@ const initialState = {
     categories: null,
     classList: new Map(),
     editorClassList: null,
-    editorClass: null,
+    editorClass: {
+        id: '',
+        name: '',
+        keyName: '',
+        title: '',
+        description: '',
+        keywords: '',
+        manualUrl: '',
+        customUrl: '',
+        parentClass: '',
+        isEditing: false,
+    },
     errorMessage: null,
     currentPage: null,
     totalCount: null,
@@ -31,6 +42,27 @@ const getClassReducer = (state = initialState, action) => {
     // console.log(action);
 
     switch (action.type) {
+        case GetClassAction.CANCEL_EDITING_CLASS:
+            return {
+                ...state,
+                editorClass: {
+                    ...initialState.editorClass,
+                    isEditing: false
+                }
+            }
+        case GetClassAction.SET_CLASS_PROPERTY: {
+            const { property, value } = action.payload.allProps
+            console.log("🚀 ~ file: GetSlateReducer.js:80 ~ getSlateReducer ~ property:", property)
+            console.log("🚀 ~ file: GetSlateReducer.js:80 ~ getSlateReducer ~ value:", value)
+
+            return {
+                ...state,
+                editorClass: {
+                    ...state.editorClass,
+                    [property]: value
+                },
+            }
+        }
         case GetClassAction.RESET_SELECTED_CLASS:
             return {
                 ...state,
@@ -147,9 +179,22 @@ const getClassReducer = (state = initialState, action) => {
             }
         }
         case GetClassAction.EDITING_CLASS:
+            const editorClass = action.payload.editorClass;
             return {
                 ...state,
                 editorClass: action.payload.editorClass,
+                editorClass: {
+                    id: editorClass._id,
+                    name: editorClass.name,
+                    keyName: editorClass.keyName,
+                    title: editorClass.title,
+                    description: editorClass.description,
+                    keywords: editorClass.keywords,
+                    manualUrl: editorClass.manualUrl,
+                    customUrl: editorClass.customUrl,
+                    parentClass: editorClass.parentClass,
+                    isEditing: true
+                }
             }
         case GetClassAction.EDIT_CLASS_SUCCESS:
             return {

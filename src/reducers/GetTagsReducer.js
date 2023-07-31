@@ -11,7 +11,7 @@ const initialState = {
     tagList: null,
     showTagList: null,
     selectedTag: {
-        id: null,
+        id: '',
         tagName: '',
         title: '',
         description: '',

@@ -29,7 +29,6 @@ function EditorList() {
     dispatch({ type: GetEditorAction.REQUEST_EDITOR });
   }, [])
 
-  // const titleList = useSelector((state) => state.getEditorReducer.titleList);
   const [isModalOpen, setIsModalOpen] = useState(true);
 
 

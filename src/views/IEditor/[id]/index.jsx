@@ -9,6 +9,8 @@ import MessageDialog from '../../../components/Modal/MessageDialog.jsx';
 
 import useIEditorResult from '../../../hook/useIEditorResult.js';
 import useSetEditorDefaultValue from '../../../hook/useSetEditorDefaultValue.js';
+import usePreview from '../../../hook/usePreview.js';
+import useModal from '../../../hook/useModal.js';
 
 function IEditor() {
 
@@ -44,17 +46,21 @@ function IEditor() {
   console.log("🚀 ~ file: index.jsx:35 ~ NewIEditor ~ editor:", editor)
   console.log("🚀 ~ file: index.jsx:35 ~ NewIEditor ~ message:", message)
   useSetEditorDefaultValue(editor)
-  const [open, setOpen] = React.useState(false);
-  const handleClickOpen = () => setOpen(true);
-  const handleClose = () => {
-    setOpen(false)
+  const {
+    open,
+    handleOpen: handleClickOpen,
+    handleClose: setClose
+  } = useModal()
+  
+  const handleClose = useCallback(() => {
+    setClose()
     dispatch({
       type: GetSlateAction.CHECK_BEFORE_SUBMIT,
       payload: {
         errorMessage: '--reset-error-message',
       }
     })
-  }
+  }, [dispatch, setClose])
 
   const {
     title,
@@ -83,12 +89,14 @@ function IEditor() {
     if (title === '更新成功') requestEditorByID(id)
   }, [title, id]);
 
-  useEffect(() => {
-    if (!isPreview) return
-    if (!previewID) return
-    window.open(`http://10.88.0.103:3001/preview/${previewID}`, '_blank')
+  usePreview(previewID, isPreview)
+  
+  // useEffect(() => {
+  //   if (!isPreview) return
+  //   if (!previewID) return
+  //   window.open(`http://10.88.0.103:3001/preview/${previewID}`, '_blank')
 
-  }, [isPreview, previewID]);
+  // }, [isPreview, previewID]);
 
   function requestEditorByID(id) {
     dispatch({

@@ -8,11 +8,24 @@ import MessageDialog from '../../components/Modal/MessageDialog.jsx';
 
 import useIEditorResult from '../../hook/useIEditorResult.js';
 import useSetEditorDefaultValue from '../../hook/useSetEditorDefaultValue.js';
+import usePreview from '../../hook/usePreview.js';
 import useModal from '../../hook/useModal.js';
 
 function NewIEditor() {
 
-  const previewURL = process.env.REACT_APP_PREVIEW_URL
+  // useEffect(() => {
+  //   const handleBeforeUnload = (event) => {
+  //     console.log('🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀beforeunload Hola!');
+  //     event.preventDefault();
+  //     onDraftEditorSave()
+  //     event.returnValue = 'beforeunload Hola!';
+  //   };
+  //   window.addEventListener('beforeunload', handleBeforeUnload);
+  //   return () => {
+  //     window.removeEventListener('beforeunload', handleBeforeUnload);
+  //   };
+  // }, []);
+
   const dispatch = useDispatch();
 
   const submitState = useSelector((state) => state.getSlateReducer.submitState);
@@ -89,11 +102,9 @@ function NewIEditor() {
     onPreviewSave(submitState)
   }, [message, submitState, isPreview]);
 
-  useEffect(() => {
-    if (!isPreview) return
-    if (!previewID) return
-    window.open(`${previewURL}/preview/${previewID}`, '_blank')
-  }, [isPreview, previewID, previewURL]);
+
+  usePreview(previewID, isPreview)
+
 
   const onPreviewSave = useCallback((data) => {
     console.log("🚀 ~ file: index.jsx:92 ~ onPreviewSave ~ data:", data)

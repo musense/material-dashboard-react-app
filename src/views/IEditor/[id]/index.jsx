@@ -9,6 +9,7 @@ import MessageDialog from '../../../components/Modal/MessageDialog.jsx';
 
 import useIEditorResult from '../../../hook/useIEditorResult.js';
 import useSetEditorDefaultValue from '../../../hook/useSetEditorDefaultValue.js';
+import usePreview from '../../../hook/usePreview.js';
 
 function IEditor() {
 
@@ -83,12 +84,14 @@ function IEditor() {
     if (title === '更新成功') requestEditorByID(id)
   }, [title, id]);
 
-  useEffect(() => {
-    if (!isPreview) return
-    if (!previewID) return
-    window.open(`http://10.88.0.103:3001/preview/${previewID}`, '_blank')
+  usePreview(previewID, isPreview)
+  
+  // useEffect(() => {
+  //   if (!isPreview) return
+  //   if (!previewID) return
+  //   window.open(`http://10.88.0.103:3001/preview/${previewID}`, '_blank')
 
-  }, [isPreview, previewID]);
+  // }, [isPreview, previewID]);
 
   function requestEditorByID(id) {
     dispatch({

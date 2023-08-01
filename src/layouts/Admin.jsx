@@ -28,7 +28,7 @@ const myContainerStyle = {
   minHeight: 'unset',
   marginTop: '74px',
   height: 'calc(100vh - 74px)',
-  overflow: 'hidden auto',
+  overflow: 'hidden',
 }
 
 function Dashboard({ ...props }) {

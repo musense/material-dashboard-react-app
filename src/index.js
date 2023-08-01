@@ -14,9 +14,11 @@ const store = configureStore();
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
 root.render(
-  <Provider store={store}>
-    <BrowserRouter history={hist}>
-      <App />
-    </BrowserRouter>
-  </Provider>
+  <React.StrictMode>
+    <Provider store={store}>
+      <BrowserRouter history={hist}>
+        <App />
+      </BrowserRouter>
+    </Provider>
+  </React.StrictMode>
 );

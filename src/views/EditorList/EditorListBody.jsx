@@ -32,6 +32,7 @@ export default function EditorListBody() {
     const showList = useSelector((state) => state.getEditorReducer.showList);
     const currentPage = useSelector((state) => state.getEditorReducer.currentPage);
     const totalPage = useSelector((state) => state.getEditorReducer.totalPage);
+    const totalCount = useSelector((state) => state.getEditorReducer.totalCount);
     const serverMessage = useSelector((state) => state.getEditorReducer.errorMessage);
 
     console.log("🚀 ~ file: EditorListBody.jsx:34 ~ EditorListBody ~ showList:", showList)
@@ -86,6 +87,7 @@ export default function EditorListBody() {
         <EditorListButtonList
             currentPage={currentPage}
             totalPage={totalPage}
+            totalCount={totalCount}
         />
         <form className='view-list-form' name='view-editor-list-form' >
             <RowHeader headerConfig={headerMap} />

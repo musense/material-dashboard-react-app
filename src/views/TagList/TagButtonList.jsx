@@ -1,10 +1,16 @@
 import React from "react";
 import PageButtonList from '../../components/PageButtonList/PageButtonList';
-import Button from '../../components/CustomButtons/Button';
+import Stack from "@mui/material/Stack";
+import Button from '@mui/material/Button';
 import { useDispatch } from 'react-redux';
 import * as GetTagsAction from '../../actions/GetTagsAction';
+import { Typography } from "@material-ui/core";
 
-export default function TagButtonList({ currentPage, totalPage }) {
+export default function TagButtonList({
+    currentPage,
+    totalPage,
+    totalCount
+}) {
 
     const dispatch = useDispatch();
 
@@ -16,11 +22,15 @@ export default function TagButtonList({ currentPage, totalPage }) {
         })
     }
 
-    return <div style={{
-        marginTop: '1.1rem',
-    }}>
+    const buttonProps = {
+        color: 'info',
+        size: 'small',
+        variant: 'contained',
+    }
+
+    return <Stack spacing={2} direction={'row'} display={'flex'} alignItems={'center'} sx={{ my: '1rem' }}>
         <Button
-            color='info'
+            {...buttonProps}
             disabled={currentPage === 1}
             onClick={() => onPageButtonClick(currentPage - 1)}
         >
@@ -32,11 +42,14 @@ export default function TagButtonList({ currentPage, totalPage }) {
             patchType={GetTagsAction.REQUEST_TAG_PAGE}
         />
         <Button
-            color='info'
+            {...buttonProps}
             disabled={currentPage === totalPage}
             onClick={() => onPageButtonClick(currentPage + 1)}
         >
             下一頁
         </Button>
-    </div>;
+        <Typography sx={{ fontSize: 16 }}>
+            合計：{totalCount}筆
+        </Typography>
+    </Stack>;
 }

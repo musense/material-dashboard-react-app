@@ -1,7 +1,7 @@
 import React, { useCallback } from "react";
 import CustomRadio from '../../../components/CustomRadio/CustomRadio';
 import DateTimeSelector from "../../../components/DateSelector/DateTimeSelector";
-import { Stack } from "@mui/system";
+import { Stack } from "@mui/material";
 
 export default function PublishInfo({ styles, hidden, isScheduled, onPropertyChange, scheduledAt }) {
     const onPublishInfoHiddenChange = useCallback((value) => {

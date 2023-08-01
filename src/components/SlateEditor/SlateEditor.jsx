@@ -56,9 +56,9 @@ function SlateEditor({
           style={{
             fontSize: '1rem',
             minHeight: '30rem',
-            height: 'auto',
+            height: '676px',
             maxHeight: '57rem',
-            overflow: 'hidden scroll',
+            overflow: 'hidden auto',
           }}
           renderElement={renderElement}
           renderLeaf={renderLeaf}

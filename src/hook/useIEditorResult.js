@@ -77,7 +77,12 @@ export default function useIEditorResult(message, editor) {
                 setSuccess(false)
                 return
             }
-            
+            case 'Network Error': {
+                setTitle('Error')
+                setContent('取得資料出現錯誤！即將導回登入頁！')
+                setSuccess(false)
+                return
+            }
             case '--reset-error-message': {
                 setTitle(null)
                 setContent(null)

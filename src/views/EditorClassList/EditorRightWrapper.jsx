@@ -31,6 +31,7 @@ export default function EditorRightWrapper() {
     const showList = useSelector((state) => state.getClassReducer.showList);
     const currentPage = useSelector((state) => state.getClassReducer.currentPage);
     const totalPage = useSelector((state) => state.getClassReducer.totalPage);
+    const totalCount = useSelector((state) => state.getClassReducer.totalCount);
     const serverMessage = useSelector((state) => state.getClassReducer.errorMessage);
 
     console.log("🚀 ~ file: EditorRightWrapper.jsx:33 ~ EditorRightWrapper ~ showList:", showList)
@@ -80,6 +81,7 @@ export default function EditorRightWrapper() {
                             <EditorClassButtonList
                                 currentPage={currentPage}
                                 totalPage={totalPage}
+                                totalCount={totalCount}
                             />
                             <form className='view-list-form' name='view-class-form'>
                                 <RowHeader headerConfig={headerMap} />
@@ -88,6 +90,7 @@ export default function EditorRightWrapper() {
                                     showList={showList}
                                     handleOpenDialog={handleOpenDialog}
                                     messageDialogReturnValue={messageDialogReturnValue}
+                                    className="editor-class"
                                 />
                             </form>
                         </CardBody>

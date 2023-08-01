@@ -9,7 +9,8 @@ export default function RowBody({
     headerConfig,
     showList,
     handleOpenDialog,
-    messageDialogReturnValue
+    messageDialogReturnValue,
+    className = null
 }) {
 
     const dispatch = useDispatch();
@@ -69,7 +70,7 @@ export default function RowBody({
         });
     }
     const headerRow = headerConfig.headerRow
-    return <div data-attr="data-body" className='view-body'>
+    return <div data-attr="data-body" className={`view-body ${className}`}>
         {showList && showList.length > 0 && showList.map((tag, index) => {
             return (
                 <div data-attr="data-body-row" key={index} >

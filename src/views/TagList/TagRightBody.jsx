@@ -27,6 +27,7 @@ export default function TagRightBody() {
     const showList = useSelector((state) => state.getTagsReducer.showTagList);
     const currentPage = useSelector((state) => state.getTagsReducer.currentPage);
     const totalPage = useSelector((state) => state.getTagsReducer.totalPage);
+    const totalCount = useSelector((state) => state.getTagsReducer.totalCount);
     const serverMessage = useSelector((state) => state.getTagsReducer.errorMessage);
     console.log("🚀 ~ file: TagRightBody.jsx:29 ~ TagRightBody ~ showList:", showList)
 
@@ -71,6 +72,7 @@ export default function TagRightBody() {
         <TagButtonList
             currentPage={currentPage}
             totalPage={totalPage}
+            totalCount={totalCount}
         />
         <form name='view-class-form' className={'view-list-form'}>
             <RowHeader headerConfig={headerMap} />
@@ -79,6 +81,7 @@ export default function TagRightBody() {
                 showList={showList}
                 handleOpenDialog={handleOpenDialog}
                 messageDialogReturnValue={messageDialogReturnValue}
+                className={'tag'}
             />
 
         </form>

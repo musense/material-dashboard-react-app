@@ -15,7 +15,8 @@ export default function RowBody({
     handleOpen,
     setMediaInfo,
     handleOpenDialog,
-    messageDialogReturnValue
+    messageDialogReturnValue,
+    className=null
 }) {
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -88,7 +89,7 @@ export default function RowBody({
         navigate(`/admin/editorList/${updateEditor._id}`);
     }
     const headerRow = headerConfig.headerRow
-    return <div data-attr="data-body" className={`view-body`}>
+    return <div data-attr="data-body" className={`view-body ${className}`}>
         {showList && showList.length > 0 && showList.map((titleView, index) => {
             return (
                 <div data-attr="data-body-row" key={index}>

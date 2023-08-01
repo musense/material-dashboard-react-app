@@ -1,10 +1,16 @@
 import React from "react";
-import Button from 'components/CustomButtons/Button';
-import PageButtonList from '../../components/PageButtonList/PageButtonList';
 import { useDispatch } from 'react-redux';
 import * as GetClassAction from 'actions/GetClassAction';
+import Stack from "@mui/material/Stack";
+import Button from '@mui/material/Button';
+import PageButtonList from "components/PageButtonList/PageButtonList";
+import { Typography } from "@material-ui/core";
 
-export default function EditorClassButtonList({ currentPage, totalPage }) {
+export default function EditorClassButtonList({
+    currentPage,
+    totalPage,
+    totalCount,
+}) {
 
     const dispatch = useDispatch();
 
@@ -16,27 +22,32 @@ export default function EditorClassButtonList({ currentPage, totalPage }) {
         })
     }
 
-    return <div style={{
-        marginTop: '1.1rem',
-    }}>
+    const buttonProps = {
+        color: 'info',
+        size: 'small',
+        variant: 'contained',
+    }
+
+
+    return <Stack spacing={2} direction={'row'} display={'flex'} alignItems={'center'} sx={{ my: '1rem' }}>
         <Button
-            color='info'
+            {...buttonProps}
             disabled={currentPage === 1}
-            onClick={() => onPageButtonClick(currentPage - 1)}
-        >
+            onClick={() => onPageButtonClick(currentPage - 1)} >
             上一頁
         </Button>
         <PageButtonList
             totalPage={totalPage}
             currentPage={currentPage}
-            patchType={GetClassAction.REQUEST_CLASS_PAGE}
-        />
+            patchType={GetClassAction.REQUEST_CLASS_PAGE} />
         <Button
-            color='info'
+            {...buttonProps}
             disabled={currentPage === totalPage}
-            onClick={() => onPageButtonClick(currentPage + 1)}
-        >
+            onClick={() => onPageButtonClick(currentPage + 1)}>
             下一頁
         </Button>
-    </div>;
+        <Typography sx={{ fontSize: 16 }}>
+            合計：{totalCount}筆
+        </Typography>
+    </Stack>;
 }

@@ -8,21 +8,9 @@ import MessageDialog from '../../components/Modal/MessageDialog.jsx';
 
 import useIEditorResult from '../../hook/useIEditorResult.js';
 import useSetEditorDefaultValue from '../../hook/useSetEditorDefaultValue.js';
+import useModal from '../../hook/useModal.js';
 
 function NewIEditor() {
-
-  // useEffect(() => {
-  //   const handleBeforeUnload = (event) => {
-  //     console.log('🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀beforeunload Hola!');
-  //     event.preventDefault();
-  //     onDraftEditorSave()
-  //     event.returnValue = 'beforeunload Hola!';
-  //   };
-  //   window.addEventListener('beforeunload', handleBeforeUnload);
-  //   return () => {
-  //     window.removeEventListener('beforeunload', handleBeforeUnload);
-  //   };
-  // }, []);
 
   const previewURL = process.env.REACT_APP_PREVIEW_URL
   const dispatch = useDispatch();
@@ -51,17 +39,35 @@ function NewIEditor() {
   console.log("🚀 ~ file: index.jsx:35 ~ NewIEditor ~ editor:", submitState)
   console.log("🚀 ~ file: index.jsx:35 ~ NewIEditor ~ message:", message)
   useSetEditorDefaultValue()
-  const [open, setOpen] = React.useState(false);
-  const handleClickOpen = () => setOpen(true);
-  const handleClose = () => {
-    setOpen(false)
+
+  const {
+    open,
+    handleOpen: handleClickOpen,
+    handleClose: setClose
+  } = useModal()
+  
+  const handleClose = useCallback(() => {
+    setClose()
     dispatch({
       type: GetSlateAction.CHECK_BEFORE_SUBMIT,
       payload: {
         errorMessage: '--reset-error-message',
       }
     })
-  }
+  }, [dispatch, setClose])
+
+  useEffect(() => {
+    const handleBeforeUnload = (event) => {
+      console.log('🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀beforeunload Hola!');
+      event.preventDefault();
+      // onEditorSave()
+      event.returnValue = 'beforeunload Hola!';
+    };
+    window.addEventListener('beforeunload', handleBeforeUnload);
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+    };
+  }, []);
 
   const {
     title,

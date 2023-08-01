@@ -24,6 +24,7 @@ function NewIEditor() {
   //   };
   // }, []);
 
+  const previewURL = process.env.REACT_APP_PREVIEW_URL
   const dispatch = useDispatch();
 
   const submitState = useSelector((state) => state.getSlateReducer.submitState);
@@ -75,7 +76,7 @@ function NewIEditor() {
 
   useEffect(() => {
     if (message !== 'check__OK!') return
-    if(!isPreview){
+    if (!isPreview) {
       onEditorSave(submitState)
       return
     }
@@ -85,8 +86,8 @@ function NewIEditor() {
   useEffect(() => {
     if (!isPreview) return
     if (!previewID) return
-    window.open(`http://10.88.0.103:3001/preview/${previewID}`, '_blank')
-  }, [isPreview, previewID]);
+    window.open(`${previewURL}/preview/${previewID}`, '_blank')
+  }, [isPreview, previewID, previewURL]);
 
   const onPreviewSave = useCallback((data) => {
     console.log("🚀 ~ file: index.jsx:92 ~ onPreviewSave ~ data:", data)
@@ -96,7 +97,7 @@ function NewIEditor() {
         data: data
       },
     })
-  },[dispatch])
+  }, [dispatch])
 
   const onEditorSave = useCallback((data) => {
     console.log("🚀 ~ file: index.jsx:74 ~ onEditorSave ~ data:", data)

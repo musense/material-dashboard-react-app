@@ -25,7 +25,7 @@ const initialState = {
 }
 const getEditorReducer = (state = initialState, action) => {
   // console.log("🚀 ~ file: GetEditorReducer.js:157 ~ getEditorReducer ~ action:", action)
-  switch (action.type) {  
+  switch (action.type) {
     case GetEditorAction.RESET_EDITOR: {
       return {
         ...state,
@@ -176,6 +176,14 @@ const getEditorReducer = (state = initialState, action) => {
         ...state,
         errorMessage: action.payload.errorMessage
       }
+    case "LOGOUT_USER": {
+      return {
+        ...initialState,
+        sortingMap: {
+          ...initialState.sortingMap
+        }
+      }
+    }
     default: {
       return {
         ...state,

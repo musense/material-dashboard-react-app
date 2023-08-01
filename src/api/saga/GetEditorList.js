@@ -176,6 +176,7 @@ function* PreviewEditor(payload) {
 function* UpdateEditor(payload) {
     // return
     const { id, data } = payload
+    console.log("🚀 ~ file: GetEditorList.js:179 ~ function*UpdateEditor ~ data:", data)
     try {
         const requestFormData = toBackendFormData(data, 'update')
         // return

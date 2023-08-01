@@ -1,37 +1,24 @@
-import React, { useEffect, useCallback } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import React from 'react';
+import { useSelector } from 'react-redux';
 import ContentEditorForm from "./ContentEditorForm.jsx"
 import DetailForm from "./DetailForm/DetailForm.jsx"
-import * as GetEditorAction from 'actions/GetEditorAction.js';
-import * as GetSlateAction from 'actions/GetSlateAction.js';
 import MessageDialog from '../../components/Modal/MessageDialog.jsx';
 
 import useIEditorResult from '../../hook/useIEditorResult.js';
 import useSetEditorDefaultValue from '../../hook/useSetEditorDefaultValue.js';
 import usePreview from '../../hook/usePreview.js';
-import useModal from '../../hook/useModal.js';
+import useEditorModal from '../../hook/useEditorModal.js';
+import useEditorSave from '../../hook/useEditorSave.js';
+import useBeforeUnloadSave from '../../hook/useBeforeUnloadSave.js';
 
 function NewIEditor() {
 
-  // useEffect(() => {
-  //   const handleBeforeUnload = (event) => {
-  //     console.log('🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀beforeunload Hola!');
-  //     event.preventDefault();
-  //     onDraftEditorSave()
-  //     event.returnValue = 'beforeunload Hola!';
-  //   };
-  //   window.addEventListener('beforeunload', handleBeforeUnload);
-  //   return () => {
-  //     window.removeEventListener('beforeunload', handleBeforeUnload);
-  //   };
-  // }, []);
-
-  const dispatch = useDispatch();
+  useSetEditorDefaultValue()
 
   const submitState = useSelector((state) => state.getSlateReducer.submitState);
   const isPreview = useSelector((state) => state.getSlateReducer.isPreview);
   const returnMessage = useSelector((state) => state.getSlateReducer.errorMessage);
-  const _id = useSelector((state) => state.getEditorReducer._id);
+  const id = useSelector((state) => state.getEditorReducer._id);
   const errorMessage = useSelector((state) => state.getEditorReducer.errorMessage);
   const previewID = useSelector((state) => state.getSlateReducer.previewID);
   const message = getErrorMessage(errorMessage, returnMessage)
@@ -51,36 +38,7 @@ function NewIEditor() {
 
   console.log("🚀 ~ file: index.jsx:35 ~ NewIEditor ~ editor:", submitState)
   console.log("🚀 ~ file: index.jsx:35 ~ NewIEditor ~ message:", message)
-  useSetEditorDefaultValue()
 
-  const {
-    open,
-    handleOpen: handleClickOpen,
-    handleClose: setClose
-  } = useModal()
-  
-  const handleClose = useCallback(() => {
-    setClose()
-    dispatch({
-      type: GetSlateAction.CHECK_BEFORE_SUBMIT,
-      payload: {
-        errorMessage: '--reset-error-message',
-      }
-    })
-  }, [dispatch, setClose])
-
-  useEffect(() => {
-    const handleBeforeUnload = (event) => {
-      console.log('🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀beforeunload Hola!');
-      event.preventDefault();
-      // onEditorSave()
-      event.returnValue = 'beforeunload Hola!';
-    };
-    window.addEventListener('beforeunload', handleBeforeUnload);
-    return () => {
-      window.removeEventListener('beforeunload', handleBeforeUnload);
-    };
-  }, []);
 
   const {
     title,
@@ -89,43 +47,15 @@ function NewIEditor() {
     success
   } = useIEditorResult(message, submitState)
 
-  useEffect(() => {
-    if (title) handleClickOpen()
-  }, [title, content]);
-
-  useEffect(() => {
-    if (message !== 'check__OK!') return
-    if (!isPreview) {
-      onEditorSave(submitState)
-      return
-    }
-    onPreviewSave(submitState)
-  }, [message, submitState, isPreview]);
-
+  const {
+    open,
+    handleClose
+  } = useEditorModal(title)
 
   usePreview(previewID, isPreview)
-
-
-  const onPreviewSave = useCallback((data) => {
-    console.log("🚀 ~ file: index.jsx:92 ~ onPreviewSave ~ data:", data)
-    dispatch({
-      type: GetSlateAction.PREVIEW_EDITOR,
-      payload: {
-        data: data
-      },
-    })
-  }, [dispatch])
-
-  const onEditorSave = useCallback((data) => {
-    console.log("🚀 ~ file: index.jsx:74 ~ onEditorSave ~ data:", data)
-    dispatch({
-      type: GetEditorAction.ADD_EDITOR,
-      payload: {
-        data: data,
-        draft: false
-      },
-    })
-  }, [dispatch])
+  useEditorSave(message, submitState, isPreview)
+  const { onEditorSave } = useEditorSave(message, submitState, isPreview)
+  // useBeforeUnloadSave(onEditorSave)
 
   return (
     <div className={'container'}>
@@ -141,7 +71,7 @@ function NewIEditor() {
       <MessageDialog
         dialogTitle={title}
         dialogContent={content}
-        editorID={_id}
+        editorID={id}
         sitemapUrl={sitemapUrl}
         success={success}
         open={open}

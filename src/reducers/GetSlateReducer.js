@@ -1,5 +1,4 @@
 import * as GetSlateAction from './../actions/GetSlateAction';
-import * as GetUserAction from './../actions/GetUserAction';
 
 const initialState = {
   contentForm: {
@@ -44,6 +43,13 @@ const initialState = {
 const getSlateReducer = (state = initialState, action) => {
   console.log("🚀 ~ file: GetSlateReducer.js:30 ~ getSlateReducer ~ action:", action)
   switch (action.type) {
+    case "PREVIEW_FINISHED": {
+      return {
+        ...state,
+        isPreview: false,
+        previewID: null,
+      }
+    }
     case GetSlateAction.PREVIEW_EDITOR_SUCCESS: {
       return {
         ...state,
@@ -140,20 +146,12 @@ const getSlateReducer = (state = initialState, action) => {
       let errorMessage,
         cachedInitialState,
         trimmedState
-      if (isPreview) {
-        trimmedState = { ...submitState }
-        return {
-          ...state,
-          submitState: trimmedState,
-          isPreview: isPreview,
-          errorMessage: 'check__OK!'
-        }
-      }
+
       if (action.payload.errorMessage) {
         errorMessage = action.payload.errorMessage
       } else {
         errorMessage = generateErrorMessage(state, initialState)
-      }
+      }     
       console.log("🚀 ~ file: GetSlateReducer.js:108 ~ getSlateReducer ~ errorMessage:", errorMessage)
       if (errorMessage) {
         return {
@@ -161,6 +159,15 @@ const getSlateReducer = (state = initialState, action) => {
           errorMessage: errorMessage
         }
       } else {
+        if (isPreview) {
+          trimmedState = { ...submitState }
+          return {
+            ...state,
+            submitState: trimmedState,
+            isPreview: isPreview,
+            errorMessage: 'check__OK!'
+          }
+        }
         // cloneDeep
         const createType = action.payload.createType
         console.log("🚀 ~ file: GetSlateReducer.js:129 ~ getSlateReducer ~ createType:", createType)
@@ -187,7 +194,7 @@ const getSlateReducer = (state = initialState, action) => {
         errorMessage: errorMessage || 'check__OK!'
       }
     }
-    case GetUserAction.LOGOUT_USER: {
+    case "LOGOUT_USER": {
       return {
         ...initialState,
         errorMessage: '--reset-error-message'

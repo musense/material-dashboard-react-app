@@ -38,6 +38,11 @@ const getDialogReducer = (state = initialState, action) => {
       return {
         ...initialState,
       }
+    case "LOGOUT_USER": {
+      return {
+        ...initialState,
+      }
+    }
     default:
       return { ...state }
   }

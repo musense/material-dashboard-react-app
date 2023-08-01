@@ -123,8 +123,8 @@ export function toFrontendData(responseData) {
 export function toBackendFormData(requestData, createType) {
     const formData = new FormData()
     // if (createType === 'add_new') {
-    formData.append('title', JSON.stringify(requestData.title))
-    formData.append('content', JSON.stringify(requestData.content))
+    requestData.title && formData.append('title', JSON.stringify(requestData.title))
+    requestData.content && formData.append('content', JSON.stringify(requestData.content))
     // }
     if (requestData.webHeader) {
         Object.entries(requestData.webHeader).forEach(([key, value]) => {
@@ -141,6 +141,10 @@ export function toBackendFormData(requestData, createType) {
     }
     if (requestData.media) {
         Object.entries(requestData.media).forEach(([key, value]) => {
+            if (value === null || value === '') {
+                // formData.append(key, '')
+                return
+            }
             if (key === 'contentImagePath') {
                 if (value.indexOf('data:image') !== -1) {
                     const imageFile = generateImageFile(value);
@@ -148,12 +152,13 @@ export function toBackendFormData(requestData, createType) {
                 } else {
                     formData.append('contentImagePath', new Blob([value], { type: 'text/plain' }))
                 }
-            } else if (key === 'homeImagePath') {
-                value !== null && formData.append('homeImagePath', new Blob([value], { type: 'text/plain' }))
-            } else {
-                formData.append('altText', JSON.stringify(value))
+                return
             }
-
+            if (key === 'homeImagePath') {
+                value !== null && formData.append('homeImagePath', new Blob([value], { type: 'text/plain' }))
+                return
+            }
+            formData.append('altText', JSON.stringify(value))
         })
     }
     if (requestData.publishInfo) {

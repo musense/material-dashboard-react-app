@@ -45,6 +45,10 @@ const getUserReducer = (state = initialState, action) => {
                 ...state,
                 errorMessage: action.payload.message
             }
+        case GetUserAction.LOGOUT_USER:
+            return {
+                ...initialState,
+            }
         default:
             return { ...state }
     }

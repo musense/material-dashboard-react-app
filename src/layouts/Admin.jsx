@@ -20,9 +20,9 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import * as GetClassAction from "actions/GetClassAction.js";
 import * as GetTagsAction from "actions/GetTagsAction.js";
+import useResetEditorState from '../hook/useResetEditorState';
 
 let userInfo = {};
-
 
 function Dashboard({ ...props }) {
   const [logo, setLogo] = useState();
@@ -34,6 +34,8 @@ function Dashboard({ ...props }) {
   const mainPanel = useRef(null);
   const location = useLocation()
   const dispatch = new useDispatch();
+
+  useResetEditorState(location.pathname)
 
   const handleDrawerToggle = () => {
     setMobileOpen((preMobileOpen) => !preMobileOpen);

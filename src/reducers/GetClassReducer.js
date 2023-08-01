@@ -212,6 +212,12 @@ const getClassReducer = (state = initialState, action) => {
                 ...state,
                 errorMessage: action.payload.message
             }
+        case "LOGOUT_USER": {
+            return {
+                ...initialState,
+                errorMessage: '--reset-error-message'
+            }
+        }
         default:
             return { ...state }
     }

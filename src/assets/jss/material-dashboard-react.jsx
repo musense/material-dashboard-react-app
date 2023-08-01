@@ -61,7 +61,8 @@ const container = {
   paddingRight: "15px",
   paddingLeft: "15px",
   marginRight: "auto",
-  marginLeft: "auto"
+  marginLeft: "auto",
+  height: '100%'
 };
 
 const defaultFont = {

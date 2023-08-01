@@ -24,6 +24,13 @@ import useResetEditorState from '../hook/useResetEditorState';
 
 let userInfo = {};
 
+const myContainerStyle = {
+  minHeight: 'unset',
+  marginTop: '74px',
+  height: 'calc(100vh - 74px)',
+  overflow: 'hidden auto',
+}
+
 function Dashboard({ ...props }) {
   const [logo, setLogo] = useState();
   const [logoText, setLogoText] = useState();
@@ -104,7 +111,7 @@ function Dashboard({ ...props }) {
             {...rest}
           />
           {/* On the /maps route we want the map to be on full screen - this is not possible if the content and conatiner classes are present because they have some paddings which would make the map smaller */}
-          <div style={{ paddingBottom: 0 }} className={classes.content}>
+          <div style={myContainerStyle} className={`${classes.content}`}>
             <div className={classes.container}>
               <Outlet />
             </div>

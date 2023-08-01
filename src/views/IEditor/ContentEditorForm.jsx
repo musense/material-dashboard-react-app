@@ -32,7 +32,7 @@ const ContentEditorForm = () => {
   }, [onPropertyChange])
 
   return (
-    <form >
+    <form>
       <div className='iEditor-Title-Container'>
         <label htmlFor='title'>文章標題</label>
         <input

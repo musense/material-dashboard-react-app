@@ -38,7 +38,8 @@ function SlateEditor({
     position: relative;
     background: rgb(255, 255, 255);
     max-width: 100%;
-    margin-top: 36px;
+    height: calc(100% - 82px);
+    overflow: hidden;
     padding-top: 0;
     `}>
       <Slate
@@ -55,9 +56,7 @@ function SlateEditor({
         <Editable
           style={{
             fontSize: '1rem',
-            minHeight: '30rem',
-            height: '676px',
-            maxHeight: '57rem',
+            height: 'calc(100% - 50px)',
             overflow: 'hidden auto',
           }}
           renderElement={renderElement}

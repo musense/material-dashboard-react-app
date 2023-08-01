@@ -23,7 +23,7 @@ export default function TagLeftWrapper() {
     const dispatch = useDispatch();
 
     const id = useSelector((state) => state.getTagsReducer.selectedTag.id);
-    const tagName = useSelector((state) => state.getTagsReducer.selectedTag.name);
+    const tagName = useSelector((state) => state.getTagsReducer.selectedTag.tagName);
     const tagTitle = useSelector((state) => state.getTagsReducer.selectedTag.title);
     const description = useSelector((state) => state.getTagsReducer.selectedTag.description);
     const keywords = useSelector((state) => state.getTagsReducer.selectedTag.manualUrl);
@@ -217,10 +217,9 @@ export default function TagLeftWrapper() {
                                 : null
                             }
                             <div className={styles['input-group']}>
-                                <label htmlFor="sorting">熱門標籤排序</label>
                                 <CustomRadio
                                     value={isPopularTag}
-                                    label={'熱門標籤'}
+                                    label={'是否設為熱門標籤'}
                                     setState={onPopularTagChange} />
                             </div>
                             {isPopularTag && <div className={styles['input-group']}>

@@ -46,7 +46,7 @@ export function toBackendData(requestData) {
     return {
         _id: requestData._id,
         name: requestData.name,
-        sorting: requestData.sorting,
+        sorting: requestData.sorting !== '' ? requestData.sorting : null,
         popular: requestData.popular,
         headTitle: requestData.webHeader.headTitle,
         headKeyword: requestData.webHeader.keywords,
@@ -97,17 +97,19 @@ function* GetTagList(payload = 1) {
 /// startDate=${startDate}
 /// endDate=${endDate}
 function* SearchTag(payload) {
+
+    const { title, createDate } = payload
     try {
 
-        const nameString = payload.title ? `name=${payload.title}&` : ''
-        const startDateString = payload.createDate
-            ? payload.createDate.startDate
-                ? `startDate=${new Date(payload.createDate.startDate).getTime()}&`
+        const nameString = title ? `name=${title}&` : ''
+        const startDateString = createDate
+            ? createDate.startDate
+                ? `startDate=${new Date(createDate.startDate).getTime()}&`
                 : ''
             : ''
-        const endDateString = payload.createDate
-            ? payload.createDate.endDate
-                ? `endDate=${new Date(payload.createDate.endDate).getTime()}&`
+        const endDateString = createDate
+            ? createDate.endDate
+                ? `endDate=${new Date(createDate.endDate).getTime()}&`
                 : ''
             : ''
         const response = yield instance.get(`/tags?${nameString}${startDateString} ${endDateString}`);
@@ -131,8 +133,9 @@ function* SearchTag(payload) {
 
 // POST
 function* AddTag(payload) {
+    const { data } = payload
     try {
-        const requestData = toBackendData(payload.data)
+        const requestData = toBackendData(data)
         // console.log("🚀 ~ file: GetTagList.js:131 ~ function*AddTag ~ requestDate:", requestData)
         // return
         const response = yield instance.post(`/tags`, requestData);

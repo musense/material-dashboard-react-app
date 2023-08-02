@@ -28,7 +28,6 @@ import MessageDialog from '../../components/Modal/MessageDialog';
 import * as GetUserAction from 'actions/GetUserAction';
 import useLoginResult from '../../hook/useLoginResult';
 import useRememberMe from '../../hook/useRememberMe';
-import Cookie from "js-cookie";
 
 function LoginPage(props) {
   const { classes } = props;
@@ -82,8 +81,6 @@ function LoginPage(props) {
       type: GetUserAction.REGISTER_USER_ERROR_RESET
     })
     if (success) {
-      const sid = Cookie.get('sid')
-      console.log("🚀 ~ file: LoginPage.jsx:135 ~ handleClose ~ sid:", sid)
       navigate('/admin/editorList', { replace: true })
     }
   };

@@ -19,21 +19,21 @@ const DetailForm = ({ createType }) => {
 
     const dispatch = useDispatch();
 
-    const headTitle = useSelector((state) => state.getSlateReducer.detailForm.webHeader.headTitle);
-    const headDescription = useSelector((state) => state.getSlateReducer.detailForm.webHeader.headDescription);
-    const headKeyword = useSelector((state) => state.getSlateReducer.detailForm.webHeader.headKeyword);
-    const manualUrl = useSelector((state) => state.getSlateReducer.detailForm.webHeader.manualUrl);
-    const customUrl = useSelector((state) => state.getSlateReducer.detailForm.webHeader.sitemapUrl);
+    const headTitle = useSelector((state) => state.getSlateReducer.detailForm?.webHeader?.headTitle);
+    const headDescription = useSelector((state) => state.getSlateReducer.detailForm?.webHeader?.headDescription);
+    const headKeyword = useSelector((state) => state.getSlateReducer.detailForm?.webHeader?.headKeyword);
+    const manualUrl = useSelector((state) => state.getSlateReducer.detailForm?.webHeader?.manualUrl);
+    const customUrl = useSelector((state) => state.getSlateReducer.detailForm?.webHeader?.sitemapUrl);
 
-    const tags = useSelector((state) => state.getSlateReducer.detailForm.tags);
+    const tags = useSelector((state) => state.getSlateReducer.detailForm?.tags);
 
-    const categories = useSelector((state) => state.getSlateReducer.detailForm.categories);
+    const categories = useSelector((state) => state.getSlateReducer.detailForm?.categories);
 
-    const altText = useSelector((state) => state.getSlateReducer.detailForm.media.altText);
+    const altText = useSelector((state) => state.getSlateReducer.detailForm?.media.altText);
 
-    const hidden = useSelector((state) => state.getSlateReducer.detailForm.publishInfo.hidden);
-    const isScheduled = useSelector((state) => state.getSlateReducer.detailForm.publishInfo.isScheduled);
-    const scheduledAt = useSelector((state) => state.getSlateReducer.detailForm.publishInfo.scheduledAt);
+    const hidden = useSelector((state) => state.getSlateReducer.detailForm?.publishInfo?.hidden);
+    const isScheduled = useSelector((state) => state.getSlateReducer.detailForm?.publishInfo?.isScheduled);
+    const scheduledAt = useSelector((state) => state.getSlateReducer.detailForm?.publishInfo?.scheduledAt);
 
     const onPropertyChange = useCallback((value, property, info) => {
         dispatch({

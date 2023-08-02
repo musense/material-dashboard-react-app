@@ -197,6 +197,7 @@ const getSlateReducer = (state = initialState, action) => {
     }
     case "SET_ERROR_MESSAGE": {
       return {
+        ...state,
         errorMessage: action.payload.errorMessage
       }
     }

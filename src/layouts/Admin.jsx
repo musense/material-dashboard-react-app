@@ -80,7 +80,7 @@ function Dashboard({ ...props }) {
     } else {
       //componentDidUpdate
 
-      import(`${process.env.REACT_APP_LOGO_DIR}`).then(res => {
+      import(process.env.REACT_APP_LOGO_DIR).then(res => {
         setLogo(res.default)
         setLogoText(process.env.REACT_APP_LOGO_TEXT)
       })

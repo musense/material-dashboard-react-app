@@ -2,15 +2,16 @@ import React, { useCallback, useEffect } from "react";
 import *  as GetEditorAction from "actions/GetEditorAction";
 import { useDispatch } from 'react-redux';
 
-export default function useRequestEditorByID(id, editor, title) {
+export default function useRequestEditorByID(id, editor) {
 
     const dispatch = useDispatch();
 
     useEffect(() => {
-        if (title !== '更新成功') return
+        console.log("🚀 ~ file: useRequestEditorByID.js:17 ~ useEffect ~ editor:", editor)
         if (editor) return
+        console.log("🚀 ~ file: useRequestEditorByID.js:11 ~ useEffect ~ id:", id)
         requestEditorByID(id)
-    }, [id, editor, title]);
+    }, [id, editor]);
 
     const requestEditorByID = useCallback((id) => {
         dispatch({

@@ -17,9 +17,10 @@ function IEditor() {
 
   const { id } = useParams();
   const editor = useSelector((state) => state.getEditorReducer.editor);
-  useSetEditorDefaultValue(editor)
-  console.log("🚀 ~ file: index.jsx:20 ~ IEditor ~ id:", id)
+
   console.log("🚀 ~ file: index.jsx:20 ~ IEditor ~ editor:", editor)
+  console.log("🚀 ~ file: index.jsx:22 ~ IEditor ~ id:", id)
+  console.log("🚀 ~ file: index.jsx:22 ~ IEditor ~ editor:", editor)
 
   const submitState = useSelector((state) => state.getSlateReducer.submitState);
   const isPreview = useSelector((state) => state.getSlateReducer.isPreview);
@@ -53,8 +54,10 @@ function IEditor() {
     success
   } = useIEditorResult(message, editor)
   console.log("🚀 ~ file: index.jsx:74 ~ NewIEditor ~ id:", id)
+  useRequestEditorByID(id, editor)
+  useSetEditorDefaultValue(editor)
 
-  useRequestEditorByID(id, editor, title)
+
   usePreview(previewID, isPreview)
   const { onEditorSave } = useEditorSave(message, submitState, isPreview, id)
   // useBeforeUnloadSave(onEditorSave)

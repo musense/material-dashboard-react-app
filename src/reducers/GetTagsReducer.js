@@ -90,9 +90,15 @@ const getTagsReducer = (state = initialState, action) => {
         case GetTagsAction.ADD_TAG_FAIL:
         case GetTagsAction.UPDATE_TAG_FAIL:
         case GetTagsAction.DELETE_TAG_FAIL: {
+            let errorMessage;
+            if (action.payload.errorMessage.indexOf('E11000 duplicate key error') !== -1) {
+                errorMessage = 'duplicate key error'
+            } else {
+                errorMessage = action.payload.errorMessage
+            }
             return {
                 ...state,
-                errorMessage: action.payload.errorMessage
+                errorMessage: errorMessage
             }
         }
         case GetTagsAction.REQUEST_TAG_SUCCESS:
@@ -187,6 +193,17 @@ const getTagsReducer = (state = initialState, action) => {
                 ...state,
                 errorMessage: null
             }
+        case "RESET_STATE_DATA": {
+            return {
+                ...initialState,
+                sortingMap:{
+                    ...initialState.sortingMap
+                },
+                selectedTag:{
+                    ...initialState.selectedTag
+                }
+            }
+        }
         default: {
             return {
                 ...state,

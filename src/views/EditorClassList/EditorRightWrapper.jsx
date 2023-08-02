@@ -61,15 +61,11 @@ export default function EditorRightWrapper() {
         success
     } = useEditorListResult(errorMessage, contentData, data)
 
-    useEffect(() => {
-        if (title) handleOpenDialog()
-    }, [title, content]);
-
     const {
         open: openDialog,
         handleOpen: handleOpenDialog,
         handleClose: handleCloseDialog
-    } = useModal()
+    } = useModal(title)
 
     return (
         <div className={styles['editor-right-wrapper']}>

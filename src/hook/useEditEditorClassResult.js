@@ -16,6 +16,12 @@ export default function useEditEditorClassResult(message) {
                 setSuccess(false)
                 return
             }
+            case 'duplicate key error': {
+                setTitle('Failed!')
+                setContent('分類名稱不可重複！')
+                setSuccess(false)
+                return
+            }
             case 'add successfully': {
                 setTitle('Success')
                 setContent('文章分類新增成功！')

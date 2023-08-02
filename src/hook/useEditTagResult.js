@@ -16,6 +16,12 @@ export default function useEditTagResult(message) {
                 setSuccess(false)
                 return
             }
+            case 'duplicate key error': {
+                setTitle('Failed!')
+                setContent('標籤名稱不可重複！')
+                setSuccess(false)
+                return
+            }
             case 'add successfully': {
                 setTitle('Success')
                 setContent('標籤新增成功！')

@@ -5,8 +5,8 @@ import * as GetSlateAction from 'actions/GetSlateAction';
 
 const ContentEditorForm = () => {
   const dispatch = useDispatch();
-  const title = useSelector((state) => state.getSlateReducer.contentForm.title);
-  const content = useSelector((state) => state.getSlateReducer.contentForm.content);
+  const title = useSelector((state) => state.getSlateReducer.contentForm?.title);
+  const content = useSelector((state) => state.getSlateReducer.contentForm?.content);
 
   console.log("🚀 ~ file: ContentEditorForm.jsx:17 ~ ContentEditorForm ~ title:", title)
   console.log("🚀 ~ file: ContentEditorForm.jsx:17 ~ ContentEditorForm ~ content:", content)

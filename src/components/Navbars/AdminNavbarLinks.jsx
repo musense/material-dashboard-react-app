@@ -17,10 +17,10 @@ import Button from 'components/CustomButtons/Button.jsx';
 
 import headerLinksStyle from 'assets/jss/material-dashboard-react/components/headerLinksStyle.jsx';
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
 import * as GetUserAction from '../../actions/GetUserAction';
 import MessageDialog from '../Modal/MessageDialog';
 import useLogoutResult from '../../hook/useLogoutResult';
+import useModal from '../../hook/useModal';
 
 function HeaderLinks(props) {
   let anchorEl;
@@ -29,40 +29,17 @@ function HeaderLinks(props) {
   const returnMessage = useSelector((state) => state.getUserReducer.errorMessage);
   console.log("🚀 ~ file: AdminNavbarLinks.jsx:30 ~ HeaderLinks ~ returnMessage:", returnMessage)
 
-  const [notifyPopupOpen, setNotifyPopupOpen] = useState(false);
   const [profilePopupOpen, setProfilePopupOpen] = useState(false);
-
-  const [open, setOpen] = useState(false);
-  const handleDialogOpen = () => setOpen(true);
-  const handleDialogClose = () => {
-    setOpen(false)
-    dispatch({
-      type: GetUserAction.SET_ERROR_MESSAGE,
-      payload: {
-        message: '--reset-error-message',
-      }
-    })
-  }
-
-  const navigate = useNavigate();
-  // const handleToggleNotify = () => {
-  //   setNotifyPopupOpen((prevNotifyOpen) => !prevNotifyOpen);
-  //   setProfilePopupOpen(false);
-  // };
 
   const handleToggleProfile = () => {
     setProfilePopupOpen((prevProfilePopupOpen) => !prevProfilePopupOpen);
-    setNotifyPopupOpen(false);
   };
 
   const handleClose = (event) => {
-    setNotifyPopupOpen(false);
     setProfilePopupOpen(false);
   };
   const logout = () => {
-    dispatch({
-      type: GetUserAction.LOGOUT_USER,
-    });
+    dispatch({ type: GetUserAction.LOGOUT_USER });
   };
 
   const {
@@ -71,9 +48,12 @@ function HeaderLinks(props) {
     success
   } = useLogoutResult(returnMessage)
 
-  useEffect(() => {
-    if (title) handleDialogOpen()
-  }, [title]);
+  const {
+    open,
+    // handleOpen: handleDialogOpen,
+    handleClose: handleDialogClose,
+  } = useModal(title)
+
   return (
     <div>
       <div className={classes.manager}>

@@ -173,9 +173,15 @@ const getClassReducer = (state = initialState, action) => {
         case GetClassAction.DELETE_CLASS_FAIL:
         case GetClassAction.REQUEST_CLASS_LIST_FAIL:
         case GetClassAction.REQUEST_CLASS_FAIL: {
+            let errorMessage;
+            if (action.payload.errorMessage.indexOf('E11000 duplicate key error') !== -1) {
+              errorMessage = 'duplicate key error'
+            } else {
+              errorMessage = action.payload.errorMessage
+            }
             return {
                 ...state,
-                errorMessage: action.payload.errorMessage,
+                errorMessage: errorMessage,
             }
         }
         case GetClassAction.EDITING_CLASS:
@@ -212,7 +218,7 @@ const getClassReducer = (state = initialState, action) => {
                 ...state,
                 errorMessage: action.payload.message
             }
-        case "LOGOUT_USER": {
+        case "RESET_STATE_DATA": {
             return {
                 ...initialState,
                 errorMessage: '--reset-error-message'

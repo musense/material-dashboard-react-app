@@ -26,10 +26,10 @@ export default function TagLeftWrapper() {
     const tagName = useSelector((state) => state.getTagsReducer.selectedTag.tagName);
     const tagTitle = useSelector((state) => state.getTagsReducer.selectedTag.title);
     const description = useSelector((state) => state.getTagsReducer.selectedTag.description);
-    const keywords = useSelector((state) => state.getTagsReducer.selectedTag.manualUrl);
-    const manualUrl = useSelector((state) => state.getTagsReducer.selectedTag.customUrl);
+    const keywords = useSelector((state) => state.getTagsReducer.selectedTag.keywords);
+    const manualUrl = useSelector((state) => state.getTagsReducer.selectedTag.manualUrl);
     const customUrl = useSelector((state) => state.getTagsReducer.selectedTag.customUrl);
-    const isPopularTag = useSelector((state) => state.getTagsReducer.selectedTag.isPopularTag);
+    const popular = useSelector((state) => state.getTagsReducer.selectedTag.popular);
     const sorting = useSelector((state) => state.getTagsReducer.selectedTag.sorting);
     const isEditing = useSelector((state) => state.getTagsReducer.selectedTag.isEditing);
 
@@ -37,21 +37,6 @@ export default function TagLeftWrapper() {
 
     console.log("🚀 ~ file: TagLeftWrapper.jsx:54 ~ useEffect ~ serverMessage:", serverMessage)
 
-    const {
-        open,
-        handleOpen,
-        handleClose
-    } = useModal()
-
-    const setClose = useCallback(() => {
-        handleClose()
-        dispatch({
-            type: GetTagsAction.SET_ERROR_MESSAGE,
-            payload: {
-                message: '--reset-error-message',
-            }
-        })
-    }, handleClose)
 
     usePressEnterEventHandler(formRef)
     const {
@@ -61,9 +46,10 @@ export default function TagLeftWrapper() {
     } = useEditTagResult(serverMessage)
     console.log("🚀 ~ file: TagLeftWrapper.jsx:58 ~ TagLeftWrapper ~ title:", title)
 
-    useEffect(() => {
-        if (title) handleOpen()
-    }, [title, content]);
+    const {
+        open,
+        handleClose
+    } = useModal(title)
 
     function onAddNewEditor(e) {
         e.preventDefault()
@@ -83,7 +69,6 @@ export default function TagLeftWrapper() {
 
         let tempData = {
             name: tagName,
-            sorting: sorting,
             webHeader: {
                 title: tagTitle,
                 description: description,
@@ -94,8 +79,8 @@ export default function TagLeftWrapper() {
 
         }
 
-        if (sorting !== '') {
-            console.log(`🚀 ~ file: TagLeftWrapper.jsx:101 ~ onAddNewEditor ~ typeof ${parseInt(sorting)}:`, typeof parseInt(sorting))
+        console.log(`🚀 ~ file: TagLeftWrapper.jsx:101 ~ onAddNewEditor ~ typeof ${parseInt(sorting)}:`, typeof parseInt(sorting))
+        if (popular) {
             if (typeof parseInt(sorting) !== 'number') {
                 dispatch({
                     type: GetTagsAction.SET_ERROR_MESSAGE,
@@ -119,10 +104,7 @@ export default function TagLeftWrapper() {
                 popular: true,
                 sorting: sorting
             }
-
         }
-
-
 
         console.log("🚀 ~ file: TagLeftWrapper.jsx:48 ~ onAddNewEditor ~ tempData:", tempData)
         // return
@@ -171,7 +153,7 @@ export default function TagLeftWrapper() {
     }, [dispatch])
 
     const onPopularTagChange = useCallback((value) => {
-        onPropertyChange(value, 'isPopularTag')
+        onPropertyChange(value, 'popular')
     }, [onPropertyChange])
     return <div className={styles['tag-left-wrapper']}>
         <GridContainer>
@@ -218,11 +200,11 @@ export default function TagLeftWrapper() {
                             }
                             <div className={styles['input-group']}>
                                 <CustomRadio
-                                    value={isPopularTag}
+                                    value={popular}
                                     label={'是否設為熱門標籤'}
                                     setState={onPopularTagChange} />
                             </div>
-                            {isPopularTag && <div className={styles['input-group']}>
+                            {popular && <div className={styles['input-group']}>
                                 <label htmlFor="sorting">熱門標籤排序</label>
                                 <input type="number" name='sorting' min={0}
                                     value={sorting} onChange={e => onPropertyChange(e.target.value, 'sorting')} />
@@ -251,7 +233,7 @@ export default function TagLeftWrapper() {
             dialogContent={content}
             success={success}
             open={open}
-            setClose={setClose}
+            setClose={handleClose}
         />
     </div >;
 }

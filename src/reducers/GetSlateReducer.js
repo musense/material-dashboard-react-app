@@ -153,6 +153,7 @@ const getSlateReducer = (state = initialState, action) => {
         errorMessage = generateErrorMessage(state, initialState)
       }     
       console.log("🚀 ~ file: GetSlateReducer.js:108 ~ getSlateReducer ~ errorMessage:", errorMessage)
+      console.log("🚀 ~ file: GetSlateReducer.js:159 ~ getSlateReducer ~ state:", state)
       if (errorMessage) {
         return {
           ...state,
@@ -194,7 +195,12 @@ const getSlateReducer = (state = initialState, action) => {
         errorMessage: errorMessage || 'check__OK!'
       }
     }
-    case "LOGOUT_USER": {
+    case "SET_ERROR_MESSAGE": {
+      return {
+        errorMessage: action.payload.errorMessage
+      }
+    }
+    case "RESET_STATE_DATA": {
       return {
         ...initialState,
         errorMessage: '--reset-error-message'

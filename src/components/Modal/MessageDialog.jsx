@@ -65,7 +65,8 @@ export default function MessageDialog({
     if (dialogContent === '您已被登出！'
       || dialogContent === '您已登出！'
       || dialogContent === '取得資料出現錯誤！即將導回登入頁！'
-      ) {
+    ) {
+      dispatch({ type: "RESET_STATE_DATA" });
       navigate('/auth/login-page', { replace: true })
     }
   }, [setClose, navigate, dispatch])

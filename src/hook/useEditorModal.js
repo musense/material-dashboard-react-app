@@ -1,15 +1,14 @@
 import { useCallback, useEffect, useState } from "react";
-import * as GetSlateAction from 'actions/GetSlateAction';
 import { useDispatch } from 'react-redux';
 
-export default function useModal(data) {
+export default function useEditorModal(data) {
     const dispatch = useDispatch();
     const [open, setOpen] = useState(false);
     const handleOpen = () => setOpen(true);
     const handleClose = useCallback(() => {
         setOpen(false)
         dispatch({
-          type: GetSlateAction.CHECK_BEFORE_SUBMIT,
+          type: "SET_ERROR_MESSAGE",
           payload: {
             errorMessage: '--reset-error-message',
           }

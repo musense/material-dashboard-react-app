@@ -64,9 +64,7 @@ export default function EditorListBody() {
         success
     } = useEditorListResult(errorMessage, contentData, data)
 
-    useEffect(() => {
-        if (title) handleOpenDialog()
-    }, [title, content]);
+ 
 
     const {
         open,
@@ -78,7 +76,8 @@ export default function EditorListBody() {
         open: openDialog,
         handleOpen: handleOpenDialog,
         handleClose: handleCloseDialog
-    } = useModal()
+    } = useModal(title)
+
 
     const [mediaInfo, setMediaInfo] = useState(null);
 

@@ -34,21 +34,7 @@ export default function EditorLeftWrapper() {
 
     console.log("🚀 ~ file: EditorLeftWrapper.jsx:67 ~ EditorLeftWrapper ~ isEditing:", isEditing)
 
-    const {
-        open,
-        handleOpen,
-        handleClose
-    } = useModal()
 
-    const setClose = useCallback(() => {
-        handleClose()
-        dispatch({
-            type: GetClassAction.SET_ERROR_MESSAGE,
-            payload: {
-                message: '--reset-error-message',
-            }
-        })
-    }, [handleClose])
 
     usePressEnterEventHandler(formRef)
     const {
@@ -59,10 +45,10 @@ export default function EditorLeftWrapper() {
 
     console.log("🚀 ~ file: TagLeftWrapper.jsx:58 ~ TagLeftWrapper ~ title:", title)
 
-    useEffect(() => {
-        if (title) handleOpen()
-    }, [title, content]);
-
+    const {
+        open,
+        handleClose
+    } = useModal(title)
 
     function onAddNewEditor(e) {
         e.preventDefault()
@@ -218,7 +204,7 @@ export default function EditorLeftWrapper() {
             dialogContent={content}
             success={success}
             open={open}
-            setClose={setClose}
+            setClose={handleClose}
         />
     </div>;
 }

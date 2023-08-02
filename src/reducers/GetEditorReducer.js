@@ -176,7 +176,7 @@ const getEditorReducer = (state = initialState, action) => {
         ...state,
         errorMessage: action.payload.errorMessage
       }
-    case "LOGOUT_USER": {
+    case "RESET_STATE_DATA": {
       return {
         ...initialState,
         sortingMap: {

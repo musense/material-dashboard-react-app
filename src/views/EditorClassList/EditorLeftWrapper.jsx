@@ -131,7 +131,10 @@ export default function EditorLeftWrapper() {
         })
     }, [dispatch])
 
-
+    const handleModalClose = useCallback(() => {
+        handleClose()
+        onReset()
+    },[onReset, handleClose])
     return <div className={styles['editor-left-wrapper']}>
         <GridContainer>
             <GridItem xs={12} sm={12} md={12}>
@@ -204,7 +207,7 @@ export default function EditorLeftWrapper() {
             dialogContent={content}
             success={success}
             open={open}
-            setClose={handleClose}
+            setClose={handleModalClose}
         />
     </div>;
 }

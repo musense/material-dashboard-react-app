@@ -155,6 +155,11 @@ export default function TagLeftWrapper() {
     const onPopularTagChange = useCallback((value) => {
         onPropertyChange(value, 'popular')
     }, [onPropertyChange])
+
+    const handleModalClose = useCallback(() => {
+        handleClose()
+        onReset()
+    },[onReset, handleClose])
     return <div className={styles['tag-left-wrapper']}>
         <GridContainer>
             <GridItem xs={12} sm={12} md={12}>
@@ -233,7 +238,7 @@ export default function TagLeftWrapper() {
             dialogContent={content}
             success={success}
             open={open}
-            setClose={handleClose}
+            setClose={handleModalClose}
         />
     </div >;
 }

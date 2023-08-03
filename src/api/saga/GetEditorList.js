@@ -12,7 +12,7 @@ function* GetEditorTitleList(payload = 1) {
     try {
         const startDate = new Date(`${dayjs().subtract(3, 'month').format('YYYY-MM-DD')} 00:00:00`).getTime()
         const endDate = new Date(`${dayjs().format('YYYY-MM-DD')} 23:59:59`).getTime()
-        const response = instance.get(`/editor?limit=10000&startData=${startDate}&endDate=${endDate}&pageNumber=${payload}`);
+        const response = instance.get(encodeURI(`/editor?limit=10000&startData=${startDate}&endDate=${endDate}&pageNumber=${payload}&status=全部`));
         const responseDraft = instance.get(encodeURI(`/editor?limit=10000&startData=${startDate}&endDate=${endDate}&pageNumber=${payload}&status=草稿`));
         const responseData = yield Promise.all([response, responseDraft]).then(res => {
             const resData = res.reduce((acc, curr) => {

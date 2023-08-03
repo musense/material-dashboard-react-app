@@ -4,7 +4,7 @@ export default function useSetDefaultRef(array) {
     console.log("🚀 ~ file: useSetDefaultRef.js:4 ~ useSetDefaultRef ~ array:", array)
     const ref = useRef(null);
     useEffect(() => {
-        if (array === null) return;
+        if (array === null) return undefined;
         ref.current = array;
     }, [array]);
 

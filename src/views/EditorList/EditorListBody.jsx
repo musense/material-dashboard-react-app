@@ -16,7 +16,7 @@ const headerMap = {
     headerRow: [
         { name: "序號", patchKey: "serialNumber" },
         { name: "圖片/影片", className: "flex-2 image-container" },
-        { name: "分類", patchKey: "categories.label", className: "flex-2" },
+        { name: "分類", patchKey: "categories.name", className: "flex-2" },
         { name: "標題", patchKey: "content.title", className: "flex-3" },
         { name: "瀏覽數", patchKey: "pageView" },
         { name: "狀態", patchKey: "status", className: "flex-2" },
@@ -42,7 +42,6 @@ export default function EditorListBody() {
     const confirm = useSelector((state) => state.getDialogReducer.confirm);
     const messageDialogReturnValue = useSelector((state) => state.getDialogReducer.messageDialogReturnValue);
     const dialogMessage = useSelector((state) => state.getDialogReducer.message);
-
 
     const errorMessage = getErrorMessage(dialogMessage, serverMessage)
     function getErrorMessage(errorMessage, returnMessage) {

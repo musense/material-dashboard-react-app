@@ -46,9 +46,9 @@ export default function useEditTagResult(message) {
                 setSuccess(false)
                 return
             }
-            case 'sorting should be equal or greater than 0': {
+            case 'sorting should be equal or greater than 1': {
                 setTitle('Warning')
-                setContent('熱門標籤排序必須大於等於0！')
+                setContent('熱門標籤排序必須大於等於1！')
                 setSuccess(false)
                 return
             }

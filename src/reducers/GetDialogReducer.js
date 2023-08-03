@@ -9,7 +9,6 @@ const initialState = {
 }
 
 const getDialogReducer = (state = initialState, action) => {
-  // console.log("🚀 ~ file: getDialogReducer.js:157 ~ getDialogReducer ~ action:", action)
   switch (action.type) {
     case GetDialogAction.COPY_SITEMAP:
       return {

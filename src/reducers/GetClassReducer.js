@@ -39,8 +39,6 @@ const initialState = {
     ]
 }
 const getClassReducer = (state = initialState, action) => {
-    // console.log(action);
-
     switch (action.type) {
         case GetClassAction.CANCEL_EDITING_CLASS:
             return {
@@ -52,9 +50,6 @@ const getClassReducer = (state = initialState, action) => {
             }
         case GetClassAction.SET_CLASS_PROPERTY: {
             const { property, value } = action.payload.allProps
-            console.log("🚀 ~ file: GetSlateReducer.js:80 ~ getSlateReducer ~ property:", property)
-            console.log("🚀 ~ file: GetSlateReducer.js:80 ~ getSlateReducer ~ value:", value)
-
             return {
                 ...state,
                 editorClass: {

@@ -25,16 +25,11 @@ export function toFrontendData(responseData) {
                 },
             },
             tags: item.tags && item.tags.length > 0
-                ? item.tags.map(tag => ({
-                    value: tag._id,
-                    label: tag.name,
-                }
-                ))
+                ? item.tags
                 : [],
-            categories: item.categories ? {
-                value: item.categories._id,
-                label: item.categories.name,
-            } : null,
+            categories: item.categories
+                ? item.categories
+                : null,
             webHeader: {
                 headTitle: item.headTitle || '',
                 headDescription: item.headDescription || '',
@@ -84,16 +79,11 @@ export function toFrontendData(responseData) {
                 },
             },
             tags: responseData.tags && responseData.tags.length > 0
-                ? responseData.tags.map(tag => ({
-                    value: tag._id,
-                    label: tag.name,
-                }
-                ))
+                ? responseData.tags
                 : [],
-            categories: responseData.categories ? {
-                value: responseData.categories._id,
-                label: responseData.categories.name,
-            } : null,
+            categories: responseData.categories
+                ? responseData.categories
+                : null,
             webHeader: {
                 headTitle: responseData.headTitle || '',
                 headDescription: responseData.headDescription || '',

@@ -10,7 +10,7 @@ const initialState = {
     updateDate: 'asc',
     status: 'asc',
     pageView: 'asc',
-    'categories.label': 'asc',
+    'categories.name': 'asc',
   },
   showList: null,
   titleList: null,
@@ -24,7 +24,6 @@ const initialState = {
 
 }
 const getEditorReducer = (state = initialState, action) => {
-  // console.log("🚀 ~ file: GetEditorReducer.js:157 ~ getEditorReducer ~ action:", action)
   switch (action.type) {
     case GetEditorAction.RESET_EDITOR: {
       return {

@@ -1,40 +1,41 @@
-import React, { useImperativeHandle, useState, useRef, useEffect } from 'react'
-import dayjs from 'dayjs';
+import React, { useState, useMemo, useEffect } from 'react'
 import { DatePicker as MUIDatePicker } from '@mui/x-date-pickers/DatePicker';
 import { css } from '@emotion/css';
+import { useCallback } from 'react';
+import dayjs from 'dayjs';
 
-const DateTimePicker = React.forwardRef(({
+const DateTimePicker = ({
     title,
     width,
     height,
-    lastThreeMonth = null
-}, ref) => {
-    const currentRef = useRef();
-    useImperativeHandle(ref, () => {
-        return {
-            reset: () => {
-                currentRef.current = null
-                setValue(null)
-            },
-            current: () => currentRef.current
-        }
-    })
-    // const lastMonth = dayjs().subtract(1, 'month')
-    const initialState = lastThreeMonth ? dayjs().subtract(3, 'month') : dayjs(new Date())
+    state,
+    setState
+}) => {
 
-    const [value, setValue] = useState(null);
+    const [value, setValue] = useState(dayjs(state));
 
-    const getDate = (dayObject) => {
-        return `${dayObject['$y']}/${dayObject['$M'] + 1}/${dayObject['$D']}`
-    }
     useEffect(() => {
-        handleChange(initialState)
-    }, []);
+        handleChange(dayjs(state));
+    }, [state]);
 
-    const handleChange = (newValue) => {
-        currentRef.current = getDate(newValue)
+    const handleChange = useCallback((newValue) => {
+        const formattedValue = newValue.format('YYYY-MM-DD');
         setValue(newValue)
-    }
+        setState && setState(formattedValue)
+    }, [setValue, setState])
+
+    const styles = useMemo(() => ({
+        height: height,
+        border: '1px solid black',
+        borderRadius: '4px',
+        width: width,
+        '& input': {
+            paddingTop: '9px',
+            paddingBottom: '9px',
+            boxSizing: 'border-box',
+            height: height
+        }
+    }), [height, width])
 
     return (
         <div className={css`
@@ -43,27 +44,17 @@ const DateTimePicker = React.forwardRef(({
             `}>
             <label htmlFor={title}>{title}</label>
             <MUIDatePicker
-                sx={{
-                    height: height,
-                    border: '1px solid black',
-                    borderRadius: '4px',
-                    width: width,
-                    '& input': {
-                        paddingTop: '9px',
-                        paddingBottom: '9px',
-                        boxSizing: 'border-box',
-                        height: height
-                    }
-                }}
+                sx={styles}
                 className={css`
                     background-color: #fff;
                 `}
                 name={title}
+                // defaultValue={dayjs(state)}
                 value={value}
                 onChange={handleChange}
             />
         </div>
     )
-})
+}
 
 export default DateTimePicker

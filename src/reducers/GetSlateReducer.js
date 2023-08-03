@@ -1,4 +1,5 @@
 import * as GetSlateAction from './../actions/GetSlateAction';
+import dayjs from 'dayjs';
 
 const initialState = {
   contentForm: {
@@ -31,6 +32,15 @@ const initialState = {
       scheduledAt: ''
     }
   },
+  searchForm: {
+    title: '',
+    categories: null,
+    status: { _id: 0, name: '全部' },
+    createDate: {
+      startDate: dayjs().subtract(3, 'month').format('YYYY-MM-DD'),
+      endDate: dayjs(new Date()).format('YYYY-MM-DD'),
+    },
+  },
   showUrl: '',
   updateInitialState: null,
   submitState: null,
@@ -41,7 +51,6 @@ const initialState = {
 }
 
 const getSlateReducer = (state = initialState, action) => {
-  console.log("🚀 ~ file: GetSlateReducer.js:30 ~ getSlateReducer ~ action:", action)
   switch (action.type) {
     case "PREVIEW_FINISHED": {
       return {
@@ -115,13 +124,35 @@ const getSlateReducer = (state = initialState, action) => {
         showUrl: action.payload.showUrl,
       }
     }
+    case GetSlateAction.SET_SEARCH_FORM_PROPERTY: {
+      const { property, value, detail } = action.payload.allProps
+      return detail ? {
+        ...state,
+        searchForm: {
+          ...state.searchForm,
+          [property]: {
+            ...state.searchForm[property],
+            [detail]: value,
+          }
+        }
+      } : {
+        ...state,
+        searchForm: {
+          ...state.searchForm,
+          [property]: value,
+        }
+      }
+    }
+    case GetSlateAction.RESET_SEARCH_FORM: {
+      return {
+        ...state,
+        searchForm: {
+          ...initialState.searchForm
+        }
+      }
+    }
     case GetSlateAction.SET_PROPERTY: {
       const { form, info, property, value } = action.payload.allProps
-      console.log("🚀 ~ file: GetSlateReducer.js:80 ~ getSlateReducer ~ form:", form)
-      console.log("🚀 ~ file: GetSlateReducer.js:80 ~ getSlateReducer ~ info:", info)
-      console.log("🚀 ~ file: GetSlateReducer.js:80 ~ getSlateReducer ~ property:", property)
-      console.log("🚀 ~ file: GetSlateReducer.js:80 ~ getSlateReducer ~ value:", value)
-
       return info ? {
         ...state,
         [form]: {
@@ -151,9 +182,7 @@ const getSlateReducer = (state = initialState, action) => {
         errorMessage = action.payload.errorMessage
       } else {
         errorMessage = generateErrorMessage(state, initialState)
-      }     
-      console.log("🚀 ~ file: GetSlateReducer.js:108 ~ getSlateReducer ~ errorMessage:", errorMessage)
-      console.log("🚀 ~ file: GetSlateReducer.js:159 ~ getSlateReducer ~ state:", state)
+      }
       if (errorMessage) {
         return {
           ...state,
@@ -171,7 +200,6 @@ const getSlateReducer = (state = initialState, action) => {
         }
         // cloneDeep
         const createType = action.payload.createType
-        console.log("🚀 ~ file: GetSlateReducer.js:129 ~ getSlateReducer ~ createType:", createType)
 
         if (createType === "add_new") {
           cachedInitialState = JSON.parse(JSON.stringify({ ...initialState.contentForm, ...initialState.detailForm }))
@@ -184,9 +212,6 @@ const getSlateReducer = (state = initialState, action) => {
           throw new Error('invalid createType')
         }
       }
-      console.log("🚀 ~ file: GetSlateReducer.js:139 ~ getSlateReducer ~ cachedInitialState:", cachedInitialState)
-      console.log("🚀 ~ file: GetSlateReducer.js:139 ~ getSlateReducer ~ submitState:", submitState)
-      console.log("🚀 ~ file: GetSlateReducer.js:139 ~ getSlateReducer ~ trimmedState:", trimmedState)
       // return
       return {
         ...state,
@@ -219,12 +244,8 @@ export default getSlateReducer
 function recurseCheckAndDelete(state, initialState, createType) {
   if (createType === "add_new") {
     for (const key in initialState) {
-      console.log("🚀 ~ file: GetSlateReducer.js:176 ~ recurseCheckAndDelete ~ key:", key)
       const value = initialState[key];
-      console.log("🚀 ~ file: GetSlateReducer.js:176 ~ recurseCheckAndDelete ~ value:", value)
       if (key.toLowerCase().includes('image')) {
-        console.log("🚀 ~ file: GetSlateReducer.js:180 ~ recurseCheckAndDelete ~ key:", key)
-        console.log("🚀 ~ file: GetSlateReducer.js:180 ~ recurseCheckAndDelete ~ state[" + key + "]:", state[key])
         if (state[key] === '') {
           delete state[key]
         }

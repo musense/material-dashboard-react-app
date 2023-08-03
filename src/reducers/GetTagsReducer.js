@@ -19,7 +19,7 @@ const initialState = {
         manualUrl: '',
         customUrl: '',
         popular: false,
-        sorting: 0,
+        sorting: 1,
         isEditing: false,
     },
     selectedIndex: -1,
@@ -42,9 +42,6 @@ const getTagsReducer = (state = initialState, action) => {
         }
         case GetTagsAction.SET_TAG_PROPERTY: {
             const { property, value } = action.payload.allProps
-            console.log("🚀 ~ file: GetSlateReducer.js:80 ~ getSlateReducer ~ property:", property)
-            console.log("🚀 ~ file: GetSlateReducer.js:80 ~ getSlateReducer ~ value:", value)
-
             return {
                 ...state,
                 selectedTag: {

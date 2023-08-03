@@ -69,6 +69,7 @@ export default function TagLeftWrapper() {
 
         let tempData = {
             name: tagName,
+            popular: popular,
             webHeader: {
                 title: tagTitle,
                 description: description,
@@ -90,18 +91,17 @@ export default function TagLeftWrapper() {
                 })
                 return
             }
-            if (sorting < 0) {
+            if (parseInt(sorting) < 1) {
                 dispatch({
                     type: GetTagsAction.SET_ERROR_MESSAGE,
                     payload: {
-                        message: 'sorting should be equal or greater than 0',
+                        message: 'sorting should be equal or greater than 1',
                     }
                 })
                 return
             }
             tempData = {
-                ...tempData,
-                popular: true,
+                ...tempData,                
                 sorting: sorting
             }
         }
@@ -206,7 +206,7 @@ export default function TagLeftWrapper() {
                             </div>
                             {popular && <div className={styles['input-group']}>
                                 <label htmlFor="sorting">熱門標籤排序</label>
-                                <input type="number" name='sorting' min={0}
+                                <input type="number" name='sorting' min={1}
                                     value={sorting} onChange={e => onPropertyChange(e.target.value, 'sorting')} />
                             </div>}
                             <div className={styles['left-button-container']}>

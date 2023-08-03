@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import SingleSelector from './base/Selector';
+import Selector from './base/Selector';
 
 import { useDispatch, useSelector } from 'react-redux';
 import * as GetClassAction from '../../../actions/GetClassAction';
@@ -84,7 +84,7 @@ export default function SingleParentCatSelect({ parentClassRef }) {
     });
   }, [classOptions])
 
-  return <SingleSelector
+  return <Selector
     parentSelected={selected}
     parentSetSelected={setSelected}
     selectedRef={parentClassRef}

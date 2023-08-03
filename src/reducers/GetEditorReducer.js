@@ -25,7 +25,7 @@ const initialState = {
 }
 const getEditorReducer = (state = initialState, action) => {
   switch (action.type) {
-    case GetEditorAction.RESET_EDITOR: {
+    case GetEditorAction.ADD_NEW_EDITOR: {
       return {
         ...state,
         editor: null
@@ -50,9 +50,15 @@ const getEditorReducer = (state = initialState, action) => {
         editor: action.payload.editor,
         errorMessage: errorMessage.addSuccess
       }
+    case GetEditorAction.AUTH_USER_SUCCESS:
+      return {
+        ...state,
+        errorMessage: action.payload.errorMessage
+      }
     case GetEditorAction.ADD_EDITOR_FAIL:
     case GetEditorAction.UPDATE_EDITOR_FAIL:
-    case GetEditorAction.DELETE_EDITOR_FAIL: {
+    case GetEditorAction.DELETE_EDITOR_FAIL: 
+    case GetEditorAction.AUTH_USER_FAIL: {
       let errorMessage;
       if (action.payload.errorMessage.indexOf('E11000 duplicate key error') !== -1) {
         errorMessage = 'duplicate key error'

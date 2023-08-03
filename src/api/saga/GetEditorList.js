@@ -1,4 +1,4 @@
-import { all, put, take } from 'redux-saga/effects';
+import { all, put, take, takeEvery } from 'redux-saga/effects';
 import * as GetEditorAction from "../../actions/GetEditorAction";
 import * as GetSlateAction from "../../actions/GetSlateAction";
 import { formInstance, instance } from "./AxiosInstance";
@@ -44,8 +44,8 @@ function* GetEditorByID(payload) {
     const { _id } = payload
     console.log("🚀 ~ file: GetEditorList.js:45 ~ function*GetEditorByID ~ _id:", _id)
     try {
-
         // const response = yield instance.get(`/editor/${payload.data._id}`);
+
         const response = yield instance.get(`/editor/${_id}`);
         const responseData = yield response.data;
         // return
@@ -67,23 +67,49 @@ function* GetEditorByID(payload) {
 /// endDate=${endDate}
 // GET
 function* SearchEditor(payload) {
-    try {
+    const {
+        title,
+        categories: categoryName,
+        status: statusName,
+        createDate,
+    } = payload
 
-        const titleString = payload.title ? `title=${payload.title}&` : ''
-        const categoryString = payload.classification ? `category=${payload.classification}&` : ''
-        const startDateString = payload.createDate
-            ? payload.createDate.startDate
-                ? `startDate=${payload.createDate.startDate}&`
-                : ''
-            : ''
-        const endDateString = payload.createDate
-            ? payload.createDate.endDate
-                ? `endDate=${payload.createDate.endDate}&`
-                : ''
-            : ''
-        const status = payload.status ? `status=${payload.status}&` : ''
+    const {
+        startDate,
+        endDate
+    } = createDate
+
+    try {
+        const startDateToSeconds = new Date(`${dayjs(startDate).format('YYYY-MM-DD')} 00:00:00`).getTime()
+        const endDateToSeconds = new Date(`${dayjs(endDate).format('YYYY-MM-DD')} 23:59:59`).getTime()
+
+        const titleString = title ? `title=${title}&` : ''
+        const categoryString = categoryName ? `category=${categoryName}&` : ''
+        const status = statusName ? `status=${statusName}&` : ''
+        const startDateString = `startDate=${startDateToSeconds}&`
+        const endDateString = `endDate=${endDateToSeconds}&`
+
+
         const response = yield instance.get(encodeURI(`/editor?${titleString}${categoryString}${startDateString}${endDateString}${status}limit=10000&pageNumber=1`));
-        const { currentPage, totalCount, data: responseData } = yield response.data
+        let promiseArray = [response]
+        if (statusName === '草稿' || statusName === '全部') {
+            const responseDraft = instance.get(encodeURI(`/editor?${titleString}${categoryString}${startDateString}${endDateString}status=草稿&limit=10000&pageNumber=1`));
+            promiseArray = [
+                ...promiseArray,
+                responseDraft
+            ]
+        }
+
+        const responseData = yield Promise.all(promiseArray).then(res => {
+            const resData = res.reduce((acc, curr) => {
+                return [...acc, curr.data.data]
+            }, [])
+            return resData.flat()
+        })
+
+        responseData.sort((data1, data2) => new Date(data2.updatedAt) - new Date(data1.updatedAt))
+        const totalCount = parseInt(responseData.length)
+
         const titleList = toFrontendData(responseData)
         // return
         yield put({
@@ -91,7 +117,7 @@ function* SearchEditor(payload) {
             payload: {
                 titleList,
                 totalCount: parseInt(totalCount),
-                currentPage: parseInt(currentPage),
+                currentPage: parseInt(1),
             }
         })
     } catch (error) {
@@ -216,6 +242,22 @@ function* DeleteEditor(payload) {
     }
 }
 
+function* AuthUser(patchSuccessType, patchFailType) {
+    try {
+        const authResponse = yield instance.post(`/editor/verifyUser`);;
+        console.log("🚀 ~ file: GetEditorList.js:223 ~ function*AuthUser ~ authResponse:", authResponse)
+        const message = yield authResponse.data.message;
+        yield put({
+            type: patchSuccessType,
+            payload: {
+                errorMessage: message
+            }
+        })
+    } catch (error) {
+        yield getErrorMessage(error, patchFailType)
+    }
+}
+
 function* watchAddEditorSaga() {
     while (true) {
         const { payload } = yield take(GetEditorAction.ADD_EDITOR)
@@ -260,7 +302,15 @@ function* watchDeleteEditorSaga() {
 function* watchGetEditorByIDSaga() {
     while (true) {
         const { payload } = yield take(GetEditorAction.REQUEST_EDITOR_BY_ID)
+        yield AuthUser(GetEditorAction.AUTH_USER_SUCCESS, GetEditorAction.AUTH_USER_FAIL)
         yield GetEditorByID(payload)
+    }
+}
+
+function* watchAddNewEditorAuth() {
+    while (true) {
+        yield take(GetEditorAction.ADD_NEW_EDITOR)
+        yield AuthUser(GetEditorAction.AUTH_USER_SUCCESS, GetEditorAction.AUTH_USER_FAIL)
     }
 }
 
@@ -272,7 +322,8 @@ function* mySaga() {
         watchSearchEditorSaga(),
         watchAddEditorSaga(),
         watchDeleteEditorSaga(),
-        watchGetEditorByIDSaga()
+        watchGetEditorByIDSaga(),
+        watchAddNewEditorAuth()
     ])
 }
 

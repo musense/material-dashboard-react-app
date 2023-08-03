@@ -15,22 +15,6 @@ export default function SingleParentCatSelect({ parentClassRef }) {
   const [selected, setSelected] = useState();
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    if (reset === '--reset-all') {
-      setSelected(null)
-      //* reset [上層分類] 選擇
-      dispatch({
-        type: GetClassAction.RESET_SELECTED_CLASS,
-        payload: null
-      });
-      //* reset [分類名稱] 名單
-      dispatch({
-        type: GetClassAction.REQUEST_CLASS,
-        payload: null
-      })
-    }
-  }, [reset]);
-
   //* 選擇[上層分類]預設值
   useMemo(() => {
     if (editorClass) {

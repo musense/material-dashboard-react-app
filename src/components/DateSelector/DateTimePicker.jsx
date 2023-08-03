@@ -49,9 +49,9 @@ const DateTimePicker = ({
                     background-color: #fff;
                 `}
                 name={title}
-                // defaultValue={dayjs(state)}
                 value={value}
                 onChange={handleChange}
+                maxDate={dayjs()}
             />
         </div>
     )

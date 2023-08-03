@@ -58,6 +58,12 @@ export default function useEditEditorClassResult(message) {
                 setSuccess(false)
                 return
             }
+            case 'Something went wrong!': {
+                setTitle('Error')
+                setContent('Something went wrong!！')
+                setSuccess(false)
+                return
+            }
             case '--reset-error-message': {
                 setTitle(null)
                 setContent(null)

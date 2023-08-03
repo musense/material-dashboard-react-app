@@ -65,25 +65,52 @@ export default function EditorSearchForm() {
 
     function onSearchEditorList(e) {
         e.preventDefault()
+        if (startDate === "Invalid Date" && endDate === "Invalid Date") {
+            dispatch({
+                type: GetEditorAction.SET_ERROR_MESSAGE,
+                payload: {
+                    message: "Please select create date"
+                }
+            })
+            return
+        }
+        if (startDate === "Invalid Date") {
+            dispatch({
+                type: GetEditorAction.SET_ERROR_MESSAGE,
+                payload: {
+                    message: "Please select start date"
+                }
+            })
+            return
+        }
+        if (endDate === "Invalid Date") {
+            dispatch({
+                type: GetEditorAction.SET_ERROR_MESSAGE,
+                payload: {
+                    message: "Please select end date"
+                }
+            })
+            return
+        }
         const searchData = {
-            title,
-            categories,
-            status,
+            title: title.length === 0 ? null : title,
+            categories: categories?.name,
+            status: status?.name,
             createDate: {
-                startDate,
-                endDate
+                startDate: startDate,
+                endDate: endDate
             }
         }
         console.log("🚀 ~ file: EditorList.jsx:136 ~ onSearchEditorList ~ searchData:", searchData)
 
-        return
+        // return
         dispatch({
             type: GetEditorAction.SEARCH_EDITOR_LIST,
             payload: searchData
         })
         return
     }
-    
+
     const reset = useCallback(() => {
         dispatch({
             type: GetSlateAction.RESET_SEARCH_FORM
@@ -94,14 +121,15 @@ export default function EditorSearchForm() {
         <form name='editor-list-form' className="editor-list-form" onSubmit={onSearchEditorList}>
             <div className="title" >
                 <label htmlFor="title">標題</label>
-                <input type="text" name='title' value={title} onChange={e => onSearchFormPropertyChange(e.target.value, 'title')} />
+                <input type="text" name='title'
+                    value={title} onChange={e => onSearchFormPropertyChange(e.target.value, 'title')} />
             </div>
             <div >
                 <label htmlFor="classification">分類</label>
                 <SingleClassificationSelect
                     defaultSelected={categories}
                     // classRef={classRef}
-                    width={'150px'}
+                    width={'180px'}
                     height={'40px'}
                     setState={onClassificationChange}
                 />
@@ -110,7 +138,7 @@ export default function EditorSearchForm() {
                 <label htmlFor="classification">狀態</label>
                 <SingleStatusSelect
                     defaultSelected={status}
-                    width={'150px'}
+                    width={'180px'}
                     height={'40px'}
                     setState={onStatusChange}
                 />
@@ -124,7 +152,7 @@ export default function EditorSearchForm() {
                 onEndDateChange={onEndDateChange}
             />
             <div className="button-list">
-                <input type='button' value='清空' onClick={reset} />
+                <input type='button' value='重設' onClick={reset} />
                 <input ref={submitRef} type="submit" value="查詢" />
             </div>
         </form>

@@ -12,11 +12,6 @@ export default function useSetEditorDefaultValue(editor = null) {
             dispatch({
                 type: GetSlateAction.RESET_FORM_VALUE,
             })
-            // reset selected dropdown list
-            dispatch({
-                type: GetClassAction.RESET_SELECTED_CLASS,
-                payload: '--reset-all'
-            })
             return
         }
         dispatch({

@@ -17,7 +17,7 @@ export default function useRegisterResult(message) {
             case "user validation failed: email: email not valid!":
             case "email has been used": {
                 setTitle("註冊失敗")
-                setContent("信箱已被使用！")
+                setContent("信箱格式錯誤！")
                 setSuccess(false)
                 break;
             }
@@ -41,7 +41,7 @@ export default function useRegisterResult(message) {
             }
             case "Password error": {
                 setTitle("註冊失敗")
-                setContent("密碼規則錯誤！需英文大小寫+6碼數字！")
+                setContent("密碼規則錯誤！需英文大小寫+數字共六碼！")
                 setSuccess(false)
                 break;
             }

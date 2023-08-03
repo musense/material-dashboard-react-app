@@ -75,11 +75,6 @@ export default function RowBody({
         dispatch({
             type: GetSlateAction.RESET_FORM_VALUE,
         })
-        // reset selected dropdown list
-        dispatch({
-            type: GetClassAction.RESET_SELECTED_CLASS,
-            payload: '--reset-all'
-        })
         dispatch({
             type: GetEditorAction.REQUEST_EDITOR_BY_ID,
             payload: {

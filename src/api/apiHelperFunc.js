@@ -131,11 +131,11 @@ export function toBackendFormData(requestData, createType) {
     }
     if (requestData.media) {
         Object.entries(requestData.media).forEach(([key, value]) => {
-            if (value === null || value === '') {
-                // formData.append(key, '')
-                return
-            }
             if (key === 'contentImagePath') {
+                if (value === null || value === '') {
+                    formData.append(key, new Blob([''], { type: 'text/plain' }))
+                    return
+                }
                 if (value.indexOf('data:image') !== -1) {
                     const imageFile = generateImageFile(value);
                     formData.append('contentImagePath', imageFile)
@@ -145,6 +145,10 @@ export function toBackendFormData(requestData, createType) {
                 return
             }
             if (key === 'homeImagePath') {
+                if (value === null || value === '') {
+                    formData.append(key, new Blob([''], { type: 'text/plain' }))
+                    return
+                }
                 value !== null && formData.append('homeImagePath', new Blob([value], { type: 'text/plain' }))
                 return
             }
@@ -188,6 +192,15 @@ export function* getErrorMessage(error, patchType) {
     console.log("🚀 ~ file: apiHelperFunc.js:213 ~ getErrorMessage ~ error:", error)
     console.log("🚀 ~ file: apiHelperFunc.js:213 ~ *getErrorMessage ~ patchType:", patchType)
     let errorMessage;
+    if (!error) {
+        yield put({
+            type: patchType,
+            payload: {
+                errorMessage: 'Something went wrong!'
+            }
+        })
+        return
+    }
     if (error.response) {
         errorMessage = error.response.data.message || error.response.data.messages.join(',')
     } else {

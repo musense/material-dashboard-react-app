@@ -4,6 +4,7 @@ export default function useSetSelectorValue(defaultSelected, isMulti) {
 
     const [selected, setSelected] = useState();
     const setTransform = useCallback((selectedValue) => {
+        if (!selectedValue || selectedValue.length === 0) return;
         if (isMulti) {
             return selectedValue.map(selected => ({
                 _id: selected.value,
@@ -17,8 +18,8 @@ export default function useSetSelectorValue(defaultSelected, isMulti) {
     }, [isMulti])
 
     const transformedSelected = useMemo(() => {
+        console.log("🚀 ~ file: useSetSelectorValue.js:21 ~ transformedSelected ~ defaultSelected:", defaultSelected)
         if (!defaultSelected || defaultSelected.length === 0) return null;
-        console.log("🚀 ~ file: useSetSelectorValue.js:31 ~ returndefaultSelected.map ~ defaultSelected:", defaultSelected)
         if (isMulti) {
             return defaultSelected.map((selected) => {
                 return {

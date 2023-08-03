@@ -54,6 +54,24 @@ export default function useIEditorResult(message, contentData, data) {
                 setSuccess(false)
                 return
             }
+            case 'Please select create date': {
+                setTitle('Warning')
+                setContent('請輸入創建日期！')
+                setSuccess(false)
+                return
+            }
+            case 'Please select start date': {
+                setTitle('Warning')
+                setContent('請輸入創建開始日期！')
+                setSuccess(false)
+                return
+            }
+            case 'Please select end date': {
+                setTitle('Warning')
+                setContent('請輸入創建結束日期！')
+                setSuccess(false)
+                return
+            }
             case 'Please login first': {
                 setTitle('Error')
                 setContent('您已被登出！')
@@ -63,6 +81,12 @@ export default function useIEditorResult(message, contentData, data) {
             case 'Network Error': {
                 setTitle('Error')
                 setContent('取得資料出現錯誤！即將導回登入頁！')
+                setSuccess(false)
+                return
+            }
+            case 'Something went wrong!': {
+                setTitle('Error')
+                setContent('Something went wrong!！')
                 setSuccess(false)
                 return
             }

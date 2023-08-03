@@ -19,10 +19,10 @@ export default function useSelectorStyle(controlWidth, controlHeight) {
           }),
           input: (base) => ({
             ...base,
-            paddingTop: 'unset',
-            paddingBottom: 'unset',
-            marginTop: 'unset',
-            marginBottom: 'unset',
+            // paddingTop: 'unset',
+            // paddingBottom: 'unset',
+            // marginTop: 'unset',
+            // marginBottom: 'unset',
             height: controlHeight
           }),
           menuPortal: (base) => ({

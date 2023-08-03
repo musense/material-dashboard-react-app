@@ -23,7 +23,7 @@ const DateSelector = ({
                         align-items: center;
                         `}>
                     <DateTimePicker
-                        title={'開始日期'}
+                        title={'創建開始日期'}
                         width={width}
                         height={height}
                         lastThreeMonth
@@ -32,7 +32,7 @@ const DateSelector = ({
                     />
                     ~
                     <DateTimePicker
-                        title={'結束日期'}
+                        title={'創建結束日期'}
                         width={width}
                         height={height}
                         state={endDate}

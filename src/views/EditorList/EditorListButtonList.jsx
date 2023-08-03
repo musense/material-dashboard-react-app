@@ -18,7 +18,7 @@ export default function EditorListButtonList({
 
     const onAddNew = useCallback(() => {
         dispatch({
-            type: GetEditorAction.RESET_EDITOR
+            type: GetEditorAction.ADD_NEW_EDITOR
         });
         navigate('/admin/editorList/new');
     }, [dispatch, navigate])

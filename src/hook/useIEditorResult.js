@@ -83,6 +83,12 @@ export default function useIEditorResult(message, editor) {
                 setSuccess(false)
                 return
             }
+            case 'Something went wrong!': {
+                setTitle('Error')
+                setContent('Something went wrong!！')
+                setSuccess(false)
+                return
+            }
             case '--reset-error-message': {
                 setTitle(null)
                 setContent(null)

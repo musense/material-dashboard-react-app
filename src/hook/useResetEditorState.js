@@ -10,7 +10,7 @@ export default function useResetEditorState(route) {
     useEffect(() => {
         if (route === '/admin/editorList/new') {
             dispatch({
-                type: GetEditorAction.RESET_EDITOR
+                type: GetEditorAction.ADD_NEW_EDITOR
             })
         }
         return () => {
@@ -20,11 +20,6 @@ export default function useResetEditorState(route) {
             // reset form value
             dispatch({
                 type: GetSlateAction.RESET_FORM_VALUE,
-            })
-            // reset selected dropdown list
-            dispatch({
-                type: GetClassAction.RESET_SELECTED_CLASS,
-                payload: '--reset-all'
             })
             return
             // }

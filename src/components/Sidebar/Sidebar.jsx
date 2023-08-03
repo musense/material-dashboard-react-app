@@ -25,7 +25,14 @@ const Sidebar = ({ ...props }) => {
   function activeRoute(routeName) {
     return location.pathname === routeName;
   }
-  const { classes, color, logo, image, logoText, routes } = props;
+  const {
+    classes,
+    color,
+    logo,
+    image,
+    // logoText, 
+    routes
+  } = props;
   const links = (
     <List className={classes.list}>
       {routes.map((prop, key) => {
@@ -68,9 +75,13 @@ const Sidebar = ({ ...props }) => {
     <div className={classes.logo}>
       <a href='' className={classNames(classes.logoLink)}>
         <div className={classes.logoImage}>
-          <img src={logo} alt='logo' className={classes.img} />
+          <img
+            src={logo}
+            alt='logo'
+            className={classes.img}
+          />
         </div>
-        {logoText}
+        {/* {logoText} */}
       </a>
     </div>
   );

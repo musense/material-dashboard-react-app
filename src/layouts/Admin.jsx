@@ -82,7 +82,7 @@ function Dashboard({ ...props }) {
 
       import(process.env.REACT_APP_LOGO_DIR).then(res => {
         setLogo(res.default)
-        setLogoText(process.env.REACT_APP_LOGO_TEXT)
+        // setLogoText(process.env.REACT_APP_LOGO_TEXT)
       })
     }
     return () => {
@@ -95,7 +95,7 @@ function Dashboard({ ...props }) {
       <div className={classes.wrapper}>
         <Sidebar
           routes={routes}
-          logoText={logoText}
+          // logoText={logoText}
           logo={logo}
           image={image}
           handleDrawerToggle={handleDrawerToggle}

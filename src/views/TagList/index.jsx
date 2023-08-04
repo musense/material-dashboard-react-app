@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'; 
+import React, { useEffect, useState } from 'react';
 import styles from './TagList.module.css'
 import TagLeftWrapper from "./TagLeftWrapper";
 import TagRightWrapper from "./TagRightWrapper";
@@ -18,21 +18,16 @@ function TagList() {
         if (tagDispatchMessage.includes(returnMessage)) {
             dispatch({ type: GetTagsAction.REQUEST_TAG })
         }
+        return () => {
+            dispatch({ type: GetTagsAction.CANCEL_EDITING_TAG })
+        }
     }, [returnMessage]);
 
-    const [isModalOpen, setIsModalOpen] = useState(true);
-
-    function openModal() {
-        setIsModalOpen(true);
-    }
-    function closeModal() {
-        setIsModalOpen(false);
-    }
 
     return (
         <div className={styles['tag-container']}>
-            <TagLeftWrapper />
             <TagRightWrapper />
+            <TagLeftWrapper />
         </div >
 
     );

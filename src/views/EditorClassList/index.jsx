@@ -26,21 +26,15 @@ function EditorClassList() {
     useEffect(() => {
         // dispatch({ type: GetClassAction.REQUEST_PARENT_CLASS })
         dispatch({ type: GetClassAction.REQUEST_CLASS_LIST })
+        return () => {
+            dispatch({ type: GetClassAction.CANCEL_EDITING_CLASS })
+        }
     }, []);
-
-    const [isModalOpen, setIsModalOpen] = useState(true);
-
-    function openModal() {
-        setIsModalOpen(true);
-    }
-    function closeModal() {
-        setIsModalOpen(false);
-    }
 
     return (
         <div className={styles['editor-container']}>
-            <EditorLeftWrapper />
             <EditorRightWrapper />
+            <EditorLeftWrapper />
         </div >
 
     );

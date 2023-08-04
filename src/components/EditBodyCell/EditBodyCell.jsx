@@ -1,8 +1,7 @@
 import React from "react";
-import Icon from './Icon';
-import { CopyToClipboard } from 'react-copy-to-clipboard';
 import BodyCell from "./../BodyCell/BodyCell";
 import { Stack } from '@mui/material';
+import IconCell from "./IconCell";
 
 export default function EditBodyCell({
     onCopy,
@@ -12,22 +11,36 @@ export default function EditBodyCell({
     onDelete,
     deleteID,
     deleteTitle,
-    className
+    className,
+    note = null
 }) {
+    console.log("🚀 ~ file: EditBodyCell.jsx:18 ~ copyText:", copyText)
+
+
     return <BodyCell className={className} children={<Stack spacing={2} direction={'row'} >
-        <CopyToClipboard text={copyText} onCopy={(text, result) => onCopy(text, result)}>
-            <div className="edit-icon-wrapper">
-                <input title="複製連結" className="edit-icon-input" type="button" />
-                <Icon iconName={'link'} />
-            </div>
-        </CopyToClipboard>
-        <div className="edit-icon-wrapper">
-            <input title="編輯" className="edit-icon-input" type="button" onClick={() => onEdit(editData)} />
-            <Icon iconName={'edit'} />
-        </div>
-        <div className="edit-icon-wrapper">
-            <input title="刪除" className="edit-icon-input" type="button" onClick={() => onDelete(deleteID, deleteTitle)} />
-            <Icon iconName={'delete_forever'} />
-        </div>
+        {note && <IconCell
+            iconName={'text_snippet'}
+            iconTitle={'備註'}
+            callback={() => onEdit(editData)}
+        />}
+        <IconCell
+            copy
+            iconName={'link'}
+            iconTitle={'複製連結'}
+            callback={(text, result) => onCopy(text, result)}
+            copyText={copyText}
+        />
+        <IconCell
+            iconName={'edit'}
+            iconTitle={'編輯'}
+            callback={() => onEdit(editData)}
+        />
+        <IconCell
+            iconName={'delete_forever'}
+            iconTitle={'刪除'}
+            callback={() => onDelete(deleteID, deleteTitle)}
+        />
     </Stack>} />;
 }
+
+

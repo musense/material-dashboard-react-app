@@ -5,6 +5,7 @@ import getUserReducer from './GetUserReducer'
 import getClassReducer from './GetClassReducer'
 import getDialogReducer from './GetDialogReducer'
 import getSlateReducer from './GetSlateReducer'
+import getBannerReducer from './GetBannerReducer'
 
 const rootReducer = combineReducers({
     getTagsReducer: getTagsReducer,
@@ -13,6 +14,7 @@ const rootReducer = combineReducers({
     getClassReducer: getClassReducer,
     getDialogReducer: getDialogReducer,
     getSlateReducer: getSlateReducer,
+    getBannerReducer: getBannerReducer,
 });
 
 export default rootReducer;

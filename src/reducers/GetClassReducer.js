@@ -58,11 +58,6 @@ const getClassReducer = (state = initialState, action) => {
                 },
             }
         }
-        case GetClassAction.RESET_SELECTED_CLASS:
-            return {
-                ...state,
-                reset: action.payload,
-            }
         case GetClassAction.SET_PARENT_CLASS_OPTIONS:
             return {
                 ...state,

@@ -1,9 +1,8 @@
-import React, { useEffect } from 'react'
-import { Routes, Route, useNavigate, useLocation } from 'react-router-dom'
+import React  from 'react'
+import { Routes, Route } from 'react-router-dom'
 
 import Admin from "layouts/Admin.jsx";
 import Auth from "layouts/Auth.jsx";
-import Dashboard from 'views/Dashboard/Dashboard.jsx';
 import EditorList from 'views/EditorList'
 import IEditor from 'views/IEditor/[id]'
 import NewIEditor from 'views/IEditor'
@@ -11,39 +10,13 @@ import LoginPage from 'views/Pages/LoginPage';
 import RegisterPage from 'views/Pages/RegisterPage';
 import TagList from './views/TagList';
 import EditorClassList from './views/EditorClassList';
+import BannerManager from './views/BannerManager';
+
+import useRefreshStayCurrentPage from 'hook/useRefreshStayCurrentPage';
 import './app.css'
 
 function App() {
-    const navigate = useNavigate()
-    const location = useLocation()
-    console.log("🚀 ~ file: App.js:24 ~ App ~ location:", location)
-
-    useEffect(() => {
-        window.sessionStorage.setItem('pathname', location.pathname)
-    }, [location.pathname]);
-
-    useEffect(() => {
-        const lastLocation = window.sessionStorage.getItem('pathname')
-        if (!lastLocation || lastLocation === '/') {
-            navigate('/auth/login-page')
-        } else if (lastLocation) {
-            navigate(lastLocation)
-        }
-
-        // dispatch({ type: GetClassAction.REQUEST_CLASS_LIST })
-        // navigate('/admin/editorList/new')
-
-        // navigate('/auth/register-page')
-        // navigate('/admin/tag')
-
-        // navigate('/admin/editorClassList')
-        // navigate('/admin/table')
-        // navigate('/admin/editorList/new')
-
-        // navigate('/admin/editorManager')
-
-    }, []);
-
+    useRefreshStayCurrentPage()
     return (
         <>
             <div className='App'>
@@ -51,8 +24,10 @@ function App() {
                     <Route path="admin" element={<Admin />} >
                         {/* <Route path="dashboard" element={<Dashboard />} /> */}
                         {/* <Route path="user" element={<UserProfile />} /> */}
+                        <Route path="banner" element={<BannerManager />} />
                         <Route path="tag" element={<TagList />} />
                         <Route path="editorClassList" element={<EditorClassList />} />
+
 
                         <Route path="editorList" >
                             <Route index element={<EditorList />} />

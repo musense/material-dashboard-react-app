@@ -10,6 +10,7 @@ import TagList from "views/TagList";
 import LoginPage from "views/Pages/LoginPage.jsx";
 import RegisterPage from "views/Pages/RegisterPage.jsx";
 import EditorClassList from "./views/EditorClassList";
+import BannerManager from "./views/BannerManager";
 
 const dashboardRoutes = [
   // {
@@ -33,6 +34,13 @@ const dashboardRoutes = [
   //   component: TableList,
   //   layout: "/admin"
   // },
+  {
+    path: "/banner",
+    name: "Banner管理",
+    icon: "content_paste",
+    component: BannerManager,
+    layout: "/admin"
+  },
   {
     path: "/tag",
     name: "標籤管理",

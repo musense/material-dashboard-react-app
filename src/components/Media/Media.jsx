@@ -1,23 +1,24 @@
 import React, { useCallback } from "react";
+import { useDispatch } from "react-redux";
 import ImageSelector from "./ImageSelector";
 import VideoSelector from "./VideoSelector";
 import PreviewMedia from "./PreviewMedia";
-import { useDispatch, useSelector } from "react-redux";
-import * as GetSlateAction from "actions/GetSlateAction";
-import useIsImageOrVideo from "../../../hook/useIsImageOrVideo";
+import useIsImageOrVideo from "hook/useIsImageOrVideo";
 
 export default function Media({
     styles,
     onPropertyChange,
+    patchType,
+    showUrl,
     altText,
 }) {
     const dispatch = useDispatch();
-    const showUrl = useSelector((state) => state.getSlateReducer.showUrl);
+ 
     const { isImage, iframeUrl } = useIsImageOrVideo(showUrl)
 
     const onShowUrlChange = useCallback((value) => {
         dispatch({
-            type: GetSlateAction.SET_SHOW_URL,
+            type: patchType,
             payload: {
                 showUrl: value
             }

@@ -12,8 +12,6 @@ export default function HeaderCell({
   const dispatch = useDispatch();
   const sortingDirection = useSelector((state) => state[reducerName]['sortingMap'][patchKey]);
 
-  console.log(`🚀 ~ file: EditorListBody.jsx:190 ~ sortingDirection`, sortingDirection)
-
   const onSortingClick = (type, key) => {
     dispatch({
       type: type,

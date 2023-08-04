@@ -1,6 +1,6 @@
 import React, { useCallback } from "react";
 import { css, cx } from '@emotion/css';
-import { fetchYoutubeInfo } from '../youtube';
+import { fetchYoutubeInfo } from './youtube';
 
 export default function VideoSelector({
     styles,

@@ -9,7 +9,7 @@ import * as GetSlateAction from 'actions/GetSlateAction';
 import WebHeader from "./WebHeader";
 import Tags from "./Tags";
 import Classification from "./Classification";
-import Media from "./Media";
+import Media from "../../../components/Media/Media";
 import PublishInfo from "./PublishInfo";
 import DetailFormButtonList from "./DetailFormButtonList";
 
@@ -29,6 +29,7 @@ const DetailForm = ({ createType }) => {
 
     const categories = useSelector((state) => state.getSlateReducer.detailForm?.categories);
 
+    const showUrl = useSelector((state) => state.getSlateReducer.showUrl);
     const altText = useSelector((state) => state.getSlateReducer.detailForm?.media.altText);
 
     const hidden = useSelector((state) => state.getSlateReducer.detailForm?.publishInfo?.hidden);
@@ -66,7 +67,10 @@ const DetailForm = ({ createType }) => {
             <Media
                 styles={styles}
                 onPropertyChange={onPropertyChange}
-                altText={altText} />
+                patchType={GetSlateAction.SET_SHOW_URL}
+                showUrl={showUrl}
+                altText={altText}
+            />
             <PublishInfo
                 styles={styles}
                 hidden={hidden}

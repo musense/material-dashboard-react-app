@@ -27,7 +27,6 @@ function HeaderLinks(props) {
   const { classes } = props;
   const dispatch = useDispatch();
   const returnMessage = useSelector((state) => state.getUserReducer.errorMessage);
-  console.log("🚀 ~ file: AdminNavbarLinks.jsx:30 ~ HeaderLinks ~ returnMessage:", returnMessage)
 
   const [profilePopupOpen, setProfilePopupOpen] = useState(false);
 

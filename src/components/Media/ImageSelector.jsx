@@ -1,6 +1,6 @@
 import React, { useRef } from "react";
 import { css, cx } from '@emotion/css';
-import useUploadImage from "../../../hook/useUploadImage";
+import useUploadImage from "hook/useUploadImage";
 
 export default function ImageSelector({
     styles,

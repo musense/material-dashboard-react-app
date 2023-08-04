@@ -7,7 +7,6 @@ export default function PageButtonList({ totalPage, currentPage, patchType }) {
     const dispatch = useDispatch();
 
     const pageList = Array.from({ length: totalPage }, (_, i) => i + 1);
-    console.log("🚀 ~ file: PageButtonList.jsx:7 ~ PageButtonList ~ pageList:", pageList)
 
     const buttonProps = (page, currentPage) => ({
         color: currentPage === page ? 'error' : 'info',

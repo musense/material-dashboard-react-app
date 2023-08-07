@@ -13,10 +13,10 @@ import useDeleteSelectedRow from 'hook/useDeleteSelectedRow';
 
 const headerMap = {
     headerRow: [
-        { name: "標籤名稱", patchKey: "name" },
-        { name: "創建日期", patchKey: "createDate" },
-        { name: "標籤觸及次數", patchKey: "pageView" },
-        { name: "熱門標籤排序", patchKey: "sorting" },
+        { name: "標籤名稱", patchKey: "name", type: "string" },
+        { name: "創建日期", patchKey: "createDate", type: "date" },
+        { name: "標籤觸及次數", patchKey: "pageView", type: "number" },
+        { name: "熱門標籤排序", patchKey: "sorting", type: "number" },
         { name: "編輯" }
     ],
     patchType: GetTagsAction.SHOW_TAG_LIST_SORTING,
@@ -75,7 +75,7 @@ export default function TagRightBody() {
             totalPage={totalPage}
             totalCount={totalCount}
         />
-        <form name='view-class-form' className={'view-list-form'}>
+        <form className='view-list-form'>
             <RowHeader headerConfig={headerMap} />
             <RowBody
                 headerConfig={headerMap}

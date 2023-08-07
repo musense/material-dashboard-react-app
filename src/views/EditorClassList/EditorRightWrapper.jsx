@@ -19,8 +19,8 @@ import useEditorListResult from '../../hook/useEditorListResult';
 import useDeleteSelectedRow from 'hook/useDeleteSelectedRow';
 const headerMap = {
     headerRow: [
-        { name: '分類名稱', patchKey: 'name' },
-        { name: '英文名稱', patchKey: 'keyName' },
+        { name: '分類名稱', patchKey: 'name', type: "string" },
+        { name: '英文名稱', patchKey: 'keyName', type: "string" },
         { name: '編輯' },
     ],
     patchType: GetClassAction.SHOW_CLASS_LIST_SORTING,
@@ -84,7 +84,7 @@ export default function EditorRightWrapper() {
                                 totalPage={totalPage}
                                 totalCount={totalCount}
                             />
-                            <form className='view-list-form' name='view-class-form'>
+                            <form className='view-list-form'>
                                 <RowHeader headerConfig={headerMap} />
                                 <RowBody
                                     headerConfig={headerMap}

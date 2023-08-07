@@ -86,59 +86,59 @@ const getClassReducer = (state = initialState, action) => {
             const { key } = action.payload;
             return {
                 ...state,
-                sortingMap: {
-                    ...state.sortingMap,
-                    [key]: state.sortingMap[key] === 'asc' ? 'desc' : 'asc',
-                },
                 showList: state.editorClassList.sort((class1, class2) => {
                     let typeOf
-                    let c1, c2,
+                    let e1, e2,
                         k1, k2;
 
                     if (key.indexOf('.') !== -1) {
                         k1 = key.split('.')[0]
                         k2 = key.split('.')[1]
-                        c1 = class1[k1][k2]
-                        c2 = class2[k1][k2]
+                        e1 = class1[k1][k2]
+                        e2 = class2[k1][k2]
                         typeOf = typeof class1[k1][k2]
                     } else {
-                        c1 = class1[key]
-                        c2 = class2[key]
+                        e1 = class1[key]
+                        e2 = class2[key]
                         typeOf = typeof class1[key]
                     }
+                    typeOf = typeof new Date(e1).getMonth === 'function' ? 'date' : typeOf
                     const sorting = state.sortingMap[key]
                     switch (typeOf) {
                         case 'string': {
                             if (sorting === 'asc') {
-                                return c1.localeCompare(c2)
+                                return e1.localeCompare(e2)
                             } else {
-                                return c2.localeCompare(c1)
+                                return e2.localeCompare(e1)
                             }
                         }
                         case 'boolean': {
                             if (sorting === 'asc') {
-                                return c2.toString().localeCompare(c1.toString())
+                                return e1.toString().localeCompare(e2.toString())
                             } else {
-                                return c1.toString().localeCompare(c2.toString())
+                                return e2.toString().localeCompare(e1.toString())
                             }
                         }
                         case 'number': {
                             if (sorting === 'asc') {
-                                return parseInt(c2 ? c2 : 0) - parseInt(c1 ? c1 : 0)
+                                return parseInt(e1) - parseInt(e2)
                             } else {
-                                return parseInt(c1 ? c1 : 0) - parseInt(c2 ? c2 : 0)
+                                return parseInt(e2) - parseInt(e1)
                             }
                         }
-                        case 'object': {
+                        case 'date': {
                             if (sorting === 'asc') {
-                                return (new Date(c2)).getTime() - (new Date(c1)).getTime()
+                                return (new Date(e1)).getTime() - (new Date(e1)).getTime()
                             } else {
-                                return (new Date(c1)).getTime() - (new Date(c1)).getTime()
+                                return (new Date(e2)).getTime() - (new Date(e1)).getTime()
                             }
                         }
-
                     }
                 }).slice(0, 10),
+                sortingMap: {
+                    ...state.sortingMap,
+                    [key]: state.sortingMap[key] === 'asc' ? 'desc' : 'asc',
+                },
                 currentPage: 1
             }
         case GetClassAction.REQUEST_CLASS:

@@ -29,7 +29,9 @@ export default function EditorClassButtonList({
     }
 
 
-    return <Stack spacing={2} direction={'row'} display={'flex'} alignItems={'center'} sx={{ my: '1rem' }}>
+    return <Stack spacing={2} direction={'row'}
+        display={'flex'} useFlexGap flexWrap="wrap"
+        alignItems={'center'} sx={{ my: '1rem' }}>
         <Button
             {...buttonProps}
             disabled={currentPage === 1}

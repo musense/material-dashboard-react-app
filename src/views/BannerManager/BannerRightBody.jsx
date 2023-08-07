@@ -80,7 +80,7 @@ export default function BannerRightBody() {
             totalPage={totalPage}
             totalCount={totalCount}
         />
-        <form name='view-class-form' className={'view-list-form'}>
+        <form className='view-list-form'>
             <RowHeader headerConfig={headerMap} />
             <RowBody
                 headerConfig={headerMap}

@@ -22,6 +22,7 @@ export default function TagLeftWrapper() {
     const formRef = useRef(null);
     const dispatch = useDispatch();
 
+    const nextSorting = useSelector((state) => state.getTagsReducer.nextSorting);
     const id = useSelector((state) => state.getTagsReducer.selectedTag.id);
     const tagName = useSelector((state) => state.getTagsReducer.selectedTag.tagName);
     const tagTitle = useSelector((state) => state.getTagsReducer.selectedTag.title);
@@ -212,7 +213,9 @@ export default function TagLeftWrapper() {
                             {popular && <div>
                                 <label htmlFor="sorting">熱門標籤排序</label>
                                 <input type="number" name='sorting' min={1}
-                                    value={sorting} onChange={e => onPropertyChange(e.target.value, 'sorting')} />
+                                    value={sorting} onChange={e => onPropertyChange(e.target.value, 'sorting')}
+                                    placeholder={nextSorting}
+                                />
                             </div>}
                             <FormButtonList
                                 isEditing={isEditing}

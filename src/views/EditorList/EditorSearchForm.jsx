@@ -1,7 +1,7 @@
 import React, { useRef, useCallback } from 'react'
 import DateSelector from 'components/DateSelector/DateSelector';
 import usePressEnterEventHandler from 'hook/usePressEnterEventHandler';
-import { Box } from '@mui/material';
+import Stack from '@mui/material/Stack';
 import * as GetEditorAction from 'actions/GetEditorAction';
 import * as GetsSearchAction from 'actions/GetSearchAction';
 
@@ -33,34 +33,6 @@ export default function EditorSearchForm() {
     const submitRef = useRef(null);
 
     usePressEnterEventHandler(submitRef);
-
-    const onSearchFormPropertyChange = useCallback((value, property) => {
-        dispatch({
-            type: GetsSearchAction.SET_SEARCH_FORM_PROPERTY,
-            payload: {
-                allProps: {
-                    property: property,
-                    value: value
-                }
-            }
-        })
-    }, [dispatch])
-
-    const onClassificationChange = useCallback((value) => {
-        onSearchFormPropertyChange(value, 'categories')
-    }, [onSearchFormPropertyChange])
-
-    const onStatusChange = useCallback((value) => {
-        onSearchFormPropertyChange(value, 'status')
-    }, [onSearchFormPropertyChange])
-
-    const onStartDateChange = useCallback((value) => {
-        onSearchFormPropertyChange(value, 'startDate')
-    }, [onSearchFormPropertyChange])
-
-    const onEndDateChange = useCallback((value) => {
-        onSearchFormPropertyChange(value, 'endDate')
-    }, [onSearchFormPropertyChange])
 
     function onSearchEditorList(e) {
         e.preventDefault()
@@ -110,14 +82,46 @@ export default function EditorSearchForm() {
         return
     }
 
+    const onSearchFormPropertyChange = useCallback((value, property) => {
+        dispatch({
+            type: GetsSearchAction.SET_SEARCH_FORM_PROPERTY,
+            payload: {
+                allProps: {
+                    property: property,
+                    value: value
+                }
+            }
+        })
+    }, [dispatch])
+
+    const onClassificationChange = useCallback((value) => {
+        onSearchFormPropertyChange(value, 'categories')
+    }, [onSearchFormPropertyChange])
+
+    const onStatusChange = useCallback((value) => {
+        onSearchFormPropertyChange(value, 'status')
+    }, [onSearchFormPropertyChange])
+
+    const onStartDateChange = useCallback((value) => {
+        onSearchFormPropertyChange(value, 'startDate')
+    }, [onSearchFormPropertyChange])
+
+    const onEndDateChange = useCallback((value) => {
+        onSearchFormPropertyChange(value, 'endDate')
+    }, [onSearchFormPropertyChange])
+
     const reset = useCallback(() => {
         dispatch({
             type: GetsSearchAction.RESET_SEARCH_FORM
         })
     }, [dispatch])
 
-    return <Box sx={style}>
-        <form name='editor-list-form' className="editor-list-form" onSubmit={onSearchEditorList}>
+    return <Stack
+        spacing={2} direction={'row'}
+        useFlexGap flexWrap="wrap"
+        justifyContent={'space-between'}
+        sx={style}>
+        <form className="editor-list-form" onSubmit={onSearchEditorList}>
             <div className="title" >
                 <label htmlFor="title">標題</label>
                 <input type="text" name='title'
@@ -155,5 +159,5 @@ export default function EditorSearchForm() {
                 <input ref={submitRef} type="submit" value="查詢" />
             </div>
         </form>
-    </Box>
+    </Stack>
 }

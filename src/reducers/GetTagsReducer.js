@@ -19,13 +19,14 @@ const initialState = {
         manualUrl: '',
         customUrl: '',
         popular: false,
-        sorting: 1,
+        sorting: '',
         isEditing: false,
     },
     selectedIndex: -1,
     currentPage: null,
     totalPage: null,
     totalCount: null,
+    nextSorting: null,
     errorMessage: null,
 }
 
@@ -106,6 +107,7 @@ const getTagsReducer = (state = initialState, action) => {
                 currentPage: action.payload.currentPage,
                 totalCount: action.payload.totalCount,
                 totalPage: Math.ceil(action.payload.totalCount / 10),
+                nextSorting: action.payload.nextSorting,
                 errorMessage: errorMessage.getFinish
             }
         case GetTagsAction.REQUEST_TAG_PAGE:
@@ -118,50 +120,54 @@ const getTagsReducer = (state = initialState, action) => {
             }
         case GetTagsAction.SHOW_TAG_LIST_SORTING:
             const { key } = action.payload;
+            console.log("🚀 ~ file: GetTagsReducer.js:123 ~ getTagsReducer ~ key:", key)
             return {
                 ...state,
-                sortingMap: {
-                    ...state.sortingMap,
-                    [key]: state.sortingMap[key] === 'asc' ? 'desc' : 'asc',
-                },
                 showTagList: state.tagList
                     ? state.tagList.sort((tag1, tag2) => {
-                        const typeOf = typeof tag1[key]
+                        let typeOf = typeof tag1[key]
+                        let e1, e2
+                        e1 = tag1[key]
+                        e2 = tag2[key]
+                        typeOf = typeof new Date(tag1[key]).getMonth === 'function' ? 'date' : typeOf
                         const sorting = state.sortingMap[key]
                         switch (typeOf) {
                             case 'string': {
                                 if (sorting === 'asc') {
-                                    return tag2[key].localeCompare(tag1[key])
+                                    return e1.localeCompare(e2)
                                 } else {
-                                    return tag1[key].localeCompare(tag2[key])
+                                    return e2.localeCompare(e1)
                                 }
                             }
                             case 'boolean': {
                                 if (sorting === 'asc') {
-                                    return tag2[key].toString().localeCompare(tag1[key].toString())
+                                    return e1.toString().localeCompare(e2.toString())
                                 } else {
-                                    return tag1[key].toString().localeCompare(tag2[key].toString())
+                                    return e2.toString().localeCompare(e1.toString())
                                 }
                             }
                             case 'number': {
                                 if (sorting === 'asc') {
-                                    return parseInt(tag2[key] ? tag2[key] : 0) - parseInt(tag1[key] ? tag1[key] : 0)
+                                    return parseInt(e1) - parseInt(e2)
                                 } else {
-                                    return parseInt(tag1[key] ? tag1[key] : 0) - parseInt(tag2[key] ? tag2[key] : 0)
-
+                                    return parseInt(e2) - parseInt(e1)
                                 }
                             }
-                            case 'object': {
+                            case 'date': {
                                 if (sorting === 'asc') {
-                                    return (new Date(tag2[key])).getTime() - (new Date(tag1[key])).getTime()
+                                    return (new Date(e1)).getTime() - (new Date(e2)).getTime()
                                 } else {
-                                    return (new Date(tag1[key])).getTime() - (new Date(tag1[key])).getTime()
+                                    return (new Date(e2)).getTime() - (new Date(e1)).getTime()
                                 }
                             }
 
                         }
                     }).slice(0, 10)
                     : null,
+                sortingMap: {
+                    ...state.sortingMap,
+                    [key]: state.sortingMap[key] === 'asc' ? 'desc' : 'asc',
+                },
                 currentPage: 1
             }
         case GetTagsAction.GET_TAG_FAIL:

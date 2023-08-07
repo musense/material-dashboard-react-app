@@ -37,30 +37,33 @@ export default function EditBodyCell({
         }
     }
     )
-    return <BodyCell className={className} children={<Stack spacing={2} direction={'row'} >
-        {note && <IconCell
-            iconName={'text_snippet'}
-            iconTitle={'備註'}
-            callback={onNote}
-        />}
-        <IconCell
-            copy
-            iconName={'link'}
-            iconTitle={'複製連結'}
-            copyText={copyText}
-            callback={onCopy}
-        />
-        <IconCell
-            iconName={'edit'}
-            iconTitle={'編輯'}
-            callback={onEdit}
-        />
-        <IconCell
-            iconName={'delete_forever'}
-            iconTitle={'刪除'}
-            callback={onDelete}
-        />
-    </Stack>} />;
+    return <BodyCell className={className} children={
+        <Stack spacing={2} direction={'row'}
+            useFlexGap flexWrap="wrap" justifyContent={"space-evenly"}
+        >
+            {note && <IconCell
+                iconName={'text_snippet'}
+                iconTitle={'備註'}
+                callback={onNote}
+            />}
+            <IconCell
+                copy
+                iconName={'link'}
+                iconTitle={'複製連結'}
+                copyText={copyText}
+                callback={onCopy}
+            />
+            <IconCell
+                iconName={'edit'}
+                iconTitle={'編輯'}
+                callback={onEdit}
+            />
+            <IconCell
+                iconName={'delete_forever'}
+                iconTitle={'刪除'}
+                callback={onDelete}
+            />
+        </Stack>} />;
 }
 
 

@@ -57,7 +57,7 @@ const getEditorReducer = (state = initialState, action) => {
       }
     case GetEditorAction.ADD_EDITOR_FAIL:
     case GetEditorAction.UPDATE_EDITOR_FAIL:
-    case GetEditorAction.DELETE_EDITOR_FAIL: 
+    case GetEditorAction.DELETE_EDITOR_FAIL:
     case GetEditorAction.AUTH_USER_FAIL: {
       let errorMessage;
       if (action.payload.errorMessage.indexOf('E11000 duplicate key error') !== -1) {
@@ -92,10 +92,6 @@ const getEditorReducer = (state = initialState, action) => {
       const { key } = action.payload;
       return {
         ...state,
-        sortingMap: {
-          ...state.sortingMap,
-          [key]: state.sortingMap[key] === 'asc' ? 'desc' : 'asc',
-        },
         showList: state.titleList.sort((editor1, editor2) => {
           let typeOf
           let e1, e2,
@@ -112,6 +108,7 @@ const getEditorReducer = (state = initialState, action) => {
             e2 = editor2[key]
             typeOf = typeof editor1[key]
           }
+          typeOf = typeof new Date(e1).getMonth === 'function' ? 'date' : typeOf
           const sorting = state.sortingMap[key]
           switch (typeOf) {
             case 'string': {
@@ -123,29 +120,31 @@ const getEditorReducer = (state = initialState, action) => {
             }
             case 'boolean': {
               if (sorting === 'asc') {
-                return e2.toString().localeCompare(e1.toString())
-              } else {
                 return e1.toString().localeCompare(e2.toString())
+              } else {
+                return e2.toString().localeCompare(e1.toString())
               }
             }
             case 'number': {
               if (sorting === 'asc') {
-                return parseInt(e2 ? e2 : 0) - parseInt(e1 ? e1 : 0)
+                return parseInt(e1) - parseInt(e2)
               } else {
-                return parseInt(e1 ? e1 : 0) - parseInt(e2 ? e2 : 0)
-
+                return parseInt(e2) - parseInt(e1)
               }
             }
-            case 'object': {
+            case 'date': {
               if (sorting === 'asc') {
-                return (new Date(e2)).getTime() - (new Date(e1)).getTime()
+                return (new Date(e1)).getTime() - (new Date(e2)).getTime()
               } else {
-                return (new Date(e1)).getTime() - (new Date(e1)).getTime()
+                return (new Date(e2)).getTime() - (new Date(e1)).getTime()
               }
             }
-
           }
         }).slice(0, 10),
+        sortingMap: {
+          ...state.sortingMap,
+          [key]: state.sortingMap[key] === 'asc' ? 'desc' : 'asc',
+        },
         currentPage: 1
       }
     case GetEditorAction.REQUEST_EDITOR_FAIL:

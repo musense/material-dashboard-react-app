@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react'; // useState
+import React, { useEffect, useState } from 'react'; // useState
 // core components
 import Card from 'components/Card/Card.jsx';
 import { useDispatch, useSelector } from 'react-redux';
@@ -8,7 +8,6 @@ import EditorListHeader from "./EditorListHeader";
 import EditorListBody from "./EditorListBody";
 
 import * as GetEditorAction from "../../actions/GetEditorAction";
-import * as GetTagsAction from "../../actions/GetTagsAction";
 import { reDispatchMessage } from './../../reducers/errorMessage';
 
 

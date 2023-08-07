@@ -1,7 +1,7 @@
 import React from "react";
 import { cx, css } from '@emotion/css'
 
-export default function Icon({ iconName, classes }) {
+export default function Icon({ iconName, classes, onClick }) {
     const iconClassName = cx(
         'material-icons',
         css`        
@@ -10,7 +10,7 @@ export default function Icon({ iconName, classes }) {
         vertical-align: text-bottom;
         ${classes};`
     )
-    const icon = <span className={iconClassName}>
+    const icon = <span className={iconClassName} onClick={onClick} >
         {iconName}
     </span>
 

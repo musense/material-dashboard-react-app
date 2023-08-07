@@ -15,13 +15,13 @@ import useDeleteSelectedRow from 'hook/useDeleteSelectedRow';
 
 const headerMap = {
     headerRow: [
-        { name: "序號", patchKey: "serialNumber" },
+        { name: "序號", patchKey: "serialNumber", type: "number" },
         { name: "圖片/影片", className: "flex-2 image-container" },
-        { name: "分類", patchKey: "categories.name", className: "flex-2" },
-        { name: "標題", patchKey: "content.title", className: "flex-3" },
-        { name: "瀏覽數", patchKey: "pageView" },
-        { name: "狀態", patchKey: "status", className: "flex-2" },
-        { name: "更新日期", patchKey: "updateDate", className: "flex-2" },
+        { name: "分類", patchKey: "categories.name", className: "flex-2", type: "string" },
+        { name: "標題", patchKey: "content.title", className: "flex-3", type: "string" },
+        { name: "瀏覽數", patchKey: "pageView", type: "number" },
+        { name: "狀態", patchKey: "status", className: "flex-2", type: "string" },
+        { name: "更新日期", patchKey: "updateDate", className: "flex-2", type: "date" },
         { name: "編輯", className: "flex-2" }
     ],
     patchType: GetEditorAction.SHOW_EDITOR_LIST_SORTING,
@@ -90,7 +90,7 @@ export default function EditorListBody() {
             totalPage={totalPage}
             totalCount={totalCount}
         />
-        <form className='view-list-form' name='view-editor-list-form' >
+        <form className='view-list-form'>
             <RowHeader headerConfig={headerMap} />
             <RowBody
                 headerConfig={headerMap}

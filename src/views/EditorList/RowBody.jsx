@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import BodyCell from "../../components/BodyCell/BodyCell";
 import EditBodyCell from "../../components/EditBodyCell/EditBodyCell";
 import getUpdateDateTime from "utils/getUpdateDateTime";
+import useMacOSCss from "hook/useMacOSCss";
 
 export default function RowBody({
     headerConfig,
@@ -14,10 +15,11 @@ export default function RowBody({
     handleOpenDialog,
     className = null
 }) {
+    const rowBodyClassName = useMacOSCss('view-body')
     const navigate = useNavigate();
 
     const headerRow = headerConfig.headerRow
-    return <div data-attr="data-body" className={`view-body ${className}`}>
+    return <div data-attr="data-body" className={`${rowBodyClassName} ${className ? className : ''}`}>
         {showList && showList.length > 0 && showList.map((titleView, index) => {
             return (
                 <div data-attr="data-body-row" key={index}>

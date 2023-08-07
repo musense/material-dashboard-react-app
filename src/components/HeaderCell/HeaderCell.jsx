@@ -29,20 +29,24 @@ export default function HeaderCell({
     value: name,
   }), [name, patchKey, patchType])
 
-  const icon = (patchKey) => {
+
+  const icon = (patchKey, callback) => {
     if (!patchKey) return null
 
     const iconClassName = `
       position: absolute;
       top: 50%;
       transform: translateY(-50%);
-      right: 10px;`
-
+      right: 10px;
+      cursor: pointer;
+      user-select: none; `
     const icon_name = sortingDirection === 'asc' ? 'arrow_upward' : 'arrow_downward'
-    return < Icon iconName={icon_name} classes={iconClassName} />
+
+    return < Icon iconName={icon_name} classes={iconClassName} onClick={callback} />
   };
+
   return <div className={className} >
     <input {...inputProps} />
-    {icon(patchKey)}
+    {icon(patchKey, () => onSortingClick(patchType, patchKey))}
   </div>;
 }

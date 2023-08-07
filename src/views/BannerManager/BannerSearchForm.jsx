@@ -2,7 +2,7 @@ import React, { useRef } from 'react'
 import DateSelector from '../../components/DateSelector/DateSelector';
 import { css } from '@emotion/css'
 import usePressEnterEventHandler from '../../hook/usePressEnterEventHandler';
-import { Box } from '@mui/material';
+import Stack from '@mui/material/Stack';
 import * as GetBannerAction from '../../actions/GetBannerAction';
 import { useDispatch } from 'react-redux';
 
@@ -50,7 +50,11 @@ export default function BannerSearchForm() {
         form.reset();
         dateRef.current.reset()
     }
-    return <Box sx={style}>
+    return <Stack
+        spacing={2} direction={'row'}
+        useFlexGap flexWrap="wrap"
+        justifyContent={'space-between'}
+        sx={style}>
         <form name='Banner-list-form' className="banner-list-form" onSubmit={onSearchEditorList}>
 
             <div className="title" >
@@ -61,11 +65,11 @@ export default function BannerSearchForm() {
             <DateSelector
                 width={'160px'}
                 height={'40px'}
-                />
+            />
             <div className="button-list">
                 <input type='button' value='清空' onClick={reset} />
                 <input ref={submitRef} type="submit" value="查詢" />
             </div>
         </form>
-    </Box>
+    </Stack>
 }

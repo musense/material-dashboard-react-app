@@ -95,6 +95,10 @@ input[type='file'] {
   background-color: #ccc;
 }
 
+.view-header.OSX {
+  padding-right: unset;
+}
+
 .view-search-form {
   position: sticky;
 }
@@ -115,7 +119,7 @@ input[type='file'] {
   flex: 1;
 }
 
-.view-list-form * .image-container>img {
+.view-list-form .image-container>img {
   height: 100%;
   width: 100%;
   object-fit: cover;
@@ -123,29 +127,33 @@ input[type='file'] {
   cursor: pointer;
 }
 
-.view-list-form * .flex-2 {
+.view-list-form .flex-2 {
   flex-grow: 2;
 }
 
-.view-list-form * .flex-3 {
+.view-list-form .flex-3 {
   flex-grow: 3;
   text-align: left;
   white-space: pre-wrap;
 }
 
-.view-list-form * .is-popular-tag {
+.view-list-form .is-popular-tag {
   font-weight: bolder;
   color: red;
 }
 
-.view-list-form * .not-popular-tag {
+.view-list-form .not-popular-tag {
   font-weight: bolder;
   color: green;
 }
 
 .view-body {
-  height: 560px;
+  height: calc(100vh - 400px);
   overflow-y: scroll;
+}
+
+.view-body.OSX {
+  height: calc(100vh - 450px);
 }
 
 .view-body.editor-class {
@@ -203,18 +211,20 @@ input[type='file'] {
 .editor-list-form {
   display: flex;
   flex-direction: row;
+  flex-wrap: wrap;
   justify-content: space-between;
   color: black;
-  width: 1300px;
+  width: fit-content;
   margin-right: auto;
   align-items: flex-end;
-  gap: 40px;
+  column-gap: 40px;
+  row-gap: 20px;
 }
 
-.tag-list-form,
+/* .tag-list-form,
 .banner-list-form {
   width: 1000px;
-}
+} */
 
 .tag-list-form .title>input,
 .banner-list-form .title>input,
@@ -257,4 +267,33 @@ input[type='file'] {
   padding: 10px;
   width: 100%;
   resize: none;
+}
+
+::placeholder {
+  /* CSS 3 標準 */
+  color: #ccc;
+
+}
+
+::-webkit-input-placeholder {
+  /* Chrome, Safari */
+  color: #ccc;
+}
+
+:-ms-input-placeholder {
+  /* IE 10+ */
+  color: #ccc;
+}
+
+::-moz-placeholder {
+  /* Firefox 19+ */
+  color: #ccc;
+  opacity: 1;
+}
+
+/** Safari */
+@media not all and (min-resolution:.001dpcm) {
+  .view-header {
+    padding-right: unset;
+  }
 }

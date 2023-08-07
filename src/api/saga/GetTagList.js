@@ -76,8 +76,29 @@ function* GetPopularTagList() {
 function* GetTagList(payload = 1) {
     try {
 
-        const response = yield instance.get(`/tags?limit=100000&pageNumber=${payload}`);
-        const { currentPage, totalCount, data: responseData } = yield response.data
+        const promise1 = instance.get(`/tags/getMaxTagNumber`);
+        // const maxTagNumber = yield response.data
+
+        const promise2 = yield instance.get(`/tags?limit=100000&pageNumber=${payload}`);
+        // const { currentPage, totalCount, data: responseData } = yield response.data
+
+        const {
+            nextSorting,
+            responseData,
+            totalCount,
+            currentPage
+        } = yield Promise.all([promise1, promise2]).then(res => {
+            console.log("🚀 ~ file: GetTagList.js:86 ~ const[]=Promise.all ~ res:", res)
+            const nextSorting = res[0].data.maxTagNumber
+            const { data: responseData, totalCount, currentPage } = res[1].data
+            return {
+                nextSorting,
+                responseData,
+                totalCount,
+                currentPage
+            }
+        })
+
         const tagList = toFrontendData(responseData)
         yield put({
             type: GetTagsAction.REQUEST_TAG_SUCCESS,
@@ -85,6 +106,7 @@ function* GetTagList(payload = 1) {
                 tagList,
                 totalCount: parseInt(totalCount),
                 currentPage: parseInt(currentPage),
+                nextSorting,
             },
         })
     } catch (error) {

@@ -37,7 +37,9 @@ export default function EditorListButtonList({
         variant: 'contained',
     }
 
-    return <Stack spacing={2} direction={'row'} display={'flex'} alignItems={'center'} sx={{ my: '1rem' }}>
+    return <Stack spacing={2} direction={'row'}
+        display={'flex'} useFlexGap flexWrap="wrap"
+        alignItems={'center'} sx={{ my: '1rem' }}>
         <Button
             {...buttonProps}
             onClick={onAddNew}>

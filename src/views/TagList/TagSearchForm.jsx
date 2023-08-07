@@ -1,7 +1,7 @@
 import React, { useRef, useCallback } from 'react'
 import DateSelector from 'components/DateSelector/DateSelector';
 import usePressEnterEventHandler from 'hook/usePressEnterEventHandler';
-import { Box } from '@mui/material';
+import Stack from '@mui/material/Stack';
 import * as GetTagsAction from 'actions/GetTagsAction';
 import * as GetSearchAction from 'actions/GetSearchAction';
 import { useDispatch, useSelector } from 'react-redux';
@@ -100,8 +100,12 @@ export default function TagSearchForm() {
             type: GetSearchAction.RESET_SEARCH_FORM
         })
     }, [dispatch])
-    return <Box sx={style}>
-        <form name='tag-list-form' className="tag-list-form" onSubmit={onSearchEditorList}>
+    return <Stack
+        spacing={2} direction={'row'}
+        useFlexGap flexWrap="wrap"
+        justifyContent={'space-between'}
+        sx={style}>
+        <form className="tag-list-form" onSubmit={onSearchEditorList}>
 
             <div className="title" >
                 <label htmlFor="title">標籤名稱</label>
@@ -122,5 +126,5 @@ export default function TagSearchForm() {
                 <input ref={submitRef} type="submit" value="查詢" />
             </div>
         </form>
-    </Box>
+    </Stack>
 }

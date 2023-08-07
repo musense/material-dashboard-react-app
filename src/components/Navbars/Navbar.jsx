@@ -1,4 +1,4 @@
-import React,{useEffect} from "react";
+import React, { useEffect } from "react";
 import classNames from "classnames";
 import PropTypes from "prop-types";
 // @material-ui/core components
@@ -49,15 +49,16 @@ function Header({ ...props }) {
             <AdminNavbarLinks {...props} />
           )}
         </Hidden>
-        <Hidden mdUp implementation="css">
-          <IconButton
-            color="inherit"
-            aria-label="open drawer"
-            onClick={props.handleDrawerToggle}
-          >
-            <Menu />
-          </IconButton>
-        </Hidden>
+        {/* <Hidden mdUp implementation="css"> */}
+        <IconButton
+          color="inherit"
+          aria-label="open drawer"
+          onClick={props.handleDrawerToggle}
+        // sx={{ display: { md: 'none', xs: 'block' } }}
+        >
+          <Menu />
+        </IconButton>
+        {/* </Hidden> */}
       </Toolbar>
     </AppBar>
   );

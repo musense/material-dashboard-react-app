@@ -36,7 +36,7 @@ function Dashboard({ ...props }) {
   const [logoText, setLogoText] = useState();
   const { classes, ...rest } = props;
   const color = "orange";
-  const [mobileOpen, setMobileOpen] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(true);
 
   const mainPanel = useRef(null);
   const location = useLocation()
@@ -103,7 +103,7 @@ function Dashboard({ ...props }) {
           color={color}
           {...rest}
         />
-        <div className={classes.mainPanel} ref={mainPanel}>
+        <div className={`${classes.mainPanel} ${mobileOpen ? '' : 'main-panel-max-size'}`} ref={mainPanel}>
           <Navbar
             routes={routes}
             handleDrawerToggle={handleDrawerToggle}

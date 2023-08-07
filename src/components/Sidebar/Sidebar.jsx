@@ -5,7 +5,6 @@ import { NavLink, useLocation } from 'react-router-dom';
 // @material-ui/core components
 import withStyles from '@material-ui/core/styles/withStyles';
 import Drawer from '@material-ui/core/Drawer';
-import Hidden from '@material-ui/core/Hidden';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
@@ -15,6 +14,7 @@ import AdminNavbarLinks from 'components/Navbars/AdminNavbarLinks.jsx';
 // import RTLNavbarLinks from 'components/Navbars/RTLNavbarLinks.jsx';
 
 import sidebarStyle from 'assets/jss/material-dashboard-react/components/sidebarStyle.jsx';
+import Button from '@material-ui/core/Button'
 
 const Sidebar = ({ ...props }) => {
   // verifies if routeName is the one active (in browser input)
@@ -30,8 +30,10 @@ const Sidebar = ({ ...props }) => {
     color,
     logo,
     image,
+    open,
     // logoText, 
-    routes
+    routes,
+    handleDrawerToggle
   } = props;
   const links = (
     <List className={classes.list}>
@@ -87,51 +89,52 @@ const Sidebar = ({ ...props }) => {
   );
   return (
     <div>
-      <Hidden mdUp implementation='css'>
-        <Drawer
-          variant='temporary'
-          anchor={'right'}
-          open={props.open}
-          classes={{
-            paper: classNames(classes.drawerPaper),
-          }}
-          onClose={props.handleDrawerToggle}
-          ModalProps={{
-            keepMounted: true, // Better open performance on mobile.
-          }}
-        >
-          {brand}
-          <div className={classes.sidebarWrapper}>
-            <AdminNavbarLinks />
-            {links}
-          </div>
-          {image !== undefined ? (
-            <div
-              className={classes.background}
-              style={{ backgroundImage: 'url(' + image + ')' }}
-            />
-          ) : null}
-        </Drawer>
-      </Hidden>
-      <Hidden smDown implementation='css'>
-        <Drawer
-          anchor={'left'}
-          variant='permanent'
-          open
-          classes={{
-            paper: classNames(classes.drawerPaper),
-          }}
-        >
-          {brand}
-          <div className={classes.sidebarWrapper}>{links}</div>
-          {image !== undefined ? (
-            <div
-              className={classes.background}
-              style={{ backgroundImage: 'url(' + image + ')' }}
-            />
-          ) : null}
-        </Drawer>
-      </Hidden>
+      {/* <Drawer
+        variant='temporary'
+        anchor={'right'}
+        open={props.open}
+        classes={{
+          paper: classNames(classes.drawerPaper),
+        }}
+        onClose={props.handleDrawerToggle}
+        ModalProps={{
+          keepMounted: true, // Better open performance on mobile.
+        }}
+        sx={{ display: { md: 'none', xs: 'block' } }}
+      >
+        {brand}
+        <div className={classes.sidebarWrapper}>
+          <AdminNavbarLinks />
+          {links}
+        </div>
+        {image !== undefined ? (
+          <div
+            className={classes.background}
+            style={{ backgroundImage: 'url(' + image + ')' }}
+          />
+        ) : null}
+      </Drawer> */}
+
+      <Drawer
+        anchor={'left'}
+        variant='persistent'
+        hideBackdrop={true}
+        open={open}
+        classes={{
+          paper: classNames(classes.drawerPaper),
+        }}
+        onClose={handleDrawerToggle}
+      >
+        {brand}
+        <div className={classes.sidebarWrapper}>{links}</div>
+        {image !== undefined ? (
+          <div
+            className={classes.background}
+            style={{ backgroundImage: 'url(' + image + ')' }}
+          />
+        ) : null}
+
+      </Drawer>
     </div>
   );
 };

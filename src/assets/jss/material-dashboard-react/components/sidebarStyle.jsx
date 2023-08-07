@@ -50,16 +50,16 @@ const sidebarStyle = (theme) => ({
       ...transition,
     },
   },
-  drawerPaperRTL: {
-    [theme.breakpoints.up("md")]: {
-      left: "auto !important",
-      right: "0 !important",
-    },
-    [theme.breakpoints.down("sm")]: {
-      left: "0  !important",
-      right: "auto !important",
-    },
-  },
+  // drawerPaperRTL: {
+  //   [theme.breakpoints.up("md")]: {
+  //     left: "auto !important",
+  //     right: "0 !important",
+  //   },
+  //   [theme.breakpoints.down("sm")]: {
+  //     left: "0  !important",
+  //     right: "auto !important",
+  //   },
+  // },
   logo: {
     position: "relative",
     padding: "15px 15px",
@@ -303,7 +303,7 @@ const sidebarStyle = (theme) => ({
   },
   hide: {
     display: "none",
-  },
+  }
 });
 
 export default sidebarStyle;

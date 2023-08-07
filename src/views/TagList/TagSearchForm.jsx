@@ -1,10 +1,10 @@
-import React, { useRef } from 'react'
-import DateSelector from '../../components/DateSelector/DateSelector';
-import { css } from '@emotion/css'
-import usePressEnterEventHandler from '../../hook/usePressEnterEventHandler';
+import React, { useRef, useCallback } from 'react'
+import DateSelector from 'components/DateSelector/DateSelector';
+import usePressEnterEventHandler from 'hook/usePressEnterEventHandler';
 import { Box } from '@mui/material';
-import * as GetTagsAction from '../../actions/GetTagsAction';
-import { useDispatch } from 'react-redux';
+import * as GetTagsAction from 'actions/GetTagsAction';
+import * as GetSearchAction from 'actions/GetSearchAction';
+import { useDispatch, useSelector } from 'react-redux';
 
 const style = {
     width: '100%',
@@ -21,21 +21,51 @@ const style = {
 export default function TagSearchForm() {
 
     const dispatch = useDispatch()
+    const title = useSelector((state) => state.getSearchReducer.title);
+    const startDate = useSelector((state) => state.getSearchReducer.startDate);
+    const endDate = useSelector((state) => state.getSearchReducer.endDate);
+
     const submitRef = useRef(null);
-    const dateRef = useRef(null);
 
     usePressEnterEventHandler(submitRef)
 
     function onSearchEditorList(e) {
         e.preventDefault()
-        const form = e.target;
-        const formData = new FormData(form);
-        const searchData = Object.assign(
-            {},
-            Object.fromEntries(formData),
-            { createDate: dateRef.current.current() }
-        );
-        console.log("🚀 ~ file: EditorList.jsx:136 ~ onSearchEditorList ~ searchData:", searchData)
+        if (startDate === "Invalid Date" && endDate === "Invalid Date") {
+            dispatch({
+                type: GetTagsAction.SET_ERROR_MESSAGE,
+                payload: {
+                    message: "Please select create date"
+                }
+            })
+            return
+        }
+        if (startDate === "Invalid Date") {
+            dispatch({
+                type: GetTagsAction.SET_ERROR_MESSAGE,
+                payload: {
+                    message: "Please select start date"
+                }
+            })
+            return
+        }
+        if (endDate === "Invalid Date") {
+            dispatch({
+                type: GetTagsAction.SET_ERROR_MESSAGE,
+                payload: {
+                    message: "Please select end date"
+                }
+            })
+            return
+        }
+        const searchData = {
+            title: title.length === 0 ? null : title,
+            createDate: {
+                startDate: startDate,
+                endDate: endDate
+            }
+        }
+        console.log("🚀 ~ file: TagSearchForm.jsx:67 ~ onSearchEditorList ~ searchData:", searchData)
 
         // return
         dispatch({
@@ -45,23 +75,48 @@ export default function TagSearchForm() {
         return
     }
 
-    function reset() {
-        const form = document.getElementsByName('tag-list-form')[0];
-        form.reset();
-        dateRef.current.reset()
-    }
+
+    const onSearchFormPropertyChange = useCallback((value, property) => {
+        dispatch({
+            type: GetSearchAction.SET_SEARCH_FORM_PROPERTY,
+            payload: {
+                allProps: {
+                    property: property,
+                    value: value
+                }
+            }
+        })
+    }, [dispatch])
+
+    const onStartDateChange = useCallback((value) => {
+        onSearchFormPropertyChange(value, 'startDate')
+    }, [onSearchFormPropertyChange])
+
+    const onEndDateChange = useCallback((value) => {
+        onSearchFormPropertyChange(value, 'endDate')
+    }, [onSearchFormPropertyChange])
+    const reset = useCallback(() => {
+        dispatch({
+            type: GetSearchAction.RESET_SEARCH_FORM
+        })
+    }, [dispatch])
     return <Box sx={style}>
         <form name='tag-list-form' className="tag-list-form" onSubmit={onSearchEditorList}>
 
             <div className="title" >
                 <label htmlFor="title">標籤名稱</label>
-                <input type="text" name='title' />
+                <input type="text" name='title'
+                    value={title} onChange={e => onSearchFormPropertyChange(e.target.value, 'title')} />
             </div>
 
             <DateSelector
+                startDate={startDate}
+                endDate={endDate}
                 width={'160px'}
                 height={'40px'}
-                ref={dateRef} />
+                onStartDateChange={onStartDateChange}
+                onEndDateChange={onEndDateChange}
+            />
             <div className="button-list">
                 <input type='button' value='清空' onClick={reset} />
                 <input ref={submitRef} type="submit" value="查詢" />

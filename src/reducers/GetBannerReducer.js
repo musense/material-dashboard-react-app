@@ -12,15 +12,23 @@ const initialState = {
     showBannerList: null,
     selectedBanner: {
         id: '',
-        bannerName: '',
-        title: '',
-        description: '',
-        keywords: '',
-        manualUrl: '',
-        customUrl: '',
-        popular: false,
+        name: '',
+        hyperlink: '',
         sorting: 1,
+        media: {
+            contentImagePath: '',
+            homeImagePath: '',
+            altText: '',
+        },
+        publishInfo: {
+            isOnShelvesImmediate: false,
+            isPermanent: false,
+            startDate: null,
+            endDate: null,
+        },
+        note: null,
         isEditing: false,
+        showUrl: null,
     },
     selectedIndex: -1,
     currentPage: null,
@@ -40,16 +48,35 @@ const getBannerReducer = (state = initialState, action) => {
                 },
             }
         }
-        case GetBannerAction.SET_BANNER_PROPERTY: {
-            const { property, value } = action.payload.allProps
+        case GetBannerAction.SET_SHOW_URL: {
             return {
                 ...state,
                 selectedBanner: {
                     ...state.selectedBanner,
-                    [property]: value
+                    showUrl: action.payload.showUrl,
                 },
             }
         }
+        case GetBannerAction.SET_BANNER_PROPERTY: {
+            const { property, value, info } = action.payload.allProps
+            return info ? {
+                ...state,
+                selectedBanner: {
+                    ...state.selectedBanner,
+                    [info]: {
+                        ...state.selectedBanner[info],
+                        [property]: value,
+                    }
+                }
+            } : {
+                ...state,
+                selectedBanner: {
+                    ...state.selectedBanner,
+                    [property]: value,
+                }
+            }
+        }
+
         case GetBannerAction.EDITING_BANNER:
             const banner = action.payload.data
             return {
@@ -193,10 +220,10 @@ const getBannerReducer = (state = initialState, action) => {
         case "RESET_STATE_DATA": {
             return {
                 ...initialState,
-                sortingMap:{
+                sortingMap: {
                     ...initialState.sortingMap
                 },
-                selectedBanner:{
+                selectedBanner: {
                     ...initialState.selectedBanner
                 }
             }

@@ -1,31 +1,21 @@
 import React, { useCallback } from "react";
-import { useDispatch } from "react-redux";
 import ImageSelector from "./ImageSelector";
 import VideoSelector from "./VideoSelector";
 import PreviewMedia from "./PreviewMedia";
 import useIsImageOrVideo from "hook/useIsImageOrVideo";
+import styles from "./Media.module.css"
 
 export default function Media({
-    styles,
     onPropertyChange,
-    patchType,
+    onShowUrlChange,
     showUrl,
     altText,
+    alt = true
 }) {
-    const dispatch = useDispatch();
- 
+
     const { isImage, iframeUrl } = useIsImageOrVideo(showUrl)
 
-    const onShowUrlChange = useCallback((value) => {
-        dispatch({
-            type: patchType,
-            payload: {
-                showUrl: value
-            }
-        })
-    }, [dispatch])
-
-    const onRemoveClick = useCallback(() => { 
+    const onRemoveClick = useCallback(() => {
         onShowUrlChange('')
         onPropertyChange('', 'contentImagePath', 'media')
         onPropertyChange('', 'homeImagePath', 'media')
@@ -55,6 +45,7 @@ export default function Media({
                 onRemoveClick={onRemoveClick}
                 onImageChange={onImageChange}
                 onMediaAltTextChange={onMediaAltTextChange}
+                alt={alt}
             />
             <VideoSelector
                 styles={styles}

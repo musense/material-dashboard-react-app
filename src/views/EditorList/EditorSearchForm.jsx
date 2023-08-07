@@ -1,13 +1,13 @@
-import React, { useEffect, useRef } from 'react'
+import React, { useRef, useCallback } from 'react'
 import DateSelector from 'components/DateSelector/DateSelector';
 import usePressEnterEventHandler from 'hook/usePressEnterEventHandler';
 import { Box } from '@mui/material';
 import * as GetEditorAction from 'actions/GetEditorAction';
-import * as GetSlateAction from 'actions/GetSlateAction';
+import * as GetsSearchAction from 'actions/GetSearchAction';
+
 import { useDispatch, useSelector } from 'react-redux';
 import SingleClassificationSelect from 'components/Select/SingleClassificationSelect';
 import SingleStatusSelect from 'components/Select/SingleStatusSelect';
-import { useCallback } from 'react';
 
 const style = {
     width: '100%',
@@ -24,23 +24,22 @@ const style = {
 export default function EditorSearchForm() {
 
     const dispatch = useDispatch();
-    const title = useSelector((state) => state.getSlateReducer.searchForm.title);
-    const categories = useSelector((state) => state.getSlateReducer.searchForm.categories);
-    const status = useSelector((state) => state.getSlateReducer.searchForm.status);
-    const startDate = useSelector((state) => state.getSlateReducer.searchForm.createDate.startDate);
-    const endDate = useSelector((state) => state.getSlateReducer.searchForm.createDate.endDate);
+    const title = useSelector((state) => state.getSearchReducer.title);
+    const categories = useSelector((state) => state.getSearchReducer.categories);
+    const status = useSelector((state) => state.getSearchReducer.status);
+    const startDate = useSelector((state) => state.getSearchReducer.startDate);
+    const endDate = useSelector((state) => state.getSearchReducer.endDate);
 
     const submitRef = useRef(null);
 
     usePressEnterEventHandler(submitRef);
 
-    const onSearchFormPropertyChange = useCallback((value, property, detail = null) => {
+    const onSearchFormPropertyChange = useCallback((value, property) => {
         dispatch({
-            type: GetSlateAction.SET_SEARCH_FORM_PROPERTY,
+            type: GetsSearchAction.SET_SEARCH_FORM_PROPERTY,
             payload: {
                 allProps: {
                     property: property,
-                    detail: detail,
                     value: value
                 }
             }
@@ -56,11 +55,11 @@ export default function EditorSearchForm() {
     }, [onSearchFormPropertyChange])
 
     const onStartDateChange = useCallback((value) => {
-        onSearchFormPropertyChange(value, 'createDate', 'startDate')
+        onSearchFormPropertyChange(value, 'startDate')
     }, [onSearchFormPropertyChange])
 
     const onEndDateChange = useCallback((value) => {
-        onSearchFormPropertyChange(value, 'createDate', 'endDate')
+        onSearchFormPropertyChange(value, 'endDate')
     }, [onSearchFormPropertyChange])
 
     function onSearchEditorList(e) {
@@ -113,7 +112,7 @@ export default function EditorSearchForm() {
 
     const reset = useCallback(() => {
         dispatch({
-            type: GetSlateAction.RESET_SEARCH_FORM
+            type: GetsSearchAction.RESET_SEARCH_FORM
         })
     }, [dispatch])
 

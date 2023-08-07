@@ -7,15 +7,8 @@ input {
   box-sizing: border-box;
 }
 
-
-.left-button-container {
-  display: flex;
-  flex-direction: row;
-  gap: 4rem;
-  margin-top: 1.5rem;
-}
-
 .banner-container {
+  height: 100%;
   display: flex;
   flex-direction: row;
   justify-content: space-between;

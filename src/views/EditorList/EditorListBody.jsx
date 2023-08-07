@@ -11,6 +11,7 @@ import RowBody from './RowBody';
 import MessageDialog from '../../components/Modal/MessageDialog';
 import useEditorListResult from '../../hook/useEditorListResult';
 import useModal from '../../hook/useModal';
+import useDeleteSelectedRow from 'hook/useDeleteSelectedRow';
 
 const headerMap = {
     headerRow: [
@@ -57,13 +58,15 @@ export default function EditorListBody() {
 
     }
 
+    useDeleteSelectedRow(messageDialogReturnValue, {
+        deleteType: GetEditorAction.BUNCH_DELETE_EDITOR
+    });
+
     const {
         title,
         content,
         success
     } = useEditorListResult(errorMessage, contentData, data)
-
- 
 
     const {
         open,
@@ -95,7 +98,6 @@ export default function EditorListBody() {
                 handleOpen={handleOpen}
                 setMediaInfo={setMediaInfo}
                 handleOpenDialog={handleOpenDialog}
-                messageDialogReturnValue={messageDialogReturnValue}
             />
         </form>
         <MediaModal

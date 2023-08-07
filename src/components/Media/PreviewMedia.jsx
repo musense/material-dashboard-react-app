@@ -10,7 +10,7 @@ export default function PreviewMedia({ styles, isImage, iframeUrl }) {
                     ? <img src={iframeUrl}
                         style={{
                             width: 'auto',
-                            height: '250px',
+                            height: '100%',
                             objectFit: 'cover',
                             objectPosition: 'center',
                             aspectRatio: '16/9',

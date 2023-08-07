@@ -2,7 +2,9 @@ import React, { useCallback } from "react";
 import { useDispatch } from "react-redux";
 import * as GetSlateAction from 'actions/GetSlateAction'
 
-export default function DetailFormButtonList({ styles, createType }) {
+export default function FormButtonList({
+    createType 
+}) {
     const dispatch = useDispatch();
     const onErrorMessageChange = useCallback((e, createType, submitType) => {
         console.log("🚀 ~ file: DetailFormButtonList.jsx:8 ~ onErrorMessageChange ~ createType:", createType)
@@ -20,7 +22,7 @@ export default function DetailFormButtonList({ styles, createType }) {
     }, [dispatch])
 
     return <section id="button">
-        <div className={styles['button-wrapper']}>
+        <div className={'button-wrapper'}>
             <input type='submit' onClick={(e) => onErrorMessageChange(e, createType, 'submit')} value='確認' />
             <input type='submit' onClick={(e) => onErrorMessageChange(e, createType, 'preview')} value='預覽' />
         </div>

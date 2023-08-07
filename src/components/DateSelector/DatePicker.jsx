@@ -4,7 +4,7 @@ import { css } from '@emotion/css';
 import { useCallback } from 'react';
 import dayjs from 'dayjs';
 
-const DateTimePicker = ({
+const DatePicker = ({
     title,
     width,
     height,
@@ -57,4 +57,4 @@ const DateTimePicker = ({
     )
 }
 
-export default DateTimePicker
+export default DatePicker

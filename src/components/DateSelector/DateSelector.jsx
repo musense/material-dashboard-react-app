@@ -2,7 +2,7 @@ import React from 'react'
 import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import DateTimePicker from './DateTimePicker';
+import DatePicker from './DatePicker';
 import { css } from '@emotion/css';
 
 const DateSelector = ({
@@ -12,6 +12,7 @@ const DateSelector = ({
     height,
     onStartDateChange,
     onEndDateChange,
+    title = '創建'
 }) => {
     return (
         <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -22,8 +23,8 @@ const DateSelector = ({
                         gap: 1rem;
                         align-items: center;
                         `}>
-                    <DateTimePicker
-                        title={'創建開始日期'}
+                    <DatePicker
+                        title={`${title}開始日期`}
                         width={width}
                         height={height}
                         lastThreeMonth
@@ -31,8 +32,8 @@ const DateSelector = ({
                         setState={onStartDateChange}
                     />
                     ~
-                    <DateTimePicker
-                        title={'創建結束日期'}
+                    <DatePicker
+                        title={`${title}結束日期`}
                         width={width}
                         height={height}
                         state={endDate}

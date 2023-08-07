@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { useSelector } from 'react-redux';
 import * as GetBannerAction from '../../actions/GetBannerAction';
 import CardBody from 'components/Card/CardBody.jsx';
@@ -9,6 +9,7 @@ import RowBody from './RowBody';
 import BannerButtonList from './BannerButtonList';
 import useModal from "../../hook/useModal";
 import useEditorListResult from "../../hook/useEditorListResult";
+import useDeleteSelectedRow from "hook/useDeleteSelectedRow";
 
 const headerMap = {
     headerRow: [
@@ -43,6 +44,10 @@ export default function BannerRightBody() {
         confirm,
         messageDialogReturnValue
     } = useSelector((state) => state.getDialogReducer);
+
+    useDeleteSelectedRow(messageDialogReturnValue, {
+        deleteType: GetBannerAction.BUNCH_DELETE_BANNER
+    });
 
     const errorMessage = getErrorMessage(dialogMessage, serverMessage)
     function getErrorMessage(errorMessage, returnMessage) {
@@ -81,7 +86,6 @@ export default function BannerRightBody() {
                 headerConfig={headerMap}
                 showList={showList}
                 handleOpenDialog={handleOpenDialog}
-                messageDialogReturnValue={messageDialogReturnValue}
                 className={'Banner'}
             />
 

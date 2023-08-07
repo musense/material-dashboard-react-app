@@ -1,9 +1,14 @@
 import React, { useCallback } from "react";
-import CustomRadio from '../../../components/CustomRadio/CustomRadio';
-import DateTimeSelector from "../../../components/DateSelector/DateTimeSelector";
+import CustomRadio from 'components/CustomRadio/CustomRadio';
+import DateTimeSelector from "components/DateSelector/DateTimeSelector";
 import { Stack } from "@mui/material";
 
-export default function PublishInfo({ styles, hidden, isScheduled, onPropertyChange, scheduledAt }) {
+export default function PublishInfo({
+    hidden,
+    isScheduled,
+    onPropertyChange,
+    scheduledAt
+}) {
     const onPublishInfoHiddenChange = useCallback((value) => {
         onPropertyChange(value, 'hidden', 'publishInfo')
     }, [onPropertyChange])
@@ -16,7 +21,7 @@ export default function PublishInfo({ styles, hidden, isScheduled, onPropertyCha
         onPropertyChange(value, 'scheduledAt', 'publishInfo')
     }, [onPropertyChange])
     return <section id="publishInfo">
-        <div className={styles['input-group']}>
+        <div>
             <Stack direction={"column"} spacing={2}>
                 <CustomRadio
                     value={hidden}
@@ -24,12 +29,11 @@ export default function PublishInfo({ styles, hidden, isScheduled, onPropertyCha
                     setState={onPublishInfoHiddenChange} />
                 {hidden && <CustomRadio
                     disabled={!hidden}
-                    defaultValue={isScheduled}
+                    value={isScheduled}
                     label={'是否排程上版'}
                     setState={onPublishInfoIsScheduledChange} />}
                 {hidden && isScheduled && <DateTimeSelector
                     defaultValue={scheduledAt}
-                    width={'250px'}
                     title={'排程日期'}
                     setState={onPublishReservedPublishDateTimeChange} />}
             </Stack>

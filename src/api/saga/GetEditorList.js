@@ -41,12 +41,12 @@ function* GetEditorTitleList(payload = 1) {
 
 // GET :_id
 function* GetEditorByID(payload) {
-    const { _id } = payload
-    console.log("🚀 ~ file: GetEditorList.js:45 ~ function*GetEditorByID ~ _id:", _id)
+    const { data } = payload
+    console.log("🚀 ~ file: GetEditorList.js:45 ~ function*GetEditorByID ~ _id:", data)
     try {
         // const response = yield instance.get(`/editor/${payload.data._id}`);
 
-        const response = yield instance.get(`/editor/${_id}`);
+        const response = yield instance.get(`/editor/${data}`);
         const responseData = yield response.data;
         // return
         const mappedEditorData = toFrontendData(responseData)

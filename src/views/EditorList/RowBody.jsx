@@ -1,13 +1,10 @@
-import React, { useCallback, useEffect } from "react";
+import React from "react";
 import { Stack } from '@mui/material';
-import { useDispatch } from 'react-redux';
-import * as GetDialogAction from '../../actions/GetDialogAction';
 import * as GetEditorAction from '../../actions/GetEditorAction';
-import * as GetSlateAction from '../../actions/GetSlateAction';
-import * as GetClassAction from '../../actions/GetClassAction';
 import { useNavigate } from 'react-router-dom';
 import BodyCell from "../../components/BodyCell/BodyCell";
 import EditBodyCell from "../../components/EditBodyCell/EditBodyCell";
+import getUpdateDateTime from "utils/getUpdateDateTime";
 
 export default function RowBody({
     headerConfig,
@@ -15,74 +12,10 @@ export default function RowBody({
     handleOpen,
     setMediaInfo,
     handleOpenDialog,
-    messageDialogReturnValue,
-    className=null
+    className = null
 }) {
-    const dispatch = useDispatch();
     const navigate = useNavigate();
 
-    const getUpdateDateTime = (date) => `
-    ${new Date(date).toLocaleDateString('zh-TW', {
-        year: 'numeric', month: 'long', day: 'numeric'
-    })} ${new Date(date).toLocaleTimeString('zh-TW', {
-        hour: 'numeric', minute: 'numeric', hour12: 'numeric'
-    })}`;
-
-    useEffect(() => {
-        const id = messageDialogReturnValue
-        if (!id) return console.log('id is null');
-        dispatch({
-            type: GetEditorAction.BUNCH_DELETE_EDITOR,
-            payload: [id]
-        });
-        dispatch({
-            type: GetDialogAction.RESET_MODAL_STATUS
-        });
-    }, [messageDialogReturnValue]);
-
-    const onDelete = useCallback((id, title) => {
-        dispatch({
-            type: GetDialogAction.ON_DELETE_EDITOR,
-            payload: {
-                data: id,
-                contentData: title,
-                message: `delete editor`,
-                confirm: true,
-            },
-        });
-        handleOpenDialog()
-    }, [handleOpenDialog])
-
-    const onCopyLink = useCallback(
-        (sitemapUrl, result) => {
-            console.log(sitemapUrl);
-            console.log(result);
-            dispatch({
-                type: GetDialogAction.COPY_SITEMAP,
-                payload: {
-                    contentData: result ? sitemapUrl : '',
-                    message: result ? 'copy sitemapUrl successfully' : 'copy sitemapUrl failed',
-                },
-            });
-            handleOpenDialog();
-        },
-        [handleOpenDialog]
-    );
-
-    function onEdit(updateEditor) {
-        console.log("🚀 ~ file: RowBody.jsx:70 ~ onEdit ~ updateEditor:", updateEditor)
-        // reset form values
-        dispatch({
-            type: GetSlateAction.RESET_FORM_VALUE,
-        })
-        dispatch({
-            type: GetEditorAction.REQUEST_EDITOR_BY_ID,
-            payload: {
-                _id: updateEditor._id,
-            },
-        });
-        navigate(`/admin/editorList/${updateEditor._id}`);
-    }
     const headerRow = headerConfig.headerRow
     return <div data-attr="data-body" className={`view-body ${className}`}>
         {showList && showList.length > 0 && showList.map((titleView, index) => {
@@ -144,13 +77,14 @@ export default function RowBody({
                         if (rowItem.name === '編輯') {
                             return <EditBodyCell
                                 key={index}
-                                onCopy={onCopyLink}
-                                copyText={titleView.sitemapUrl}
-                                onEdit={onEdit}
-                                editData={titleView}
-                                onDelete={onDelete}
-                                deleteID={titleView._id}
-                                deleteTitle={titleView.content.title}
+                                copyText={titleView.webHeader.customUrl}
+                                id={titleView._id}
+                                name={titleView.content.title}
+                                deleteMessage={'delete editor'}
+                                editType={GetEditorAction.REQUEST_EDITOR_BY_ID}
+                                editData={titleView._id}
+                                handleOpenDialog={handleOpenDialog}
+                                callback={() => navigate(`/admin/editorList/${titleView._id}`)}
                                 className={rowItem.className}
                             />
                         }

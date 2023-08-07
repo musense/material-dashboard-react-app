@@ -1,5 +1,4 @@
 import * as GetSlateAction from './../actions/GetSlateAction';
-import dayjs from 'dayjs';
 
 const initialState = {
   contentForm: {
@@ -31,15 +30,6 @@ const initialState = {
       isScheduled: false,
       scheduledAt: ''
     }
-  },
-  searchForm: {
-    title: '',
-    categories: null,
-    status: { _id: 0, name: '全部' },
-    createDate: {
-      startDate: dayjs().subtract(3, 'month').format('YYYY-MM-DD'),
-      endDate: dayjs(new Date()).format('YYYY-MM-DD'),
-    },
   },
   showUrl: '',
   updateInitialState: null,
@@ -122,33 +112,6 @@ const getSlateReducer = (state = initialState, action) => {
       return {
         ...state,
         showUrl: action.payload.showUrl,
-      }
-    }
-    case GetSlateAction.SET_SEARCH_FORM_PROPERTY: {
-      const { property, value, detail } = action.payload.allProps
-      return detail ? {
-        ...state,
-        searchForm: {
-          ...state.searchForm,
-          [property]: {
-            ...state.searchForm[property],
-            [detail]: value,
-          }
-        }
-      } : {
-        ...state,
-        searchForm: {
-          ...state.searchForm,
-          [property]: value,
-        }
-      }
-    }
-    case GetSlateAction.RESET_SEARCH_FORM: {
-      return {
-        ...state,
-        searchForm: {
-          ...initialState.searchForm
-        }
       }
     }
     case GetSlateAction.SET_PROPERTY: {

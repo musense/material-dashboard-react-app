@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { useSelector } from 'react-redux';
 import * as GetTagsAction from '../../actions/GetTagsAction';
 import CardBody from 'components/Card/CardBody.jsx';
@@ -9,6 +9,7 @@ import RowBody from './RowBody';
 import TagButtonList from './TagButtonList';
 import useModal from "../../hook/useModal";
 import useEditorListResult from "../../hook/useEditorListResult";
+import useDeleteSelectedRow from 'hook/useDeleteSelectedRow';
 
 const headerMap = {
     headerRow: [
@@ -38,6 +39,10 @@ export default function TagRightBody() {
         confirm,
         messageDialogReturnValue
     } = useSelector((state) => state.getDialogReducer);
+
+    useDeleteSelectedRow(messageDialogReturnValue, {
+        deleteType: GetTagsAction.BUNCH_DELETE_TAG
+    });
 
     const errorMessage = getErrorMessage(dialogMessage, serverMessage)
     function getErrorMessage(errorMessage, returnMessage) {
@@ -76,7 +81,6 @@ export default function TagRightBody() {
                 headerConfig={headerMap}
                 showList={showList}
                 handleOpenDialog={handleOpenDialog}
-                messageDialogReturnValue={messageDialogReturnValue}
                 className={'tag'}
             />
 

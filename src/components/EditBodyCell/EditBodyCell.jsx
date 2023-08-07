@@ -2,43 +2,63 @@ import React from "react";
 import BodyCell from "./../BodyCell/BodyCell";
 import { Stack } from '@mui/material';
 import IconCell from "./IconCell";
+import useEditCellFunction from "hook/useEditCellFunction";
 
 export default function EditBodyCell({
-    onCopy,
     copyText,
-    onEdit,
+    id,
+    name,
+    deleteMessage,
+    editType,
     editData,
-    onDelete,
-    deleteID,
-    deleteTitle,
+    handleOpenDialog,
+    onNote = null,
+    note = null,
     className,
-    note = null
+    callback = null
 }) {
     console.log("🚀 ~ file: EditBodyCell.jsx:18 ~ copyText:", copyText)
 
-
+    const {
+        onCopy,
+        onDelete,
+        onEdit
+    } = useEditCellFunction({
+        handleOpenDialog,
+        onDelete: {
+            id,
+            name,
+            message: deleteMessage,
+        },
+        onEdit: {
+            editType,
+            data: editData,
+            callback: callback
+        }
+    }
+    )
     return <BodyCell className={className} children={<Stack spacing={2} direction={'row'} >
         {note && <IconCell
             iconName={'text_snippet'}
             iconTitle={'備註'}
-            callback={() => onEdit(editData)}
+            callback={onNote}
         />}
         <IconCell
             copy
             iconName={'link'}
             iconTitle={'複製連結'}
-            callback={(text, result) => onCopy(text, result)}
             copyText={copyText}
+            callback={onCopy}
         />
         <IconCell
             iconName={'edit'}
             iconTitle={'編輯'}
-            callback={() => onEdit(editData)}
+            callback={onEdit}
         />
         <IconCell
             iconName={'delete_forever'}
             iconTitle={'刪除'}
-            callback={() => onDelete(deleteID, deleteTitle)}
+            callback={onDelete}
         />
     </Stack>} />;
 }

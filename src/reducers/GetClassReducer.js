@@ -165,9 +165,9 @@ const getClassReducer = (state = initialState, action) => {
         case GetClassAction.REQUEST_CLASS_FAIL: {
             let errorMessage;
             if (action.payload.errorMessage.indexOf('E11000 duplicate key error') !== -1) {
-              errorMessage = 'duplicate key error'
+                errorMessage = 'duplicate key error'
             } else {
-              errorMessage = action.payload.errorMessage
+                errorMessage = action.payload.errorMessage
             }
             return {
                 ...state,
@@ -175,7 +175,7 @@ const getClassReducer = (state = initialState, action) => {
             }
         }
         case GetClassAction.EDITING_CLASS:
-            const editorClass = action.payload.editorClass;
+            const editorClass = action.payload.data;
             return {
                 ...state,
                 editorClass: action.payload.editorClass,

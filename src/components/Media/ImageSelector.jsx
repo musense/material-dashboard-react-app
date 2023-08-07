@@ -8,6 +8,7 @@ export default function ImageSelector({
     onRemoveClick,
     onImageChange,
     onMediaAltTextChange,
+    alt = true
 }) {
 
     const imageUploadRef = useRef(null)
@@ -22,7 +23,7 @@ export default function ImageSelector({
                                             color: red;
                                             font-size: 12px;`
                 : css`display:none`}>請選取圖片!!! (jpeg, png, gif)</span>
-            <input
+            {alt && <input
                 type='text'
                 name='altText'
                 value={altText}
@@ -35,7 +36,7 @@ export default function ImageSelector({
                                             color: lightgray;
                                         }`)}
 
-            />
+            />}
         </div>
         <div>
             <label htmlFor='uploadImage'>

@@ -212,7 +212,7 @@ input[type='file'] {
 }
 
 .tag-list-form,
-.banner-list-form{
+.banner-list-form {
   width: 1000px;
 }
 
@@ -231,4 +231,30 @@ input[type='file'] {
   width: 300px;
   display: flex;
   gap: 40px;
+}
+
+.button-wrapper {
+  display: flex;
+  flex-direction: row;
+  gap: 10rem;
+}
+
+.ieditor-detail-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.banner-submit-form {
+  height: 100%;
+  padding-right: 10px;
+  overflow: hidden auto;
+}
+
+.banner-submit-form textarea {
+  min-height: 100px;
+  height: fit-content;
+  padding: 10px;
+  width: 100%;
+  resize: none;
 }

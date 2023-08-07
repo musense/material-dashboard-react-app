@@ -1,7 +1,7 @@
-import React, { useRef, useCallback, useEffect, useState } from 'react';
+import React, { useRef, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import * as GetBannerAction from '../../actions/GetBannerAction';
+import * as GetBannerAction from 'actions/GetBannerAction';
 // import md5 from 'crypto-js/md5'
 import Card from 'components/Card/Card.jsx';
 import CardBody from 'components/Card/CardBody.jsx';
@@ -9,13 +9,16 @@ import CardHeader from 'components/Card/CardHeader.jsx';
 import GridContainer from 'components/Grid/GridContainer.jsx';
 import GridItem from 'components/Grid/GridItem.jsx';
 import styles from './BannerList.module.css'
-import usePressEnterEventHandler from '../../hook/usePressEnterEventHandler';
-import useBannerResult from '../../hook/useBannerResult';
+import usePressEnterEventHandler from 'hook/usePressEnterEventHandler';
+import useBannerResult from 'hook/useBannerResult';
 
-import useSetBannerFormValue from '../../hook/useSetBannerFormValue';
-import MessageDialog from '../../components/Modal/MessageDialog';
-import useModal from '../../hook/useModal';
-import CustomRadio from '../../components/CustomRadio/CustomRadio';
+import MessageDialog from 'components/Modal/MessageDialog';
+import useModal from 'hook/useModal';
+import Media from 'components/Media/Media';
+import FormButtonList from 'components/FormButtonList/FormButtonList';
+import BannerPublishInfo from './BannerPublishInfo';
+
+import { useDebounce } from 'react-use'
 
 export default function BannerLeftWrapper() {
 
@@ -23,15 +26,22 @@ export default function BannerLeftWrapper() {
     const dispatch = useDispatch();
 
     const id = useSelector((state) => state.getBannerReducer.selectedBanner.id);
-    const BannerName = useSelector((state) => state.getBannerReducer.selectedBanner.BannerName);
-    const BannerTitle = useSelector((state) => state.getBannerReducer.selectedBanner.title);
-    const description = useSelector((state) => state.getBannerReducer.selectedBanner.description);
-    const keywords = useSelector((state) => state.getBannerReducer.selectedBanner.keywords);
-    const manualUrl = useSelector((state) => state.getBannerReducer.selectedBanner.manualUrl);
-    const customUrl = useSelector((state) => state.getBannerReducer.selectedBanner.customUrl);
-    const popular = useSelector((state) => state.getBannerReducer.selectedBanner.popular);
+    const name = useSelector((state) => state.getBannerReducer.selectedBanner.name);
+    const hyperlink = useSelector((state) => state.getBannerReducer.selectedBanner.hyperlink);
+
+
     const sorting = useSelector((state) => state.getBannerReducer.selectedBanner.sorting);
     const isEditing = useSelector((state) => state.getBannerReducer.selectedBanner.isEditing);
+
+    const showUrl = useSelector((state) => state.getBannerReducer.selectedBanner.showUrl);
+    const altText = useSelector((state) => state.getBannerReducer.selectedBanner?.media.altText);
+
+    const isOnShelvesImmediate = useSelector((state) => state.getBannerReducer.selectedBanner?.publishInfo.isOnShelvesImmediate);
+    const isPermanent = useSelector((state) => state.getBannerReducer.selectedBanner?.publishInfo.isPermanent);
+    const startDate = useSelector((state) => state.getBannerReducer.selectedBanner?.publishInfo.startDate);
+    const endDate = useSelector((state) => state.getBannerReducer.selectedBanner?.publishInfo.endDate);
+
+    const note = useSelector((state) => state.getBannerReducer.selectedBanner.note);
 
     const serverMessage = useSelector((state) => state.getBannerReducer.errorMessage);
 
@@ -57,7 +67,7 @@ export default function BannerLeftWrapper() {
         const formData = new FormData(form);
         console.log(Object.fromEntries(formData));
 
-        if (!BannerName) {
+        if (!name) {
             dispatch({
                 type: GetBannerAction.SET_ERROR_MESSAGE,
                 payload: {
@@ -68,10 +78,10 @@ export default function BannerLeftWrapper() {
         }
 
         let tempData = {
-            name: BannerName,
+            name: name,
             popular: popular,
             webHeader: {
-                title: BannerTitle,
+                title: title,
                 description: description,
                 keywords: keywords,
                 href: customUrl,
@@ -101,13 +111,13 @@ export default function BannerLeftWrapper() {
                 return
             }
             tempData = {
-                ...tempData,                
+                ...tempData,
                 sorting: sorting
             }
         }
 
         console.log("🚀 ~ file: BannerLeftWrapper.jsx:48 ~ onAddNewEditor ~ tempData:", tempData)
-        // return
+        return
         if (isEditing === true) {
             dispatch({
                 type: GetBannerAction.EDIT_SAVING_BANNER,
@@ -140,99 +150,95 @@ export default function BannerLeftWrapper() {
         onReset()
     }, [onReset])
 
-    const onPropertyChange = useCallback((value, property) => {
+    const onPropertyChange = useCallback((value, property, info = null) => {
         dispatch({
             type: GetBannerAction.SET_BANNER_PROPERTY,
             payload: {
                 allProps: {
                     property: property,
+                    info: info,
                     value: value
                 }
             }
         })
     }, [dispatch])
 
-    const onPopularBannerChange = useCallback((value) => {
-        onPropertyChange(value, 'popular')
-    }, [onPropertyChange])
+    // const [, cancel] = useDebounce(
+    //     () => {
+    //         dispatch({
+    //             type: GetBannerAction.SET_BANNER_PROPERTY,
+    //             payload: {
+    //                 allProps: {
+    //                     property: property,
+    //                     info: info,
+    //                     value: value
+    //                 }
+    //             }
+    //         })
+    //     }, 2000, [value, property, info]
+    // );
+
+    const onShowUrlChange = useCallback((value) => {
+        dispatch({
+            type: GetBannerAction.SET_SHOW_URL,
+            payload: {
+                showUrl: value
+            }
+        })
+    }, [dispatch])
 
     const handleModalClose = useCallback(() => {
         handleClose()
         onReset()
-    },[onReset, handleClose])
+    }, [onReset, handleClose])
     return <div className={styles['banner-left-wrapper']}>
-        <GridContainer>
-            <GridItem xs={12} sm={12} md={12}>
-                <Card>
-                    <CardHeader color="primary">
-                        <h4>{isEditing ? '編輯' : '新增'}</h4>
-                    </CardHeader>
-                    <CardBody>
-                        <form ref={formRef} name='class-form' onSubmit={onAddNewEditor}>
-                            <div className={styles['input-group']}>
-                                <input type="hidden" name='_id' value={id} onChange={e => onPropertyChange(e.target.value, 'id')} />
-                            </div>
-                            <div className={styles['input-group']}>
-                                <label htmlFor="name">Banner名稱</label>
-                                <input type="text" name='name' value={BannerName} onChange={e => onPropertyChange(e.target.value, 'BannerName')} />
-                            </div>
-                            <div className={styles['input-group']}>
-                                <label htmlFor="title">title</label>
-                                <input type="text" name='title' value={BannerTitle} onChange={e => onPropertyChange(e.target.value, 'title')} />
-                            </div>
-                            <div className={styles['input-group']}>
-                                <label htmlFor="description">description</label>
-                                <input type="text" name='description' value={description} onChange={e => onPropertyChange(e.target.value, 'description')} />
-                            </div>
-                            <div className={styles['input-group']}>
-                                <label htmlFor="keywords">keywords</label>
-                                <input type="text" name='keywords' value={keywords} onChange={e => onPropertyChange(e.target.value, 'keywords')} />
-                            </div>
-                            <div className={styles['input-group']}>
-                                <label htmlFor="manualUrl">自訂網址</label>
-                                <input type="text" name='manualUrl'
-                                    value={manualUrl} onChange={e => onPropertyChange(e.target.value, 'manualUrl')} />
-                            </div>
-                            {manualUrl.length > 0 || customUrl
-                                ? <div className={styles['input-group']}>
-                                    <label htmlFor="customUrl">前台顯示網址</label>
-                                    {manualUrl.length > 0
-                                        ? <input readOnly disabled type="text" name='manualUrl' value={`p_${manualUrl}.html`} />
-                                        : <div><a target="_blank" rel="noopener noreferrer" href={customUrl}>{customUrl}</a></div>
-                                    }
-                                </div>
-                                : null
-                            }
-                            <div className={styles['input-group']}>
-                                <CustomRadio
-                                    value={popular}
-                                    label={'是否設為熱門Banner'}
-                                    setState={onPopularBannerChange} />
-                            </div>
-                            {popular && <div className={styles['input-group']}>
-                                <label htmlFor="sorting">熱門Banner排序</label>
-                                <input type="number" name='sorting' min={1}
-                                    value={sorting} onChange={e => onPropertyChange(e.target.value, 'sorting')} />
-                            </div>}
-                            <div className={styles['left-button-container']}>
-                                {isEditing
-                                    ? (<>
-                                        <input type='button' value='取消'
-                                            onClick={(e) => onCancel(e)}
-                                        />
-                                        <input type='submit' value='儲存' title="Enter" />
-                                    </>)
-                                    : (<>
-                                        <input type='button' value='清空'
-                                            onClick={(e) => onReset(e)} />
-                                        <input type='submit' value='新增' title="Enter" />
-                                    </>)}
-                            </div>
-                        </form>
-                    </CardBody>
-                </Card>
-            </GridItem>
-        </GridContainer>
+        <Card style={{ height: 'calc(100% - 50px)' }}>
+            <CardHeader color="primary">
+                <h4>{isEditing ? '編輯' : '新增'}</h4>
+            </CardHeader>
+            <CardBody style={{ overflow: 'auto', paddingRight: 0 }}>
+                <form ref={formRef} name='class-form' className='banner-submit-form' onSubmit={onAddNewEditor}>
+                    <div>
+                        <input type="hidden" name='_id' value={id} onChange={e => onPropertyChange(e.target.value, 'id')} />
+                    </div>
+                    <div>
+                        <label htmlFor="name">Banner名稱</label>
+                        <input type="text" name='name' value={name} onChange={e => onPropertyChange(e.target.value, 'name')} />
+                    </div>
+                    <div>
+                        <label htmlFor="sorting">排序</label>
+                        <input type="number" min={1} name='sorting' value={sorting} onChange={e => onPropertyChange(e.target.value, 'sorting')} />
+                    </div>
+                    <div>
+                        <label htmlFor="hyperlink">超連結</label>
+                        <input type="text" name='hyperlink' value={hyperlink} onChange={e => onPropertyChange(e.target.value, 'hyperlink')} />
+                    </div>
+                    <Media
+                        styles={styles}
+                        onPropertyChange={onPropertyChange}
+                        onShowUrlChange={onShowUrlChange}
+                        showUrl={showUrl}
+                        alt={false}
+                    />
+                    <BannerPublishInfo
+                        isOnShelvesImmediate={isOnShelvesImmediate}
+                        isPermanent={isPermanent}
+                        startDate={startDate}
+                        endDate={endDate}
+                        onPropertyChange={onPropertyChange}
+                    />
+                    <div>
+                        <label htmlFor="note">備註</label>
+                        <textarea type="text" name='note' value={note} onChange={e => onPropertyChange(e.target.value, 'note')} />
+                    </div>
+                    <FormButtonList
+                        isEditing={isEditing}
+                        onCancel={onCancel}
+                        onReset={onReset}
+                    />
+                </form>
+            </CardBody>
+        </Card>
         <MessageDialog
             dialogTitle={title}
             dialogContent={content}

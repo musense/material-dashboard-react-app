@@ -16,6 +16,7 @@ import RowHeader from '../EditorList/RowHeader';
 import RowBody from './RowBody';
 import useModal from '../../hook/useModal';
 import useEditorListResult from '../../hook/useEditorListResult';
+import useDeleteSelectedRow from 'hook/useDeleteSelectedRow';
 const headerMap = {
     headerRow: [
         { name: '分類名稱', patchKey: 'name' },
@@ -41,6 +42,10 @@ export default function EditorRightWrapper() {
     const confirm = useSelector((state) => state.getDialogReducer.confirm);
     const messageDialogReturnValue = useSelector((state) => state.getDialogReducer.messageDialogReturnValue);
     const dialogMessage = useSelector((state) => state.getDialogReducer.message);
+
+    useDeleteSelectedRow(messageDialogReturnValue, {
+        deleteType: GetClassAction.BUNCH_DELETE_CLASS
+    });
 
     const errorMessage = getErrorMessage(dialogMessage, serverMessage)
     function getErrorMessage(errorMessage, returnMessage) {
@@ -85,7 +90,6 @@ export default function EditorRightWrapper() {
                                     headerConfig={headerMap}
                                     showList={showList}
                                     handleOpenDialog={handleOpenDialog}
-                                    messageDialogReturnValue={messageDialogReturnValue}
                                     className="editor-class"
                                 />
                             </form>

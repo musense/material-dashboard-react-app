@@ -101,7 +101,7 @@ function* SearchTag(payload) {
     const { title, createDate } = payload
     try {
 
-        const nameString = title ? `name=${title}&` : ''
+        const titleString = title ? `name=${title}&` : ''
         const startDateString = createDate
             ? createDate.startDate
                 ? `startDate=${new Date(createDate.startDate).getTime()}&`
@@ -112,7 +112,7 @@ function* SearchTag(payload) {
                 ? `endDate=${new Date(createDate.endDate).getTime()}&`
                 : ''
             : ''
-        const response = yield instance.get(`/tags?${nameString}${startDateString} ${endDateString}`);
+        const response = yield instance.get(`/tags?limit=10000&pageNumber=1&${titleString}${startDateString}${endDateString}`);
         // console.log("🚀 ~ file: GetEditorList.js:72 ~ function*SearchEditor ~ response:", response)
         const { currentPage, totalCount, data: responseData } = yield response.data
         // console.log("🚀 ~ file: GetEditorList.js:72 ~ function*SearchEditor ~ responseData:", responseData)

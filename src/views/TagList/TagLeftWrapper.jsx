@@ -12,10 +12,10 @@ import styles from './TagList.module.css'
 import usePressEnterEventHandler from '../../hook/usePressEnterEventHandler';
 import useEditTagResult from '../../hook/useEditTagResult';
 
-import useSetTagFormValue from '../../hook/useSetTagFormValue';
 import MessageDialog from '../../components/Modal/MessageDialog';
 import useModal from '../../hook/useModal';
 import CustomRadio from '../../components/CustomRadio/CustomRadio';
+import FormButtonList from 'components/FormButtonList/FormButtonList';
 
 export default function TagLeftWrapper() {
 
@@ -101,7 +101,7 @@ export default function TagLeftWrapper() {
                 return
             }
             tempData = {
-                ...tempData,                
+                ...tempData,
                 sorting: sorting
             }
         }
@@ -159,7 +159,7 @@ export default function TagLeftWrapper() {
     const handleModalClose = useCallback(() => {
         handleClose()
         onReset()
-    },[onReset, handleClose])
+    }, [onReset, handleClose])
     return <div className={styles['tag-left-wrapper']}>
         <GridContainer>
             <GridItem xs={12} sm={12} md={12}>
@@ -169,32 +169,32 @@ export default function TagLeftWrapper() {
                     </CardHeader>
                     <CardBody>
                         <form ref={formRef} name='class-form' onSubmit={onAddNewEditor}>
-                            <div className={styles['input-group']}>
+                            <div>
                                 <input type="hidden" name='_id' value={id} onChange={e => onPropertyChange(e.target.value, 'id')} />
                             </div>
-                            <div className={styles['input-group']}>
+                            <div>
                                 <label htmlFor="name">標籤名稱</label>
                                 <input type="text" name='name' value={tagName} onChange={e => onPropertyChange(e.target.value, 'tagName')} />
                             </div>
-                            <div className={styles['input-group']}>
+                            <div>
                                 <label htmlFor="title">title</label>
                                 <input type="text" name='title' value={tagTitle} onChange={e => onPropertyChange(e.target.value, 'title')} />
                             </div>
-                            <div className={styles['input-group']}>
+                            <div>
                                 <label htmlFor="description">description</label>
                                 <input type="text" name='description' value={description} onChange={e => onPropertyChange(e.target.value, 'description')} />
                             </div>
-                            <div className={styles['input-group']}>
+                            <div>
                                 <label htmlFor="keywords">keywords</label>
                                 <input type="text" name='keywords' value={keywords} onChange={e => onPropertyChange(e.target.value, 'keywords')} />
                             </div>
-                            <div className={styles['input-group']}>
+                            <div>
                                 <label htmlFor="manualUrl">自訂網址</label>
                                 <input type="text" name='manualUrl'
                                     value={manualUrl} onChange={e => onPropertyChange(e.target.value, 'manualUrl')} />
                             </div>
                             {manualUrl.length > 0 || customUrl
-                                ? <div className={styles['input-group']}>
+                                ? <div>
                                     <label htmlFor="customUrl">前台顯示網址</label>
                                     {manualUrl.length > 0
                                         ? <input readOnly disabled type="text" name='manualUrl' value={`p_${manualUrl}.html`} />
@@ -203,31 +203,22 @@ export default function TagLeftWrapper() {
                                 </div>
                                 : null
                             }
-                            <div className={styles['input-group']}>
+                            <div>
                                 <CustomRadio
                                     value={popular}
                                     label={'是否設為熱門標籤'}
                                     setState={onPopularTagChange} />
                             </div>
-                            {popular && <div className={styles['input-group']}>
+                            {popular && <div>
                                 <label htmlFor="sorting">熱門標籤排序</label>
                                 <input type="number" name='sorting' min={1}
                                     value={sorting} onChange={e => onPropertyChange(e.target.value, 'sorting')} />
                             </div>}
-                            <div className={styles['left-button-container']}>
-                                {isEditing
-                                    ? (<>
-                                        <input type='button' value='取消'
-                                            onClick={(e) => onCancel(e)}
-                                        />
-                                        <input type='submit' value='儲存' title="Enter" />
-                                    </>)
-                                    : (<>
-                                        <input type='button' value='清空'
-                                            onClick={(e) => onReset(e)} />
-                                        <input type='submit' value='新增' title="Enter" />
-                                    </>)}
-                            </div>
+                            <FormButtonList
+                                isEditing={isEditing}
+                                onCancel={onCancel}
+                                onReset={onReset}
+                            />
                         </form>
                     </CardBody>
                 </Card>
@@ -242,5 +233,6 @@ export default function TagLeftWrapper() {
         />
     </div >;
 }
+
 
 

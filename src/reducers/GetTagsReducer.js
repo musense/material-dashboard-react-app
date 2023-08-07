@@ -164,13 +164,6 @@ const getTagsReducer = (state = initialState, action) => {
                     : null,
                 currentPage: 1
             }
-        case GetTagsAction.GET_TAG_SUCCESS:
-            return {
-                ...state,
-                tagList: action.payload,
-                errorMessage: null
-            }
-
         case GetTagsAction.GET_TAG_FAIL:
         case GetTagsAction.REQUEST_POPULAR_TAG_FAIL: {
             return {
@@ -193,10 +186,10 @@ const getTagsReducer = (state = initialState, action) => {
         case "RESET_STATE_DATA": {
             return {
                 ...initialState,
-                sortingMap:{
+                sortingMap: {
                     ...initialState.sortingMap
                 },
-                selectedTag:{
+                selectedTag: {
                     ...initialState.selectedTag
                 }
             }

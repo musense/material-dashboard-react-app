@@ -1,11 +1,6 @@
 import React, { useCallback } from "react";
-
-
-import styles from '../IEditor.module.css';
-
 import { useDispatch, useSelector } from "react-redux";
 import * as GetSlateAction from 'actions/GetSlateAction';
-
 import WebHeader from "./WebHeader";
 import Tags from "./Tags";
 import Classification from "./Classification";
@@ -50,9 +45,19 @@ const DetailForm = ({ createType }) => {
         })
     }, [dispatch])
 
+    const onShowUrlChange = useCallback((value) => {
+        dispatch({
+            type: GetSlateAction.SET_SHOW_URL,
+            payload: {
+                showUrl: value
+            }
+        })
+    }, [dispatch])
+
     return (
-        <form name='ieditor-detail-form' >
-            <WebHeader headTitle={headTitle}
+        <form class={'ieditor-detail-form'} >
+            <WebHeader
+                headTitle={headTitle}
                 onPropertyChange={onPropertyChange}
                 headDescription={headDescription}
                 headKeyword={headKeyword}
@@ -65,20 +70,18 @@ const DetailForm = ({ createType }) => {
                 categories={categories}
                 onPropertyChange={onPropertyChange} />
             <Media
-                styles={styles}
                 onPropertyChange={onPropertyChange}
+                onShowUrlChange={onShowUrlChange}
                 patchType={GetSlateAction.SET_SHOW_URL}
                 showUrl={showUrl}
                 altText={altText}
             />
             <PublishInfo
-                styles={styles}
                 hidden={hidden}
                 onPropertyChange={onPropertyChange}
                 isScheduled={isScheduled}
                 scheduledAt={scheduledAt} />
             <DetailFormButtonList
-                styles={styles}
                 createType={createType}
             />
         </form >

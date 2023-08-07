@@ -13,6 +13,7 @@ import useEditEditorClassResult from '../../hook/useEditEditorClassResult';
 
 import MessageDialog from '../../components/Modal/MessageDialog';
 import useModal from '../../hook/useModal';
+import FormButtonList from 'components/FormButtonList/FormButtonList';
 
 export default function EditorLeftWrapper() {
 
@@ -134,7 +135,7 @@ export default function EditorLeftWrapper() {
     const handleModalClose = useCallback(() => {
         handleClose()
         onReset()
-    },[onReset, handleClose])
+    }, [onReset, handleClose])
     return <div className={styles['editor-left-wrapper']}>
         <GridContainer>
             <GridItem xs={12} sm={12} md={12}>
@@ -184,19 +185,11 @@ export default function EditorLeftWrapper() {
                                     }
                                 </div>
                             )}
-                            <div className={styles['left-button-container']}>
-                                {isEditing === true && (<>
-                                    <input type='button' value='取消'
-                                        onClick={(e) => onCancel(e)}
-                                    />
-                                    <input type='submit' value='儲存' title="Enter" />
-                                </>)}
-                                {isEditing === false && (<>
-                                    <input type='button' value='清空'
-                                        onClick={(e) => onReset(e)} />
-                                    <input type='submit' value='新增' title="Enter" />
-                                </>)}
-                            </div>
+                            <FormButtonList
+                                isEditing={isEditing}
+                                onCancel={onCancel}
+                                onReset={onReset}
+                            />
                         </form>
                     </CardBody>
                 </Card>

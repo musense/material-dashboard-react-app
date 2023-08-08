@@ -7,6 +7,7 @@ import getDialogReducer from './GetDialogReducer'
 import getSlateReducer from './GetSlateReducer'
 import getBannerReducer from './GetBannerReducer'
 import getSearchReducer from './GetSearchReducer'
+import getConfigReducer from './GetConfigReducer'
 
 const rootReducer = combineReducers({
     getTagsReducer: getTagsReducer,
@@ -17,6 +18,7 @@ const rootReducer = combineReducers({
     getSlateReducer: getSlateReducer,
     getBannerReducer: getBannerReducer,
     getSearchReducer: getSearchReducer,
+    getConfigReducer: getConfigReducer,
 });
 
 export default rootReducer;

@@ -13,10 +13,10 @@ export default function RowBody({
 
     const headerRow = headerConfig.headerRow
 
-    return <div data-attr="data-body" className={`view-body ${className}`}>
+    return <div className={`view-body ${className}`}>
         {showList && showList.length > 0 && showList.map((Banner, index) => {
             return (
-                <div data-attr="data-body-row" key={index} >
+                <div key={index} >
                     {headerRow.map((rowItem, index) => {
                         if (rowItem.patchKey === 'createDate') {
                             return (

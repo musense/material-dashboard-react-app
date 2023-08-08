@@ -21,8 +21,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import * as GetClassAction from "actions/GetClassAction.js";
 import * as GetTagsAction from "actions/GetTagsAction.js";
 import useResetEditorState from '../hook/useResetEditorState';
+import * as GetConfigAction from "actions/GetConfigAction.js";
 
-let userInfo = {};
 
 const myContainerStyle = {
   minHeight: 'unset',
@@ -32,11 +32,12 @@ const myContainerStyle = {
 }
 
 function Dashboard({ ...props }) {
+
+  const sidebarOpen = useSelector((state) => state.getConfigReducer.sidebarOpen);
   const [logo, setLogo] = useState();
   const [logoText, setLogoText] = useState();
   const { classes, ...rest } = props;
   const color = "orange";
-  const [mobileOpen, setMobileOpen] = useState(true);
 
   const mainPanel = useRef(null);
   const location = useLocation()
@@ -45,7 +46,7 @@ function Dashboard({ ...props }) {
   useResetEditorState(location.pathname)
 
   const handleDrawerToggle = () => {
-    setMobileOpen((preMobileOpen) => !preMobileOpen);
+    dispatch({ type: GetConfigAction.TOGGLE_SIDEBAR_OPEN });
   };
   function getRoute() {
     return props.location && props.location.pathname !== '/admin/maps';
@@ -99,11 +100,11 @@ function Dashboard({ ...props }) {
           logo={logo}
           image={image}
           handleDrawerToggle={handleDrawerToggle}
-          open={mobileOpen}
+          open={sidebarOpen}
           color={color}
           {...rest}
         />
-        <div className={`${classes.mainPanel} ${mobileOpen ? '' : 'main-panel-max-size'}`} ref={mainPanel}>
+        <div className={`${classes.mainPanel} ${sidebarOpen ? '' : 'main-panel-max-size'}`} ref={mainPanel}>
           <Navbar
             routes={routes}
             handleDrawerToggle={handleDrawerToggle}

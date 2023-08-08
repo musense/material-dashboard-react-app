@@ -18,7 +18,7 @@ import Media from 'components/Media/Media';
 import FormButtonList from 'components/FormButtonList/FormButtonList';
 import BannerPublishInfo from './BannerPublishInfo';
 
-import { useDebounce } from 'react-use'
+// import { useDebounce } from 'react-use'
 
 export default function BannerLeftWrapper() {
 

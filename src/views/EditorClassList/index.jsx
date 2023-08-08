@@ -13,8 +13,8 @@ import * as GetClassAction from '../../actions/GetClassAction';
 import { reDispatchMessage } from './../../reducers/errorMessage';
 
 
-
 function EditorClassList() {
+
     const dispatch = useDispatch();
     const returnMessage = useSelector(state => state.getClassReducer.errorMessage);
     useEffect(() => {

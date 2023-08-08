@@ -7,10 +7,8 @@ import "assets/css/material-dashboard-react.css?v=1.6.0";
 import configureStore from './store/configureStore'
 import { Provider } from "react-redux";
 import App from './App'
-
 const hist = createBrowserHistory();
 const store = configureStore();
-
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
 root.render(

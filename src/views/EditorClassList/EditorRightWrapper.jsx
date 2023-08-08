@@ -29,6 +29,8 @@ const headerMap = {
 
 export default function EditorRightWrapper() {
 
+    const maxSizeClassName = useSelector((state) => state.getConfigReducer.maxSizeClassName);
+
     const showList = useSelector((state) => state.getClassReducer.showList);
     const currentPage = useSelector((state) => state.getClassReducer.currentPage);
     const totalPage = useSelector((state) => state.getClassReducer.totalPage);
@@ -73,7 +75,7 @@ export default function EditorRightWrapper() {
     } = useModal(title)
 
     return (
-        <div className={styles['editor-right-wrapper']}>
+        <div className={`${styles['editor-right-wrapper']} ${styles[maxSizeClassName]}`}>
             <GridContainer>
                 <GridItem xs={12} sm={12} md={12}>
                     <Card>

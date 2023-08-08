@@ -84,32 +84,24 @@ input[type='file'] {
   /* background-color: lightblue; */
 }
 
-.view-list-form>div {
-  display: flex;
-  flex-direction: column;
-}
-
 .view-header {
   position: relative;
-  padding-right: 17px;
   background-color: #ccc;
-}
-
-.view-header.OSX {
-  padding-right: unset;
 }
 
 .view-search-form {
   position: sticky;
 }
 
-.view-list-form>div>div {
+.view-list-form .view-header>div,
+.view-list-form .view-body>div {
   display: flex;
   flex-direction: row;
   height: fit-content;
 }
 
-.view-list-form>div>div>div {
+.view-list-form .view-header>div>div,
+.view-list-form .view-body>div>div {
   position: relative;
   text-align: center;
   overflow-x: hidden;
@@ -148,16 +140,9 @@ input[type='file'] {
 }
 
 .view-body {
-  height: calc(100vh - 400px);
-  overflow-y: scroll;
-}
-
-.view-body.OSX {
-  height: calc(100vh - 450px);
-}
-
-.view-body.editor-class {
-  height: 624px;
+  position: relative;
+  height: fit-content;
+  overflow: hidden auto;
 }
 
 .view-body>div>div {
@@ -289,11 +274,4 @@ input[type='file'] {
   /* Firefox 19+ */
   color: #ccc;
   opacity: 1;
-}
-
-/** Safari */
-@media not all and (min-resolution:.001dpcm) {
-  .view-header {
-    padding-right: unset;
-  }
 }

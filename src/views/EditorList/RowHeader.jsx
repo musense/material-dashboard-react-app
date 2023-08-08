@@ -1,10 +1,8 @@
 import React from "react";
 import HeaderCell from '../../components/HeaderCell/HeaderCell'
-import useSetMacOSCssReset from "hook/useMacOSCss";
 
 export default function RowHeader({ headerConfig }) {
-    const headerClass = useSetMacOSCssReset('view-header')
-    return <div data-attr="data-header" className={headerClass}>
+    return <div data-attr="data-header" className='view-header'>
         <Header
             headerMap={headerConfig.headerRow}
             patchType={headerConfig.patchType}

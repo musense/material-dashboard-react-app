@@ -118,7 +118,7 @@ const Sidebar = ({ ...props }) => {
       <Drawer
         anchor={'left'}
         variant='persistent'
-        hideBackdrop={true}
+        hidebackdrop={true}
         open={open}
         classes={{
           paper: classNames(classes.drawerPaper),

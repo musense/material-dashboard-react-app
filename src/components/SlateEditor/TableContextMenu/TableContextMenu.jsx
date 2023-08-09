@@ -15,8 +15,32 @@ const TableContextMenu = (props) => {
 
     const menu = [
         {
+            icon: 'tableToLeft',
+            text: '表格置左',
+            action: {
+                type: 'justify',
+                alignment: 'left'
+            }
+        },
+        {
+            icon: 'tableToCenter',
+            text: '表格置中',
+            action: {
+                type: 'justify',
+                alignment: 'center'
+            }
+        },
+        {
+            icon: 'tableToRight',
+            text: '表格置右',
+            action: {
+                type: 'justify',
+                alignment: 'right'
+            }
+        },
+        {
             icon: 'insertColumnRight',
-            text: 'Insert Columns to the Right',
+            text: '右側插入一欄',
             action: {
                 type: 'insertColumn',
                 position: 'after'
@@ -24,7 +48,7 @@ const TableContextMenu = (props) => {
         },
         {
             icon: 'insertColumnLeft',
-            text: 'Insert Columns to the Left',
+            text: '左側插入一欄',
             action: {
                 type: 'insertColumn',
                 position: 'at'
@@ -32,7 +56,7 @@ const TableContextMenu = (props) => {
         },
         {
             icon: 'insertRowAbove',
-            text: 'Insert Row Above',
+            text: '上面插入一列',
             action: {
                 type: 'insertRow',
                 position: 'at'
@@ -40,15 +64,29 @@ const TableContextMenu = (props) => {
         },
         {
             icon: 'insertRowBelow',
-            text: 'Insert Row Below',
+            text: '下面插入一列',
             action: {
                 type: 'insertRow',
                 position: 'after'
             }
         },
         {
+            icon: 'deleteRow',
+            text: '刪除列',
+            action: {
+                type: 'deleteRow'
+            }
+        },
+        {
+            icon: 'deleteColumn',
+            text: '刪除欄',
+            action: {
+                type: 'deleteColumn'
+            }
+        },
+        {
             icon: 'trashCan',
-            text: 'Remove Table',
+            text: '刪除表格',
             action: {
                 type: 'remove'
             }
@@ -56,7 +94,7 @@ const TableContextMenu = (props) => {
     ]
 
 
-    const handleInsert = ({ type, position }) => {
+    const handleInsert = ({ type, position, alignment }) => {
         Transforms.select(editor, selection)
         switch (type) {
             case 'insertRow':
@@ -67,6 +105,15 @@ const TableContextMenu = (props) => {
                 break;
             case 'remove':
                 table.removeTable();
+                break;
+            case 'deleteRow':
+                table.deleteRow();
+                break;
+            case 'deleteColumn':
+                table.deleteColumn();
+                break;
+            case 'justify':
+                table.addStyle(alignment);
                 break;
             default:
                 return;

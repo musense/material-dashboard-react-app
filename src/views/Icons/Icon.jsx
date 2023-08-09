@@ -2,9 +2,14 @@ import React from 'react';
 import { MdFormatBold, MdFormatItalic, MdStrikethroughS, MdFormatUnderlined, MdFormatQuote, MdFormatAlignLeft, MdFormatAlignCenter, MdFormatAlignRight, MdFormatAlignJustify, MdFormatListNumbered, MdFormatListBulleted, MdInsertLink, MdLinkOff, MdVideoLibrary, MdImage, MdAdd, MdKeyboardArrowRight, MdArrowForward, MdSmartButton, MdLogout } from 'react-icons/md'
 import { BsTypeH1, BsTypeH2, BsTypeH3, BsCameraVideoFill, BsCode } from 'react-icons/bs'
 import { FaSuperscript, FaSubscript } from 'react-icons/fa'
-import { AiFillEdit, AiOutlineTable, AiOutlineInsertRowBelow, AiOutlineInsertRowRight, AiOutlineDelete, AiFillTag, AiOutlineUpload, AiOutlineArrowsAlt, AiOutlineInsertRowAbove, AiOutlineInsertRowLeft, AiFillHtml5 } from 'react-icons/ai'
+import { AiFillEdit, AiOutlineTable, AiOutlineInsertRowBelow, AiOutlineInsertRowRight, AiOutlineDelete, AiFillTag, AiOutlineUpload, AiOutlineArrowsAlt, AiOutlineInsertRowAbove, AiOutlineInsertRowLeft, AiFillHtml5, AiOutlineDeleteRow, AiOutlineDeleteColumn } from 'react-icons/ai'
 import { SiLatex } from 'react-icons/si'
 import { BiHide } from 'react-icons/bi'
+import {
+    PiAlignLeftSimple,
+    PiAlignCenterHorizontalSimple,
+    PiAlignRightSimple
+} from 'react-icons/pi'
 const iconList = {
     bold: <MdFormatBold size={20} />,
     italic: <MdFormatItalic size={20} />,
@@ -45,7 +50,13 @@ const iconList = {
     arrowRight: <MdArrowForward size={35} />,
     pen: <AiFillEdit size={20} />,
     smartButton: <MdSmartButton size={20} />,
-    logout: <MdLogout size={32} color='white' title='logout' />
+    logout: <MdLogout size={32} color='white' title='logout' />,
+    tableToLeft: <PiAlignLeftSimple size={25} />,
+    tableToCenter: <PiAlignCenterHorizontalSimple size={25} />,
+    tableToRight: <PiAlignRightSimple size={25} />,
+    deleteRow: <AiOutlineDeleteRow size={25} />,
+    deleteColumn: <AiOutlineDeleteColumn size={25} />,
+
 }
 
 const Icon = (props) => {

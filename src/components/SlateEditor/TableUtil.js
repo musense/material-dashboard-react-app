@@ -1,5 +1,5 @@
 import { Transforms, Editor, Range, Element, Path } from 'slate'
-
+import { TEXT_ALIGN_TYPES } from './CustomEditor';
 
 export class TableUtil {
     constructor(editor) {
@@ -65,6 +65,21 @@ export class TableUtil {
         }
     }
 
+    deleteRow = () => {
+        const { selection } = this.editor
+        if (!!selection && Range.isCollapsed(selection)) {
+
+            const [rowNode] = Editor.nodes(this.editor, {
+                match: n => !Editor.isEditor(n) && Element.isElement(n) && n.type === 'table-row',
+            })
+            if (rowNode) {
+                const [, currentRow] = rowNode;
+
+                Transforms.removeNodes(this.editor, { at: currentRow });
+            }
+        }
+    }
+
     insertColumn = (action) => {
         const { selection } = this.editor
         if (!!selection && Range.isCollapsed(selection)) {
@@ -95,8 +110,39 @@ export class TableUtil {
             }
         }
     }
-}
 
+    deleteColumn = () => {
+        const { selection } = this.editor
+        if (!!selection && Range.isCollapsed(selection)) {
+            const [cellNode] = Editor.nodes(this.editor, {
+                match: n => !Editor.isEditor(n) && Element.isElement(n) && n.type === 'table-cell',
+            })
+            if (cellNode) {
+                const [[table, tablePath]] = Editor.nodes(this.editor, {
+                    match: n => !Editor.isEditor(n) && Element.isElement(n) && n.type === 'table',
+                })
+                const [, currentCell] = cellNode
+                const startPath = currentCell;
+
+                startPath[startPath.length - 2] = 0;
+                for (let row = 0; row < table.rows; row++) {
+                    Transforms.removeNodes(this.editor, { at: startPath });
+                    startPath[startPath.length - 2]++
+                }
+            }
+        }
+    }
+
+    addStyle = (alignment) => {
+        const [tableNode] = Editor.nodes(this.editor, {
+            match: n => n.type === 'table',
+        })
+        if (tableNode && TEXT_ALIGN_TYPES.includes(alignment)) {
+            const [, tablePath] = tableNode;
+            Transforms.setNodes(this.editor, { alignment }, { at: tablePath });
+        }
+    }
+}
 
 
 

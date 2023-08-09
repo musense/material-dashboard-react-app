@@ -11,14 +11,14 @@ export default function useRequestEditorByID(id, editor) {
         if (editor) return
         console.log("🚀 ~ file: useRequestEditorByID.js:11 ~ useEffect ~ id:", id)
         requestEditorByID(id)
-    }, [id, editor]);
+    }, []);
 
-    const requestEditorByID = useCallback((id) => {
+    const requestEditorByID = (id) => {
         dispatch({
             type: GetEditorAction.REQUEST_EDITOR_BY_ID,
             payload: {
-                _id: id
+                data: id
             },
         });
-    }, [dispatch])
+    }
 }

@@ -79,7 +79,6 @@ input[type='file'] {
   width: 30%;
   height: 100%;
   padding: 0 1rem;
-  max-height: 814px;
   overflow: auto;
   /* background-color: lightblue; */
 }
@@ -241,9 +240,8 @@ input[type='file'] {
 }
 
 .banner-submit-form {
-  height: 100%;
+  height: fit-content;
   padding-right: 10px;
-  overflow: hidden auto;
 }
 
 .banner-submit-form textarea {

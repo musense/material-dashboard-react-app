@@ -1,8 +1,16 @@
-import React, { useEffect } from 'react'
-import { useSlate, useSlateStatic } from 'slate-react'
-import { Button, Icon } from './components'
+import React from 'react'
 import { css } from '@emotion/css'
-import { CustomEditor, TEXT_ALIGN_TYPES } from './CustomEditor'
+import {
+    MarkButton,
+    BlockButton,
+    TableButton,
+    ImageButton,
+    AddLinkButton,
+    RemoveLinkButton,
+    ToggleEditableButton
+} from './ButtonComponents'
+import { useSlate, useSlateStatic } from 'slate-react'
+import TableContextMenu from './TableContextMenu/TableContextMenu'
 
 export default function Toolbar({
     handleClickOpen,
@@ -10,189 +18,57 @@ export default function Toolbar({
     currentAltText,
     currentHref
 }) {
-    return <div className={css` 
-                  position: sticky;
-                  top: 0;
-                  display: flex;
-                  flex-direction: row;
-                  flex-wrap: wrap;
-                  gap: 1rem;
-                  padding-top: 0;
-                  padding-bottom: 0.5rem;
-                  margin-bottom: 1rem;
-                  border-bottom: 2px solid rgb(238, 238, 238);
-                  background-color: white;
-                  z-index: 1;
-                  `}>
-        {/* inline-block style */}
-        <MarkButton type = {'bold'} icon      = {'format_bold'} title      = {'ctrl+b'} />
-        <MarkButton type = {'italic'} icon    = {'format_italic'} title    = {'ctrl+i'} />
-        <MarkButton type = {'underline'} icon = {'format_underline'} title = {'ctrl+u'} />
-        <MarkButton type = {'code'} icon      = {'code'} title             = {'ctrl+`'} />
-        <MarkButton type = {'hide'} icon      = {'visibility_off'} title   = {'ctrl+shift+x'} />
-        {/* block style */}
-        <BlockButton type = {'h1'} icon            = {'looks_one'} title            = {'ctrl+1'} />
-        <BlockButton type = {'h2'} icon            = {'looks_two'} title            = {'ctrl+2'} />
-        <BlockButton type = {'h3'} icon            = {'looks_3'} title              = {'ctrl+3'} />
-        <BlockButton type = {'numbered-list'} icon = {'format_list_numbered'} title = {'ctrl+Enter'} />
-        <BlockButton type = {'bulleted-list'} icon = {'format_list_bulleted'} title = {'shift+Enter'} />
-        <BlockButton type = {'block-quote'} icon   = {'format_quote'} title         = {'ctrl+q'} />
-        <BlockButton type = {'left'} icon          = {'format_align_left'} title    = {'ctrl+shift+l'} />
-        <BlockButton type = {'center'} icon        = {'format_align_center'} title  = {'ctrl+shift+c'} />
-        <BlockButton type = {'right'} icon         = {'format_align_right'} title   = {'ctrl+shift+r'} />
-        <BlockButton type = {'justify'} icon       = {'format_align_justify'} title = {'ctrl+shift+f'} />
-
-        <ImageButton type={'image'} icon={'insert_photo'} title={'ctrl+shift+m'}
-
-            handleClickOpen={handleClickOpen}
-            currentHref={currentHref}
-            currentUrl={currentUrl}
-            currentAltText={currentAltText}
-        />
-
-        <AddLinkButton type={'link'} icon={'link'} title={'ctrl+h'} />
-        <RemoveLinkButton type={'unlink'} icon={'link_off'} title={'ctrl+r'} />
-        <ToggleEditableButton type={'button'} icon={'smart_button'} title={'ctrl+g'} />
-    </div>
-}
-
-function MarkButton({ icon, type, title = '' }) {
-    const editor = useSlate();
-    return <Button
-        title={title}
-        active={CustomEditor.isMarkActive(editor, type)}
-        onMouseDown={(event) => {
-            event.preventDefault();
-            CustomEditor.toggleMark(editor, type);
-        }} >
-        <Icon icon={icon} />
-    </Button>
-}
-
-
-function BlockButton({ icon, type, title = '' }) {
-    const editor = useSlate();
-    return <Button
-        title={title}
-        active={CustomEditor.isBlockActive(
-            editor,
-            type,
-            TEXT_ALIGN_TYPES.includes(type) ? 'align' : 'type')}
-        onMouseDown={(event) => {
-            event.preventDefault();
-            CustomEditor.toggleBlock(editor, type);
-        }}
-    >
-        <Icon icon={icon} />
-    </Button>
-}
-
-function ImageButton({
-    handleClickOpen,
-    currentUrl,
-    currentAltText,
-    currentHref,
-    title = ''
-}) {
-
-    const editor = useSlateStatic()
-
-    useEffect(() => {
-        console.log("🚀 ~ file: Toolbar.jsx:88 ~ ImageButton ~ currentUrl:", currentUrl)
-        console.log("🚀 ~ file: Toolbar.jsx:89 ~ ImageButton ~ currentAltText:", currentAltText)
-        console.log("🚀 ~ file: Toolbar.jsx:89 ~ ImageButton ~ currentHref:", currentHref)
-
-        if (currentUrl) {
-            CustomEditor.insertImage(editor, currentUrl, currentAltText, currentHref)
-        }
-    }, [currentUrl, currentAltText]);
-
-    return (
-        <Button
-            title={title}
-            onMouseDown={event => {
-                event.preventDefault()
-                handleClickOpen()
-                //! fail at this point, the ext should not be part of the url
-                // if (url && !CustomEditor.isImageUrl(url)) {
-                //   alert('URL is not an image')
-                //   return
-                // }
-            }}
-        >
-            <Icon icon={'image'} />
-        </Button>
-    )
-}
-
-function AddLinkButton({ icon, type, title }) {
     const editor = useSlate()
-    return (
-        <Button
-            title={title}
-            active={CustomEditor.isLinkActive(editor)}
-            onMouseDown={event => {
-                event.preventDefault()
+    const editorStatic = useSlateStatic()
+    const style = css` 
+    position: sticky;
+    top: 0;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 1rem;
+    padding-top: 0;
+    padding-bottom: 0.5rem;
+    margin-bottom: 1rem;
+    border-bottom: 2px solid rgb(238, 238, 238);
+    background-color: white;
+    z-index: 1;
+    `
+    return <>
+        <div className={style}>
+            {/* inline-block style */}
+            <MarkButton editor={editor} type={'bold'} icon={'bold'} title={'黑體 ctrl+b'} />
+            <MarkButton editor={editor} type={'italic'} icon={'italic'} title={'斜體 ctrl+i'} />
+            <MarkButton editor={editor} type={'underline'} icon={'underline'} title={'底線 ctrl+u'} />
+            <MarkButton editor={editor} type={'code'} icon={'code'} title={'等寬字型 ctrl+`'} />
+            <MarkButton editor={editor} type={'hide'} icon={'hide'} title={'隱藏文字 ctrl+shift+x'} />
+            {/* block style */}
+            <BlockButton editor={editor} type={'h1'} icon={'headingOne'} title={'標題1 ctrl+1'} />
+            <BlockButton editor={editor} type={'h2'} icon={'headingTwo'} title={'標題2 ctrl+2'} />
+            <BlockButton editor={editor} type={'h3'} icon={'headingThree'} title={'標題3 ctrl+3'} />
+            <BlockButton editor={editor} type={'numbered-list'} icon={'orderedList'} title={'編號列表 ctrl+Enter'} />
+            <BlockButton editor={editor} type={'bulleted-list'} icon={'unorderedList'} title={'列表 shift+Enter'} />
+            <TableButton editor={editor} type={'table'} icon={'table'} title={'表格 ctrl+shift+t'} />
+            <BlockButton editor={editor} type={'block-quote'} icon={'blockquote'} title={'引用 ctrl+q'} />
+            <BlockButton editor={editor} type={'left'} icon={'alignLeft'} title={'文字置左 ctrl+shift+l'} />
+            <BlockButton editor={editor} type={'center'} icon={'alignCenter'} title={'文字置中 ctrl+shift+c'} />
+            <BlockButton editor={editor} type={'right'} icon={'alignRight'} title={'文字置右 ctrl+shift+r'} />
+            <BlockButton editor={editor} type={'justify'} icon={'alignJustify'} title={'分散對齊 ctrl+shift+f'} />
 
-                const { selection } = editor
-                const allTextArray  = editor.children
-                const anchorPath    = selection.anchor.path[0]
-                const focusPath     = selection.focus.path[0]
+            <ImageButton editor={editorStatic} type={'image'} icon={'image'} title={'插入圖片 ctrl+shift+m'}
 
-                let selectedText
-                if (anchorPath === focusPath) {
-                    selectedText = CustomEditor.getSingleParagraphText(allTextArray, selection)
-                } else {
-                    selectedText = CustomEditor.getMultiParagraphText(allTextArray, selection)
-                }
-                const url = window.prompt(`${selectedText && `顯示的文字: ${selectedText}\n`}請輸入超連結：`)
-                if (!url) return
-                CustomEditor.insertLink(editor, url)
-            }}
-        >
-            {/* icon=link */}
-            <Icon icon={icon} />
-        </Button>
-    )
-}
+                handleClickOpen={handleClickOpen}
+                currentHref={currentHref}
+                currentUrl={currentUrl}
+                currentAltText={currentAltText}
+            />
 
-function RemoveLinkButton({ icon, type, title }) {
-    const editor = useSlate()
-
-    return (
-        <Button
-            title={title}
-            active={CustomEditor.isLinkActive(editor)}
-            onMouseDown={event => {
-                if (CustomEditor.isLinkActive(editor)) {
-                    CustomEditor.unwrapLink(editor)
-                }
-            }}
-        >
-            {/* icon=link_off */}
-            <Icon icon={icon} />
-        </Button>
-    )
-}
+            <AddLinkButton editor={editor} type={'link'} icon={'link'} title={'插入連結 ctrl+h'} />
+            <RemoveLinkButton editor={editor} type={'unlink'} icon={'linkOff'} title={'移除連結 ctrl+r'} />
+            <ToggleEditableButton editor={editor} type={'button'} icon={'smartButton'} title={'插入文字按鈕 ctrl+g'} />
 
 
-function ToggleEditableButton({ icon, type, title = '' }) {
-    const editor = useSlate()
-    return (
-        <Button
-            title={title}
-            active
-            onMouseDown={event => {
-                event.preventDefault()
-                if (CustomEditor.isButtonActive(editor)) {
-                    CustomEditor.unwrapButton(editor)
-                } else {
-                    CustomEditor.insertButton(editor)
-                }
-            }}
-        >
-            {/* icon=smart_button */}
-            <Icon icon={icon} />
-        </Button>
-    )
+        </div>
+        <TableContextMenu editor={editor} />
+    </>
 }

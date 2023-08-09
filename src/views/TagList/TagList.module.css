@@ -26,6 +26,11 @@ input {
 
 .tag-right-wrapper {
   width: 1200px;
+  transition: all 225ms cubic-bezier(0, 0, 0.2, 1) 0ms;
+}
+
+.tag-right-wrapper.main-panel-max-size {
+  width: 1500px;
 }
 
 .tag-table-wrapper {

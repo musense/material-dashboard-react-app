@@ -7,6 +7,7 @@ import Classification from "./Classification";
 import Media from "../../../components/Media/Media";
 import PublishInfo from "./PublishInfo";
 import DetailFormButtonList from "./DetailFormButtonList";
+import MyScrollbar from "components/MyScrollbar/MyScrollbar";
 
 
 
@@ -55,36 +56,38 @@ const DetailForm = ({ createType }) => {
     }, [dispatch])
 
     return (
-        <form class={'ieditor-detail-form'} >
-            <WebHeader
-                headTitle={headTitle}
-                onPropertyChange={onPropertyChange}
-                headDescription={headDescription}
-                headKeyword={headKeyword}
-                manualUrl={manualUrl}
-                customUrl={customUrl} />
-            <Tags
-                tags={tags}
-                onPropertyChange={onPropertyChange} />
-            <Classification
-                categories={categories}
-                onPropertyChange={onPropertyChange} />
-            <Media
-                onPropertyChange={onPropertyChange}
-                onShowUrlChange={onShowUrlChange}
-                patchType={GetSlateAction.SET_SHOW_URL}
-                showUrl={showUrl}
-                altText={altText}
-            />
-            <PublishInfo
-                hidden={hidden}
-                onPropertyChange={onPropertyChange}
-                isScheduled={isScheduled}
-                scheduledAt={scheduledAt} />
-            <DetailFormButtonList
-                createType={createType}
-            />
-        </form >
+        <MyScrollbar height='814px'>
+            <form class={'ieditor-detail-form'} >
+                <WebHeader
+                    headTitle={headTitle}
+                    onPropertyChange={onPropertyChange}
+                    headDescription={headDescription}
+                    headKeyword={headKeyword}
+                    manualUrl={manualUrl}
+                    customUrl={customUrl} />
+                <Tags
+                    tags={tags}
+                    onPropertyChange={onPropertyChange} />
+                <Classification
+                    categories={categories}
+                    onPropertyChange={onPropertyChange} />
+                <Media
+                    onPropertyChange={onPropertyChange}
+                    onShowUrlChange={onShowUrlChange}
+                    patchType={GetSlateAction.SET_SHOW_URL}
+                    showUrl={showUrl}
+                    altText={altText}
+                />
+                <PublishInfo
+                    hidden={hidden}
+                    onPropertyChange={onPropertyChange}
+                    isScheduled={isScheduled}
+                    scheduledAt={scheduledAt} />
+                <DetailFormButtonList
+                    createType={createType}
+                />
+            </form >
+        </MyScrollbar>
     );
 }
 

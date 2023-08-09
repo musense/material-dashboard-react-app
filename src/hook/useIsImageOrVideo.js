@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 
 export default function useIsImageOrVideo(url) {
 
-    const [isImage, setIsImage] = useState();
+    const [isImage, setIsImage] = useState(true);
     const [iframeUrl, setIframeUrl] = useState();
 
     const getProperty = useCallback((propertyName) => {
@@ -14,7 +14,7 @@ export default function useIsImageOrVideo(url) {
 
     useEffect(() => {
         if (!url || typeof url !== 'string') {
-            setIsImage(false)
+            setIsImage(true)
             setIframeUrl('')
             return
         }

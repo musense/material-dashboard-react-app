@@ -17,6 +17,7 @@ import useModal from 'hook/useModal';
 import Media from 'components/Media/Media';
 import FormButtonList from 'components/FormButtonList/FormButtonList';
 import BannerPublishInfo from './BannerPublishInfo';
+import MyScrollbar from 'components/MyScrollbar/MyScrollbar';
 
 // import { useDebounce } from 'react-use'
 
@@ -196,47 +197,49 @@ export default function BannerLeftWrapper() {
             <CardHeader color="primary">
                 <h4>{isEditing ? '編輯' : '新增'}</h4>
             </CardHeader>
-            <CardBody style={{ overflow: 'auto', paddingRight: 0 }}>
-                <form ref={formRef} name='class-form' className='banner-submit-form' onSubmit={onAddNewEditor}>
-                    <div>
-                        <input type="hidden" name='_id' value={id} onChange={e => onPropertyChange(e.target.value, 'id')} />
-                    </div>
-                    <div>
-                        <label htmlFor="name">Banner名稱</label>
-                        <input type="text" name='name' value={name} onChange={e => onPropertyChange(e.target.value, 'name')} />
-                    </div>
-                    <div>
-                        <label htmlFor="sorting">排序</label>
-                        <input type="number" min={1} name='sorting' value={sorting} onChange={e => onPropertyChange(e.target.value, 'sorting')} />
-                    </div>
-                    <div>
-                        <label htmlFor="hyperlink">超連結</label>
-                        <input type="text" name='hyperlink' value={hyperlink} onChange={e => onPropertyChange(e.target.value, 'hyperlink')} />
-                    </div>
-                    <Media
-                        styles={styles}
-                        onPropertyChange={onPropertyChange}
-                        onShowUrlChange={onShowUrlChange}
-                        showUrl={showUrl}
-                        alt={false}
-                    />
-                    <BannerPublishInfo
-                        isOnShelvesImmediate={isOnShelvesImmediate}
-                        isPermanent={isPermanent}
-                        startDate={startDate}
-                        endDate={endDate}
-                        onPropertyChange={onPropertyChange}
-                    />
-                    <div>
-                        <label htmlFor="note">備註</label>
-                        <textarea type="text" name='note' value={note} onChange={e => onPropertyChange(e.target.value, 'note')} />
-                    </div>
-                    <FormButtonList
-                        isEditing={isEditing}
-                        onCancel={onCancel}
-                        onReset={onReset}
-                    />
-                </form>
+            <CardBody style={{ paddingRight: 0 }}>
+                <MyScrollbar component='form' height='700px'>
+                    <form ref={formRef} name='class-form' className='banner-submit-form' onSubmit={onAddNewEditor}>
+                        <div>
+                            <input type="hidden" name='_id' value={id} onChange={e => onPropertyChange(e.target.value, 'id')} />
+                        </div>
+                        <div>
+                            <label htmlFor="name">Banner名稱</label>
+                            <input type="text" name='name' value={name} onChange={e => onPropertyChange(e.target.value, 'name')} />
+                        </div>
+                        <div>
+                            <label htmlFor="sorting">排序</label>
+                            <input type="number" min={1} name='sorting' value={sorting} onChange={e => onPropertyChange(e.target.value, 'sorting')} />
+                        </div>
+                        <div>
+                            <label htmlFor="hyperlink">超連結</label>
+                            <input type="text" name='hyperlink' value={hyperlink} onChange={e => onPropertyChange(e.target.value, 'hyperlink')} />
+                        </div>
+                        <Media
+                            styles={styles}
+                            onPropertyChange={onPropertyChange}
+                            onShowUrlChange={onShowUrlChange}
+                            showUrl={showUrl}
+                            alt={false}
+                        />
+                        <BannerPublishInfo
+                            isOnShelvesImmediate={isOnShelvesImmediate}
+                            isPermanent={isPermanent}
+                            startDate={startDate}
+                            endDate={endDate}
+                            onPropertyChange={onPropertyChange}
+                        />
+                        <div>
+                            <label htmlFor="note">備註</label>
+                            <textarea type="text" name='note' value={note} onChange={e => onPropertyChange(e.target.value, 'note')} />
+                        </div>
+                        <FormButtonList
+                            isEditing={isEditing}
+                            onCancel={onCancel}
+                            onReset={onReset}
+                        />
+                    </form>
+                </MyScrollbar>
             </CardBody>
         </Card>
         <MessageDialog

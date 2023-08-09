@@ -21,6 +21,7 @@ import * as GetUserAction from '../../actions/GetUserAction';
 import MessageDialog from '../Modal/MessageDialog';
 import useLogoutResult from '../../hook/useLogoutResult';
 import useModal from '../../hook/useModal';
+import Icon from 'views/Icons/Icon';
 
 function HeaderLinks(props) {
   let anchorEl;
@@ -66,7 +67,8 @@ function HeaderLinks(props) {
           onClick={handleToggleProfile}
           className={classes.buttonLink}
         >
-          <Person className={classes.icons} />
+          <Icon icon={'logout'} />
+          {/* <Person className={classes.icons} /> */}
           <Hidden mdUp implementation='css'>
             <p onClick={handleToggleProfile} className={classes.linkText}>
               Profile

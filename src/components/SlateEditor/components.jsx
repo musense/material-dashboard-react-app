@@ -58,27 +58,4 @@ export const Button = React.forwardRef((
           `
         )}
     />
-)
-)
-
-
-export const Icon = React.forwardRef((
-    {
-        icon,
-        className = '',
-        ...props
-    },
-    ref) => (
-    <span
-        {...props}
-        ref={ref}
-        className={cx(
-            'material-icons',
-            css`
-        font-size: 18px;
-        color    : #999;
-        vertical-align: text-bottom;`
-        )}>{icon}</span>
-)
-)
-
+))

@@ -54,12 +54,12 @@ export default function EditBodyCell({
                 callback={onCopy}
             />
             <IconCell
-                iconName={'edit'}
+                iconName={'pen'}
                 iconTitle={'編輯'}
                 callback={onEdit}
             />
             <IconCell
-                iconName={'delete_forever'}
+                iconName={'trashCan'}
                 iconTitle={'刪除'}
                 callback={onDelete}
             />

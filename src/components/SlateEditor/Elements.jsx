@@ -1,4 +1,4 @@
-import React, { useMemo, useCallback } from 'react'
+import React from 'react'
 
 import { Transforms } from 'slate'
 import {
@@ -7,9 +7,11 @@ import {
     useFocused,
     ReactEditor,
 } from 'slate-react'
-import { Button, Icon } from './components'
-import InlineChromiumBugfix, { CustomEditor } from './CustomEditor'
+import { Button } from './components'
+import Icon from "../../views/Icons/Icon"
+import InlineChromiumBugfix from './CustomEditor'
 import { css } from '@emotion/css'
+import Table from './Table/Table'
 
 const Link = ({ attributes, children, element }) => {
     const selected = useSelected()
@@ -114,9 +116,9 @@ const Image = ({ attributes, children, element }) => {
                     rel="noreferrer noopener"
                     target="_blank">
                     <img
-                        src       = {element.url}
-                        alt       = {element.alt}
-                        className = {css`
+                        src={element.url}
+                        alt={element.alt}
+                        className={css`
               display   : block;
               max-width : 100%;
               max-height: 20em;
@@ -142,7 +144,7 @@ const Image = ({ attributes, children, element }) => {
                         active
                         onClick={() => Transforms.removeNodes(editor, { at: path })}
                     >
-                        <Icon icon={'delete'} />
+                        <Icon icon={'trashCan'} />
                     </Button>
                     <Button
                         active
@@ -271,6 +273,15 @@ export const Element = ({ element, children, attributes }) => {
             return <Badge
                 attributes={attributes}
                 children={children} />
+        case 'table':
+            return <Table
+                element={element}
+                attributes={attributes}
+                children={children} />
+        case 'table-row':
+            return <tr {...attributes}>{children}</tr>
+        case 'table-cell':
+            return <td {...element.attr} {...attributes}>{children}</td>
         default:
             return (
                 <p style={style} {...attributes}>
@@ -292,8 +303,8 @@ export const Leaf = ({ attributes, children, leaf }) => {
     if (leaf.underline) {
         children = <u>{children}</u>
     }
-    if (leaf.hide) {      
-        children = <span data-attr = "display-none" style = {{ opacity: 0.3 }}>{children}</span>
+    if (leaf.hide) {
+        children = <span data-attr="display-none" style={{ opacity: 0.3 }}>{children}</span>
     }
     return <span {...attributes}>{children}</span>
 }

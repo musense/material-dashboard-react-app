@@ -1,6 +1,6 @@
 import React from "react";
 import { CopyToClipboard } from 'react-copy-to-clipboard';
-import Icon from './Icon';
+import Icon from 'views/Icons/Icon';
 
 export default function IconCell({
     iconName: name,
@@ -24,7 +24,7 @@ export default function IconCell({
             }
             return <div div className="edit-icon-wrapper" >
                 <input {...inputProps} />
-                < Icon iconName={name} />
+                < Icon icon={name} />
             </div>
         }
         , copyTemplate = (

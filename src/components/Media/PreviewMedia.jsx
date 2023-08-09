@@ -7,7 +7,7 @@ export default function PreviewMedia({ styles, isImage, iframeUrl }) {
         <div className={styles['preview-image-wrapper']}>
             {
                 isImage
-                    ? <img src={iframeUrl}
+                    ? (iframeUrl !== '' && <img src={iframeUrl}
                         style={{
                             width: 'auto',
                             height: '100%',
@@ -15,7 +15,7 @@ export default function PreviewMedia({ styles, isImage, iframeUrl }) {
                             objectPosition: 'center',
                             aspectRatio: '16/9',
                         }}
-                    />
+                    />)
                     : <Iframe
                         url={iframeUrl}
                         loading='lazy'

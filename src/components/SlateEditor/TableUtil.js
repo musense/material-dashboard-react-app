@@ -1,4 +1,4 @@
-import { Transforms, Editor, Range, Element, Path } from 'slate'
+import { Transforms, Editor, Range, Element, Path, Node } from 'slate'
 import { TEXT_ALIGN_TYPES } from './CustomEditor';
 
 export class TableUtil {
@@ -33,7 +33,7 @@ export class TableUtil {
     removeTable = () => {
         Transforms.removeNodes(this.editor, {
             match: n => !Editor.isEditor(n) && Element.isElement(n) && n.type === 'table',
-            // mode:'highest'
+            // mode: 'highest'
         })
     }
 
@@ -67,16 +67,27 @@ export class TableUtil {
 
     deleteRow = () => {
         const { selection } = this.editor
-        if (!!selection && Range.isCollapsed(selection)) {
 
+        if (!!selection && Range.isCollapsed(selection)) {
+            const [[table, tablePath]] = Editor.nodes(this.editor, {
+                match: n => !Editor.isEditor(n) && Element.isElement(n) && n.type === 'table',
+            })
             const [rowNode] = Editor.nodes(this.editor, {
                 match: n => !Editor.isEditor(n) && Element.isElement(n) && n.type === 'table-row',
             })
             if (rowNode) {
                 const [, currentRow] = rowNode;
+                console.log("🚀 ~ file: TableUtil.js:78 ~ TableUtil ~ deleteRow ~ currentRow:", currentRow)
 
                 Transforms.removeNodes(this.editor, { at: currentRow });
+
+                Transforms.setNodes(this.editor, { rows: table.rows - 1 },
+                    {
+                        at: tablePath
+                    });
+
             }
+            this.checkAndRemoveEmptyTable()
         }
     }
 
@@ -123,14 +134,32 @@ export class TableUtil {
                 })
                 const [, currentCell] = cellNode
                 const startPath = currentCell;
+                console.log("🚀 ~ file: TableUtil.js:130 ~ TableUtil ~ deleteColumn ~ startPath:", startPath)
+                console.log("🚀 ~ file: TableUtil.js:132 ~ TableUtil ~ deleteColumn ~ table.rows:", table.rows)
 
                 startPath[startPath.length - 2] = 0;
                 for (let row = 0; row < table.rows; row++) {
+
+                    console.log("🚀 ~ file: TableUtil.js:138 ~ TableUtil ~ deleteColumn ~ startPath:", startPath)
                     Transforms.removeNodes(this.editor, { at: startPath });
+
                     startPath[startPath.length - 2]++
                 }
+                Transforms.setNodes(this.editor, { columns: table.columns - 1 },
+                    {
+                        at: tablePath
+                    });
             }
+            this.checkAndRemoveEmptyTable()
         }
+    }
+
+    checkAndRemoveEmptyTable = () => {
+        const [remainCellNode] = Editor.nodes(this.editor, {
+            match: n => !Editor.isEditor(n) && Element.isElement(n) && n.type === 'table-cell',
+        })
+        if (remainCellNode) return
+        this.removeTable();
     }
 
     addStyle = (alignment) => {

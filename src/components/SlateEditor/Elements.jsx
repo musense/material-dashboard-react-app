@@ -210,6 +210,7 @@ const Image = ({ attributes, children, element }) => {
     )
 }
 export const Element = ({ element, children, attributes }) => {
+    console.log("🚀 ~ file: Elements.jsx:293 ~ Element ~ attributes:", attributes)
     const style = { textAlign: element.align }
     switch (element.type) {
         case 'block-quote':
@@ -290,7 +291,10 @@ export const Element = ({ element, children, attributes }) => {
             )
     }
 }
+
 export const Leaf = ({ attributes, children, leaf }) => {
+    console.log("🚀 ~ file: Elements.jsx:294 ~ Leaf ~ attributes:", attributes)
+    console.log("🚀 ~ file: Elements.jsx:294 ~ Leaf ~ children:", children)
     if (leaf.bold) {
         children = <strong>{children}</strong>
     }

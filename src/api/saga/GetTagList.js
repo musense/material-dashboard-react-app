@@ -91,6 +91,13 @@ function* GetTagList(payload = 1) {
             console.log("🚀 ~ file: GetTagList.js:86 ~ const[]=Promise.all ~ res:", res)
             const nextSorting = res[0].data.maxTagNumber
             const { data: responseData, totalCount, currentPage } = res[1].data
+            console.log("🚀 ~ file: GetTagList.js:94 ~ function*GetTagList ~ responseData:", responseData)
+            responseData.map(tag => {
+                return {
+                    ...tag,
+                    sorting: tag.sorting ? NaN : tag.sorting
+                }
+            })
             return {
                 nextSorting,
                 responseData,

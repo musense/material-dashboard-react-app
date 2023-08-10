@@ -129,7 +129,8 @@ const getTagsReducer = (state = initialState, action) => {
                         let e1, e2
                         e1 = tag1[key]
                         e2 = tag2[key]
-                        typeOf = typeof new Date(tag1[key]).getMonth === 'function' ? 'date' : typeOf
+                        // typeOf = typeof new Date(tag1[key]).getMonth === 'function' ? 'date' : typeOf
+                        console.log("🚀 ~ file: GetTagsReducer.js:133 ~ ?state.tagList.sort ~ typeOf:", typeOf)
                         const sorting = state.sortingMap[key]
                         switch (typeOf) {
                             case 'string': {

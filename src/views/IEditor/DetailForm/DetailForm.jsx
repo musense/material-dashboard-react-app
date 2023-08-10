@@ -57,7 +57,7 @@ const DetailForm = ({ createType }) => {
 
     return (
         <MyScrollbar height='814px'>
-            <form class={'ieditor-detail-form'} >
+            <form className={'ieditor-detail-form'} >
                 <WebHeader
                     headTitle={headTitle}
                     onPropertyChange={onPropertyChange}

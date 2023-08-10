@@ -92,15 +92,15 @@ input[type='file'] {
   position: sticky;
 }
 
-.view-list-form .view-header>div,
-.view-list-form .view-body>div {
+.view-header>div,
+.view-body>div {
   display: flex;
   flex-direction: row;
   height: fit-content;
 }
 
-.view-list-form .view-header>div>div,
-.view-list-form .view-body>div>div {
+.view-header>div>div,
+.view-body>div>div {
   position: relative;
   text-align: center;
   overflow-x: hidden;

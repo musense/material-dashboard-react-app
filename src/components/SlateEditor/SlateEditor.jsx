@@ -59,6 +59,7 @@ function SlateEditor({
             style={{
               fontSize: '1rem',
               height: 'fit-content',
+              minHeight: '100%',
             }}
             renderElement={renderElement}
             renderLeaf={renderLeaf}

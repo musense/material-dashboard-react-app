@@ -31,11 +31,10 @@ export const CustomEditor = {
     },
 
     isMarkActive(editor, format) {
-        console.log("🚀 ~ file: CustomEditor.jsx:34 ~ isMarkActive ~ editor:", editor)
-        console.log("🚀 ~ file: CustomEditor.jsx:34 ~ isMarkActive ~ format:", format)
         const marks = Editor.marks(editor)
-        console.log("🚀 ~ file: CustomEditor.jsx:34 ~ isMarkActive ~ marks:", marks)
-        return marks ? !!marks[format] === true : false
+        if (!marks) return false
+        if (marks[format] === false) return false
+        return marks[format]
     },
 
     isBlockActive(editor, format, blockType = 'type') {

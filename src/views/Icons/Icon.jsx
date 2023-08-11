@@ -56,8 +56,8 @@ const iconList = {
     tableToRight: <PiAlignRightSimple size={25} />,
     deleteRow: <AiOutlineDeleteRow size={25} />,
     deleteColumn: <AiOutlineDeleteColumn size={25} />,
-    backgroundColorPicker: <MdFormatColorFill size={20} />,
-    colorPicker: <MdFormatColorText size={20} />,
+    backgroundColorPicker: <MdFormatColorFill size={20} color="inherit" />,
+    colorPicker: <MdFormatColorText size={20} color="inherit" />,
     check: <MdCheck size={20} color='inherit' />
 }
 

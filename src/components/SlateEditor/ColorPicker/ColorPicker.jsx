@@ -56,7 +56,7 @@ const ColorPicker = ({ format, title, editor }) => {
     return (
         <div className='color-picker popup-wrapper' ref={colorPickerRef}>
             <Button
-                active={CustomEditor.isMarkActive(editor, format)}
+                style={{ color: CustomEditor.isMarkActive(editor, format) }}
                 title={title}
                 onMouseDown={toggleOption}>
                 <Icon icon={iconName} />

@@ -7,15 +7,14 @@ import {
     useFocused,
     ReactEditor,
 } from 'slate-react'
-import { Button } from './components'
-import Icon from "../../views/Icons/Icon"
-import InlineChromiumBugfix from './CustomEditor'
+import Button from './Button'
+import Icon from "views/Icons/Icon"
+import InlineChromiumBugfix from '../utils/CustomEditor'
 import { css } from '@emotion/css'
-import Table from './Table/Table'
-import ResizableTable from './Table/Resizable/ResizableTable'
-import ResizableRow from './Table/Resizable/ResizableRow'
-import ResizableCell from './Table/Resizable/ResizableCell'
-import HtmlCode from './CodeToText/HtmlCode'
+import ResizableTable from '../Table/Resizable/ResizableTable'
+import ResizableRow from '../Table/Resizable/ResizableRow'
+import ResizableCell from '../Table/Resizable/ResizableCell'
+import HtmlCode from '../CodeToText/HtmlCode'
 
 const Link = ({ attributes, children, element }) => {
     const selected = useSelected()

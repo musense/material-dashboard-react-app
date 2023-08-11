@@ -12,8 +12,8 @@ import {
     ToggleEditableButton
 } from './ButtonComponents'
 import { useSlate, useSlateStatic } from 'slate-react'
-import TableContextMenu from './TableContextMenu/TableContextMenu'
-import HtmlContextMenu from './CodeToText/HtmlContextMenu'
+import TableContextMenu from '../TableContextMenu/TableContextMenu'
+import HtmlContextMenu from '../CodeToText/HtmlContextMenu'
 
 export default function Toolbar({
     handleClickOpen,

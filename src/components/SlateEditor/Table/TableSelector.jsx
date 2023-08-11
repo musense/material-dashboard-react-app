@@ -1,10 +1,10 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import Icon from '../../../views/Icons/Icon'
+import Icon from 'views/Icons/Icon'
 import usePopup from '../customHooks/usePopup'
 import { Transforms } from 'slate';
-import { TableUtil } from '../TableUtil'
-import { Button } from './../components'
-import { CustomEditor, TEXT_ALIGN_TYPES } from '../CustomEditor';
+import { TableUtil } from '../utils/TableUtil'
+import Button from './../components/Button'
+import { CustomEditor, TEXT_ALIGN_TYPES } from '../utils/CustomEditor';
 
 import './TableSelector.css'
 

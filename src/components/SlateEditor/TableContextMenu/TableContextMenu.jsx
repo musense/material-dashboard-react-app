@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import useContextMenu from 'components/SlateEditor/customHooks/useContextMenu.js';
 import Icon from 'views/Icons/Icon'
 import './styles.css'
-import { TableUtil } from '../TableUtil'
+import { TableUtil } from '../utils/TableUtil'
 import { Transforms } from 'slate';
 import { ReactEditor } from 'slate-react';
 

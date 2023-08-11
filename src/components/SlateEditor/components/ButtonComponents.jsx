@@ -1,10 +1,10 @@
 import React, { useEffect } from 'react'
-import { Button } from './components'
-import { CustomEditor, TEXT_ALIGN_TYPES } from './CustomEditor'
-import TableSelector from './Table/TableSelector';
-import Icon from '../../views/Icons/Icon';
-import ColorPicker from './ColorPicker/ColorPicker';
-import CodeToTextButton from './CodeToText/CodeToTextButton';
+import Button from './Button'
+import { CustomEditor, TEXT_ALIGN_TYPES } from '../utils/CustomEditor'
+import TableSelector from '../Table/TableSelector';
+import Icon from '../../../views/Icons/Icon';
+import ColorPicker from '../ColorPicker/ColorPicker';
+import CodeToTextButton from '../CodeToText/CodeToTextButton';
 
 function MarkButton({ editor, icon, type, title = '' }) {
     return <Button

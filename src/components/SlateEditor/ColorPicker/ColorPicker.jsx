@@ -1,12 +1,12 @@
 import React, { useRef, useState } from 'react';
 import './ColorPicker.css'
 import { colors } from './defaultColors.js'
-import { CustomEditor } from '../CustomEditor'
+import { CustomEditor } from '../utils/CustomEditor'
 import { Transforms } from 'slate';
 import usePopup from '../customHooks/usePopup'
 import { ReactEditor } from 'slate-react';
 import Icon from 'views/Icons/Icon';
-import { Button } from '../components';
+import Button from '../components/Button'
 
 const ColorPicker = ({ format, title, editor }) => {
     const iconName = format === 'color' ? 'colorPicker' : 'backgroundColorPicker';

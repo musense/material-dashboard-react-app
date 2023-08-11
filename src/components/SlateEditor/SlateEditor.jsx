@@ -1,14 +1,14 @@
 import React, { useCallback, useRef, useState } from 'react'
 import { Slate, Editable } from 'slate-react'
 import { css } from '@emotion/css'
-import { CustomEditor } from './CustomEditor'
-import Toolbar from "./Toolbar";
+import { CustomEditor } from './utils/CustomEditor'
+import Toolbar from './components/Toolbar'
 import "./SlateEditor.css";
 
-import { Element, Leaf } from "./Elements";
-import ImageDialog from './ImageDialog'
+import { Element, Leaf } from './components/Elements'
+import ImageDialog from './components/ImageDialog'
 
-import useCreateSlateEditor from '../../hook/useCreateSlateEditor'
+import useCreateSlateEditor from './customHooks/useCreateSlateEditor'
 import useModal from '../../hook/useModal';
 import MyScrollbar from 'components/MyScrollbar/MyScrollbar';
 import CodeToText from './CodeToText/CodeToText';

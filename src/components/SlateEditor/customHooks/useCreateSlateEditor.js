@@ -1,10 +1,10 @@
 import { useMemo } from "react";
-import withCorrectVoidBehavior from "../components/SlateEditor/withCorrectVoidBehavior";
-import { CustomEditor } from "../components/SlateEditor/CustomEditor";
+import withCorrectVoidBehavior from "../utils/withCorrectVoidBehavior";
+import { CustomEditor } from "../utils/CustomEditor";
 import { withHistory } from "slate-history";
 import { withReact } from "slate-react";
 import { createEditor } from "slate";
-import withTable from "../components/SlateEditor/withTable";
+import withTable from "../utils/withTable";
 
 export default function useCreateSlateEditor() {
 

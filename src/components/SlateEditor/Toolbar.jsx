@@ -68,7 +68,7 @@ export default function Toolbar({
             <ToggleEditableButton editor={editor} type={'button'} icon={'smartButton'} title={'插入文字按鈕 ctrl+g'} />
 
 
+            <TableContextMenu editor={editor} />
         </div>
-        <TableContextMenu editor={editor} />
     </>
 }

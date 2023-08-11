@@ -12,6 +12,9 @@ import Icon from "../../views/Icons/Icon"
 import InlineChromiumBugfix from './CustomEditor'
 import { css } from '@emotion/css'
 import Table from './Table/Table'
+import ResizableTable from './Table/Resizable/ResizableTable'
+import ResizableRow from './Table/Resizable/ResizableRow'
+import InnerResizableCell from './Table/Resizable/ResizableCell'
 
 const Link = ({ attributes, children, element }) => {
     const selected = useSelected()
@@ -275,14 +278,22 @@ export const Element = ({ element, children, attributes }) => {
                 attributes={attributes}
                 children={children} />
         case 'table':
-            return <Table
+            return <ResizableTable
                 element={element}
                 attributes={attributes}
                 children={children} />
         case 'table-row':
-            return <tr {...attributes}>{children}</tr>
+            return (
+                <ResizableRow {...attributes}>
+                    {children}
+                </ResizableRow>
+            )
         case 'table-cell':
-            return <td {...element.attr} {...attributes}>{children}</td>
+            return (
+                <InnerResizableCell {...attributes}>
+                    {children}
+                </InnerResizableCell>
+            )
         default:
             return (
                 <p style={style} {...attributes}>

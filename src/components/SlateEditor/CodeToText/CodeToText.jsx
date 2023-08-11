@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import './CodeToText.css'
 import Icon from 'views/Icons/Icon'
 import Interweave from 'interweave'

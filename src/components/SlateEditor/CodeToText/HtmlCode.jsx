@@ -1,7 +1,7 @@
 import Interweave from 'interweave';
 import React, { useEffect } from 'react';
-import { Transforms, Path, Node } from 'slate';
-import { useSelected, useFocused, useSlateStatic, ReactEditor } from 'slate-react';
+import { Transforms, Path } from 'slate';
+import { useSelected, useFocused, useSlateStatic } from 'slate-react';
 import useFormat from '../customHooks/useFormat';
 
 const HtmlCode = (props) => {

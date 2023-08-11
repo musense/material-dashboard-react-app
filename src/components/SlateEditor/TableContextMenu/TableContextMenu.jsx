@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import useContextMenu from 'components/SlateEditor/customHooks/useContextMenu.js';
 import Icon from 'views/Icons/Icon'
 import './styles.css'

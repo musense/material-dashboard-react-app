@@ -1,5 +1,5 @@
 import React from 'react';
-import { MdFormatBold, MdFormatItalic, MdStrikethroughS, MdFormatUnderlined, MdFormatQuote, MdFormatAlignLeft, MdFormatAlignCenter, MdFormatAlignRight, MdFormatAlignJustify, MdFormatListNumbered, MdFormatListBulleted, MdInsertLink, MdLinkOff, MdVideoLibrary, MdImage, MdAdd, MdKeyboardArrowRight, MdArrowForward, MdSmartButton, MdLogout } from 'react-icons/md'
+import { MdFormatBold, MdFormatItalic, MdStrikethroughS, MdFormatUnderlined, MdFormatQuote, MdFormatAlignLeft, MdFormatAlignCenter, MdFormatAlignRight, MdFormatAlignJustify, MdFormatListNumbered, MdFormatListBulleted, MdInsertLink, MdLinkOff, MdVideoLibrary, MdImage, MdAdd, MdKeyboardArrowRight, MdArrowForward, MdSmartButton, MdLogout, MdFormatColorFill, MdFormatColorText, MdCheck } from 'react-icons/md'
 import { BsTypeH1, BsTypeH2, BsTypeH3, BsCameraVideoFill, BsCode } from 'react-icons/bs'
 import { FaSuperscript, FaSubscript } from 'react-icons/fa'
 import { AiFillEdit, AiOutlineTable, AiOutlineInsertRowBelow, AiOutlineInsertRowRight, AiOutlineDelete, AiFillTag, AiOutlineUpload, AiOutlineArrowsAlt, AiOutlineInsertRowAbove, AiOutlineInsertRowLeft, AiFillHtml5, AiOutlineDeleteRow, AiOutlineDeleteColumn } from 'react-icons/ai'
@@ -56,7 +56,9 @@ const iconList = {
     tableToRight: <PiAlignRightSimple size={25} />,
     deleteRow: <AiOutlineDeleteRow size={25} />,
     deleteColumn: <AiOutlineDeleteColumn size={25} />,
-
+    backgroundColorPicker: <MdFormatColorFill size={20} />,
+    colorPicker: <MdFormatColorText size={20} />,
+    check: <MdCheck size={20} color='inherit' />
 }
 
 const Icon = (props) => {

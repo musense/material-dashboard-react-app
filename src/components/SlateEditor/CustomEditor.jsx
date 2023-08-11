@@ -14,9 +14,28 @@ const LIST_TYPES = ['numbered-list', 'bulleted-list']
 export const TEXT_ALIGN_TYPES = ['left', 'center', 'right', 'justify']
 
 export const CustomEditor = {
+    addMarkData(editor, data) {
+        Editor.addMark(editor, data.format, data.value)
+    },
+
+    activeMark(editor, format) {
+        const defaultMarkData = {
+            color: 'black',
+            bgColor: 'black',
+            fontSize: 'normal',
+            fontFamily: 'sans'
+        }
+        const marks = Editor.marks(editor);
+        const defaultValue = defaultMarkData[format];
+        return marks?.[format] ?? defaultValue;
+    },
+
     isMarkActive(editor, format) {
+        console.log("🚀 ~ file: CustomEditor.jsx:34 ~ isMarkActive ~ editor:", editor)
+        console.log("🚀 ~ file: CustomEditor.jsx:34 ~ isMarkActive ~ format:", format)
         const marks = Editor.marks(editor)
-        return marks ? marks[format] === true : false
+        console.log("🚀 ~ file: CustomEditor.jsx:34 ~ isMarkActive ~ marks:", marks)
+        return marks ? !!marks[format] === true : false
     },
 
     isBlockActive(editor, format, blockType = 'type') {
@@ -304,19 +323,19 @@ export const CustomEditor = {
     },
     getSingleParagraphText(allTextArray, selection) {
         const anchorOffset = selection.anchor.offset
-        const anchorPath   = selection.anchor.path[0]
-        const focusOffset  = selection.focus.offset
-        const focusText    = allTextArray[anchorPath].children[0].text
+        const anchorPath = selection.anchor.path[0]
+        const focusOffset = selection.focus.offset
+        const focusText = allTextArray[anchorPath].children[0].text
 
-        const        selectedText = 
+        const selectedText =
             anchorOffset <= focusOffset
                 ? focusText.slice(anchorOffset, focusOffset)
-                :    focusText.slice(focusOffset, anchorOffset)
+                : focusText.slice(focusOffset, anchorOffset)
         return selectedText
     },
     getMultiParagraphText(allTextArray, selection) {
         const anchorPath = selection.anchor.path[0]
-        const focusPath  = selection.focus.path[0]
+        const focusPath = selection.focus.path[0]
 
         let selectedText
         let startOffset,
@@ -327,14 +346,14 @@ export const CustomEditor = {
 
         if (anchorPath < focusPath) {
             startOffset = selection.anchor.offset
-            startPath   = anchorPath
-            endOffset   = selection.focus.offset
-            endPath     = focusPath
+            startPath = anchorPath
+            endOffset = selection.focus.offset
+            endPath = focusPath
         } else {
             startOffset = selection.focus.offset
-            startPath   = focusPath
-            endOffset   = selection.anchor.offset
-            endPath     = anchorPath
+            startPath = focusPath
+            endOffset = selection.anchor.offset
+            endPath = anchorPath
         }
 
         selectedText =

@@ -4,6 +4,7 @@ import {
     MarkButton,
     BlockButton,
     TableButton,
+    ColorPickerButton,
     ImageButton,
     AddLinkButton,
     RemoveLinkButton,
@@ -42,6 +43,8 @@ export default function Toolbar({
             <MarkButton editor={editor} type={'underline'} icon={'underline'} title={'底線 ctrl+u'} />
             <MarkButton editor={editor} type={'code'} icon={'code'} title={'等寬字型 ctrl+`'} />
             <MarkButton editor={editor} type={'hide'} icon={'hide'} title={'隱藏文字 ctrl+shift+x'} />
+            <ColorPickerButton editor={editor} format={'color'} title={'字色'} />
+            <ColorPickerButton editor={editor} format={'backgroundColor'} title={'底色'} />
             {/* block style */}
             <BlockButton editor={editor} type={'h1'} icon={'headingOne'} title={'標題1 ctrl+1'} />
             <BlockButton editor={editor} type={'h2'} icon={'headingTwo'} title={'標題2 ctrl+2'} />

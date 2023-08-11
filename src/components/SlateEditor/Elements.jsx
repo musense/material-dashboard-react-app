@@ -304,6 +304,7 @@ export const Element = ({ element, children, attributes }) => {
 }
 
 export const Leaf = ({ attributes, children, leaf }) => {
+    console.log("🚀 ~ file: Elements.jsx:294 ~ Leaf ~ leaf:", leaf)
     console.log("🚀 ~ file: Elements.jsx:294 ~ Leaf ~ attributes:", attributes)
     console.log("🚀 ~ file: Elements.jsx:294 ~ Leaf ~ children:", children)
     if (leaf.bold) {
@@ -317,6 +318,12 @@ export const Leaf = ({ attributes, children, leaf }) => {
     }
     if (leaf.underline) {
         children = <u>{children}</u>
+    }
+    if (leaf.backgroundColor) {
+        children = <span style={{ backgroundColor: leaf.backgroundColor }}>{children}</span>
+    }
+    if (leaf.color) {
+        children = <span style={{ color: leaf.color }}>{children}</span>
     }
     if (leaf.hide) {
         children = <span data-attr="display-none" style={{ opacity: 0.3 }}>{children}</span>

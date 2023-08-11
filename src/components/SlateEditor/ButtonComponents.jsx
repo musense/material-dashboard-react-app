@@ -3,6 +3,7 @@ import { Button } from './components'
 import { CustomEditor, TEXT_ALIGN_TYPES } from './CustomEditor'
 import TableSelector from './Table/TableSelector';
 import Icon from '../../views/Icons/Icon';
+import ColorPicker from './ColorPicker/ColorPicker';
 
 function MarkButton({ editor, icon, type, title = '' }) {
     return <Button
@@ -38,6 +39,9 @@ function TableButton({ editor }) {
     />
 }
 
+function ColorPickerButton({ editor, format, title }) {
+    return <ColorPicker format={format} title={title} editor={editor} />
+}
 function ImageButton({ editor,
     handleClickOpen,
     currentUrl,
@@ -142,6 +146,7 @@ export {
     MarkButton,
     BlockButton,
     TableButton,
+    ColorPickerButton,
     ImageButton,
     AddLinkButton,
     RemoveLinkButton,

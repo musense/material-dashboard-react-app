@@ -14,7 +14,8 @@ import { css } from '@emotion/css'
 import Table from './Table/Table'
 import ResizableTable from './Table/Resizable/ResizableTable'
 import ResizableRow from './Table/Resizable/ResizableRow'
-import InnerResizableCell from './Table/Resizable/ResizableCell'
+import ResizableCell from './Table/Resizable/ResizableCell'
+import HtmlCode from './CodeToText/HtmlCode'
 
 const Link = ({ attributes, children, element }) => {
     const selected = useSelected()
@@ -212,8 +213,12 @@ const Image = ({ attributes, children, element }) => {
         </div>
     )
 }
-export const Element = ({ element, children, attributes }) => {
-    console.log("🚀 ~ file: Elements.jsx:293 ~ Element ~ attributes:", attributes)
+export const Element = (props) => {
+    const { element, children, attributes } = props
+
+    console.log("🚀 ~ file: Elements.jsx:217 ~ Element ~ children:", children)
+    console.log("🚀 ~ file: Elements.jsx:217 ~ Element ~ element:", element)
+    console.log("🚀 ~ file: Elements.jsx:217 ~ Element ~ attributes:", attributes)
     const style = { textAlign: element.align }
     switch (element.type) {
         case 'block-quote':
@@ -290,10 +295,12 @@ export const Element = ({ element, children, attributes }) => {
             )
         case 'table-cell':
             return (
-                <InnerResizableCell {...attributes}>
+                <ResizableCell {...attributes}>
                     {children}
-                </InnerResizableCell>
+                </ResizableCell>
             )
+        case 'htmlCode':
+            return <HtmlCode {...props} />
         default:
             return (
                 <p style={style} {...attributes}>

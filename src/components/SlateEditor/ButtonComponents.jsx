@@ -4,6 +4,7 @@ import { CustomEditor, TEXT_ALIGN_TYPES } from './CustomEditor'
 import TableSelector from './Table/TableSelector';
 import Icon from '../../views/Icons/Icon';
 import ColorPicker from './ColorPicker/ColorPicker';
+import CodeToTextButton from './CodeToText/CodeToTextButton';
 
 function MarkButton({ editor, icon, type, title = '' }) {
     return <Button
@@ -33,14 +34,19 @@ function BlockButton({ editor, icon, type, title = '' }) {
     </Button>
 }
 
-function TableButton({ editor }) {
+function TableButton({ editor, title }) {
     return <TableSelector
         editor={editor}
+        title={title}
     />
 }
 
 function ColorPickerButton({ editor, format, title }) {
     return <ColorPicker format={format} title={title} editor={editor} />
+}
+
+function HTMLCodeButton({ handleCodeToText, title }) {
+    return <CodeToTextButton handleButtonClick={handleCodeToText} title={title} />
 }
 function ImageButton({ editor,
     handleClickOpen,
@@ -147,6 +153,7 @@ export {
     BlockButton,
     TableButton,
     ColorPickerButton,
+    HTMLCodeButton,
     ImageButton,
     AddLinkButton,
     RemoveLinkButton,

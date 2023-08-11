@@ -1,4 +1,4 @@
-import React, { useCallback, useRef } from 'react'
+import React, { useCallback, useRef, useState } from 'react'
 import { Slate, Editable } from 'slate-react'
 import { css } from '@emotion/css'
 import { CustomEditor } from './CustomEditor'
@@ -11,6 +11,7 @@ import ImageDialog from './ImageDialog'
 import useCreateSlateEditor from '../../hook/useCreateSlateEditor'
 import useModal from '../../hook/useModal';
 import MyScrollbar from 'components/MyScrollbar/MyScrollbar';
+import CodeToText from './CodeToText/CodeToText';
 
 function SlateEditor({
   slateValue,
@@ -30,10 +31,22 @@ function SlateEditor({
     handleClose
   } = useModal()
 
+  const [htmlAction, setHtmlAction] = useState({
+    showInput: false,
+    html: '',
+    action: '',
+    location: '',
+  })
 
   const renderElement = useCallback(props => <Element {...props} />, [])
   const renderLeaf = useCallback(props => <Leaf {...props} />, [])
 
+  const handleCodeToText = (partialState) => {
+    setHtmlAction(prev => ({
+      ...prev,
+      ...partialState,
+    }))
+  }
   return (
     <div className={css` 
     position: relative;
@@ -50,6 +63,7 @@ function SlateEditor({
       >
         <Toolbar
           handleClickOpen={handleOpen}
+          handleCodeToText={handleCodeToText}
           currentUrl={urlRef.current}
           currentAltText={altTextRef.current}
           currentHref={hrefRef.current}
@@ -213,6 +227,11 @@ function SlateEditor({
               }
             }}
           />
+
+          {
+            htmlAction.showInput &&
+            <CodeToText {...htmlAction} handleCodeToText={handleCodeToText} />
+          }
         </MyScrollbar>
       </Slate>
       <ImageDialog

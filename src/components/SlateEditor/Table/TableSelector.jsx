@@ -8,7 +8,7 @@ import { CustomEditor, TEXT_ALIGN_TYPES } from '../CustomEditor';
 
 import './TableSelector.css'
 
-const TableSelector = ({ editor }) => {
+const TableSelector = ({ editor, title }) => {
     const tableOptionsRef = useRef();
     const [selection, setSelection] = useState()
     const [showOptions, setShowOptions] = usePopup(tableOptionsRef);
@@ -55,7 +55,7 @@ const TableSelector = ({ editor }) => {
                     editor,
                     'table',
                     TEXT_ALIGN_TYPES.includes('table') ? 'align' : 'type')}
-                title={'表格 ctrl+shift+t'}
+                title={title}
                 onMouseDown={handleButtonClick}>
                 <Icon icon={'table'} />
             </Button>

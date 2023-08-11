@@ -5,6 +5,7 @@ import {
     BlockButton,
     TableButton,
     ColorPickerButton,
+    HTMLCodeButton,
     ImageButton,
     AddLinkButton,
     RemoveLinkButton,
@@ -12,9 +13,11 @@ import {
 } from './ButtonComponents'
 import { useSlate, useSlateStatic } from 'slate-react'
 import TableContextMenu from './TableContextMenu/TableContextMenu'
+import HtmlContextMenu from './CodeToText/HtmlContextMenu'
 
 export default function Toolbar({
     handleClickOpen,
+    handleCodeToText,
     currentUrl,
     currentAltText,
     currentHref
@@ -51,7 +54,7 @@ export default function Toolbar({
             <BlockButton editor={editor} type={'h3'} icon={'headingThree'} title={'標題3 ctrl+3'} />
             <BlockButton editor={editor} type={'numbered-list'} icon={'orderedList'} title={'編號列表 ctrl+Enter'} />
             <BlockButton editor={editor} type={'bulleted-list'} icon={'unorderedList'} title={'列表 shift+Enter'} />
-            <TableButton editor={editor} type={'table'} icon={'table'} title={'表格 ctrl+shift+t'} />
+            <TableButton editor={editor} type={'table'} icon={'table'} title={'插入表格'} />
             <BlockButton editor={editor} type={'block-quote'} icon={'blockquote'} title={'引用 ctrl+q'} />
             <BlockButton editor={editor} type={'left'} icon={'alignLeft'} title={'文字置左 ctrl+shift+l'} />
             <BlockButton editor={editor} type={'center'} icon={'alignCenter'} title={'文字置中 ctrl+shift+c'} />
@@ -70,8 +73,11 @@ export default function Toolbar({
             <RemoveLinkButton editor={editor} type={'unlink'} icon={'linkOff'} title={'移除連結 ctrl+r'} />
             <ToggleEditableButton editor={editor} type={'button'} icon={'smartButton'} title={'插入文字按鈕 ctrl+g'} />
 
+            <HTMLCodeButton handleCodeToText={handleCodeToText} title={'插入HTML Code'} />
+
 
             <TableContextMenu editor={editor} />
+            <HtmlContextMenu editor={editor} handleCodeToText={handleCodeToText} />
         </div>
     </>
 }

@@ -1,7 +1,7 @@
 import React from 'react';
 import { MdFormatBold, MdFormatItalic, MdStrikethroughS, MdFormatUnderlined, MdFormatQuote, MdFormatAlignLeft, MdFormatAlignCenter, MdFormatAlignRight, MdFormatAlignJustify, MdFormatListNumbered, MdFormatListBulleted, MdInsertLink, MdLinkOff, MdVideoLibrary, MdImage, MdAdd, MdKeyboardArrowRight, MdArrowForward, MdSmartButton, MdLogout, MdFormatColorFill, MdFormatColorText, MdCheck } from 'react-icons/md'
 import { BsTypeH1, BsTypeH2, BsTypeH3, BsCameraVideoFill, BsCode } from 'react-icons/bs'
-import { FaSuperscript, FaSubscript } from 'react-icons/fa'
+import { FaSuperscript, FaSubscript, FaArrowRight } from 'react-icons/fa'
 import { AiFillEdit, AiOutlineTable, AiOutlineInsertRowBelow, AiOutlineInsertRowRight, AiOutlineDelete, AiFillTag, AiOutlineUpload, AiOutlineArrowsAlt, AiOutlineInsertRowAbove, AiOutlineInsertRowLeft, AiFillHtml5, AiOutlineDeleteRow, AiOutlineDeleteColumn } from 'react-icons/ai'
 import { SiLatex } from 'react-icons/si'
 import { BiHide } from 'react-icons/bi'
@@ -58,7 +58,7 @@ const iconList = {
     deleteColumn: <AiOutlineDeleteColumn size={25} />,
     backgroundColorPicker: <MdFormatColorFill size={20} color="inherit" />,
     colorPicker: <MdFormatColorText size={20} color="inherit" />,
-    check: <MdCheck size={20} color='inherit' />
+    check: <MdCheck size={20} color='inherit' />,
 }
 
 const Icon = (props) => {

@@ -1,18 +1,29 @@
-
+import React from "react";
 import { cx, css } from '@emotion/css'
 
-export default Button = React.forwardRef((
-    {
+const InnerButton = (
+    props,
+    ref
+) => {
+    const {
         active,
         onMouseDown,
         reversed = false,
         title = '',
         className,
-        ...props },
-    ref
-) => (
-    <span
-        {...props}
+        ...rest
+    } = props
+
+    const color = reversed
+        ? active
+            ? 'white'
+            : '#aaa'
+        : active
+            ? 'black'
+            : '#ccc'
+
+    return <span
+        {...rest}
         ref={ref}
         title={title}
         onMouseDown={onMouseDown}
@@ -20,14 +31,12 @@ export default Button = React.forwardRef((
             className,
             css`
           cursor: pointer;
-          color: ${reversed
-                    ? active
-                        ? 'white'
-                        : '#aaa'
-                    : active
-                        ? 'black'
-                        : '#ccc'};
+          color: ${color};
           `
         )}
     />
-))
+}
+
+const Button = React.forwardRef(InnerButton)
+
+export default Button;

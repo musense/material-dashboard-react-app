@@ -1,4 +1,4 @@
-export default menu = [
+const menu = [
     {
         icon: 'tableToLeft',
         text: '表格置左',
@@ -77,3 +77,5 @@ export default menu = [
         }
     }
 ]
+
+export default menu

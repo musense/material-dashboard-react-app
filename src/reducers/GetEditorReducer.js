@@ -12,16 +12,12 @@ const initialState = {
     pageView: 'asc',
     'categories.name': 'asc',
   },
-  showList: null,
   titleList: null,
   _id: '',
-  editorID: null,
   editor: null,
   currentPage: null,
-  totalPage: null,
   totalCount: null,
   errorMessage: null,
-
 }
 const getEditorReducer = (state = initialState, action) => {
   switch (action.type) {
@@ -31,18 +27,6 @@ const getEditorReducer = (state = initialState, action) => {
         editor: null
       }
     }
-    case GetEditorAction.INITIAL_EDITOR:
-      return {
-        ...state,
-        _id: null,
-        id: null,
-        title: null,
-        content: null,
-        tags: null,
-        errorMessage: null,
-        titleList: null
-      }
-
     case GetEditorAction.ADD_EDITOR_SUCCESS:
       return {
         ...state,
@@ -74,25 +58,20 @@ const getEditorReducer = (state = initialState, action) => {
       return {
         ...state,
         titleList: action.payload.titleList,
-        showList: action.payload.titleList.slice(0, 10),
         currentPage: action.payload.currentPage,
-        totalPage: Math.ceil(action.payload.totalCount / 10),
         totalCount: action.payload.totalCount,
         errorMessage: errorMessage.getFinish
       }
     case GetEditorAction.REQUEST_EDITOR_PAGE:
-      const start = (action.payload - 1) * 10;
-      const end = start + 10
       return {
         ...state,
-        showList: state.titleList.slice(start, end),
         currentPage: action.payload,
       }
     case GetEditorAction.SHOW_EDITOR_LIST_SORTING:
       const { key } = action.payload;
       return {
         ...state,
-        showList: state.titleList.sort((editor1, editor2) => {
+        titleList: state.titleList.sort((editor1, editor2) => {
           let typeOf
           let e1, e2,
             k1, k2;
@@ -108,7 +87,8 @@ const getEditorReducer = (state = initialState, action) => {
             e2 = editor2[key]
             typeOf = typeof editor1[key]
           }
-          typeOf = typeof new Date(e1).getMonth === 'function' ? 'date' : typeOf
+          typeOf = typeof new Date(e1).getMonth() === 'function' ? 'date' : typeOf
+          console.log("🚀 ~ file: GetEditorReducer.js:112 ~ titleList:state.titleList.sort ~ typeOf:", typeOf)
           const sorting = state.sortingMap[key]
           switch (typeOf) {
             case 'string': {
@@ -140,7 +120,7 @@ const getEditorReducer = (state = initialState, action) => {
               }
             }
           }
-        }).slice(0, 10),
+        }),
         sortingMap: {
           ...state.sortingMap,
           [key]: state.sortingMap[key] === 'asc' ? 'desc' : 'asc',
@@ -197,3 +177,23 @@ const getEditorReducer = (state = initialState, action) => {
 }
 
 export default getEditorReducer
+
+const getTotalPage = state => state.getEditorReducer.totalCount
+  && Math.ceil(state.getEditorReducer.totalCount / 10)
+
+const getCurrentPage = state => state.getEditorReducer.currentPage
+const getTotalCount = state => state.getEditorReducer.totalCount
+const getServerMessage = state => state.getEditorReducer.errorMessage
+const getShowList = state => state.getEditorReducer.titleList
+  && state.getEditorReducer.titleList.slice(
+    (state.getEditorReducer.currentPage - 1) * 10,
+    (state.getEditorReducer.currentPage - 1) * 10 + 10
+  )
+
+export {
+  getTotalPage,
+  getCurrentPage,
+  getTotalCount,
+  getShowList,
+  getServerMessage
+}

@@ -13,6 +13,14 @@ import useEditorListResult from '../../hook/useEditorListResult';
 import useModal from '../../hook/useModal';
 import useDeleteSelectedRow from 'hook/useDeleteSelectedRow';
 
+import {
+    getTotalPage,
+    getCurrentPage,
+    getTotalCount,
+    getShowList,
+    getServerMessage
+} from 'reducers/GetEditorReducer'
+
 const headerMap = {
     headerRow: [
         { name: "序號", patchKey: "serialNumber", type: "number" },
@@ -30,11 +38,11 @@ const headerMap = {
 
 export default function EditorListBody() {
 
-    const showList = useSelector((state) => state.getEditorReducer.showList);
-    const currentPage = useSelector((state) => state.getEditorReducer.currentPage);
-    const totalPage = useSelector((state) => state.getEditorReducer.totalPage);
-    const totalCount = useSelector((state) => state.getEditorReducer.totalCount);
-    const serverMessage = useSelector((state) => state.getEditorReducer.errorMessage);
+    const showList = useSelector(getShowList);
+    const currentPage = useSelector(getCurrentPage);
+    const totalPage = useSelector(getTotalPage);
+    const totalCount = useSelector(getTotalCount);
+    const serverMessage = useSelector(getServerMessage);
 
     console.log("🚀 ~ file: EditorListBody.jsx:34 ~ EditorListBody ~ showList:", showList)
 

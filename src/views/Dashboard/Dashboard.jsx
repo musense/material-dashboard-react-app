@@ -31,10 +31,6 @@ import Danger from "components/Typography/Danger.jsx";
 
 import { bugs, server, website } from "variables/general.jsx";
 
-import {
-  completedTasksChart, dailySalesChart,
-  emailsSubscriptionChart
-} from "variables/charts.jsx";
 
 import dashboardStyle from "assets/jss/material-dashboard-react/views/dashboardStyle.jsx";
 
@@ -262,16 +258,6 @@ class Dashboard extends React.Component {
                 </p>
               </CardHeader>
               <CardBody>
-                {/* <Table
-                  tableHeaderColor="warning"
-                  tableHead={["ID", "Name", "Salary", "Country"]}
-                  tableData={[
-                    ["1", "Dakota Rice", "$36,738", "Niger"],
-                    ["2", "Minerva Hooper", "$23,789", "Curaçao"],
-                    ["3", "Sage Rodriguez", "$56,142", "Netherlands"],
-                    ["4", "Philip Chaney", "$38,735", "Korea, South"],
-                  ]}
-                /> */}
               </CardBody>
             </Card>
           </GridItem>
@@ -327,16 +313,6 @@ class Dashboard extends React.Component {
                 </p>
               </CardHeader>
               <CardBody>
-                {/* <Table
-                  tableHeaderColor="warning"
-                  tableHead={["ID", "Name", "Salary", "Country"]}
-                  tableData={[
-                    ["1", "Dakota Rice", "$36,738", "Niger"],
-                    ["2", "Minerva Hooper", "$23,789", "Curaçao"],
-                    ["3", "Sage Rodriguez", "$56,142", "Netherlands"],
-                    ["4", "Philip Chaney", "$38,735", "Korea, South"],
-                  ]}
-                /> */}
               </CardBody>
             </Card>
           </GridItem>

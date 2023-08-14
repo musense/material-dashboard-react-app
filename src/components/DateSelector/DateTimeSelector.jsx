@@ -7,8 +7,8 @@ import {
     TimePicker
 } from '@mui/x-date-pickers';
 import Stack from '@mui/system/Stack';
-import useSetDateTimeDefaultValue from 'hook/useSetDateTimeDefaultValue';
-import useSetDateTimeDispatch from 'hook/useSetDateTimeDispatch';
+import useSetDateTimeDefaultValue from './customHook/useSetDateTimeDefaultValue';
+import useSetDateTimeDispatch from './customHook/useSetDateTimeDispatch';
 
 const DateTimeSelector = ({
     disabled = false,
@@ -17,7 +17,6 @@ const DateTimeSelector = ({
     title = null,
     setState
 }) => {
-    console.log("🚀 ~ file: DateTimeSelector.jsx:16 ~ DateTimeSelector ~ defaultValue:", defaultValue)
 
     const {
         date,

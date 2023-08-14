@@ -7,7 +7,6 @@ export default function useSetEditorDefaultValue(editor = null) {
     const dispatch = useDispatch();
 
     useEffect(() => {
-        console.log("🚀 ~ file: index.jsx:61 ~ useEffect ~ editor:", editor)
         if (!editor) {
             dispatch({
                 type: GetSlateAction.RESET_FORM_VALUE,

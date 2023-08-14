@@ -51,7 +51,6 @@ export default function RowBody({
                                         copyText={tag.webHeader.customUrl}
                                         id={tag._id}
                                         name={tag.name}
-                                        deleteMessage={'delete tag'}
                                         editType={GetTagsAction.EDITING_TAG}
                                         editData={tag}
                                         handleOpenDialog={handleOpenDialog}

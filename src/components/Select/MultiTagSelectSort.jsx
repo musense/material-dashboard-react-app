@@ -8,7 +8,6 @@ export default function MultiTagSelectSort({
   width = null,
   setState = null
 }) {
-  console.log("🚀 ~ file: MultiTagSelectSort.jsx:12 ~ defaultSelected:", defaultSelected)
 
   const tagOptions = useSelector((state) => state.getTagsReducer.tagList);
 

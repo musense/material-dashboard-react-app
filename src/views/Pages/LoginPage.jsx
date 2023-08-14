@@ -26,8 +26,8 @@ import { useRef } from 'react';
 import MessageDialog from '../../components/Modal/MessageDialog';
 
 import * as GetUserAction from 'actions/GetUserAction';
-import useLoginResult from '../../hook/useLoginResult';
-import useRememberMe from '../../hook/useRememberMe';
+import useModalResult from 'hook/useModalResult';
+import useRememberMe from 'hook/useRememberMe';
 
 function LoginPage(props) {
   const { classes } = props;
@@ -43,8 +43,13 @@ function LoginPage(props) {
   const handleClickOpen = () => setOpen(true);
 
   const { rememberMeChecked: defaultRememberMeChecked } = useRememberMe(loginFormRef)
-  const { title, content, success } = useLoginResult(returnMessage)
-  console.log("🚀 ~ file: LoginPage.jsx:72 ~ LoginPage ~ title:", title)
+  const {
+    title,
+    content,
+    success
+  } = useModalResult({
+    message: returnMessage
+  })
 
   useEffect(() => {
     if (title) handleClickOpen()
@@ -55,9 +60,7 @@ function LoginPage(props) {
 
     const fields = ['username', 'password'];
     const formElements = e.target.elements;
-    console.log("🚀 ~ file: LoginPage.jsx:57 ~ login ~ checked:", rememberMeChecked)
     if (rememberMeChecked) {
-      console.log("🚀 ~ file: LoginPage.jsx:58 ~ login ~ formElements.username.value:", formElements.username.value)
       localStorage.setItem('username', formElements.username.value);
     }
     const formValues = fields

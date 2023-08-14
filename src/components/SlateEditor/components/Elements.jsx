@@ -104,7 +104,6 @@ const Image = ({ attributes, children, element }) => {
 
     const selected = useSelected()
     const focused = useFocused()
-    console.log("🚀 ~ file: Elements.jsx:97 ~ Image ~ element:", element)
     return (
         <div {...attributes}>
             {children}
@@ -215,9 +214,6 @@ const Image = ({ attributes, children, element }) => {
 export const Element = (props) => {
     const { element, children, attributes } = props
 
-    console.log("🚀 ~ file: Elements.jsx:217 ~ Element ~ children:", children)
-    console.log("🚀 ~ file: Elements.jsx:217 ~ Element ~ element:", element)
-    console.log("🚀 ~ file: Elements.jsx:217 ~ Element ~ attributes:", attributes)
     const style = { textAlign: element.align }
     switch (element.type) {
         case 'block-quote':
@@ -310,9 +306,6 @@ export const Element = (props) => {
 }
 
 export const Leaf = ({ attributes, children, leaf }) => {
-    console.log("🚀 ~ file: Elements.jsx:294 ~ Leaf ~ leaf:", leaf)
-    console.log("🚀 ~ file: Elements.jsx:294 ~ Leaf ~ attributes:", attributes)
-    console.log("🚀 ~ file: Elements.jsx:294 ~ Leaf ~ children:", children)
     if (leaf.bold) {
         children = <strong>{children}</strong>
     }

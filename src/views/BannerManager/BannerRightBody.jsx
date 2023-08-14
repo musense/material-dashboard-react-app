@@ -8,8 +8,9 @@ import RowHeader from '../EditorList/RowHeader';
 import RowBody from './RowBody';
 import BannerButtonList from './BannerButtonList';
 import useModal from "../../hook/useModal";
-import useEditorListResult from "../../hook/useEditorListResult";
+import useModalResult from "../../hook/useModalResult";
 import useDeleteSelectedRow from "hook/useDeleteSelectedRow";
+import getErrorMessage from "utils/getErrorMessage";
 
 const headerMap = {
     headerRow: [
@@ -50,22 +51,16 @@ export default function BannerRightBody() {
     });
 
     const errorMessage = getErrorMessage(dialogMessage, serverMessage)
-    function getErrorMessage(errorMessage, returnMessage) {
-        console.log("🚀 ~ file: index.jsx:40 ~ getErrorMessage ~ returnMessage:", returnMessage)
-        console.log("🚀 ~ file: index.jsx:40 ~ getErrorMessage ~ errorMessage:", errorMessage)
-        if (errorMessage) {
-            return errorMessage;
-        }
-        if (returnMessage) {
-            return returnMessage;
-        }
-        return null;
-    }
+
     const {
         title,
         content,
         success
-    } = useEditorListResult(errorMessage, contentData, data)
+    } = useModalResult({
+        message: errorMessage,
+        name: 'Banner',
+        data: contentData,
+    })
 
     const {
         open: openDialog,

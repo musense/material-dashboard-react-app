@@ -74,11 +74,9 @@ function* GetCategories() {
 // POST
 function* AddClass(payload) {
     const { tempData } = payload
-    console.log("🚀 ~ file: GetClassList.js:77 ~ function*AddClass ~ tempData:", tempData)
     try {
 
         const requestData = toBackendData(tempData)
-        console.log("🚀 ~ file: GetClassList.js:81 ~ function*AddClass ~ requestData:", requestData)
 
         // return
         const response = yield instance.post(`/categories`, requestData);

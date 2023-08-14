@@ -7,9 +7,7 @@ export default function useRequestEditorByID(id, editor) {
     const dispatch = useDispatch();
 
     useEffect(() => {
-        console.log("🚀 ~ file: useRequestEditorByID.js:17 ~ useEffect ~ editor:", editor)
         if (editor) return
-        console.log("🚀 ~ file: useRequestEditorByID.js:11 ~ useEffect ~ id:", id)
         requestEditorByID(id)
     }, []);
 

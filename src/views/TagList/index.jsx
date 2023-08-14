@@ -18,9 +18,6 @@ function TagList() {
         if (tagDispatchMessage.includes(returnMessage)) {
             dispatch({ type: GetTagsAction.REQUEST_TAG })
         }
-        return () => {
-            dispatch({ type: GetTagsAction.CANCEL_EDITING_TAG })
-        }
     }, [returnMessage]);
 
 

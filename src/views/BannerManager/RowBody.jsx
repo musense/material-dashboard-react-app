@@ -49,7 +49,7 @@ export default function RowBody({
                                 copyText={Banner.webHeader.customUrl}
                                 id={Banner._id}
                                 name={Banner.name}
-                                deleteMessage={'delete banner'}
+                                // deleteMessage={'delete one'}
                                 editType={GetBannerAction.EDITING_BANNER}
                                 editData={Banner}
                                 handleOpenDialog={handleOpenDialog}

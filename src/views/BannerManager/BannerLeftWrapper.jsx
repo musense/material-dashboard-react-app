@@ -10,7 +10,7 @@ import GridContainer from 'components/Grid/GridContainer.jsx';
 import GridItem from 'components/Grid/GridItem.jsx';
 import styles from './BannerList.module.css'
 import usePressEnterEventHandler from 'hook/usePressEnterEventHandler';
-import useBannerResult from 'hook/useBannerResult';
+import useModalResult from 'hook/useModalResult';
 
 import MessageDialog from 'components/Modal/MessageDialog';
 import useModal from 'hook/useModal';
@@ -46,7 +46,6 @@ export default function BannerLeftWrapper() {
 
     const serverMessage = useSelector((state) => state.getBannerReducer.errorMessage);
 
-    console.log("🚀 ~ file: BannerLeftWrapper.jsx:54 ~ useEffect ~ serverMessage:", serverMessage)
 
 
     usePressEnterEventHandler(formRef)
@@ -54,8 +53,10 @@ export default function BannerLeftWrapper() {
         title,
         content,
         success
-    } = useBannerResult(serverMessage)
-    console.log("🚀 ~ file: BannerLeftWrapper.jsx:58 ~ BannerLeftWrapper ~ title:", title)
+    } = useModalResult({
+        message: serverMessage,
+        name: 'Banner'
+    })
 
     const {
         open,
@@ -66,7 +67,6 @@ export default function BannerLeftWrapper() {
         e.preventDefault()
         const form = getForm();
         const formData = new FormData(form);
-        console.log(Object.fromEntries(formData));
 
         if (!name) {
             dispatch({
@@ -91,7 +91,6 @@ export default function BannerLeftWrapper() {
 
         }
 
-        console.log(`🚀 ~ file: BannerLeftWrapper.jsx:101 ~ onAddNewEditor ~ typeof ${parseInt(sorting)}:`, typeof parseInt(sorting))
         if (popular) {
             if (typeof parseInt(sorting) !== 'number') {
                 dispatch({
@@ -117,7 +116,6 @@ export default function BannerLeftWrapper() {
             }
         }
 
-        console.log("🚀 ~ file: BannerLeftWrapper.jsx:48 ~ onAddNewEditor ~ tempData:", tempData)
         return
         if (isEditing === true) {
             dispatch({

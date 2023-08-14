@@ -3,11 +3,10 @@ import { useDispatch } from "react-redux";
 import * as GetSlateAction from 'actions/GetSlateAction'
 
 export default function FormButtonList({
-    createType 
+    createType
 }) {
     const dispatch = useDispatch();
     const onErrorMessageChange = useCallback((e, createType, submitType) => {
-        console.log("🚀 ~ file: DetailFormButtonList.jsx:8 ~ onErrorMessageChange ~ createType:", createType)
         e.preventDefault()
         dispatch({
             type: GetSlateAction.CHECK_BEFORE_SUBMIT,

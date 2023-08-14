@@ -1,8 +1,8 @@
-import React, { useRef, useCallback, useEffect, useState } from 'react';
+import React, { useRef, useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import * as GetTagsAction from '../../actions/GetTagsAction';
-// import md5 from 'crypto-js/md5'
+import * as GetDialogAction from '../../actions/GetDialogAction';
 import Card from 'components/Card/Card.jsx';
 import CardBody from 'components/Card/CardBody.jsx';
 import CardHeader from 'components/Card/CardHeader.jsx';
@@ -10,12 +10,14 @@ import GridContainer from 'components/Grid/GridContainer.jsx';
 import GridItem from 'components/Grid/GridItem.jsx';
 import styles from './TagList.module.css'
 import usePressEnterEventHandler from '../../hook/usePressEnterEventHandler';
-import useEditTagResult from '../../hook/useEditTagResult';
+import useModalResult from '../../hook/useModalResult';
 
 import MessageDialog from '../../components/Modal/MessageDialog';
 import useModal from '../../hook/useModal';
 import CustomRadio from '../../components/CustomRadio/CustomRadio';
 import FormButtonList from 'components/FormButtonList/FormButtonList';
+import getErrorMessage from 'utils/getErrorMessage';
+import useClearForm from 'hook/useClearForm';
 
 export default function TagLeftWrapper() {
 
@@ -32,20 +34,24 @@ export default function TagLeftWrapper() {
     const customUrl = useSelector((state) => state.getTagsReducer.selectedTag.customUrl);
     const popular = useSelector((state) => state.getTagsReducer.selectedTag.popular);
     const sorting = useSelector((state) => state.getTagsReducer.selectedTag.sorting);
-    const isEditing = useSelector((state) => state.getTagsReducer.selectedTag.isEditing);
+    const isEditing = useSelector((state) => state.getTagsReducer.isEditing);
 
     const serverMessage = useSelector((state) => state.getTagsReducer.errorMessage);
+    const clientErrorMessage = useSelector((state) => state.getDialogReducer.clientErrorMessage);
+    const message = getErrorMessage(clientErrorMessage, serverMessage)
 
-    console.log("🚀 ~ file: TagLeftWrapper.jsx:54 ~ useEffect ~ serverMessage:", serverMessage)
 
+    useClearForm(onReset)
 
     usePressEnterEventHandler(formRef)
     const {
         title,
         content,
         success
-    } = useEditTagResult(serverMessage)
-    console.log("🚀 ~ file: TagLeftWrapper.jsx:58 ~ TagLeftWrapper ~ title:", title)
+    } = useModalResult({
+        message,
+        name: '標籤'
+    })
 
     const {
         open,
@@ -54,17 +60,15 @@ export default function TagLeftWrapper() {
 
     function onAddNewEditor(e) {
         e.preventDefault()
-        const form = getForm();
-        const formData = new FormData(form);
-        console.log(Object.fromEntries(formData));
 
         if (!tagName) {
             dispatch({
-                type: GetTagsAction.SET_ERROR_MESSAGE,
+                type: GetDialogAction.SET_CLIENT_MESSAGE,
                 payload: {
-                    message: 'please add tag name',
+                    clientErrorMessage: 'please add title',
                 }
             })
+            console.log('請輸入 [標籤名稱] 選項');
             return
         }
 
@@ -81,11 +85,10 @@ export default function TagLeftWrapper() {
 
         }
 
-        console.log(`🚀 ~ file: TagLeftWrapper.jsx:101 ~ onAddNewEditor ~ typeof ${parseInt(sorting)}:`, typeof parseInt(sorting))
         if (popular) {
             if (typeof parseInt(sorting) !== 'number') {
                 dispatch({
-                    type: GetTagsAction.SET_ERROR_MESSAGE,
+                    type: GetDialogAction.SET_CLIENT_MESSAGE,
                     payload: {
                         message: 'sorting should be typeof number',
                     }
@@ -94,7 +97,7 @@ export default function TagLeftWrapper() {
             }
             if (parseInt(sorting) < 1) {
                 dispatch({
-                    type: GetTagsAction.SET_ERROR_MESSAGE,
+                    type: GetDialogAction.SET_CLIENT_MESSAGE,
                     payload: {
                         message: 'sorting should be equal or greater than 1',
                     }
@@ -127,21 +130,13 @@ export default function TagLeftWrapper() {
         });
     }
 
-    function getForm() {
-        return formRef.current;
-    }
-
     const onReset = useCallback(() => {
         dispatch({
             type: GetTagsAction.CANCEL_EDITING_TAG
         })
     }, [dispatch])
 
-    const onCancel = useCallback(() => {
-        onReset()
-    }, [onReset])
-
-    const onPropertyChange = useCallback((value, property) => {
+    const onPropertyChange = (value, property) => {
         dispatch({
             type: GetTagsAction.SET_TAG_PROPERTY,
             payload: {
@@ -151,16 +146,17 @@ export default function TagLeftWrapper() {
                 }
             }
         })
-    }, [dispatch])
+    }
 
-    const onPopularTagChange = useCallback((value) => {
+    const onPopularTagChange = (value) => {
         onPropertyChange(value, 'popular')
-    }, [onPropertyChange])
+    }
 
     const handleModalClose = useCallback(() => {
         handleClose()
         onReset()
-    }, [onReset, handleClose])
+    }, [])
+
     return <div className={styles['tag-left-wrapper']}>
         <GridContainer>
             <GridItem xs={12} sm={12} md={12}>
@@ -219,7 +215,6 @@ export default function TagLeftWrapper() {
                             </div>}
                             <FormButtonList
                                 isEditing={isEditing}
-                                onCancel={onCancel}
                                 onReset={onReset}
                             />
                         </form>

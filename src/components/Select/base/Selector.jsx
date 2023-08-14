@@ -1,8 +1,8 @@
-import useSetSelectorValue from 'hook/useSetSelectorValue';
-import useSetSelectorOption from 'hook/useSetSelectorOption';
-import useSelectorStyle from 'hook/useSelectorStyle';
-import useSelectorProps from 'hook/useSelectorProps';
-import useCreateSortableSelector from 'hook/useCreateSortableSelector';
+import useSetSelectorValue from '../customHook/useSetSelectorValue';
+import useSetSelectorOption from '../customHook/useSetSelectorOption';
+import useSelectorStyle from '../customHook/useSelectorStyle';
+import useSelectorProps from '../customHook/useSelectorProps';
+import useCreateSortableSelector from '../customHook/useCreateSortableSelector';
 
 const Selector = ({
   isMulti = false,

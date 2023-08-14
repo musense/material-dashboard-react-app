@@ -8,7 +8,6 @@ export default function EditBodyCell({
     copyText,
     id,
     name,
-    deleteMessage,
     editType,
     editData,
     handleOpenDialog,
@@ -17,8 +16,6 @@ export default function EditBodyCell({
     className,
     callback = null
 }) {
-    console.log("🚀 ~ file: EditBodyCell.jsx:18 ~ copyText:", copyText)
-
     const {
         onCopy,
         onDelete,
@@ -28,7 +25,6 @@ export default function EditBodyCell({
         onDelete: {
             id,
             name,
-            message: deleteMessage,
         },
         onEdit: {
             editType,

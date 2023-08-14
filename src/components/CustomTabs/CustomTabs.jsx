@@ -19,11 +19,10 @@ function CustomTabs({ ...props }) {
   const [value, setvalue] = useState(0);
   const handleChange = (value) => setvalue(value);
 
-  const { classes, headerColor, plainTabs, tabs, title, rtlActive } = props;
+  const { classes, headerColor, plainTabs, tabs, title } = props;
 
   const cardTitle = classNames({
-    [classes.cardTitle]: true,
-    [classes.cardTitleRTL]: rtlActive,
+    [classes.cardTitle]: true
   });
   return (
     <Card plain={plainTabs}>

@@ -17,10 +17,10 @@ import Button from 'components/CustomButtons/Button.jsx';
 
 import headerLinksStyle from 'assets/jss/material-dashboard-react/components/headerLinksStyle.jsx';
 import { useDispatch, useSelector } from 'react-redux';
-import * as GetUserAction from '../../actions/GetUserAction';
+import * as GetUserAction from 'actions/GetUserAction';
 import MessageDialog from '../Modal/MessageDialog';
-import useLogoutResult from '../../hook/useLogoutResult';
-import useModal from '../../hook/useModal';
+import useModalResult from 'hook/useModalResult';
+import useModal from 'hook/useModal';
 import Icon from 'views/Icons/Icon';
 
 function HeaderLinks(props) {
@@ -46,7 +46,9 @@ function HeaderLinks(props) {
     title,
     content,
     success
-  } = useLogoutResult(returnMessage)
+  } = useModalResult({
+    message: returnMessage
+  })
 
   const {
     open,

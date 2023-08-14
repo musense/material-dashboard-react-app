@@ -27,13 +27,6 @@ const dashboardRoutes = [
   //   component: UserProfile,
   //   layout: "/admin"
   // },
-  // {
-  //   path: "/table",
-  //   name: "標籤管理",
-  //   icon: "content_paste",
-  //   component: TableList,
-  //   layout: "/admin"
-  // },
   {
     path: "/banner",
     name: "Banner管理",
@@ -103,15 +96,15 @@ const dashboardRoutes = [
   //   hide: true
   // },
   // {
-  //   path: "/login-page",
-  //   name: "Login Page",
+  //   path: "/login",
+  //   name: "Login",
   //   icon: Login,
   //   component: LoginPage,
   //   layout: "/auth"
   // },
   // {
-  //   path: "/register-page",
-  //   name: "Register Page",
+  //   path: "/register",
+  //   name: "Register",
   //   icon: Register,
   //   component: RegisterPage,
   //   layout: "/auth"

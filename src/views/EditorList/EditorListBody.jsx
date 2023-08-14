@@ -9,9 +9,10 @@ import EditorListButtonList from './EditorListButtonList';
 import RowHeader from './RowHeader';
 import RowBody from './RowBody';
 import MessageDialog from '../../components/Modal/MessageDialog';
-import useEditorListResult from '../../hook/useEditorListResult';
+import useModalResult from '../../hook/useModalResult';
 import useModal from '../../hook/useModal';
 import useDeleteSelectedRow from 'hook/useDeleteSelectedRow';
+import getErrorMessage from 'utils/getErrorMessage';
 
 import {
     getTotalPage,
@@ -53,18 +54,6 @@ export default function EditorListBody() {
     const dialogMessage = useSelector((state) => state.getDialogReducer.message);
 
     const errorMessage = getErrorMessage(dialogMessage, serverMessage)
-    function getErrorMessage(errorMessage, returnMessage) {
-        console.log("🚀 ~ file: index.jsx:40 ~ getErrorMessage ~ returnMessage:", returnMessage)
-        console.log("🚀 ~ file: index.jsx:40 ~ getErrorMessage ~ errorMessage:", errorMessage)
-        if (errorMessage) {
-            return errorMessage;
-        }
-        if (returnMessage) {
-            return returnMessage;
-        }
-        return null;
-
-    }
 
     useDeleteSelectedRow(messageDialogReturnValue, {
         deleteType: GetEditorAction.BUNCH_DELETE_EDITOR
@@ -74,7 +63,11 @@ export default function EditorListBody() {
         title,
         content,
         success
-    } = useEditorListResult(errorMessage, contentData, data)
+    } = useModalResult({
+        message: errorMessage,
+        name: '文章',
+        data: contentData,
+    })
 
     const {
         open,

@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 // @material-ui/core components
 import Table from '@material-ui/core/Table';
-import { FixedPlugin } from 'components/FixedPlugin/FixedPlugin.jsx';
 import { useDispatch } from 'react-redux';
 import { ADD_TAG, DELETE_TAG, UPDATE_TAG } from '../../actions/GetTagsAction';
 import CustomTableBody from '../CustomTableBody/CustomTableBody';
@@ -114,9 +113,8 @@ function CustomTable({ ...props }) {
   }
 
   function handleChange(e) {
-    console.log(e.target.value);
 
-    
+
     // const changedTag = Object.assign({}, selectedTag, {
     //   name: e.target.value,
     // });
@@ -125,20 +123,7 @@ function CustomTable({ ...props }) {
 
   return (
     <div>
-     {selectedTag? <FixedPlugin
-        handleFixedClick={handleFixedClick}
-        fixedClasses={fixedClasses}
-        tableHead={tableHead}
-        selectedTag={selectedTag}
-        isCreate={isCreate}
-        handleChange={handleChange}
-        handleAddRow={handleAddRow}
-        handleUpdateRow={handleUpdateRow}
-        handleDeleteRow={handleDeleteRow}
-        handleCancel={handleCancel}
-        handleCreateTag={handleCreateTag}
-      />:null}
-      <Table>
+      {/* <Table>
         {showList ? (
           <>
             <CustomTableHead tableHead={tableHead} />
@@ -149,7 +134,7 @@ function CustomTable({ ...props }) {
             />
           </>
         ) : null}
-      </Table>
+      </Table> */}
     </div>
   );
 }

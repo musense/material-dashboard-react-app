@@ -6,7 +6,6 @@ import CustomInput from '../CustomInput/CustomInput';
 import styles from './../../assets/css/customTableBody.module.css';
 
 function CustomTableBody({ ...props }) {
-  console.log('🚀 ~ file: CustomTableBody.jsx:7 ~ styles:', styles);
   // const id = useId();
   const { showList, handleRowClick, selectedID } = props;
   return (

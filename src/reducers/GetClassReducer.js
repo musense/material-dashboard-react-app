@@ -23,8 +23,8 @@ const initialState = {
         manualUrl: '',
         customUrl: '',
         parentClass: '',
-        isEditing: false,
     },
+    isEditing: false,
     errorMessage: null,
     currentPage: null,
     totalCount: null,
@@ -45,8 +45,8 @@ const getClassReducer = (state = initialState, action) => {
                 ...state,
                 editorClass: {
                     ...initialState.editorClass,
-                    isEditing: false
-                }
+                },
+                isEditing: false
             }
         case GetClassAction.SET_CLASS_PROPERTY: {
             const { property, value } = action.payload.allProps
@@ -189,8 +189,8 @@ const getClassReducer = (state = initialState, action) => {
                     manualUrl: editorClass.manualUrl,
                     customUrl: editorClass.customUrl,
                     parentClass: editorClass.parentClass,
-                    isEditing: true
-                }
+                },
+                isEditing: true
             }
         case GetClassAction.EDIT_CLASS_SUCCESS:
             return {

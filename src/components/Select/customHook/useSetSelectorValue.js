@@ -18,7 +18,6 @@ export default function useSetSelectorValue(defaultSelected, isMulti) {
     }, [isMulti])
 
     const transformedSelected = useMemo(() => {
-        console.log("🚀 ~ file: useSetSelectorValue.js:21 ~ transformedSelected ~ defaultSelected:", defaultSelected)
         if (!defaultSelected || defaultSelected.length === 0) return null;
         if (isMulti) {
             return defaultSelected.map((selected) => {
@@ -37,7 +36,6 @@ export default function useSetSelectorValue(defaultSelected, isMulti) {
     }, [defaultSelected, isMulti])
 
     useEffect(() => {
-        console.log("🚀 ~ file: Selector.jsx:33 ~ useEffect ~ defaultSelected:", defaultSelected)
         setSelected(transformedSelected)
     }, [transformedSelected]);
 

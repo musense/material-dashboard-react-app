@@ -83,7 +83,6 @@ export default function RowBody({
                                         copyText={titleView.webHeader.customUrl}
                                         id={titleView._id}
                                         name={titleView.content.title}
-                                        deleteMessage={'delete editor'}
                                         editType={GetEditorAction.REQUEST_EDITOR_BY_ID}
                                         editData={titleView._id}
                                         handleOpenDialog={handleOpenDialog}

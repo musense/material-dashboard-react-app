@@ -7,8 +7,8 @@ export default function useDeleteSelectedRow(messageDialogReturnValue, { deleteT
     const dispatch = useDispatch();
 
     useEffect(() => {
+        if (!messageDialogReturnValue) return;
         const id = messageDialogReturnValue
-        if (!id) return console.log('id is null');
         dispatch({
             type: deleteType,
             payload: [id]

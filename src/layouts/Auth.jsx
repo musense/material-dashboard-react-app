@@ -1,20 +1,21 @@
 import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { Routes, Route } from 'react-router-dom';
+// import { Routes, Route } from 'react-router-dom';
 
 // @material-ui/core components
 import withStyles from '@material-ui/core/styles/withStyles';
 
 // core components
 import AuthNavbar from 'components/Navbars/AuthNavbar.jsx';
-import Footer from 'components/Footer/AuthFooter.jsx';
 import routes from 'routes.js';
 import pagesStyle from 'assets/jss/material-dashboard-react/layouts/authStyle.jsx';
 import register from 'assets/img/register.jpeg';
 import login from 'assets/img/login.jpeg';
 import { Outlet, useLocation } from 'react-router-dom';
+import useRefreshStayCurrentPage from 'hook/useRefreshStayCurrentPage';
 
-function Pages({ ...props }) {
+function Auth({ ...props }) {
+  useRefreshStayCurrentPage()
   const { classes, ...rest } = props;
 
   const location = useLocation();
@@ -24,9 +25,9 @@ function Pages({ ...props }) {
   }, []);
 
   const getBgImage = () => {
-    if (location.pathname.indexOf('/auth/register-page') !== -1) {
+    if (location.pathname.indexOf('/register') !== -1) {
       return register;
-    } else if (location.pathname.indexOf('/auth/login-page') !== -1) {
+    } else if (location.pathname.indexOf('/login') !== -1) {
       return login;
     }
   };
@@ -50,15 +51,14 @@ function Pages({ ...props }) {
           style={{ backgroundImage: 'url(' + getBgImage() + ')' }}
         >
           <Outlet />
-          {/* <Footer white /> */}
         </div>
       </div>
     </div>
   );
 }
 
-Pages.propTypes = {
+Auth.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(pagesStyle)(Pages);
+export default withStyles(pagesStyle)(Auth);

@@ -2,14 +2,15 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import ContentEditorForm from "./ContentEditorForm.jsx"
 import DetailForm from "./DetailForm/DetailForm.jsx"
-import MessageDialog from '../../components/Modal/MessageDialog.jsx';
+import MessageDialog from 'components/Modal/MessageDialog.jsx';
 
-import useIEditorResult from '../../hook/useIEditorResult.js';
-import useSetEditorDefaultValue from '../../hook/useSetEditorDefaultValue.js';
-import usePreview from '../../hook/usePreview.js';
-import useEditorModal from '../../hook/useEditorModal.js';
-import useEditorSave from '../../hook/useEditorSave.js';
-import useBeforeUnloadSave from '../../hook/useBeforeUnloadSave.js';
+import useModalResult from 'hook/useModalResult';
+import useSetEditorDefaultValue from 'hook/useSetEditorDefaultValue.js';
+import usePreview from 'hook/usePreview.js';
+import useEditorModal from 'hook/useEditorModal.js';
+import useEditorSave from 'hook/useEditorSave.js';
+import useBeforeUnloadSave from 'hook/useBeforeUnloadSave.js';
+import getErrorMessage from 'utils/getErrorMessage.js';
 
 function NewIEditor() {
 
@@ -23,21 +24,6 @@ function NewIEditor() {
   const previewID = useSelector((state) => state.getSlateReducer.previewID);
   const message = getErrorMessage(errorMessage, returnMessage)
 
-  function getErrorMessage(errorMessage, returnMessage) {
-    console.log("🚀 ~ file: index.jsx:40 ~ getErrorMessage ~ returnMessage:", returnMessage)
-    console.log("🚀 ~ file: index.jsx:40 ~ getErrorMessage ~ errorMessage:", errorMessage)
-    if (errorMessage) {
-      return errorMessage;
-    }
-    if (returnMessage) {
-      return returnMessage;
-    }
-    return null;
-
-  }
-
-  console.log("🚀 ~ file: index.jsx:35 ~ NewIEditor ~ editor:", submitState)
-  console.log("🚀 ~ file: index.jsx:35 ~ NewIEditor ~ message:", message)
 
 
   const {
@@ -45,7 +31,12 @@ function NewIEditor() {
     content,
     sitemapUrl,
     success
-  } = useIEditorResult(message, submitState)
+  } = useModalResult({
+    message,
+    name: '文章',
+    data: submitState,
+    isEditor: true
+  })
 
   const {
     open,

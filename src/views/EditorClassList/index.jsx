@@ -26,9 +26,6 @@ function EditorClassList() {
     useEffect(() => {
         // dispatch({ type: GetClassAction.REQUEST_PARENT_CLASS })
         dispatch({ type: GetClassAction.REQUEST_CLASS_LIST })
-        return () => {
-            dispatch({ type: GetClassAction.CANCEL_EDITING_CLASS })
-        }
     }, []);
 
     return (

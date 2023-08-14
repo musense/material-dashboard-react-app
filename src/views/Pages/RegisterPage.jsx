@@ -21,9 +21,9 @@ import registerPageStyle from 'assets/jss/material-dashboard-react/views/registe
 import { useDispatch, useSelector } from 'react-redux';
 import { REGISTER_USER, REGISTER_USER_ERROR_RESET } from './../../actions/GetUserAction';
 import { useNavigate } from 'react-router-dom';
-import MessageDialog from '../../components/Modal/MessageDialog';
+import MessageDialog from 'components/Modal/MessageDialog';
 
-import useRegisterResult from '../../hook/useRegisterResult';
+import useModalResult from 'hook/useModalResult';
 
 function RegisterPage(props) {
   const { classes } = props;
@@ -33,8 +33,13 @@ function RegisterPage(props) {
   const dispatch = new useDispatch();
   const returnMessage = useSelector((state) => state.getUserReducer.errorMessage);
 
-  const { title, content, success } = useRegisterResult(returnMessage);
-  console.log("🚀 ~ file: LoginPage.jsx:72 ~ LoginPage ~ title:", title)
+  const {
+    title,
+    content,
+    success
+  } = useModalResult({
+    message: returnMessage
+  });
 
   useEffect(() => {
     if (title) handleClickOpen()
@@ -74,7 +79,7 @@ function RegisterPage(props) {
       type: REGISTER_USER_ERROR_RESET
     })
     if (success) {
-      navigate('/auth/login-page', { replace: true })
+      navigate('/login', { replace: true })
     }
   };
 

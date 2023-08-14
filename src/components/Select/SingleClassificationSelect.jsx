@@ -9,8 +9,6 @@ export default function SingleClassificationSelect({
   height = null,
   setState = null
 }) {
-  console.log("🚀 ~ file: SingleClassificationSelect.jsx:14 ~ defaultSelected:", defaultSelected)
-  console.log("🚀 ~ file: SingleClassificationSelect.jsx:10 ~ SingleClassificationSelect ~ width:", width)
 
   const classOptions = useSelector((state) => state.getClassReducer.editorClassList);
 

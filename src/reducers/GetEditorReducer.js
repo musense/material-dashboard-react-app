@@ -88,7 +88,6 @@ const getEditorReducer = (state = initialState, action) => {
             typeOf = typeof editor1[key]
           }
           typeOf = typeof new Date(e1).getMonth() === 'function' ? 'date' : typeOf
-          console.log("🚀 ~ file: GetEditorReducer.js:112 ~ titleList:state.titleList.sort ~ typeOf:", typeOf)
           const sorting = state.sortingMap[key]
           switch (typeOf) {
             case 'string': {

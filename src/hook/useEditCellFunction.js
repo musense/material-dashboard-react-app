@@ -7,7 +7,6 @@ export default function useEditCellFunction({
     onDelete: {
         id,
         name,
-        message,
     },
     onEdit: {
         editType,
@@ -17,19 +16,16 @@ export default function useEditCellFunction({
 
 }) {
     const dispatch = useDispatch();
-    const onCopy = useCallback(
-        (sitemapUrl, result) => {
-            console.log(sitemapUrl);
-            console.log(result);
-            dispatch({
-                type: GetDialogAction.COPY_SITEMAP,
-                payload: {
-                    contentData: result ? sitemapUrl : '',
-                    message: result ? 'copy sitemapUrl successfully' : 'copy sitemapUrl failed',
-                },
-            });
-            handleOpenDialog();
-        }, [handleOpenDialog, dispatch]);
+    const onCopy = useCallback((sitemapUrl, result) => {
+        dispatch({
+            type: GetDialogAction.COPY_SITEMAP,
+            payload: {
+                contentData: result ? sitemapUrl : '',
+                message: result ? 'copy sitemapUrl successfully' : 'copy sitemapUrl failed',
+            },
+        });
+        handleOpenDialog();
+    }, [handleOpenDialog, dispatch]);
 
     const onDelete = useCallback(() => {
         dispatch({
@@ -37,12 +33,12 @@ export default function useEditCellFunction({
             payload: {
                 data: id,
                 contentData: name,
-                message: message,
+                message: 'delete one',
                 confirm: true,
             },
         });
         handleOpenDialog()
-    }, [dispatch, handleOpenDialog, id, name, message])
+    }, [handleOpenDialog, dispatch, id, name])
 
     const onEdit = useCallback(() => {
         dispatch({

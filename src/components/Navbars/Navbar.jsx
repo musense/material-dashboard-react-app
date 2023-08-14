@@ -11,7 +11,6 @@ import Hidden from "@material-ui/core/Hidden";
 import Menu from "@material-ui/icons/Menu";
 // core components
 import AdminNavbarLinks from "./AdminNavbarLinks.jsx";
-import RTLNavbarLinks from "./RTLNavbarLinks.jsx";
 import Button from "components/CustomButtons/Button.jsx";
 
 import headerStyle from "assets/jss/material-dashboard-react/components/headerStyle.jsx";
@@ -20,10 +19,10 @@ import { useLocation } from "react-router-dom";
 function Header({ ...props }) {
   const location = useLocation()
   function makeBrand() {
-    var name;
+    let name;
     props.routes.map((prop, key) => {
       if (prop.layout + prop.path === location.pathname) {
-        name = props.rtlActive ? prop.rtlName : prop.name;
+        name = prop.name;
       }
       return null;
     });
@@ -43,11 +42,7 @@ function Header({ ...props }) {
           </Button>
         </div>
         <Hidden smDown implementation="css">
-          {props.rtlActive ? (
-            <RTLNavbarLinks />
-          ) : (
-            <AdminNavbarLinks {...props} />
-          )}
+          <AdminNavbarLinks {...props} />
         </Hidden>
         {/* <Hidden mdUp implementation="css"> */}
         <IconButton

@@ -14,9 +14,7 @@ export default function useResetEditorState(route) {
             })
         }
         return () => {
-            console.log("🚀 ~ file: useResetEditorState.js:12 ~ //return ~ route:", route)
             // if (route === '/admin/editorList/new') {
-            console.log("🚀 ~ file: useResetEditorState.js:12 ~ useResetEditorState ~ useResetEditorState:")
             // reset form value
             dispatch({
                 type: GetSlateAction.RESET_FORM_VALUE,

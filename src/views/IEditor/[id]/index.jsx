@@ -5,22 +5,22 @@ import ContentEditorForm from "./../ContentEditorForm.jsx"
 import DetailForm from "../DetailForm/DetailForm.jsx"
 import MessageDialog from '../../../components/Modal/MessageDialog.jsx';
 
-import useIEditorResult from '../../../hook/useIEditorResult.js';
+import useModalResult from 'hook/useModalResult';
 import useSetEditorDefaultValue from '../../../hook/useSetEditorDefaultValue.js';
 import usePreview from '../../../hook/usePreview.js';
 import useEditorModal from '../../../hook/useEditorModal.js';
 import useEditorSave from '../../../hook/useEditorSave.js';
 import useRequestEditorByID from '../../../hook/useRequestEditorByID.js';
 import useBeforeUnloadSave from '../../../hook/useBeforeUnloadSave.js';
+import { useLoaderData } from 'react-router-dom';
+import getErrorMessage from 'utils/getErrorMessage.js';
 
 function IEditor() {
 
+  const data = useLoaderData()
   const { id } = useParams();
   const editor = useSelector((state) => state.getEditorReducer.editor);
 
-  console.log("🚀 ~ file: index.jsx:20 ~ IEditor ~ editor:", editor)
-  console.log("🚀 ~ file: index.jsx:22 ~ IEditor ~ id:", id)
-  console.log("🚀 ~ file: index.jsx:22 ~ IEditor ~ editor:", editor)
 
   const submitState = useSelector((state) => state.getSlateReducer.submitState);
   const isPreview = useSelector((state) => state.getSlateReducer.isPreview);
@@ -29,21 +29,6 @@ function IEditor() {
   const previewID = useSelector((state) => state.getSlateReducer.previewID);
   const message = getErrorMessage(errorMessage, returnMessage)
 
-  function getErrorMessage(errorMessage, returnMessage) {
-    console.log("🚀 ~ file: index.jsx:40 ~ getErrorMessage ~ returnMessage:", returnMessage)
-    console.log("🚀 ~ file: index.jsx:40 ~ getErrorMessage ~ errorMessage:", errorMessage)
-    if (errorMessage) {
-      return errorMessage;
-    }
-    if (returnMessage) {
-      return returnMessage;
-    }
-    return null;
-
-  }
-
-  console.log("🚀 ~ file: index.jsx:35 ~ NewIEditor ~ editor:", editor)
-  console.log("🚀 ~ file: index.jsx:35 ~ NewIEditor ~ message:", message)
 
 
   const {
@@ -52,8 +37,12 @@ function IEditor() {
     // id,
     sitemapUrl,
     success
-  } = useIEditorResult(message, editor)
-  console.log("🚀 ~ file: index.jsx:74 ~ NewIEditor ~ id:", id)
+  } = useModalResult({
+    message,
+    name: '文章',
+    data: editor,
+    isEditor: true
+  })
   useRequestEditorByID(id, editor)
   useSetEditorDefaultValue(editor)
 

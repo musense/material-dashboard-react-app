@@ -38,9 +38,7 @@ class Tasks extends React.Component {
   };
   render() {
     const { classes, tasksIndexes, tasks, rtlActive } = this.props;
-    const tableCellClasses = classnames(classes.tableCell, {
-      [classes.tableCellRTL]: rtlActive,
-    });
+    const tableCellClasses = classnames(classes.tableCell);
     return (
       <Table className={classes.table}>
         <TableBody>

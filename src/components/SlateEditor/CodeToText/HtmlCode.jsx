@@ -32,7 +32,6 @@ const HtmlCode = (props) => {
         else if (e.keyCode === 8) {
             Transforms.removeNodes(editor)
         }
-        // console.log(e);
     }
     useEffect(() => {
         document.addEventListener('keyup', handleKeyUp);

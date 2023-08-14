@@ -4,23 +4,18 @@ import PropTypes from 'prop-types';
 import { NavLink, useLocation } from 'react-router-dom';
 // @material-ui/core components
 import withStyles from '@material-ui/core/styles/withStyles';
-import Drawer from '@material-ui/core/Drawer';
+import Drawer from '@mui/material/Drawer';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import Icon from '@material-ui/core/Icon';
 // core components
-import AdminNavbarLinks from 'components/Navbars/AdminNavbarLinks.jsx';
-// import RTLNavbarLinks from 'components/Navbars/RTLNavbarLinks.jsx';
-
 import sidebarStyle from 'assets/jss/material-dashboard-react/components/sidebarStyle.jsx';
 import Button from '@material-ui/core/Button'
 
 const Sidebar = ({ ...props }) => {
   // verifies if routeName is the one active (in browser input)
   const location = useLocation();
-
-
 
   function activeRoute(routeName) {
     return location.pathname === routeName;
@@ -118,7 +113,7 @@ const Sidebar = ({ ...props }) => {
       <Drawer
         anchor={'left'}
         variant='persistent'
-        hidebackdrop={true}
+        hideBackdrop
         open={open}
         classes={{
           paper: classNames(classes.drawerPaper),

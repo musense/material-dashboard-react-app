@@ -8,18 +8,14 @@ export default function DraggableList({ defaultList }) {
 
     // Function to update list on drop
     const handleDrop = (droppedItem) => {
-        console.log("🚀 ~ file: DraggableList.jsx:11 ~ handleDrop ~ droppedItem:", droppedItem)
-        console.log("🚀 ~ file: DraggableList.jsx:15 ~ handleDrop ~ itemList:", itemList)
         // Ignore drop outside droppable container
         if (!droppedItem.destination) return;
         var updatedList = [...itemList];
         // Remove dragged item
         const [reorderedItem] = updatedList.splice(droppedItem.source.index, 1);
-        console.log("🚀 ~ file: DraggableList.jsx:18 ~ handleDrop ~ reorderedItem:", reorderedItem)
         reorderedItem['sorting'] = droppedItem.destination.index
         // Add dropped item
         updatedList.splice(droppedItem.destination.index, 0, reorderedItem);
-        console.log("🚀 ~ file: EditorManagerNews.jsx:67 ~ handleDrop ~ updatedList:", updatedList)
         // Update State
         setItemList(updatedList);
     };

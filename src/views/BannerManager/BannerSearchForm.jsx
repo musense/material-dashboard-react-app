@@ -35,7 +35,6 @@ export default function BannerSearchForm() {
             Object.fromEntries(formData),
             { createDate: dateRef.current.current() }
         );
-        console.log("🚀 ~ file: EditorList.jsx:136 ~ onSearchEditorList ~ searchData:", searchData)
 
         // return
         dispatch({

@@ -1,7 +1,6 @@
 import { put } from 'redux-saga/effects';
 
 export function toFrontendData(responseData) {
-    console.log("🚀 ~ file: apiHelperFunc.js:34 ~ toFrontendData ~ responseData:", responseData)
     if (Array.isArray(responseData)) {
         return responseData.map(item => ({
             _id: item._id,
@@ -189,8 +188,6 @@ function generateImageFile(value) {
 }
 
 export function* getErrorMessage(error, patchType) {
-    console.log("🚀 ~ file: apiHelperFunc.js:213 ~ getErrorMessage ~ error:", error)
-    console.log("🚀 ~ file: apiHelperFunc.js:213 ~ *getErrorMessage ~ patchType:", patchType)
     let errorMessage;
     if (!error) {
         yield put({
@@ -206,7 +203,6 @@ export function* getErrorMessage(error, patchType) {
     } else {
         errorMessage = error.code
     }
-    console.log("🚀 ~ file: apiHelperFunc.js:213 ~ *getErrorMessage ~ errorMessage:", errorMessage)
 
     if (error.response) {
         yield put({
@@ -220,8 +216,6 @@ export function* getErrorMessage(error, patchType) {
 }
 
 export function* getGetErrorMessage(error, patchType) {
-    console.log("🚀 ~ file: apiHelperFunc.js:235 ~ function*getGetErrorMessage ~ error:", error)
-    console.log("🚀 ~ file: apiHelperFunc.js:235 ~ function*getGetErrorMessage ~ patchType:", patchType)
     yield put({
         type: patchType,
         payload: {

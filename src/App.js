@@ -15,7 +15,7 @@ import useRefreshStayCurrentPage from 'hook/useRefreshStayCurrentPage';
 import *  as GetEditorAction from "actions/GetEditorAction";
 import { useDispatch } from 'react-redux';
 
-import './app.css'
+
 function App() {
     const dispatch = useDispatch();
 

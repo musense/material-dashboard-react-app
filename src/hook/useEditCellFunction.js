@@ -9,6 +9,7 @@ export default function useEditCellFunction({
         name,
     },
     onEdit: {
+        selectedID = null,
         editType,
         data,
         callback = null
@@ -24,7 +25,7 @@ export default function useEditCellFunction({
                 message: result ? 'copy sitemapUrl successfully' : 'copy sitemapUrl failed',
             },
         });
-        handleOpenDialog();
+        handleOpenDialog && handleOpenDialog();
     }, [handleOpenDialog, dispatch]);
 
     const onDelete = useCallback(() => {
@@ -37,7 +38,7 @@ export default function useEditCellFunction({
                 confirm: true,
             },
         });
-        handleOpenDialog()
+        handleOpenDialog && handleOpenDialog()
     }, [handleOpenDialog, dispatch, id, name])
 
     const onEdit = useCallback(() => {
@@ -48,7 +49,7 @@ export default function useEditCellFunction({
             },
         });
         callback && callback()
-    }, [dispatch, callback, editType, data])
+    }, [dispatch, callback, editType, data, selectedID])
 
     return {
         onCopy,

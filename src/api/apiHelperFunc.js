@@ -167,7 +167,7 @@ export function toBackendFormData(requestData, createType) {
 }
 
 
-function generateImageFile(value) {
+export function generateImageFile(value) {
     const dataUrl = value;
     // Extract the base64-encoded data from the data URI
     const dataType = dataUrl.split(',')[0].split(':')[1].split(';')[0];

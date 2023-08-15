@@ -1,39 +1,39 @@
 import *  as GetBannerAction from '../actions/GetBannerAction';
 import { errorMessage } from './errorMessage';
+import { createSelector } from 'reselect';
+import { useSelector } from 'react-redux';
 
 const initialState = {
     sortingMap: {
-        sorting: 'asc',
+        serialNumber: 'asc',
         name: 'asc',
-        createDate: 'asc',
-        isHot: 'asc',
+        sort: 'asc',
+        hyperlink: 'asc',
+        startDate: 'asc',
+        status: 'asc',
     },
     bannerList: null,
-    showBannerList: null,
     selectedBanner: {
-        id: '',
+        _id: '',
+        serialNumber: 0,
         name: '',
+        sort: 1,
         hyperlink: '',
-        sorting: 1,
+        remark: '',
+        eternal: false,
+        display: 0,
         media: {
-            contentImagePath: '',
             homeImagePath: '',
-            altText: '',
+            contentImagePath: '',
         },
-        publishInfo: {
-            isOnShelvesImmediate: false,
-            isPermanent: false,
-            startDate: null,
-            endDate: null,
-        },
-        note: null,
-        isEditing: false,
-        showUrl: null,
+        startDate: '',
+        endDate: '',
+        status: '',
     },
-    selectedIndex: -1,
+    showUrl: '',
     currentPage: null,
-    totalPage: null,
     totalCount: null,
+    isEditing: false,
     errorMessage: null,
 }
 
@@ -44,17 +44,14 @@ const getBannerReducer = (state = initialState, action) => {
                 ...state,
                 selectedBanner: {
                     ...initialState.selectedBanner,
-                    isEditing: false
                 },
+                isEditing: false
             }
         }
         case GetBannerAction.SET_SHOW_URL: {
             return {
                 ...state,
-                selectedBanner: {
-                    ...state.selectedBanner,
-                    showUrl: action.payload.showUrl,
-                },
+                showUrl: action.payload.showUrl,
             }
         }
         case GetBannerAction.SET_BANNER_PROPERTY: {
@@ -78,21 +75,31 @@ const getBannerReducer = (state = initialState, action) => {
         }
 
         case GetBannerAction.EDITING_BANNER:
-            const banner = action.payload.data
+            const banner = action.payload.data;
+            console.log("🚀 ~ file: GetBannerReducer.js:81 ~ getBannerReducer ~ banner:", banner)
             return {
                 ...state,
                 selectedBanner: {
-                    id: banner._id,
-                    bannerName: banner.name,
-                    title: banner.webHeader.title,
-                    description: banner.webHeader.description,
-                    keywords: banner.webHeader.keywords,
-                    manualUrl: banner.webHeader.manualUrl,
-                    customUrl: banner.webHeader.customUrl,
-                    popular: banner.popular,
-                    sorting: banner.sorting,
-                    isEditing: true,
+                    _id: banner._id,
+                    serialNumber: banner.serialNumber,
+                    name: banner.name,
+                    sort: banner.sort,
+                    hyperlink: banner.hyperlink,
+                    remark: banner.remark,
+                    eternal: banner.eternal,
+                    display: banner.display,
+                    media: {
+                        homeImagePath: banner.homeImagePath,
+                        contentImagePath: banner.contentImagePath,
+                    },
+                    startDate: banner.startDate,
+                    endDate: banner.endDate,
+                    createdAt: banner.createdAt,
+                    updatedAt: banner.updatedAt,
+                    status: banner.status,
                 },
+                showUrl: banner.homeImagePath,
+                isEditing: true,
             }
         case GetBannerAction.ADD_BANNER_SUCCESS:
             return {
@@ -129,7 +136,6 @@ const getBannerReducer = (state = initialState, action) => {
             return {
                 ...state,
                 bannerList: action.payload.bannerList,
-                showBannerList: action.payload.bannerList.slice(0, 10),
                 currentPage: action.payload.currentPage,
                 totalCount: action.payload.totalCount,
                 totalPage: Math.ceil(action.payload.totalCount / 10),
@@ -140,20 +146,28 @@ const getBannerReducer = (state = initialState, action) => {
             const end = start + 10
             return {
                 ...state,
-                showBannerList: state.bannerList.slice(start, end),
                 currentPage: action.payload
             }
         case GetBannerAction.SHOW_BANNER_LIST_SORTING:
             const { key } = action.payload;
             return {
                 ...state,
-                showBannerList: state.bannerList
+                bannerList: state.bannerList
                     ? state.bannerList.sort((banner1, banner2) => {
                         let typeOf = typeof banner1[key]
-                        let e1, e2
-                        e1 = banner1[key]
-                        e2 = banner2[key]
-                        typeOf = typeof new Date(tag1[key]).getMonth === 'function' ? 'date' : typeOf
+                        let k1, k2, e1, e2
+                        if (key.indexOf('.') !== -1) {
+                            k1 = key.split('.')[0]
+                            k2 = key.split('.')[1]
+                            e1 = banner1[k1][k2]
+                            e2 = banner2[k1][k2]
+                            typeOf = typeof banner1[k1][k2]
+                        } else {
+                            e1 = banner1[key]
+                            e2 = banner2[key]
+                            typeOf = typeof banner1[key]
+                        }
+                        // typeOf = typeof new Date(e1).getMonth === 'function' ? 'date' : typeOf
                         const sorting = state.sortingMap[key]
                         switch (typeOf) {
                             case 'string': {
@@ -242,3 +256,19 @@ const getBannerReducer = (state = initialState, action) => {
 }
 
 export default getBannerReducer
+
+const getShowList = state => state.getBannerReducer.bannerList
+    && state.getBannerReducer.bannerList.slice(
+        (state.getBannerReducer.currentPage - 1) * 10,
+        (state.getBannerReducer.currentPage - 1) * 10 + 10
+    )
+
+
+const getIsEditing = state => state.getBannerReducer.isEditing
+const getShowUrl = state => state.getBannerReducer.showUrl
+
+export {
+    getIsEditing,
+    getShowUrl,
+    getShowList
+}

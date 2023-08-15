@@ -6,8 +6,6 @@ import * as GetBannerAction from 'actions/GetBannerAction';
 import Card from 'components/Card/Card.jsx';
 import CardBody from 'components/Card/CardBody.jsx';
 import CardHeader from 'components/Card/CardHeader.jsx';
-import GridContainer from 'components/Grid/GridContainer.jsx';
-import GridItem from 'components/Grid/GridItem.jsx';
 import styles from './BannerList.module.css'
 import usePressEnterEventHandler from 'hook/usePressEnterEventHandler';
 import useModalResult from 'hook/useModalResult';
@@ -18,6 +16,7 @@ import Media from 'components/Media/Media';
 import FormButtonList from 'components/FormButtonList/FormButtonList';
 import BannerPublishInfo from './BannerPublishInfo';
 import MyScrollbar from 'components/MyScrollbar/MyScrollbar';
+import { getIsEditing, getShowUrl } from 'reducers/GetBannerReducer';
 
 // import { useDebounce } from 'react-use'
 
@@ -26,26 +25,22 @@ export default function BannerLeftWrapper() {
     const formRef = useRef(null);
     const dispatch = useDispatch();
 
-    const id = useSelector((state) => state.getBannerReducer.selectedBanner.id);
+
+    const id = useSelector((state) => state.getBannerReducer.selectedBanner._id);
     const name = useSelector((state) => state.getBannerReducer.selectedBanner.name);
+    const sort = useSelector((state) => state.getBannerReducer.selectedBanner.sort);
     const hyperlink = useSelector((state) => state.getBannerReducer.selectedBanner.hyperlink);
+    const note = useSelector((state) => state.getBannerReducer.selectedBanner.remark);
+    const homeImagePath = useSelector((state) => state.getBannerReducer.selectedBanner.media.homeImagePath);
+    const contentImagePath = useSelector((state) => state.getBannerReducer.selectedBanner.media.contentImagePath);
+    const startDate = useSelector((state) => state.getBannerReducer.selectedBanner.startDate);
+    const endDate = useSelector((state) => state.getBannerReducer.selectedBanner.endDate);
+    const status = useSelector((state) => state.getBannerReducer.selectedBanner.status);
 
 
-    const sorting = useSelector((state) => state.getBannerReducer.selectedBanner.sorting);
-    const isEditing = useSelector((state) => state.getBannerReducer.selectedBanner.isEditing);
-
-    const showUrl = useSelector((state) => state.getBannerReducer.selectedBanner.showUrl);
-    const altText = useSelector((state) => state.getBannerReducer.selectedBanner?.media.altText);
-
-    const isOnShelvesImmediate = useSelector((state) => state.getBannerReducer.selectedBanner?.publishInfo.isOnShelvesImmediate);
-    const isPermanent = useSelector((state) => state.getBannerReducer.selectedBanner?.publishInfo.isPermanent);
-    const startDate = useSelector((state) => state.getBannerReducer.selectedBanner?.publishInfo.startDate);
-    const endDate = useSelector((state) => state.getBannerReducer.selectedBanner?.publishInfo.endDate);
-
-    const note = useSelector((state) => state.getBannerReducer.selectedBanner.note);
-
+    const isEditing = useSelector(getIsEditing);
+    const showUrl = useSelector(getShowUrl);
     const serverMessage = useSelector((state) => state.getBannerReducer.errorMessage);
-
 
 
     usePressEnterEventHandler(formRef)
@@ -65,8 +60,6 @@ export default function BannerLeftWrapper() {
 
     function onAddNewEditor(e) {
         e.preventDefault()
-        const form = getForm();
-        const formData = new FormData(form);
 
         if (!name) {
             dispatch({
@@ -80,19 +73,22 @@ export default function BannerLeftWrapper() {
 
         let tempData = {
             name: name,
-            popular: popular,
-            webHeader: {
-                title: title,
-                description: description,
-                keywords: keywords,
-                href: customUrl,
-                route: manualUrl,
+            sort: sort,
+            hyperlink: hyperlink,
+            remark: note,
+            // eternal: eternal,
+            // display: display,
+            media: {
+                homeImagePath: homeImagePath,
+                contentImagePath: contentImagePath,
             },
-
+            startDate: new Date(startDate).getTime(),
+            endDate: new Date(endDate).getTime(),
+            status: status,
         }
 
-        if (popular) {
-            if (typeof parseInt(sorting) !== 'number') {
+        if (sort) {
+            if (typeof parseInt(sort) !== 'number') {
                 dispatch({
                     type: GetBannerAction.SET_ERROR_MESSAGE,
                     payload: {
@@ -101,7 +97,7 @@ export default function BannerLeftWrapper() {
                 })
                 return
             }
-            if (parseInt(sorting) < 1) {
+            if (parseInt(sort) < 1) {
                 dispatch({
                     type: GetBannerAction.SET_ERROR_MESSAGE,
                     payload: {
@@ -112,11 +108,12 @@ export default function BannerLeftWrapper() {
             }
             tempData = {
                 ...tempData,
-                sorting: sorting
+                sort: sort
             }
         }
 
-        return
+        console.log("🚀 ~ file: BannerLeftWrapper.jsx:86 ~ onAddNewEditor ~ tempData:", tempData)
+        // return
         if (isEditing === true) {
             dispatch({
                 type: GetBannerAction.EDIT_SAVING_BANNER,
@@ -155,27 +152,12 @@ export default function BannerLeftWrapper() {
             payload: {
                 allProps: {
                     property: property,
-                    info: info,
-                    value: value
+                    value: value,
+                    info: info
                 }
             }
         })
     }, [dispatch])
-
-    // const [, cancel] = useDebounce(
-    //     () => {
-    //         dispatch({
-    //             type: GetBannerAction.SET_BANNER_PROPERTY,
-    //             payload: {
-    //                 allProps: {
-    //                     property: property,
-    //                     info: info,
-    //                     value: value
-    //                 }
-    //             }
-    //         })
-    //     }, 2000, [value, property, info]
-    // );
 
     const onShowUrlChange = useCallback((value) => {
         dispatch({
@@ -199,7 +181,7 @@ export default function BannerLeftWrapper() {
                 <MyScrollbar component='form' height='700px'>
                     <form ref={formRef} name='class-form' className='banner-submit-form' onSubmit={onAddNewEditor}>
                         <div>
-                            <input type="hidden" name='_id' value={id} onChange={e => onPropertyChange(e.target.value, 'id')} />
+                            <input type="hidden" name='_id' value={id} />
                         </div>
                         <div>
                             <label htmlFor="name">Banner名稱</label>
@@ -207,7 +189,7 @@ export default function BannerLeftWrapper() {
                         </div>
                         <div>
                             <label htmlFor="sorting">排序</label>
-                            <input type="number" min={1} name='sorting' value={sorting} onChange={e => onPropertyChange(e.target.value, 'sorting')} />
+                            <input type="number" min={1} name='sorting' value={sort} onChange={e => onPropertyChange(e.target.value, 'sort')} />
                         </div>
                         <div>
                             <label htmlFor="hyperlink">超連結</label>
@@ -221,20 +203,21 @@ export default function BannerLeftWrapper() {
                             alt={false}
                         />
                         <BannerPublishInfo
-                            isOnShelvesImmediate={isOnShelvesImmediate}
-                            isPermanent={isPermanent}
+                            // isOnShelvesImmediate={isOnShelvesImmediate}
+                            // isPermanent={isPermanent}
                             startDate={startDate}
                             endDate={endDate}
                             onPropertyChange={onPropertyChange}
                         />
                         <div>
                             <label htmlFor="note">備註</label>
-                            <textarea type="text" name='note' value={note} onChange={e => onPropertyChange(e.target.value, 'note')} />
+                            <textarea type="text" name='note' value={note} onChange={e => onPropertyChange(e.target.value, 'remark')} />
                         </div>
                         <FormButtonList
                             isEditing={isEditing}
                             onCancel={onCancel}
                             onReset={onReset}
+                            callback={onAddNewEditor}
                         />
                     </form>
                 </MyScrollbar>

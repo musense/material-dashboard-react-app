@@ -10,9 +10,8 @@ export default function EditBodyCell({
     name,
     editType,
     editData,
-    handleOpenDialog,
-    onNote = null,
-    note = null,
+    // onNote = null,
+    // note = null,
     className,
     callback = null
 }) {
@@ -21,7 +20,6 @@ export default function EditBodyCell({
         onDelete,
         onEdit
     } = useEditCellFunction({
-        handleOpenDialog,
         onDelete: {
             id,
             name,
@@ -37,13 +35,13 @@ export default function EditBodyCell({
         <Stack spacing={2} direction={'row'}
             useFlexGap flexWrap="wrap" justifyContent={"space-evenly"}
         >
-            {note && <IconCell
-                iconName={'text_snippet'}
+            {/* {note && <IconCell
+                iconName={'note'}
                 iconTitle={'備註'}
                 callback={onNote}
-            />}
+            />} */}
             <IconCell
-                copy
+                copy={copyText ? true : false}
                 iconName={'link'}
                 iconTitle={'複製連結'}
                 copyText={copyText}

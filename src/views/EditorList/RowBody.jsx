@@ -12,7 +12,6 @@ export default function RowBody({
     showList,
     handleOpen,
     setMediaInfo,
-    handleOpenDialog,
     className = ''
 }) {
     const navigate = useNavigate();
@@ -85,7 +84,6 @@ export default function RowBody({
                                         name={titleView.content.title}
                                         editType={GetEditorAction.REQUEST_EDITOR_BY_ID}
                                         editData={titleView._id}
-                                        handleOpenDialog={handleOpenDialog}
                                         callback={() => navigate(`/admin/editorList/${titleView._id}`)}
                                         className={rowItem.className}
                                     />

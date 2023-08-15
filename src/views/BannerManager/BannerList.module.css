@@ -29,8 +29,8 @@ input {
   width: 1200px;
 }
 
-.banner-table-wrapper {
-  /* background-color: hotpink; */
+.banner-right-wrapper.main-panel-max-size {
+  width: 1500px;
 }
 
 

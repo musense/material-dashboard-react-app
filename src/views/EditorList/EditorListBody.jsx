@@ -98,7 +98,6 @@ export default function EditorListBody() {
                 showList={showList}
                 handleOpen={handleOpen}
                 setMediaInfo={setMediaInfo}
-                handleOpenDialog={handleOpenDialog}
             />
         </form>
         <MediaModal

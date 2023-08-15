@@ -11,25 +11,25 @@ export default function BannerPublishInfo({
     onPropertyChange
 }) {
     const setIsOnShelvesImmediate = useCallback((value) => {
-        onPropertyChange(value, 'isOnShelvesImmediate', 'publishInfo')
+        onPropertyChange(value, 'isOnShelvesImmediate')
     }, [onPropertyChange])
 
     const onIsPermanent = useCallback((value) => {
-        onPropertyChange(value, 'isPermanent', 'publishInfo')
+        onPropertyChange(value, 'isPermanent')
     }, [onPropertyChange])
 
     const onStartDateChange = useCallback((value) => {
-        onPropertyChange(value, 'startDate', 'publishInfo')
+        onPropertyChange(value, 'startDate')
     }, [onPropertyChange])
 
     const onEndDateChange = useCallback((value) => {
-        onPropertyChange(value, 'endDate', 'publishInfo')
+        onPropertyChange(value, 'endDate')
     }, [onPropertyChange])
 
     return <section id="publishInfo">
         <div>
             <Stack direction={"column"} spacing={2}>
-                <Stack direction={"row"} spacing={2}>
+                {/* <Stack direction={"row"} spacing={2}>
                     <CustomRadio
                         value={isOnShelvesImmediate}
                         label={'立即上架'}
@@ -38,7 +38,7 @@ export default function BannerPublishInfo({
                         value={isPermanent}
                         label={'設為常駐'}
                         setState={onIsPermanent} />
-                </Stack>
+                </Stack> */}
                 <Stack direction={"column"} spacing={2}>
                     <DateTimeSelector
                         disabled={isOnShelvesImmediate || isPermanent}

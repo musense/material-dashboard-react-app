@@ -10,35 +10,48 @@ import RegisterPage from "views/Pages/RegisterPage";
 import TagList from "views/TagList";
 import BannerManager from "views/BannerManager";
 import { instance } from "api/saga/AxiosInstance";
+import { useDispatch } from "react-redux";
+import bannerListGetter from "utils/bannerListGetter";
+import { RouterProvider } from "react-router-dom";
 
-const router = createBrowserRouter([
-    {
-        path: "/", element: <Auth />, children: [
-            { path: "login", element: <LoginPage />, },
-            { path: "register", element: <RegisterPage />, },
-        ],
-    },
-    {
-        path: "/admin", element: <Admin />, children: [
-            { path: "banner", element: <BannerManager /> },
-            { path: "tag", element: <TagList /> },
-            { path: "editorClassList", element: <EditorClassList /> },
-            {
-                path: "editorList", children: [
-                    { index: true, element: <EditorList /> },
-                    { path: "new", element: <NewIEditor /> },
-                    {
-                        path: ":id", element: <IEditor />, loader: async ({ params, request: { signal } }) => {
-                            const res = await instance.get(`/editor/${params.id}`, { signal })
+function RouterIndex() {
+    const dispatch = useDispatch();
+    const router = createBrowserRouter([
+        {
+            path: "/", element: <Auth />, children: [
+                { path: "login", element: <LoginPage />, },
+                { path: "register", element: <RegisterPage />, },
+            ],
+        },
+        {
+            path: "/admin", element: <Admin />, children: [
+                {
+                    path: "banner",
+                    element: <BannerManager />,
+                    loader: bannerListGetter(dispatch)
+                },
+                { path: "tag", element: <TagList /> },
+                { path: "editorClassList", element: <EditorClassList /> },
+                {
+                    path: "editorList", children: [
+                        { index: true, element: <EditorList /> },
+                        { path: "new", element: <NewIEditor /> },
+                        {
+                            path: ":id", element: <IEditor />, loader: async ({ params, request: { signal } }) => {
+                                const res = await instance.get(`/editor/${params.id}`, { signal })
 
-                            console.log("🚀 ~ file: router.js:33 ~ path: id element:<IEditor/>,loader: ~ res.data:", res.data)
-                            return res.data
-                        }
-                    },
-                ]
-            },
-        ],
-    }
-]);
 
-export default router;
+                                return res.data
+                            }
+                        },
+                    ]
+                },
+            ],
+        }
+    ]);
+
+    return <RouterProvider router={router} />;
+}
+
+
+export default RouterIndex

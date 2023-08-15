@@ -4,7 +4,10 @@ import Icon from 'views/Icons/Icon'
 import Interweave from 'interweave'
 import { Transforms } from 'slate';
 import { useSlateStatic } from 'slate-react';
+import { useSelector } from 'react-redux';
 const CodeToText = (props) => {
+
+    const maxSizeClassName = useSelector((state) => state.getConfigReducer.maxSizeClassName);
 
     const { html, action, location, handleCodeToText } = props
     const codeToTextRef = useRef();
@@ -67,7 +70,7 @@ const CodeToText = (props) => {
     }
     return (
 
-        <div className='code-wrapper' ref={wrapperRef}>
+        <div className={`code-wrapper ${maxSizeClassName}`} ref={wrapperRef}>
             <div ref={codeToTextRef} className='codeToTextWrapper'>
                 <div className='codeToText'>
                     <textarea name="" id="" value={html} onChange={codeOnChange} placeholder='Write html here...'></textarea>

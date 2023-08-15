@@ -2,13 +2,14 @@ import React, { forwardRef } from 'react';
 import useResize from '../../customHooks/useResize'; // 確保這是正確的路徑
 import ResizableHandler from './ResizableHandler';
 
-const InnerResizableCell = ({ attributes, children }, ref) => {
+const InnerResizableCell = ({ attributes, attr, children }, ref) => {
     const [size, onMouseDown, resizing] = useResize();
 
     return (
         <td
             ref={ref}
             {...attributes}
+            {...attr}
             style={{
                 width: `${size.width}px`,
                 height: `${size.height}px`,

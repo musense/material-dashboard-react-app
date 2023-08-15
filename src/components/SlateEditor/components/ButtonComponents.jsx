@@ -5,6 +5,7 @@ import TableSelector from '../Table/TableSelector';
 import Icon from '../../../views/Icons/Icon';
 import ColorPicker from '../ColorPicker/ColorPicker';
 import CodeToTextButton from '../CodeToText/CodeToTextButton';
+import Id from '../ID/Id';
 
 function MarkButton({ editor, icon, type, title = '' }) {
     return <Button
@@ -47,6 +48,10 @@ function ColorPickerButton({ editor, format, title }) {
 
 function HTMLCodeButton({ handleCodeToText, title }) {
     return <CodeToTextButton handleButtonClick={handleCodeToText} title={title} />
+}
+
+function InsertIdButton({ editor, title }) {
+    return <Id editor={editor} title={title} />
 }
 function ImageButton({ editor,
     handleClickOpen,
@@ -154,6 +159,7 @@ export {
     TableButton,
     ColorPickerButton,
     HTMLCodeButton,
+    InsertIdButton,
     ImageButton,
     AddLinkButton,
     RemoveLinkButton,

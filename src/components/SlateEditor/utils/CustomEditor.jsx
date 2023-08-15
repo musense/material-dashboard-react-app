@@ -14,6 +14,8 @@ const LIST_TYPES = ['numbered-list', 'bulleted-list']
 export const TEXT_ALIGN_TYPES = ['left', 'center', 'right', 'justify']
 
 export const CustomEditor = {
+
+
     addMarkData(editor, data) {
         Editor.addMark(editor, data.format, data.value)
     },
@@ -32,6 +34,7 @@ export const CustomEditor = {
 
     isMarkActive(editor, format) {
         const marks = Editor.marks(editor)
+        console.log("🚀 ~ file: CustomEditor.jsx:37 ~ isMarkActive ~ marks:", marks)
         if (!marks) return false
         if (marks[format] === false) return false
         return marks[format]

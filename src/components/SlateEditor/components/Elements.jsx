@@ -222,31 +222,31 @@ export const Element = (props) => {
     switch (element.type) {
         case 'block-quote':
             return (
-                <blockquote style={style} {...attributes}>
+                <blockquote style={style} {...attributes} {...element.attr}>
                     {children}
                 </blockquote>
             )
         case 'h1':
             return (
-                <h1 style={style} {...attributes}>
+                <h1 style={style} {...attributes} {...element.attr}>
                     {children}
                 </h1>
             )
         case 'h2':
             return (
-                <h2 style={style} {...attributes}>
+                <h2 style={style} {...attributes} {...element.attr}>
                     {children}
                 </h2>
             )
         case 'h3':
             return (
-                <h3 style={style} {...attributes}>
+                <h3 style={style} {...attributes} {...element.attr}>
                     {children}
                 </h3>
             )
         case 'list-item':
             return (
-                <li style={style} {...attributes}>
+                <li style={style} {...attributes} {...element.attr}>
                     {children}
                 </li>
             )
@@ -294,7 +294,7 @@ export const Element = (props) => {
             )
         case 'table-cell':
             return (
-                <ResizableCell {...attributes}>
+                <ResizableCell {...attributes} {...element.attr}>
                     {children}
                 </ResizableCell>
             )
@@ -302,7 +302,7 @@ export const Element = (props) => {
             return <HtmlCode {...props} />
         default:
             return (
-                <p style={style} {...attributes}>
+                <p style={style} {...attributes} {...element.attr}>
                     {children}
                 </p>
             )

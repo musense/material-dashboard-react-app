@@ -1,8 +1,8 @@
 .code-wrapper {
     position: fixed;
     top: 0;
-    left: 0;
-    width: 100vw;
+    right: 0;
+    width: calc(100vw - 260px);
     height: 100vh;
     background: rgba(0, 0, 0, 0.9);
     z-index: 2;
@@ -10,6 +10,10 @@
     justify-content: center;
     align-items: center;
 
+}
+
+.code-wrapper.maxSizeClassName {
+    width: 100vw;
 }
 
 .codeToTextWrapper {

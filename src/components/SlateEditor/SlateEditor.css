@@ -141,6 +141,10 @@
 
 }
 
+.popup>input {
+    width: auto;
+}
+
 [data-slate-editor] button {
     cursor: pointer;
 }

@@ -6,6 +6,7 @@ import {
     TableButton,
     ColorPickerButton,
     HTMLCodeButton,
+    InsertIdButton,
     ImageButton,
     AddLinkButton,
     RemoveLinkButton,
@@ -73,6 +74,7 @@ export default function Toolbar({
             <RemoveLinkButton editor={editor} type={'unlink'} icon={'linkOff'} title={'移除連結 ctrl+r'} />
             <ToggleEditableButton editor={editor} type={'button'} icon={'smartButton'} title={'插入文字按鈕 ctrl+g'} />
 
+            {/* <InsertIdButton editor={editor} type={'id'} icon={'id'} title={'插入ID'} /> */}
             <HTMLCodeButton handleCodeToText={handleCodeToText} title={'插入HTML Code'} />
 
 

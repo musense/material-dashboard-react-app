@@ -9,10 +9,10 @@
     display: flex;
     justify-content: center;
     align-items: center;
-
+    transition: all 225ms cubic-bezier(0, 0, 0.2, 1) 0ms;
 }
 
-.code-wrapper.maxSizeClassName {
+.code-wrapper.main-panel-max-size {
     width: 100vw;
 }
 

@@ -23,7 +23,7 @@ function App() {
                 <Route path="admin" element={<Admin />} >
                     {/* <Route path="dashboard" element={<Dashboard />} /> */}
                     {/* <Route path="user" element={<UserProfile />} /> */}
-                    <Route path="banner" element={<BannerManager />} />
+                    {/* <Route path="banner" element={<BannerManager />} /> */}
                     <Route path="tag" element={<TagList />} />
                     <Route path="editorClassList" element={<EditorClassList />} />
 

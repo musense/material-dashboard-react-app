@@ -34,13 +34,13 @@ const dashboardRoutes = [
   //   component: TableList,
   //   layout: "/admin"
   // },
-  {
-    path: "/banner",
-    name: "Banner管理",
-    icon: "content_paste",
-    component: BannerManager,
-    layout: "/admin"
-  },
+  // {
+  //   path: "/banner",
+  //   name: "Banner管理",
+  //   icon: "content_paste",
+  //   component: BannerManager,
+  //   layout: "/admin"
+  // },
   {
     path: "/tag",
     name: "標籤管理",

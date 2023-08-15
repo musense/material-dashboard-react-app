@@ -41,7 +41,11 @@ const HtmlCode = (props) => {
         }
     }, [isHtmlEmbed])
     return (
-        <div   {...attributes} {...element.attr} style={{ boxShadow: selected && focused && '0 0 3px 3px lightgray', marginRight: '20px' }}>
+        <div   {...attributes} {...element.attr}
+            style={{
+                boxShadow: selected && focused && '0 0 3px 3px lightgray'
+                , marginRight: '20px'
+            }}>
             <div contentEditable={false}>
                 <Interweave content={element.html} />
             </div>

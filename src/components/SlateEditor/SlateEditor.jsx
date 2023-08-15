@@ -227,12 +227,11 @@ function SlateEditor({
               }
             }}
           />
-
-          {
-            htmlAction.showInput &&
-            <CodeToText {...htmlAction} handleCodeToText={handleCodeToText} />
-          }
         </MyScrollbar>
+        {
+          htmlAction.showInput &&
+          <CodeToText {...htmlAction} handleCodeToText={handleCodeToText} />
+        }
       </Slate>
       <ImageDialog
         open={open}

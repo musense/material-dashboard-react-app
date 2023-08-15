@@ -161,3 +161,7 @@
 [data-slate-editor] html {
     scroll-behavior: smooth;
 }
+
+html {
+    scroll-behavior: smooth;
+}

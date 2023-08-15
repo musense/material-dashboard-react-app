@@ -6,7 +6,7 @@ import {
     TableButton,
     ColorPickerButton,
     HTMLCodeButton,
-    InsertIdButton,
+    // InsertIdButton,
     ImageButton,
     AddLinkButton,
     RemoveLinkButton,

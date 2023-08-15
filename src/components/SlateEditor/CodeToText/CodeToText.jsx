@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useCallback } from 'react';
 import './CodeToText.css'
 import Icon from 'views/Icons/Icon'
 import Interweave from 'interweave'
@@ -82,11 +82,11 @@ const CodeToText = (props) => {
                     </div>
                 </div>
                 <div>
-                    <button onClick={addHtml} className='done'>Done</button>
-                    <button className='clear' onClick={clearHtml}>Clear</button>
+                    <button type="button" onClick={addHtml} className='done'>Done</button>
+                    <button type="button" className='clear' onClick={clearHtml}>Clear</button>
                 </div>
             </div>
-        </div>
+        </div >
 
     )
 }

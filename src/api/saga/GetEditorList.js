@@ -20,12 +20,10 @@ function* GetEditorTitleList(payload = 1) {
             }, [])
             return resData.flat()
         })
-        console.log("🚀 ~ file: GetEditorList.js:15 ~ function*GetEditorTitleList ~ responseData:", responseData)
         responseData.sort((data1, data2) => new Date(data2.updatedAt) - new Date(data1.updatedAt))
         const totalCount = parseInt(responseData.length)
 
         const titleList = toFrontendData(responseData)
-        console.log("🚀 ~ file: GetEditorList.js:422 ~ function*GetEditorTitleList ~ titleList:", titleList)
         yield put({
             type: GetEditorAction.REQUEST_EDITOR_TITLE_LIST_SUCCESS,
             payload: {
@@ -42,7 +40,6 @@ function* GetEditorTitleList(payload = 1) {
 // GET :_id
 function* GetEditorByID(payload) {
     const { data } = payload
-    console.log("🚀 ~ file: GetEditorList.js:45 ~ function*GetEditorByID ~ _id:", data)
     try {
         // const response = yield instance.get(`/editor/${payload.data._id}`);
 
@@ -129,12 +126,8 @@ function* SearchEditor(payload) {
 function* AddEditor(payload) {
     try {
         const { data, draft } = payload
-        console.log("🚀 ~ file: GetEditorList.js:103 ~ function*AddEditor ~ data:", data)
         let response
         const requestFormData = toBackendFormData(data, 'add_new')
-        console.log("🚀 ~ file: GetEditorList.js:105 ~ function*AddEditor ~ requestFormData:", requestFormData)
-        console.log("🚀 ~ file: GetEditorList.js:105 ~ function*AddEditor ~ requestFormData.get('contentImagePath'):", requestFormData.get('contentImagePath'))
-        console.log("🚀 ~ file: GetEditorList.js:105 ~ function*AddEditor ~ typeof requestFormData.get('contentImagePath'):", typeof requestFormData.get('contentImagePath'))
         // return
         if (!draft) {
             //* 不是草稿時執行以下程式
@@ -202,7 +195,6 @@ function* PreviewEditor(payload) {
 function* UpdateEditor(payload) {
     // return
     const { id, data } = payload
-    console.log("🚀 ~ file: GetEditorList.js:179 ~ function*UpdateEditor ~ data:", data)
     try {
         const requestFormData = toBackendFormData(data, 'update')
         // return
@@ -245,7 +237,6 @@ function* DeleteEditor(payload) {
 function* AuthUser(patchSuccessType, patchFailType) {
     try {
         const authResponse = yield instance.post(`/editor/verifyUser`);;
-        console.log("🚀 ~ file: GetEditorList.js:223 ~ function*AuthUser ~ authResponse:", authResponse)
         const message = yield authResponse.data.message;
         yield put({
             type: patchSuccessType,

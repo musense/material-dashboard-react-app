@@ -2,7 +2,6 @@ import React from "react";
 import Iframe from "react-iframe";
 
 export default function PreviewMedia({ styles, isImage, iframeUrl }) {
-    console.log("🚀 ~ file: PreviewMedia.jsx:5 ~ PreviewMedia ~ iframeUrl:", iframeUrl)
     return (
         <div className={styles['preview-image-wrapper']}>
             {

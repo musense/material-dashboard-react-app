@@ -46,9 +46,9 @@ function AuthNavbar(props) {
       </ListItem> */}
       <ListItem className={classes.listItem}>
         <NavLink
-          to={'/auth/register-page'}
+          to={'/register'}
           className={cx(classes.navLink, {
-            [classes.navLinkActive]: activeRoute('/auth/register-page'),
+            [classes.navLinkActive]: activeRoute('/register'),
           })}
         >
           <PersonAdd className={classes.listItemIcon} />
@@ -61,9 +61,9 @@ function AuthNavbar(props) {
       </ListItem>
       <ListItem className={classes.listItem}>
         <NavLink
-          to={'/auth/login-page'}
+          to={'/login'}
           className={cx(classes.navLink, {
-            [classes.navLinkActive]: activeRoute('/auth/login-page'),
+            [classes.navLinkActive]: activeRoute('/login'),
           })}
         >
           <Fingerprint className={classes.listItemIcon} />

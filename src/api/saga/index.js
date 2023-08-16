@@ -3,6 +3,7 @@ import GetEditorList from "./GetEditorList";
 import GetTagList from "./GetTagList";
 import GetUserList from "./GetUserList";
 import GetClassList from "./GetClassList";
+import GetBannerList from "./GetBannerList";
 
 function* rootSaga() {
   yield all([
@@ -10,6 +11,7 @@ function* rootSaga() {
     GetEditorList(),
     GetUserList(),
     GetClassList(),
+    GetBannerList(),
   ]);
 }
 

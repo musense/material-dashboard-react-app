@@ -5,7 +5,8 @@ const initialState = {
   message: null,
   confirm: null,
   messageDialogReturnValue: null,
-  data: null
+  data: null,
+  clientErrorMessage: null,
 }
 
 const getDialogReducer = (state = initialState, action) => {
@@ -33,9 +34,14 @@ const getDialogReducer = (state = initialState, action) => {
         confirm: null,
         data: null
       }
-    case GetDialogAction.ON_MODAL_CLOSE:
+    case GetDialogAction.SET_CLIENT_MESSAGE:
       return {
-        ...initialState,
+        ...state,
+        clientErrorMessage: action.payload.clientErrorMessage,
+      }
+    case "RESET_DIALOG_STATE":
+      return {
+        ...initialState
       }
     case "RESET_STATE_DATA": {
       return {

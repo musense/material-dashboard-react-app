@@ -5,6 +5,7 @@ import BannerRightWrapper from "./BannerRightWrapper";
 import { useDispatch, useSelector } from 'react-redux';
 import * as GetBannerAction from '../../actions/GetBannerAction';
 import { reDispatchMessage, errorMessage } from './../../reducers/errorMessage';
+import { useLoaderData } from 'react-router';
 
 const BannerDispatchMessage = [
     ...reDispatchMessage,
@@ -14,6 +15,7 @@ const BannerDispatchMessage = [
 function BannerList() {
     const dispatch = useDispatch();
     const returnMessage = useSelector(state => state.getBannerReducer.errorMessage);
+
     useEffect(() => {
         if (BannerDispatchMessage.includes(returnMessage)) {
             dispatch({ type: GetBannerAction.REQUEST_BANNER })

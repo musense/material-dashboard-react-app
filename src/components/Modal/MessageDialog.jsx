@@ -1,15 +1,12 @@
-import React, { useCallback } from 'react'
-
-import Button from '@mui/material/Button';
+import React from 'react'
 import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import Box from '@mui/material/Box';
-import { useDispatch } from 'react-redux';
-import * as GetDialogAction from '../../actions/GetDialogAction';
-import { useNavigate } from 'react-router-dom'
+
+import ConfirmButtonWrapper from './components/ConfirmButtonWrapper';
+import EditorButtonWrapper from './components/EditorButtonWrapper';
 
 const style = {
   minWidth: 300,
@@ -30,59 +27,8 @@ export default function MessageDialog({
   data = null,
   editor = null
 }) {
-  console.log("🚀 ~ file: MessageDialog.jsx:33 ~ sitemapUrl:", sitemapUrl)
 
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
-
-  const keepEditClose = useCallback(() => {
-    if (success) {
-      navigate(`/admin/editorList/${editorID}`)
-      setClose()
-    } else {
-      setClose()
-    }
-  }, [success, editorID, setClose, navigate])
-
-  const previewClose = useCallback(() => {
-    if (success) {
-      window.open(sitemapUrl, "_blank")
-      navigate(`/admin/editorList/${editorID}`)
-      setClose()
-    } else {
-      navigate(-1)
-    }
-  }, [success, sitemapUrl, navigate, setClose])
-
-  const handleClose = useCallback((dialogContent) => {
-    dispatch({
-      type: GetDialogAction.ON_MODAL_CLOSE,
-      payload: {
-        messageDialogReturnValue: false
-      }
-    })
-    setClose()
-    if (dialogContent === '您已被登出！'
-      || dialogContent === '您已登出！'
-      || dialogContent === '取得資料出現錯誤！即將導回登入頁！'
-    ) {
-      dispatch({ type: "RESET_STATE_DATA" });
-      navigate('/auth/login-page', { replace: true })
-    }
-  }, [setClose, navigate, dispatch])
-
-  const handleCloseOK = useCallback((data) => {
-    console.log("🚀 ~ file: MessageDialog.jsx:34 ~ handleCloseOK ~ data:", data)
-    dispatch({
-      type: GetDialogAction.ON_MODAL_CLOSE,
-      payload: {
-        messageDialogReturnValue: data
-      }
-    })
-    setClose()
-  }, [setClose, dispatch])
-
-  return (
+  return dialogTitle && (
     <Dialog
       open={open}
       onClose={setClose}
@@ -103,16 +49,15 @@ export default function MessageDialog({
             success={success}
             dialogTitle={dialogTitle}
             dialogContent={dialogContent}
-            keepEditClose={keepEditClose}
-            previewClose={previewClose}
-            handleClose={handleClose}
+            editorID={editorID}
+            sitemapUrl={sitemapUrl}
+            setClose={setClose}
           />
           : <ConfirmButtonWrapper
             confirm={confirm}
             dialogContent={dialogContent}
             data={data}
-            handleClose={handleClose}
-            handleCloseOK={handleCloseOK}
+            setClose={setClose}
           />
         }
       </Box>
@@ -120,59 +65,7 @@ export default function MessageDialog({
   )
 }
 
-function EditorButtonWrapper({
-  success,
-  dialogTitle,
-  dialogContent,
-  keepEditClose,
-  previewClose,
-  handleClose,
-}) {
-
-  const SuccessButton = <DialogActions>
-    <Button onClick={previewClose}>{'前往網頁'}</Button>
-    <Button onClick={keepEditClose} autoFocus>{'繼續編輯'}</Button>
-  </DialogActions>;
-
-  const WarningButton = <DialogActions>
-    <Button onClick={previewClose}>{'回前頁'}</Button>
-    <Button onClick={keepEditClose} autoFocus>{'確定'}</Button>
-  </DialogActions>;
-
-  const ErrorButton = <DialogActions>
-    <Button onClick={() => handleClose(dialogContent)} autoFocus>好</Button>
-  </DialogActions>;
-
-  return success
-    ? SuccessButton
-    : dialogTitle === 'Warning'
-      ? WarningButton
-      : ErrorButton
-}
-
-function ConfirmButtonWrapper({
-  confirm,
-  dialogContent,
-  data,
-  handleClose,
-  handleCloseOK
-}) {
-
-  const ConFirmButton = <DialogActions>
-    <Button onClick={() => handleClose(dialogContent)}>算了</Button>
-    <Button onClick={() => handleCloseOK(data)} autoFocus>好</Button>
-  </DialogActions>;
-
-  const NormalCloseButton = <DialogActions>
-    <Button onClick={() => handleClose(dialogContent)} autoFocus>好</Button>
-  </DialogActions>;
 
 
 
-  return confirm
-    ? ConFirmButton
-    : NormalCloseButton
-
-
-}
 

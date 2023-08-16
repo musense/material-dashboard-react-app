@@ -9,20 +9,20 @@ import EditorListBody from "./EditorListBody";
 
 import * as GetEditorAction from "../../actions/GetEditorAction";
 import { reDispatchMessage } from './../../reducers/errorMessage';
+import { getServerMessage } from 'reducers/GetEditorReducer';
 
 
 function EditorList() {
 
   const dispatch = useDispatch();
-  const returnMessage = useSelector(state => state.getEditorReducer.errorMessage);
-  console.log("🚀 ~ file: index.jsx:20 ~ EditorList ~ returnMessage:", returnMessage)
+  const serverMessage = useSelector(getServerMessage);
 
   useEffect(() => {
-    if (reDispatchMessage.includes(returnMessage)) {
+    if (reDispatchMessage.includes(serverMessage)) {
       dispatch({ type: GetEditorAction.REQUEST_EDITOR })
     }
 
-  }, [returnMessage]);
+  }, [serverMessage]);
 
   useEffect(() => {
     dispatch({ type: GetEditorAction.REQUEST_EDITOR });

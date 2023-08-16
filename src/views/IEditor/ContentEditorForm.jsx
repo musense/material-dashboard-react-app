@@ -8,8 +8,6 @@ const ContentEditorForm = () => {
   const title = useSelector((state) => state.getSlateReducer.contentForm?.title);
   const content = useSelector((state) => state.getSlateReducer.contentForm?.content)
 
-  console.log("🚀 ~ file: ContentEditorForm.jsx:17 ~ ContentEditorForm ~ title:", title)
-  console.log("🚀 ~ file: ContentEditorForm.jsx:17 ~ ContentEditorForm ~ content:", content)
 
   const onPropertyChange = useCallback((value, property) => {
     if (JSON.stringify(value) === JSON.stringify(content)) return
@@ -27,7 +25,6 @@ const ContentEditorForm = () => {
   }, [dispatch, content])
 
   const onSlateEditorChange = useCallback((value) => {
-    console.log("🚀 ~ file: ContentEditorForm.jsx:30 ~ onSlateEditorChange ~ value:", value)
     onPropertyChange(value, 'content')
   }, [onPropertyChange])
 

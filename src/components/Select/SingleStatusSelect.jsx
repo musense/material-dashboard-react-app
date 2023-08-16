@@ -11,8 +11,6 @@ export default function SingleStatusSelect({
   height = null,
   setState
 }) {
-  console.log("🚀 ~ file: SingleStatusSelect.jsx:16 ~ defaultSelected:", defaultSelected)
-  console.log("🚀 ~ file: SingleStatusSelect.jsx:10 ~ SingleStatusSelect ~ width:", width)
 
   const statusOptions = useSelector((state) => state.getClassReducer.editorStatus);
 

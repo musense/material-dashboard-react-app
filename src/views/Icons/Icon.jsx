@@ -1,8 +1,8 @@
 import React from 'react';
-import { MdFormatBold, MdFormatItalic, MdStrikethroughS, MdFormatUnderlined, MdFormatQuote, MdFormatAlignLeft, MdFormatAlignCenter, MdFormatAlignRight, MdFormatAlignJustify, MdFormatListNumbered, MdFormatListBulleted, MdInsertLink, MdLinkOff, MdVideoLibrary, MdImage, MdAdd, MdKeyboardArrowRight, MdArrowForward, MdSmartButton, MdLogout, MdFormatColorFill, MdFormatColorText, MdCheck } from 'react-icons/md'
+import { MdFormatBold, MdFormatItalic, MdStrikethroughS, MdFormatUnderlined, MdFormatQuote, MdFormatAlignLeft, MdFormatAlignCenter, MdFormatAlignRight, MdFormatAlignJustify, MdFormatListNumbered, MdFormatListBulleted, MdInsertLink, MdLinkOff, MdVideoLibrary, MdImage, MdAdd, MdKeyboardArrowRight, MdArrowForward, MdSmartButton, MdLogout, MdFormatColorFill, MdFormatColorText, MdCheck, MdOutlineStickyNote2 } from 'react-icons/md'
 import { BsTypeH1, BsTypeH2, BsTypeH3, BsCameraVideoFill, BsCode } from 'react-icons/bs'
 import { FaSuperscript, FaSubscript, FaArrowRight } from 'react-icons/fa'
-import { AiFillEdit, AiOutlineTable, AiOutlineInsertRowBelow, AiOutlineInsertRowRight, AiOutlineDelete, AiFillTag, AiOutlineUpload, AiOutlineArrowsAlt, AiOutlineInsertRowAbove, AiOutlineInsertRowLeft, AiFillHtml5, AiOutlineDeleteRow, AiOutlineDeleteColumn } from 'react-icons/ai'
+import { AiOutlineEdit, AiOutlineTable, AiOutlineInsertRowBelow, AiOutlineInsertRowRight, AiOutlineDelete, AiFillTag, AiOutlineUpload, AiOutlineArrowsAlt, AiOutlineInsertRowAbove, AiOutlineInsertRowLeft, AiFillHtml5, AiOutlineDeleteRow, AiOutlineDeleteColumn } from 'react-icons/ai'
 import { SiLatex } from 'react-icons/si'
 import { BiHide } from 'react-icons/bi'
 import {
@@ -48,7 +48,7 @@ const iconList = {
     videoPlayer: <BsCameraVideoFill size={20} />,
     insertHtml: <AiFillHtml5 size={20} />,
     arrowRight: <MdArrowForward size={35} />,
-    pen: <AiFillEdit size={20} />,
+    pen: <AiOutlineEdit size={20} />,
     smartButton: <MdSmartButton size={20} />,
     logout: <MdLogout size={32} color='white' title='logout' />,
     tableToLeft: <PiAlignLeftSimple size={25} />,
@@ -59,6 +59,7 @@ const iconList = {
     backgroundColorPicker: <MdFormatColorFill size={20} color="inherit" />,
     colorPicker: <MdFormatColorText size={20} color="inherit" />,
     check: <MdCheck size={20} color='inherit' />,
+    note: <MdOutlineStickyNote2 size={25} />,
 }
 
 const Icon = (props) => {

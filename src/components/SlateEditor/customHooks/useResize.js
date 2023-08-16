@@ -23,7 +23,6 @@ const useResize = () => {
         setResizing(false);
     }, [setResizing, onMouseMove, onMouseUp])
     const onMouseMove = useCallback((e) => {
-        console.log("🚀 ~ file: useResize.js:22 ~ onMouseMove ~ e.movementX:", e.movementX)
         setSize(currentSize => ({
             width: currentSize.width + e.movementX,
             height: currentSize.height + e.movementY

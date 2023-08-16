@@ -7,9 +7,9 @@ export default function useEditCellFunction({
     onDelete: {
         id,
         name,
-        message,
     },
     onEdit: {
+        selectedID = null,
         editType,
         data,
         callback = null
@@ -17,19 +17,16 @@ export default function useEditCellFunction({
 
 }) {
     const dispatch = useDispatch();
-    const onCopy = useCallback(
-        (sitemapUrl, result) => {
-            console.log(sitemapUrl);
-            console.log(result);
-            dispatch({
-                type: GetDialogAction.COPY_SITEMAP,
-                payload: {
-                    contentData: result ? sitemapUrl : '',
-                    message: result ? 'copy sitemapUrl successfully' : 'copy sitemapUrl failed',
-                },
-            });
-            handleOpenDialog();
-        }, [handleOpenDialog, dispatch]);
+    const onCopy = useCallback((sitemapUrl, result) => {
+        dispatch({
+            type: GetDialogAction.COPY_SITEMAP,
+            payload: {
+                contentData: result ? sitemapUrl : '',
+                message: result ? 'copy sitemapUrl successfully' : 'copy sitemapUrl failed',
+            },
+        });
+        handleOpenDialog && handleOpenDialog();
+    }, [handleOpenDialog, dispatch]);
 
     const onDelete = useCallback(() => {
         dispatch({
@@ -37,12 +34,12 @@ export default function useEditCellFunction({
             payload: {
                 data: id,
                 contentData: name,
-                message: message,
+                message: 'delete one',
                 confirm: true,
             },
         });
-        handleOpenDialog()
-    }, [dispatch, handleOpenDialog, id, name, message])
+        handleOpenDialog && handleOpenDialog()
+    }, [handleOpenDialog, dispatch, id, name])
 
     const onEdit = useCallback(() => {
         dispatch({
@@ -52,7 +49,7 @@ export default function useEditCellFunction({
             },
         });
         callback && callback()
-    }, [dispatch, callback, editType, data])
+    }, [dispatch, callback, editType, data, selectedID])
 
     return {
         onCopy,

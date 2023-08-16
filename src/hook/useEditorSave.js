@@ -19,7 +19,6 @@ export default function useEditorSave(message, submitState, isPreview, id = null
         onEditorSave(submitState)
     }, [message, submitState, isPreview, id]);
     const onEditorUpdate = useCallback((data, id = null) => {
-        console.log("🚀 ~ file: index.jsx:113 ~ onEditorSave ~ data:", data)
         dispatch({
             type: GetEditorAction.UPDATE_EDITOR,
             payload: {
@@ -30,7 +29,6 @@ export default function useEditorSave(message, submitState, isPreview, id = null
         })
     }, [dispatch])
     const onEditorSave = useCallback((data, id = null) => {
-        console.log("🚀 ~ file: index.jsx:74 ~ onEditorSave ~ data:", data)
 
         dispatch({
             type: GetEditorAction.ADD_EDITOR,
@@ -42,7 +40,6 @@ export default function useEditorSave(message, submitState, isPreview, id = null
     }, [dispatch])
 
     const onPreviewSave = useCallback((data) => {
-        console.log("🚀 ~ file: index.jsx:92 ~ onPreviewSave ~ data:", data)
         dispatch({
             type: GetSlateAction.PREVIEW_EDITOR,
             payload: {

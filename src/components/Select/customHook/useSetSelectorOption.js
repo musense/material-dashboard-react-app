@@ -12,9 +12,8 @@ export default function useSetSelectorOption(defaultOptions) {
             }
         })
     }, [defaultOptions])
-    
+
     useEffect(() => {
-        console.log("🚀 ~ file: useSetSelectorOption.js:18 ~ useSetSelectorOption ~ transformedOptions:", transformedOptions)
         setOptions(transformedOptions);
     }, [transformedOptions]);
 

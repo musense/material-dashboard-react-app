@@ -3,7 +3,6 @@ import React, { useCallback, useEffect } from "react";
 export default function useBeforeUnloadSave(onEditorSave) {
 
   const handleBeforeUnload = useCallback((event) => {
-    console.log('🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀beforeunload Hola!');
     event.preventDefault();
     // onEditorSave()
     event.returnValue = 'beforeunload Hola!';

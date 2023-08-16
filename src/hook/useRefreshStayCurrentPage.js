@@ -12,7 +12,7 @@ export default function useRefreshStayCurrentPage() {
     useEffect(() => {
         const lastLocation = window.sessionStorage.getItem('pathname')
         if (!lastLocation || lastLocation === '/') {
-            navigate('/auth/login-page')
+            navigate('/login')
         } else if (lastLocation) {
             navigate(lastLocation)
         }

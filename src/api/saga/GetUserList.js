@@ -9,7 +9,6 @@ function* UserLogin(payload) {
     const { username, password } = payload
     try {
         const response = yield instance.post(`/login`, { username, password });
-        console.log("🚀 ~ file: GetUserList.js:16 ~ function*UserLogin ~ response:", response)
         const user = yield response.data;
         yield put({
             type: GetUserAction.LOGIN_USER_SUCCESS,
@@ -29,9 +28,7 @@ function* UserLogout() {
 
     try {
         const response = yield instance.post(`/logout`);
-        console.log("🚀 ~ file: GetUserList.js:16 ~ function*UserLogin ~ response:", response)
         const user = yield response.data;
-          // console.log("🚀 ~ file: GetUserList.js:51 ~ function*UserLogout ~ user:", user)
         yield put({
             type: GetUserAction.LOGOUT_USER_SUCCESS,
             errorMessage: 'logout successfully',

@@ -34,11 +34,10 @@ function EditorManagerNews() {
 
 
   const itemList = useMemo(() => {
-    
+
     const newsSortingList = defaultList
       .filter(item => item['newsSorting'] !== undefined)
       .sort((a, b) => a.newsSorting - b.newsSorting)
-    console.log("🚀 ~ file: EditorManagerNews.jsx:42 ~ itemList ~ newsSortingList:", newsSortingList)
 
     const notNewSortingList = defaultList
       .filter(item => newsSortingList.every(i => i._id !== item._id))
@@ -59,7 +58,6 @@ function EditorManagerNews() {
       }
     })
   }, [defaultList])
-  console.log("🚀 ~ file: EditorManagerNews.jsx:93 ~ itemList ~ itemList:", itemList)
 
 
   return (

@@ -47,10 +47,8 @@ export default function MediaModal({ open, handleClose, mediaInfo }) {
 
     useEffect(() => {
         if (!mediaInfo) return
-        console.log("🚀 ~ file: MediaModal.jsx:32 ~ MediaModal ~ mediaInfo:", mediaInfo)
         if (mediaInfo.contentImagePath.indexOf('<iframe') !== -1) {
             const src = getProperty('src');
-            console.log("🚀 ~ file: MediaModal.jsx:41 ~ useEffect ~ src:", src)
             setIsImage(false)
             setIframeUrl(src)
         } else {

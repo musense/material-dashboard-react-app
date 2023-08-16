@@ -12,7 +12,6 @@ export default function EditorListButtonList({
     totalPage,
     totalCount
 }) {
-    console.log("🚀 ~ file: EditorListButtonList.jsx:12 ~ totalPage:", totalPage)
     const dispatch = useDispatch();
     const navigate = useNavigate();
 

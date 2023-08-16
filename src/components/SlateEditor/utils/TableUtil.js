@@ -77,7 +77,6 @@ export class TableUtil {
             })
             if (rowNode) {
                 const [, currentRow] = rowNode;
-                console.log("🚀 ~ file: TableUtil.js:78 ~ TableUtil ~ deleteRow ~ currentRow:", currentRow)
 
                 Transforms.removeNodes(this.editor, { at: currentRow });
 
@@ -134,13 +133,10 @@ export class TableUtil {
                 })
                 const [, currentCell] = cellNode
                 const startPath = currentCell;
-                console.log("🚀 ~ file: TableUtil.js:130 ~ TableUtil ~ deleteColumn ~ startPath:", startPath)
-                console.log("🚀 ~ file: TableUtil.js:132 ~ TableUtil ~ deleteColumn ~ table.rows:", table.rows)
 
                 startPath[startPath.length - 2] = 0;
                 for (let row = 0; row < table.rows; row++) {
 
-                    console.log("🚀 ~ file: TableUtil.js:138 ~ TableUtil ~ deleteColumn ~ startPath:", startPath)
                     Transforms.removeNodes(this.editor, { at: startPath });
 
                     startPath[startPath.length - 2]++

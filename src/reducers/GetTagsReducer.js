@@ -20,8 +20,8 @@ const initialState = {
         customUrl: '',
         popular: false,
         sorting: '',
-        isEditing: false,
     },
+    isEditing: false,
     selectedIndex: -1,
     currentPage: null,
     totalPage: null,
@@ -37,8 +37,8 @@ const getTagsReducer = (state = initialState, action) => {
                 ...state,
                 selectedTag: {
                     ...initialState.selectedTag,
-                    isEditing: false
                 },
+                isEditing: false
             }
         }
         case GetTagsAction.SET_TAG_PROPERTY: {
@@ -65,8 +65,8 @@ const getTagsReducer = (state = initialState, action) => {
                     customUrl: tag.webHeader.customUrl,
                     popular: tag.popular,
                     sorting: tag.sorting,
-                    isEditing: true,
                 },
+                isEditing: true,
             }
         case GetTagsAction.ADD_TAG_SUCCESS:
             return {
@@ -120,7 +120,6 @@ const getTagsReducer = (state = initialState, action) => {
             }
         case GetTagsAction.SHOW_TAG_LIST_SORTING:
             const { key } = action.payload;
-            console.log("🚀 ~ file: GetTagsReducer.js:123 ~ getTagsReducer ~ key:", key)
             return {
                 ...state,
                 showTagList: state.tagList
@@ -130,7 +129,6 @@ const getTagsReducer = (state = initialState, action) => {
                         e1 = tag1[key]
                         e2 = tag2[key]
                         // typeOf = typeof new Date(tag1[key]).getMonth === 'function' ? 'date' : typeOf
-                        console.log("🚀 ~ file: GetTagsReducer.js:133 ~ ?state.tagList.sort ~ typeOf:", typeOf)
                         const sorting = state.sortingMap[key]
                         switch (typeOf) {
                             case 'string': {

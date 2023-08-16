@@ -15,8 +15,10 @@ import MessageDialog from 'components/Modal/MessageDialog';
 import RowHeader from '../EditorList/RowHeader';
 import RowBody from './RowBody';
 import useModal from '../../hook/useModal';
-import useEditorListResult from '../../hook/useEditorListResult';
+import useModalResult from '../../hook/useModalResult';
 import useDeleteSelectedRow from 'hook/useDeleteSelectedRow';
+import getErrorMessage from 'utils/getErrorMessage';
+
 const headerMap = {
     headerRow: [
         { name: '分類名稱', patchKey: 'name', type: "string" },
@@ -50,23 +52,16 @@ export default function EditorRightWrapper() {
     });
 
     const errorMessage = getErrorMessage(dialogMessage, serverMessage)
-    function getErrorMessage(errorMessage, returnMessage) {
-        console.log("🚀 ~ file: index.jsx:40 ~ getErrorMessage ~ returnMessage:", returnMessage)
-        console.log("🚀 ~ file: index.jsx:40 ~ getErrorMessage ~ errorMessage:", errorMessage)
-        if (errorMessage) {
-            return errorMessage;
-        }
-        if (returnMessage) {
-            return returnMessage;
-        }
-        return null;
-    }
 
     const {
         title,
         content,
         success
-    } = useEditorListResult(errorMessage, contentData, data)
+    } = useModalResult({
+        message: errorMessage,
+        name: '分類',
+        data: contentData
+    })
 
     const {
         open: openDialog,

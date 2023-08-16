@@ -2,6 +2,8 @@ import { useCallback, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 
 export default function useModal(data) {
+    console.log("🚀 ~ file: useModal.js:5 ~ useModal ~ data:", data)
+
     const dispatch = useDispatch();
     const [open, setOpen] = useState(false);
     const handleOpen = () => setOpen(true);
@@ -13,10 +15,12 @@ export default function useModal(data) {
                 message: '--reset-error-message',
             }
         })
+        dispatch({
+            type: "RESET_DIALOG_STATE",
+        })
     }, [setOpen, dispatch]);
 
     useEffect(() => {
-        console.log("🚀 ~ file: useModal.js:10 ~ useEffect ~ data:", data)
         if (data) handleOpen()
     }, [data]);
 

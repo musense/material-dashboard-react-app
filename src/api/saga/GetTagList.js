@@ -61,7 +61,6 @@ function* GetPopularTagList() {
         const response = yield instance.get(`/tags/getPopularTags`);
         const { currentPage, totalCount, data: responseData } = yield response.data
         const tagList = toFrontendData(responseData)
-        console.log("🚀 ~ file: GetTagList.js:44 ~ function*GetTagList ~ tagList:", tagList)
         yield put({
             type: GetTagsAction.REQUEST_POPULAR_TAG_SUCCESS,
             payload: {
@@ -88,10 +87,8 @@ function* GetTagList(payload = 1) {
             totalCount,
             currentPage
         } = yield Promise.all([promise1, promise2]).then(res => {
-            console.log("🚀 ~ file: GetTagList.js:86 ~ const[]=Promise.all ~ res:", res)
             const nextSorting = res[0].data.maxTagNumber
             const { data: responseData, totalCount, currentPage } = res[1].data
-            console.log("🚀 ~ file: GetTagList.js:94 ~ function*GetTagList ~ responseData:", responseData)
             responseData.map(tag => {
                 return {
                     ...tag,
@@ -142,9 +139,7 @@ function* SearchTag(payload) {
                 : ''
             : ''
         const response = yield instance.get(`/tags?limit=10000&pageNumber=1&${titleString}${startDateString}${endDateString}`);
-        // console.log("🚀 ~ file: GetEditorList.js:72 ~ function*SearchEditor ~ response:", response)
         const { currentPage, totalCount, data: responseData } = yield response.data
-        // console.log("🚀 ~ file: GetEditorList.js:72 ~ function*SearchEditor ~ responseData:", responseData)
         const tagList = toFrontendData(responseData)
         // return
         yield put({
@@ -165,7 +160,6 @@ function* AddTag(payload) {
     const { data } = payload
     try {
         const requestData = toBackendData(data)
-        // console.log("🚀 ~ file: GetTagList.js:131 ~ function*AddTag ~ requestDate:", requestData)
         // return
         const response = yield instance.post(`/tags`, requestData);
         const responseData = yield response.data;
@@ -183,9 +177,6 @@ function* UpdateTag(payload) {
     try {
         const { _id, ...data } = payload;
         const requestData = toBackendData(data)
-        // console.log("🚀 ~ file: GetTagList.js:55 ~ function*UpdateTag ~ _id:", { _id })
-        // console.log("🚀 ~ file: GetTagList.js:55 ~ function*UpdateTag ~ data:", { data })
-        // console.log("🚀 ~ file: GetTagList.js:55 ~ function*UpdateTag ~ requestData:", { requestData })
 
         const response = yield instance.patch(`/tags/${_id}`, requestData);
         const tagList = yield response.data;
@@ -204,7 +195,6 @@ function* DeleteTag(payload) {
         const data = {
             'ids': payload
         }
-        // console.log("🚀 ~ file: GetTagList.js:175 ~ function*DeleteTag ~ data:", data)
 
 
         const response = yield instance.delete(`/tags/bunchDeleteByIds`, {

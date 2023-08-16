@@ -17,7 +17,6 @@ function SlateEditor({
   slateValue,
   setState
 }) {
-  console.log("🚀 ~ file: SlateEditor.jsx:15 ~ SlateEditor ~ defaultValue:", slateValue)
 
   const slateEditor = useCreateSlateEditor()
 
@@ -80,7 +79,6 @@ function SlateEditor({
             placeholder="請輸入文案..."
             // autoFocus
             onKeyDown={event => {
-              // console.log("🚀 ~ file: SlateEditor.jsx:155 ~ SlateEditor ~ event:", event)
               if (event.ctrlKey && event.key === 'Enter') {
                 event.preventDefault()
                 CustomEditor.toggleBlock(slateEditor, 'numbered-list');

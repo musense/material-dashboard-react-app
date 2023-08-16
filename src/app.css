@@ -12,8 +12,7 @@ label {
 }
 
 :where(input[type='submit'] input[type='reset'],
-  input[type='button'],
-) {
+  input[type='button'], .submit-btn) {
   padding: 0;
   display: block;
   width: min(10rem, 100%);
@@ -22,19 +21,22 @@ label {
 }
 
 div>input[type='submit'],
+div>.submit-btn,
 div>input[type='reset'],
 div>input[type='button'] {
   padding: 0;
   cursor: pointer;
 }
 
-input[type='submit'] {
+input[type='submit'],
+.submit-btn {
   background-color: darkviolet;
   color: white;
   border: none;
 }
 
-input[type='submit']:hover {
+input[type='submit']:hover,
+.submit-btn:hover {
   background-color: violet;
 }
 
@@ -116,6 +118,10 @@ input[type='file'] {
   object-fit: cover;
   aspect-ratio: 16/9;
   cursor: pointer;
+}
+
+.view-list-form .flex-1 {
+  flex-grow: 1;
 }
 
 .view-list-form .flex-2 {

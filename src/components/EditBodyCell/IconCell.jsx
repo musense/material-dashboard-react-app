@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import Icon from 'views/Icons/Icon';
 
@@ -17,12 +17,12 @@ export default function IconCell({
     let content
         , iconCell = ({ inputProps, callback = null }) => {
             if (callback) {
-                inputProps = {
+                inputProps = useMemo(() => ({
                     ...inputProps,
                     onClick: callback
-                }
+                }), [inputProps, callback])
             }
-            return <div div className="edit-icon-wrapper" >
+            return <div className="edit-icon-wrapper" >
                 <input {...inputProps} />
                 < Icon icon={name} />
             </div>

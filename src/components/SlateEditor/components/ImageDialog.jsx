@@ -12,7 +12,6 @@ export default function ImageDialog({ open, setClose, urlRef, altTextRef, hrefRe
 
 
     const handleClose = (e) => {
-        console.log("🚀 ~ file: ImageDialog.jsx:15 ~ handleClose ~ e.target.value:", e.target.value)
         const buttonValue = e.target.value
         setClose();
         if (buttonValue === 'cancel') return
@@ -20,9 +19,6 @@ export default function ImageDialog({ open, setClose, urlRef, altTextRef, hrefRe
             alert('請至少輸入URL')
             return
         }
-        console.log("🚀 ~ file: ImageDialog.jsx:15 ~ handleClose ~ urlRef.current:", urlRef.current)
-        console.log("🚀 ~ file: ImageDialog.jsx:15 ~ handleClose ~ altTextRef.current:", altTextRef.current)
-        console.log("🚀 ~ file: ImageDialog.jsx:15 ~ handleClose ~ hrefRef.current:", hrefRef.current)
     };
 
 

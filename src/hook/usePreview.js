@@ -6,11 +6,9 @@ export default function usePreview(previewID, isPreview) {
     const dispatch = useDispatch();
 
     useEffect(() => {
-        console.log("🚀 ~ file: usePreview.js:10 ~ useEffect ~ isPreview:", isPreview)
-        console.log("🚀 ~ file: usePreview.js:10 ~ useEffect ~ previewID:", previewID)
         if (!isPreview) return
         if (!previewID) return
         window.open(`${previewURL}/preview/${previewID}`, '_blank')
-        dispatch({type: "PREVIEW_FINISHED"})
+        dispatch({ type: "PREVIEW_FINISHED" })
     }, [isPreview, previewID, previewURL]);
 }

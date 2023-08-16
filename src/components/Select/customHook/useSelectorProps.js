@@ -17,7 +17,6 @@ const SortableMultiValue = SortableElement(
     }
 );
 function arrayMove(array, from, to) {
-    console.log("🚀 ~ file: Selector.jsx:21 ~ arrayMove ~ array:", array)
     const slicedArray = array.slice();
     slicedArray.splice(to < 0 ? array.length + to : to, 0, slicedArray.splice(from, 1)[0]);
     return slicedArray;

@@ -15,10 +15,10 @@ import { useLocation } from "react-router-dom";
 function Header({ ...props }) {
   const location = useLocation()
   function makeBrand() {
-    var name;
+    let name;
     props.routes.map((prop, key) => {
       if (prop.layout + prop.path === location.pathname) {
-        name = props.rtlActive ? prop.rtlName : prop.name;
+        name = prop.name;
       }
       return null;
     });

@@ -41,7 +41,7 @@ export default function RowBody({
                                             copyText={editorClass.customUrl}
                                             id={editorClass._id}
                                             name={editorClass.name}
-                                            deleteMessage={'delete class'}
+                                            // deleteMessage={'delete one'}
                                             editType={GetClassAction.EDITING_CLASS}
                                             editData={editorClass}
                                             handleOpenDialog={handleOpenDialog}

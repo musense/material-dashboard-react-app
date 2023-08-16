@@ -3,20 +3,18 @@ import styles from "./FormButtonList.module.css"
 
 export default function FormButtonList({
     isEditing,
-    onCancel,
-    onReset
+    onReset,
+    callback
 }) {
     return <div className={styles['form-button-container']}>
         {isEditing
             ? (<>
-                <input type='button' value='取消'
-                    onClick={(e) => onCancel(e)} />
-                <input type='submit' value='儲存' title="Enter" />
+                <input type='button' value='取消' onClick={(e) => onReset(e)} />
+                <input className='submit-btn' type='button' value='儲存' onClick={(e) => callback(e)} title="Enter" />
             </>)
             : (<>
-                <input type='button' value='清空'
-                    onClick={(e) => onReset(e)} />
-                <input type='submit' value='新增' title="Enter" />
+                <input type='button' value='清空' onClick={(e) => onReset(e)} />
+                <input className='submit-btn' type='button' value='新增' onClick={(e) => callback(e)} title="Enter" />
             </>)}
     </div>;
 }

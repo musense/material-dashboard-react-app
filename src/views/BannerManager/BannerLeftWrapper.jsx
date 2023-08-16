@@ -2,7 +2,6 @@ import React, { useRef, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import * as GetBannerAction from 'actions/GetBannerAction';
-// import md5 from 'crypto-js/md5'
 import Card from 'components/Card/Card.jsx';
 import CardBody from 'components/Card/CardBody.jsx';
 import CardHeader from 'components/Card/CardHeader.jsx';

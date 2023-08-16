@@ -2,7 +2,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useLocation } from 'react-router-dom';
 // creates a beautiful scrollbar
-import 'perfect-scrollbar/css/perfect-scrollbar.css';
 // @material-ui/core components
 import withStyles from '@material-ui/core/styles/withStyles';
 // core components
@@ -14,7 +13,6 @@ import dashboardStyle from 'assets/jss/material-dashboard-react/layouts/dashboar
 
 import image from 'assets/img/sidebar-1.jpg';
 import { Outlet } from 'react-router-dom';
-import PerfectScrollbar from 'perfect-scrollbar';
 
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -74,9 +72,6 @@ function Dashboard({ ...props }) {
     if (mainPanel.current === null) {
       //componentDidMount
       mainPanel.current = classes.mainPanel;
-      if (getAgentPlatform().indexOf('Win') > -1) {
-        const ps = new PerfectScrollbar(mainPanel);
-      }
       window.addEventListener('resize', resizeFunction);
     } else {
       //componentDidUpdate

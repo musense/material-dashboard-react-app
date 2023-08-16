@@ -1,10 +1,6 @@
-/* eslint-disable */
 import React from "react";
-// @material-ui/core components
 import withStyles from "@material-ui/core/styles/withStyles";
-// @material-ui/icons
 import AddAlert from "@material-ui/icons/AddAlert";
-// core components
 import GridItem from "components/Grid/GridItem.jsx";
 import GridContainer from "components/Grid/GridContainer.jsx";
 import Button from "components/CustomButtons/Button.jsx";
@@ -68,7 +64,7 @@ class Notifications extends React.Component {
     x[place] = true;
     this.setState(x);
     this.alertTimeout = setTimeout(
-      function() {
+      function () {
         x[place] = false;
         this.setState(x);
       }.bind(this),

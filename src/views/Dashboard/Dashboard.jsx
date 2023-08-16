@@ -1,11 +1,7 @@
 import PropTypes from "prop-types";
 import React from "react";
-// react plugin for creating charts
-// import ChartistGraph from "react-chartist";
-// @material-ui/core
 import Icon from "@material-ui/core/Icon";
 import withStyles from "@material-ui/core/styles/withStyles";
-// @material-ui/icons
 import Accessibility from "@material-ui/icons/Accessibility";
 import AccessTime from "@material-ui/icons/AccessTime";
 import ArrowUpward from "@material-ui/icons/ArrowUpward";
@@ -17,7 +13,6 @@ import LocalOffer from "@material-ui/icons/LocalOffer";
 import Store from "@material-ui/icons/Store";
 import Update from "@material-ui/icons/Update";
 import Warning from "@material-ui/icons/Warning";
-// core components
 import Card from "components/Card/Card.jsx";
 import CardBody from "components/Card/CardBody.jsx";
 import CardFooter from "components/Card/CardFooter.jsx";
@@ -39,9 +34,6 @@ import {
 import dashboardStyle from "assets/jss/material-dashboard-react/views/dashboardStyle.jsx";
 
 class Dashboard extends React.Component {
-  // constructor(props) {
-  //   super(props);
-  // }
   state = {
     value: 0,
   };

@@ -1,9 +1,5 @@
-// @material-ui/icons
-// import LocationOn from "@material-ui/icons/LocationOn";
-// import Unarchive from "@material-ui/icons/Unarchive";
 import Register from "@material-ui/icons/GroupAdd";
 import Login from "@material-ui/icons/LockOpen";
-// core components/views for Admin layout
 import EditorList from "views/EditorList";
 import IEditor from "views/IEditor/[id]";
 import TagList from "views/TagList";

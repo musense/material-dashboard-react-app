@@ -1,15 +1,12 @@
 import PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';
-// @material-ui/core components
 import Checkbox from '@material-ui/core/Checkbox';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Icon from '@material-ui/core/Icon';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import withStyles from '@material-ui/core/styles/withStyles';
-// @material-ui/icons
 import Check from '@material-ui/icons/Check';
 import Email from '@material-ui/icons/Email';
-// core components
 import Card from 'components/Card/Card.jsx';
 import CardBody from 'components/Card/CardBody.jsx';
 import CardFooter from 'components/Card/CardFooter.jsx';
@@ -18,13 +15,11 @@ import Button from 'components/CustomButtons/Button.jsx';
 import CustomInput from 'components/CustomInput/CustomInput.jsx';
 import GridContainer from 'components/Grid/GridContainer.jsx';
 import GridItem from 'components/Grid/GridItem.jsx';
-
 import loginPageStyle from 'assets/jss/material-dashboard-react/views/loginPageStyle.jsx';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { useRef } from 'react';
 import MessageDialog from '../../components/Modal/MessageDialog';
-
 import * as GetUserAction from 'actions/GetUserAction';
 import useLoginResult from '../../hook/useLoginResult';
 import useRememberMe from '../../hook/useRememberMe';

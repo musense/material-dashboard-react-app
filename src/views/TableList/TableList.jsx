@@ -9,7 +9,6 @@ import GridContainer from 'components/Grid/GridContainer.jsx';
 import GridItem from 'components/Grid/GridItem.jsx';
 import Table from 'components/Table/Table.jsx';
 import { useDispatch, useSelector } from 'react-redux';
-import CustomModal from '../../components/CustomModal/CustomModal';
 import Button from 'components/CustomButtons/Button';
 
 const styles = {
@@ -76,7 +75,7 @@ function TableList(props) {
         closeModal();
       }
     }
-    return () => {};
+    return () => { };
   }, [returnMessage]);
 
   function openModal() {
@@ -98,7 +97,6 @@ function TableList(props) {
 
   return (
     <GridContainer>
-      <CustomModal ariaHideApp={false} isModalOpen={isModalOpen} />
       <GridItem xs={12} sm={12} md={12}>
         <Card>
           <CardHeader color='primary'>

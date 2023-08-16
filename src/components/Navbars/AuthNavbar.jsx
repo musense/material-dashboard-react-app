@@ -2,8 +2,6 @@ import cx from 'classnames';
 import PropTypes from 'prop-types';
 import React, { useState } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
-
-// @material-ui/core components
 import AppBar from '@material-ui/core/AppBar';
 import Drawer from '@material-ui/core/Drawer';
 import Hidden from '@material-ui/core/Hidden';
@@ -12,15 +10,10 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import withStyles from '@material-ui/core/styles/withStyles';
 import Toolbar from '@material-ui/core/Toolbar';
-
-// @material-ui/icons
 import Fingerprint from '@material-ui/icons/Fingerprint';
 import Menu from '@material-ui/icons/Menu';
 import PersonAdd from '@material-ui/icons/PersonAdd';
-
-// core components
 import Button from 'components/CustomButtons/Button';
-
 import authNavbarStyle from 'assets/jss/material-dashboard-react/components/authNavbarStyle.jsx';
 
 function AuthNavbar(props) {

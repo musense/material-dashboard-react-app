@@ -5,7 +5,6 @@ import React, {
 
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, Outlet } from "react-router-dom";
-import CustomModal from '../../components/CustomModal/CustomModal.jsx';
 
 function EditorManager() {
   const dispatch = useDispatch();
@@ -35,7 +34,7 @@ function EditorManager() {
           </ul>
         </nav>
       </header>
-      <Suspense fallback={CustomModal}>
+      <Suspense>
         <Outlet />
       </Suspense>
     </>

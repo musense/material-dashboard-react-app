@@ -40,7 +40,6 @@ function EditorList() {
   }
   return (
     <div className={'container'}>
-      {/* <CustomModal ariaHideApp={false} isModalOpen={isModalOpen} /> */}
       {/* <div className={'wrapper'}> */}
       <Card>
         <EditorListHeader />

@@ -1,13 +1,10 @@
 import PropTypes from 'prop-types';
 import React, { useEffect } from 'react';
-// @material-ui/core components
 import Icon from '@material-ui/core/Icon';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import withStyles from '@material-ui/core/styles/withStyles';
-// @material-ui/icons
 import Email from '@material-ui/icons/Email';
 import Face from '@material-ui/icons/Face';
-// core components
 import Card from 'components/Card/Card.jsx';
 import CardBody from 'components/Card/CardBody.jsx';
 import CardFooter from 'components/Card/CardFooter.jsx';
@@ -16,7 +13,6 @@ import Button from 'components/CustomButtons/Button.jsx';
 import CustomInput from 'components/CustomInput/CustomInput.jsx';
 import GridContainer from 'components/Grid/GridContainer.jsx';
 import GridItem from 'components/Grid/GridItem.jsx';
-
 import registerPageStyle from 'assets/jss/material-dashboard-react/views/registerPageStyle.jsx';
 import { useDispatch, useSelector } from 'react-redux';
 import { REGISTER_USER, REGISTER_USER_ERROR_RESET } from './../../actions/GetUserAction';

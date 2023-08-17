@@ -13,6 +13,7 @@ export default function useModalResult({
 
     useEffect(() => {
         if (!message) return
+        console.log("🚀 ~ file: useModalResult.js:16 ~ useEffect ~ message:", message)
         let caseMessage = message
         if (message.includes("Password must")) {
             caseMessage = "Password error"
@@ -111,9 +112,6 @@ export default function useModalResult({
                 setTitle('Success')
                 setContent(`${name}新增成功！`)
                 setSuccess(true)
-                if (isEditor) {
-                    setSitemapUrl(data.sitemapUrl)
-                }
                 return
             }
             case 'update successfully': {
@@ -256,7 +254,11 @@ export default function useModalResult({
                 return
             }
 
-            default:
+            default: {
+                if (isEditor) {
+                    setSitemapUrl(data.sitemapUrl)
+                }
+            }
                 break;
         }
         return () => {
@@ -265,7 +267,7 @@ export default function useModalResult({
             setSuccess(null)
             setSitemapUrl(null)
         }
-    }, [message, name, data]);
+    }, [message, name, data, isEditor]);
 
     return {
         title,

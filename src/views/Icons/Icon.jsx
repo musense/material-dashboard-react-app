@@ -1,5 +1,5 @@
 import React from 'react';
-import { MdFormatBold, MdFormatItalic, MdStrikethroughS, MdFormatUnderlined, MdFormatQuote, MdFormatAlignLeft, MdFormatAlignCenter, MdFormatAlignRight, MdFormatAlignJustify, MdFormatListNumbered, MdFormatListBulleted, MdInsertLink, MdLinkOff, MdVideoLibrary, MdImage, MdAdd, MdKeyboardArrowRight, MdArrowForward, MdSmartButton, MdLogout, MdFormatColorFill, MdFormatColorText, MdCheck, MdOutlineStickyNote2 } from 'react-icons/md'
+import { MdFormatBold, MdFormatItalic, MdStrikethroughS, MdFormatUnderlined, MdFormatQuote, MdFormatAlignLeft, MdFormatAlignCenter, MdFormatAlignRight, MdFormatAlignJustify, MdFormatListNumbered, MdFormatListBulleted, MdInsertLink, MdLinkOff, MdVideoLibrary, MdImage, MdAdd, MdKeyboardArrowRight, MdArrowForward, MdSmartButton, MdLogout, MdFormatColorFill, MdFormatColorText, MdCheck, MdOutlineStickyNote2, MdOutlineEdit, MdOutlineEditOff } from 'react-icons/md'
 import { BsTypeH1, BsTypeH2, BsTypeH3, BsCameraVideoFill, BsCode } from 'react-icons/bs'
 import { FaSuperscript, FaSubscript, FaArrowRight } from 'react-icons/fa'
 import { AiOutlineEdit, AiOutlineTable, AiOutlineInsertRowBelow, AiOutlineInsertRowRight, AiOutlineDelete, AiFillTag, AiOutlineUpload, AiOutlineArrowsAlt, AiOutlineInsertRowAbove, AiOutlineInsertRowLeft, AiFillHtml5, AiOutlineDeleteRow, AiOutlineDeleteColumn } from 'react-icons/ai'
@@ -49,6 +49,8 @@ const iconList = {
     insertHtml: <AiFillHtml5 size={20} />,
     arrowRight: <MdArrowForward size={35} />,
     pen: <AiOutlineEdit size={20} />,
+    edit: <MdOutlineEdit size={20} />,
+    editOff: <MdOutlineEditOff size={20} />,
     smartButton: <MdSmartButton size={20} />,
     logout: <MdLogout size={32} color='white' title='logout' />,
     tableToLeft: <PiAlignLeftSimple size={25} />,

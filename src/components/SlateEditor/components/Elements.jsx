@@ -136,10 +136,15 @@ const Image = ({ attributes, children, element }) => {
                 width      : fit-content;
                 height     : fit-content;
                 display    : flex;
-                align-items: center;
+                align-items: center;             
                 gap        : 1rem;
                 & > span {
+                    width      : 30px;
+                    height     : 30px;
                     background-color: white;
+                    display     : flex;
+                    justify-content: center;
+                    align-items: center;
                 }
               `}>
                     <Button
@@ -175,7 +180,7 @@ const Image = ({ attributes, children, element }) => {
                             Transforms.setNodes(editor, imageAlt)
                         }}
                     >
-                        <Icon icon={'edit_off'} />
+                        <Icon icon={'editOff'} />
                     </Button>}
                     <Button
                         active
@@ -204,7 +209,7 @@ const Image = ({ attributes, children, element }) => {
                             Transforms.setNodes(editor, imageHref)
                         }}
                     >
-                        <Icon icon={'link_off'} />
+                        <Icon icon={'linkOff'} />
                     </Button>}
                 </div>
             </div>

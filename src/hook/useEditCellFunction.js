@@ -11,11 +11,12 @@ export default function useEditCellFunction({
     onEdit: {
         selectedID = null,
         editType,
-        data,
+        editData,
         callback = null
     },
 
 }) {
+    console.log("🚀 ~ file: useEditCellFunction.js:19 ~ editData:", editData)
     const dispatch = useDispatch();
     const onCopy = useCallback((sitemapUrl, result) => {
         dispatch({
@@ -45,11 +46,11 @@ export default function useEditCellFunction({
         dispatch({
             type: editType,
             payload: {
-                data: data
+                data: editData
             },
         });
         callback && callback()
-    }, [dispatch, callback, editType, data, selectedID])
+    }, [dispatch, callback, editType, editData, selectedID])
 
     return {
         onCopy,

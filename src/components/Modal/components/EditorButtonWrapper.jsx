@@ -33,7 +33,7 @@ export default function EditorButtonWrapper({
         } else {
             navigate(-1)
         }
-    }, [success, sitemapUrl, navigate, setClose])
+    }, [success, sitemapUrl, editorID, navigate, setClose])
 
     const handleClose = useCallback((dialogContent) => {
         dispatch({

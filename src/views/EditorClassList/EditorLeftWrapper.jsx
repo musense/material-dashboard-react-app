@@ -142,7 +142,7 @@ export default function EditorLeftWrapper() {
                         <h4>{isEditing ? '編輯' : '新增'}</h4>
                     </CardHeader>
                     <CardBody>
-                        <form ref={formRef} name='class-form' onSubmit={onAddNewEditor}>
+                        <form ref={formRef} name='class-form'>
                             <input type="hidden" name='_id' value={id} />
                             <div>
                                 <label htmlFor="classification">分類名稱</label>
@@ -186,6 +186,7 @@ export default function EditorLeftWrapper() {
                             <FormButtonList
                                 isEditing={isEditing}
                                 onReset={onReset}
+                                callback={onAddNewEditor}
                             />
                         </form>
                     </CardBody>

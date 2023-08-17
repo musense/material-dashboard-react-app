@@ -11,6 +11,13 @@ import useModal from "../../hook/useModal";
 import useModalResult from "hook/useModalResult";
 import useDeleteSelectedRow from 'hook/useDeleteSelectedRow';
 import getErrorMessage from "utils/getErrorMessage";
+import {
+    getTagShowList,
+    getCurrentPage,
+    getTotalPage,
+    getTotalCount,
+    getTagErrorMessage
+} from "reducers/GetTagsReducer";
 
 const headerMap = {
     headerRow: [
@@ -26,11 +33,11 @@ const headerMap = {
 
 export default function TagRightBody() {
 
-    const showList = useSelector((state) => state.getTagsReducer.showTagList);
-    const currentPage = useSelector((state) => state.getTagsReducer.currentPage);
-    const totalPage = useSelector((state) => state.getTagsReducer.totalPage);
-    const totalCount = useSelector((state) => state.getTagsReducer.totalCount);
-    const serverMessage = useSelector((state) => state.getTagsReducer.errorMessage);
+    const currentPage = useSelector(getCurrentPage);
+    const showList = useSelector(getTagShowList);
+    const totalPage = useSelector(getTotalPage);
+    const totalCount = useSelector(getTotalCount);
+    const serverMessage = useSelector(getTagErrorMessage);
     console.log("🚀 ~ file: TagRightBody.jsx:29 ~ TagRightBody ~ showList:", showList)
 
     const {

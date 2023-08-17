@@ -1,4 +1,4 @@
-import React, { useRef, useCallback, useEffect } from 'react';
+import React, { useRef, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import * as GetTagsAction from '../../actions/GetTagsAction';
@@ -18,13 +18,17 @@ import CustomRadio from '../../components/CustomRadio/CustomRadio';
 import FormButtonList from 'components/FormButtonList/FormButtonList';
 import getErrorMessage from 'utils/getErrorMessage';
 import useClearForm from 'hook/useClearForm';
+import {
+    getNextSorting,
+    getIsEditing,
+    getTagErrorMessage
+} from 'reducers/GetTagsReducer';
 
 export default function TagLeftWrapper() {
 
     const formRef = useRef(null);
     const dispatch = useDispatch();
 
-    const nextSorting = useSelector((state) => state.getTagsReducer.nextSorting);
     const id = useSelector((state) => state.getTagsReducer.selectedTag.id);
     const tagName = useSelector((state) => state.getTagsReducer.selectedTag.tagName);
     const tagTitle = useSelector((state) => state.getTagsReducer.selectedTag.title);
@@ -34,9 +38,10 @@ export default function TagLeftWrapper() {
     const customUrl = useSelector((state) => state.getTagsReducer.selectedTag.customUrl);
     const popular = useSelector((state) => state.getTagsReducer.selectedTag.popular);
     const sorting = useSelector((state) => state.getTagsReducer.selectedTag.sorting);
-    const isEditing = useSelector((state) => state.getTagsReducer.isEditing);
 
-    const serverMessage = useSelector((state) => state.getTagsReducer.errorMessage);
+    const nextSorting = useSelector(getNextSorting);
+    const isEditing = useSelector(getIsEditing);
+    const serverMessage = useSelector(getTagErrorMessage);
     const clientErrorMessage = useSelector((state) => state.getDialogReducer.clientErrorMessage);
     const message = getErrorMessage(clientErrorMessage, serverMessage)
 
@@ -216,6 +221,7 @@ export default function TagLeftWrapper() {
                             <FormButtonList
                                 isEditing={isEditing}
                                 onReset={onReset}
+                                callback={onAddNewEditor}
                             />
                         </form>
                     </CardBody>

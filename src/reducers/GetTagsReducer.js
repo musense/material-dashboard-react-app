@@ -1,5 +1,6 @@
 import *  as GetTagsAction from '../actions/GetTagsAction';
 import { errorMessage } from './errorMessage';
+import { createSelector } from 'reselect'
 
 const initialState = {
     sortingMap: {
@@ -9,7 +10,6 @@ const initialState = {
         isHot: 'asc',
     },
     tagList: null,
-    showTagList: null,
     selectedTag: {
         id: '',
         tagName: '',
@@ -22,9 +22,8 @@ const initialState = {
         sorting: '',
     },
     isEditing: false,
-    selectedIndex: -1,
-    currentPage: null,
-    totalPage: null,
+    selectedID: -1,
+    currentPage: 1,
     totalCount: null,
     nextSorting: null,
     errorMessage: null,
@@ -52,20 +51,22 @@ const getTagsReducer = (state = initialState, action) => {
             }
         }
         case GetTagsAction.EDITING_TAG:
-            const tag = action.payload.data
+            const { data } = action.payload
+            console.log("🚀 ~ file: GetTagsReducer.js:55 ~ getTagsReducer ~ data:", data)
             return {
                 ...state,
                 selectedTag: {
-                    id: tag._id,
-                    tagName: tag.name,
-                    title: tag.webHeader.title,
-                    description: tag.webHeader.description,
-                    keywords: tag.webHeader.keywords,
-                    manualUrl: tag.webHeader.manualUrl,
-                    customUrl: tag.webHeader.customUrl,
-                    popular: tag.popular,
-                    sorting: tag.sorting,
+                    id: data._id,
+                    tagName: data.name,
+                    title: data.webHeader.title,
+                    description: data.webHeader.description,
+                    keywords: data.webHeader.keywords,
+                    manualUrl: data.webHeader.manualUrl,
+                    customUrl: data.webHeader.customUrl,
+                    popular: data.popular,
+                    sorting: data.sorting,
                 },
+                selectedID: data._id,
                 isEditing: true,
             }
         case GetTagsAction.ADD_TAG_SUCCESS:
@@ -103,26 +104,21 @@ const getTagsReducer = (state = initialState, action) => {
             return {
                 ...state,
                 tagList: action.payload.tagList,
-                showTagList: action.payload.tagList.slice(0, 10),
                 currentPage: action.payload.currentPage,
                 totalCount: action.payload.totalCount,
-                totalPage: Math.ceil(action.payload.totalCount / 10),
                 nextSorting: action.payload.nextSorting,
                 errorMessage: errorMessage.getFinish
             }
         case GetTagsAction.REQUEST_TAG_PAGE:
-            const start = (action.payload - 1) * 10;
-            const end = start + 10
             return {
                 ...state,
-                showTagList: state.tagList.slice(start, end),
                 currentPage: action.payload
             }
         case GetTagsAction.SHOW_TAG_LIST_SORTING:
             const { key } = action.payload;
             return {
                 ...state,
-                showTagList: state.tagList
+                tagList: state.tagList
                     ? state.tagList.sort((tag1, tag2) => {
                         let typeOf = typeof tag1[key]
                         let e1, e2
@@ -161,7 +157,7 @@ const getTagsReducer = (state = initialState, action) => {
                             }
 
                         }
-                    }).slice(0, 10)
+                    })
                     : null,
                 sortingMap: {
                     ...state.sortingMap,
@@ -208,4 +204,36 @@ const getTagsReducer = (state = initialState, action) => {
     }
 }
 
+const getCurrentPage = state => state.getTagsReducer.currentPage
+const getTotalPage = state => Math.ceil(state.getTagsReducer.totalCount / 10)
+const getTotalCount = state => state.getTagsReducer.totalCount
+const getTagErrorMessage = state => state.getTagsReducer.errorMessage
+const getNextSorting = state => state.getTagsReducer.nextSorting
+const getIsEditing = state => state.getTagsReducer.isEditing
+
+const getTagShowList = (state) => {
+    const start = (state.getTagsReducer?.currentPage - 1) * 10;
+    const end = start + 10
+    return state.getTagsReducer?.tagList?.slice(start, end)
+}
+
+// const getSelectedID = state => state.getTagsReducer.selectedID
+// export const getSelectedTag = createSelector(
+//     getTagShowList,
+//     getSelectedID,
+//     (showList, selectedID) => {
+//         return showList?.find(tag => tag._id === selectedID)
+//     }
+// )
+
 export default getTagsReducer
+
+export {
+    getCurrentPage,
+    getTotalPage,
+    getTotalCount,
+    getNextSorting,
+    getIsEditing,
+    getTagErrorMessage,
+    getTagShowList
+}

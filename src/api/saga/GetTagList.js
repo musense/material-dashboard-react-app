@@ -179,10 +179,12 @@ function* UpdateTag(payload) {
         const requestData = toBackendData(data)
 
         const response = yield instance.patch(`/tags/${_id}`, requestData);
-        const tagList = yield response.data;
+        const { updateTag } = yield response.data;
+        console.log("🚀 ~ file: GetTagList.js:183 ~ function*UpdateTag ~ response.data:", response.data)
+        console.log("🚀 ~ file: GetTagList.js:183 ~ function*UpdateTag ~ updateTag:", updateTag)
         yield put({
             type: GetTagsAction.UPDATE_TAG_SUCCESS,
-            payload: tagList
+            payload: { updateTag: toFrontendData(updateTag) }
         })
     } catch (error) {
         yield getErrorMessage(error, GetTagsAction.UPDATE_TAG_FAIL)

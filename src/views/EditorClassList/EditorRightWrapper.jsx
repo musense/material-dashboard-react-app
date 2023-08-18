@@ -18,6 +18,9 @@ import useModal from '../../hook/useModal';
 import useModalResult from '../../hook/useModalResult';
 import useDeleteSelectedRow from 'hook/useDeleteSelectedRow';
 import getErrorMessage from 'utils/getErrorMessage';
+import { getClassErrorMessage, getClassShowList, getCurrentPage, getSelectedPatchKey, getTotalCount, getTotalPage } from 'reducers/GetClassReducer';
+import { getDialogConfirm, getDialogContentData, getDialogData, getDialogMessage, getDialogMessageDialogReturnValue } from 'reducers/GetDialogReducer';
+import { getMaxSizeClassName } from 'reducers/GetConfigReducer';
 
 const headerMap = {
     headerRow: [
@@ -31,21 +34,22 @@ const headerMap = {
 
 export default function EditorRightWrapper() {
 
-    const maxSizeClassName = useSelector((state) => state.getConfigReducer.maxSizeClassName);
+    const maxSizeClassName = useSelector(getMaxSizeClassName);
 
-    const showList = useSelector((state) => state.getClassReducer.showList);
-    const currentPage = useSelector((state) => state.getClassReducer.currentPage);
-    const totalPage = useSelector((state) => state.getClassReducer.totalPage);
-    const totalCount = useSelector((state) => state.getClassReducer.totalCount);
-    const serverMessage = useSelector((state) => state.getClassReducer.errorMessage);
+    const currentPage = useSelector(getCurrentPage);
+    const showList = useSelector(getClassShowList);
+    const totalPage = useSelector(getTotalPage);
+    const totalCount = useSelector(getTotalCount);
+    const selectedPatchKey = useSelector(getSelectedPatchKey);
+    const serverMessage = useSelector(getClassErrorMessage);
 
     console.log("🚀 ~ file: EditorRightWrapper.jsx:33 ~ EditorRightWrapper ~ showList:", showList)
 
-    const contentData = useSelector((state) => state.getDialogReducer.contentData);
-    const data = useSelector((state) => state.getDialogReducer.data);
-    const confirm = useSelector((state) => state.getDialogReducer.confirm);
-    const messageDialogReturnValue = useSelector((state) => state.getDialogReducer.messageDialogReturnValue);
-    const dialogMessage = useSelector((state) => state.getDialogReducer.message);
+    const contentData = useSelector(getDialogContentData);
+    const data = useSelector(getDialogData);
+    const confirm = useSelector(getDialogConfirm);
+    const messageDialogReturnValue = useSelector(getDialogMessageDialogReturnValue);
+    const dialogMessage = useSelector(getDialogMessage);
 
     useDeleteSelectedRow(messageDialogReturnValue, {
         deleteType: GetClassAction.BUNCH_DELETE_CLASS
@@ -82,7 +86,9 @@ export default function EditorRightWrapper() {
                                 totalCount={totalCount}
                             />
                             <form className='view-list-form'>
-                                <RowHeader headerConfig={headerMap} />
+                                <RowHeader
+                                    headerConfig={headerMap}
+                                    selectedPatchKey={selectedPatchKey} />
                                 <RowBody
                                     headerConfig={headerMap}
                                     showList={showList}

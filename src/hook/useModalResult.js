@@ -112,12 +112,18 @@ export default function useModalResult({
                 setTitle('Success')
                 setContent(`${name}新增成功！`)
                 setSuccess(true)
+                if (isEditor) {
+                    setSitemapUrl(data.sitemapUrl)
+                }
                 return
             }
             case 'update successfully': {
                 setTitle('Success')
                 setContent(`${name}更新成功！`)
                 setSuccess(true)
+                if (isEditor) {
+                    setSitemapUrl(data.sitemapUrl)
+                }
                 return
             }
             case 'please add tag name': {
@@ -255,9 +261,7 @@ export default function useModalResult({
             }
 
             default: {
-                if (isEditor) {
-                    setSitemapUrl(data.sitemapUrl)
-                }
+
             }
                 break;
         }

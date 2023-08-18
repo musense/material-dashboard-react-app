@@ -1,16 +1,21 @@
-import React, { useMemo } from "react";
+import React from "react";
 import { useDispatch, useSelector } from 'react-redux';
-import Icon from './../EditBodyCell/Icon'
+import Icon from 'views/Icons/Icon';
+import styles from './HeaderCell.module.css'
 
 export default function HeaderCell({
   name,
+  selectedPatchKey = null,
   patchKey = null,
   patchType = null,
   className = null,
   reducerName = null
 }) {
+
   const dispatch = useDispatch();
-  const sortingDirection = useSelector((state) => state[reducerName]['sortingMap'][patchKey]);
+  const getSortingDirection = (state) => state[reducerName]['sortingMap'][patchKey]
+
+  const sortingDirection = useSelector(getSortingDirection);
 
   const onSortingClick = (type, key) => {
     dispatch({
@@ -20,33 +25,27 @@ export default function HeaderCell({
       }
     })
   }
-  const inputProps = useMemo(() => patchKey ? ({
-    type: 'button',
+  let inputProps = {
     value: name,
-    onClick: () => onSortingClick(patchType, patchKey)
-  }) : ({
-    type: 'button',
-    value: name,
-  }), [name, patchKey, patchType])
+  }
+
+  if (patchKey) {
+    inputProps = {
+      ...inputProps,
+      onClick: () => onSortingClick(patchType, patchKey)
+    }
+  }
 
 
-  const icon = (patchKey, callback) => {
+  const icon = (patchKey) => {
     if (!patchKey) return null
-
-    const iconClassName = `
-      position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
-      right: 10px;
-      cursor: pointer;
-      user-select: none; `
-    const icon_name = sortingDirection === 'asc' ? 'arrow_upward' : 'arrow_downward'
-
-    return < Icon iconName={icon_name} classes={iconClassName} onClick={callback} />
+    const iconName = sortingDirection === 'asc' ? 'arrowDown' : 'arrowUp'
+    return < Icon icon={iconName} />
   };
 
-  return <div className={className} >
-    <input {...inputProps} />
-    {icon(patchKey, () => onSortingClick(patchType, patchKey))}
+  const activeClassName = patchKey === selectedPatchKey ? styles['active'] : ''
+  return <div className={`${styles['header-cell']} ${activeClassName} ${className}`}>
+    <span {...inputProps}> {inputProps.value}</span>
+    {icon(patchKey)}
   </div>;
 }

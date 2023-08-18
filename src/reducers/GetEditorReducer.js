@@ -1,3 +1,4 @@
+import { createSelector } from 'reselect';
 import * as GetEditorAction from '../actions/GetEditorAction';
 import * as GetSlateAction from '../actions/GetSlateAction';
 import { errorMessage } from './errorMessage';
@@ -12,6 +13,7 @@ const initialState = {
     pageView: 'asc',
     'categories.name': 'asc',
   },
+  selectedPatchKey: null,
   titleList: null,
   _id: '',
   editor: null,
@@ -69,61 +71,64 @@ const getEditorReducer = (state = initialState, action) => {
       }
     case GetEditorAction.SHOW_EDITOR_LIST_SORTING:
       const { key } = action.payload;
+      const sortedTagList = state.titleList.sort((editor1, editor2) => {
+        let typeOf
+        let e1, e2,
+          k1, k2;
+
+        if (key.indexOf('.') !== -1) {
+          k1 = key.split('.')[0]
+          k2 = key.split('.')[1]
+          e1 = editor1[k1][k2]
+          e2 = editor2[k1][k2]
+          typeOf = typeof editor1[k1][k2]
+        } else {
+          e1 = editor1[key]
+          e2 = editor2[key]
+          typeOf = typeof editor1[key]
+        }
+        const testDateValue = new Date(e1)
+        typeOf = testDateValue instanceof Date && !isNaN(testDateValue) ? 'date' : typeOf
+        const sorting = state.sortingMap[key]
+        switch (typeOf) {
+          case 'string': {
+            if (sorting === 'asc') {
+              return e1.localeCompare(e2)
+            } else {
+              return e2.localeCompare(e1)
+            }
+          }
+          case 'boolean': {
+            if (sorting === 'asc') {
+              return e1.toString().localeCompare(e2.toString())
+            } else {
+              return e2.toString().localeCompare(e1.toString())
+            }
+          }
+          case 'number': {
+            if (sorting === 'asc') {
+              return parseInt(e1) - parseInt(e2)
+            } else {
+              return parseInt(e2) - parseInt(e1)
+            }
+          }
+          case 'date': {
+            if (sorting === 'asc') {
+              return (new Date(e1)).getTime() - (new Date(e2)).getTime()
+            } else {
+              return (new Date(e2)).getTime() - (new Date(e1)).getTime()
+            }
+          }
+        }
+      })
       return {
         ...state,
-        titleList: state.titleList.sort((editor1, editor2) => {
-          let typeOf
-          let e1, e2,
-            k1, k2;
-
-          if (key.indexOf('.') !== -1) {
-            k1 = key.split('.')[0]
-            k2 = key.split('.')[1]
-            e1 = editor1[k1][k2]
-            e2 = editor2[k1][k2]
-            typeOf = typeof editor1[k1][k2]
-          } else {
-            e1 = editor1[key]
-            e2 = editor2[key]
-            typeOf = typeof editor1[key]
-          }
-          typeOf = typeof new Date(e1).getMonth() === 'function' ? 'date' : typeOf
-          const sorting = state.sortingMap[key]
-          switch (typeOf) {
-            case 'string': {
-              if (sorting === 'asc') {
-                return e1.localeCompare(e2)
-              } else {
-                return e2.localeCompare(e1)
-              }
-            }
-            case 'boolean': {
-              if (sorting === 'asc') {
-                return e1.toString().localeCompare(e2.toString())
-              } else {
-                return e2.toString().localeCompare(e1.toString())
-              }
-            }
-            case 'number': {
-              if (sorting === 'asc') {
-                return parseInt(e1) - parseInt(e2)
-              } else {
-                return parseInt(e2) - parseInt(e1)
-              }
-            }
-            case 'date': {
-              if (sorting === 'asc') {
-                return (new Date(e1)).getTime() - (new Date(e2)).getTime()
-              } else {
-                return (new Date(e2)).getTime() - (new Date(e1)).getTime()
-              }
-            }
-          }
-        }),
+        titleList: sortedTagList,
         sortingMap: {
           ...state.sortingMap,
           [key]: state.sortingMap[key] === 'asc' ? 'desc' : 'asc',
         },
+        selectedPatchKey: key,
         currentPage: 1
       }
     case GetEditorAction.REQUEST_EDITOR_FAIL:
@@ -177,22 +182,28 @@ const getEditorReducer = (state = initialState, action) => {
 
 export default getEditorReducer
 
-const getTotalPage = state => state.getEditorReducer.totalCount
-  && Math.ceil(state.getEditorReducer.totalCount / 10)
-
+const getEditorList = state => state.getEditorReducer.titleList && [...state.getEditorReducer.titleList]
 const getCurrentPage = state => state.getEditorReducer.currentPage
+
+const getTotalPage = state => Math.ceil(state.getEditorReducer.totalCount / 10)
 const getTotalCount = state => state.getEditorReducer.totalCount
-const getServerMessage = state => state.getEditorReducer.errorMessage
-const getShowList = state => state.getEditorReducer.titleList
-  && state.getEditorReducer.titleList.slice(
-    (state.getEditorReducer.currentPage - 1) * 10,
-    (state.getEditorReducer.currentPage - 1) * 10 + 10
-  )
+
+const getSelectedPatchKey = state => state.getEditorReducer.selectedPatchKey
+const getEditorErrorMessage = state => state.getEditorReducer.errorMessage
+
+const getEditorShowList = createSelector(
+  [getEditorList, getCurrentPage],
+  (titleList, currentPage) => {
+    const start = (currentPage - 1) * 10;
+    const end = start + 10
+    return titleList?.slice(start, end)
+  })
 
 export {
-  getTotalPage,
   getCurrentPage,
+  getTotalPage,
   getTotalCount,
-  getShowList,
-  getServerMessage
+  getSelectedPatchKey,
+  getEditorErrorMessage,
+  getEditorShowList,
 }

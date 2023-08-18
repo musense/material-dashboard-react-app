@@ -1,5 +1,6 @@
 import * as GetClassAction from '../actions/GetClassAction';
 import { errorMessage } from './errorMessage';
+import { createSelector } from 'reselect'
 
 const initialState = {
     sortingMap: {
@@ -8,7 +9,7 @@ const initialState = {
         keyName: 'asc',
         parentClass: 'asc',
     },
-    showList: null,
+    selectedPatchKey: null,
     parentClassOptions: null,
     categories: null,
     classList: new Map(),
@@ -25,18 +26,10 @@ const initialState = {
         parentClass: '',
     },
     isEditing: false,
-    errorMessage: null,
+    selectedID: -1,
     currentPage: null,
     totalCount: null,
-    totalPage: null,
-    reset: null,
-    editorStatus: [
-        { _id: 0, name: '全部' },
-        { _id: 1, name: '草稿' },
-        { _id: 2, name: '已排程' },
-        { _id: 3, name: '隱藏文章' },
-        { _id: 4, name: '已發布' },
-    ]
+    errorMessage: null
 }
 const getClassReducer = (state = initialState, action) => {
     switch (action.type) {
@@ -67,78 +60,76 @@ const getClassReducer = (state = initialState, action) => {
         case GetClassAction.REQUEST_CLASS_LIST_SUCCESS:
             return {
                 ...state,
-                showList: action.payload.editorClassList.slice(0, 10),
                 editorClassList: action.payload.editorClassList,
                 currentPage: action.payload.currentPage,
                 totalCount: action.payload.totalCount,
-                totalPage: Math.ceil(action.payload.totalCount / 10),
                 errorMessage: errorMessage.getFinish
             }
         case GetClassAction.REQUEST_CLASS_PAGE:
-            const start = (action.payload - 1) * 10;
-            const end = start + 10
             return {
                 ...state,
-                showList: state.editorClassList.slice(start, end),
                 currentPage: action.payload,
             }
         case GetClassAction.SHOW_CLASS_LIST_SORTING:
             const { key } = action.payload;
+            const sortedEditorClassList = state.editorClassList.sort((class1, class2) => {
+                let typeOf
+                let e1, e2,
+                    k1, k2;
+
+                if (key.indexOf('.') !== -1) {
+                    k1 = key.split('.')[0]
+                    k2 = key.split('.')[1]
+                    e1 = class1[k1][k2]
+                    e2 = class2[k1][k2]
+                    typeOf = typeof class1[k1][k2]
+                } else {
+                    e1 = class1[key]
+                    e2 = class2[key]
+                    typeOf = typeof class1[key]
+                }
+                const testDateValue = new Date(e1)
+                typeOf = testDateValue instanceof Date && !isNaN(testDateValue) ? 'date' : typeOf
+                const sorting = state.sortingMap[key]
+                switch (typeOf) {
+                    case 'string': {
+                        if (sorting === 'asc') {
+                            return e1.localeCompare(e2)
+                        } else {
+                            return e2.localeCompare(e1)
+                        }
+                    }
+                    case 'boolean': {
+                        if (sorting === 'asc') {
+                            return e1.toString().localeCompare(e2.toString())
+                        } else {
+                            return e2.toString().localeCompare(e1.toString())
+                        }
+                    }
+                    case 'number': {
+                        if (sorting === 'asc') {
+                            return parseInt(e1) - parseInt(e2)
+                        } else {
+                            return parseInt(e2) - parseInt(e1)
+                        }
+                    }
+                    case 'date': {
+                        if (sorting === 'asc') {
+                            return (new Date(e1)).getTime() - (new Date(e2)).getTime()
+                        } else {
+                            return (new Date(e2)).getTime() - (new Date(e1)).getTime()
+                        }
+                    }
+                }
+            })
             return {
                 ...state,
-                showList: state.editorClassList.sort((class1, class2) => {
-                    let typeOf
-                    let e1, e2,
-                        k1, k2;
-
-                    if (key.indexOf('.') !== -1) {
-                        k1 = key.split('.')[0]
-                        k2 = key.split('.')[1]
-                        e1 = class1[k1][k2]
-                        e2 = class2[k1][k2]
-                        typeOf = typeof class1[k1][k2]
-                    } else {
-                        e1 = class1[key]
-                        e2 = class2[key]
-                        typeOf = typeof class1[key]
-                    }
-                    typeOf = typeof new Date(e1).getMonth === 'function' ? 'date' : typeOf
-                    const sorting = state.sortingMap[key]
-                    switch (typeOf) {
-                        case 'string': {
-                            if (sorting === 'asc') {
-                                return e1.localeCompare(e2)
-                            } else {
-                                return e2.localeCompare(e1)
-                            }
-                        }
-                        case 'boolean': {
-                            if (sorting === 'asc') {
-                                return e1.toString().localeCompare(e2.toString())
-                            } else {
-                                return e2.toString().localeCompare(e1.toString())
-                            }
-                        }
-                        case 'number': {
-                            if (sorting === 'asc') {
-                                return parseInt(e1) - parseInt(e2)
-                            } else {
-                                return parseInt(e2) - parseInt(e1)
-                            }
-                        }
-                        case 'date': {
-                            if (sorting === 'asc') {
-                                return (new Date(e1)).getTime() - (new Date(e1)).getTime()
-                            } else {
-                                return (new Date(e2)).getTime() - (new Date(e1)).getTime()
-                            }
-                        }
-                    }
-                }).slice(0, 10),
+                editorClassList: sortedEditorClassList,
                 sortingMap: {
                     ...state.sortingMap,
                     [key]: state.sortingMap[key] === 'asc' ? 'desc' : 'asc',
                 },
+                selectedPatchKey: key,
                 currentPage: 1
             }
         case GetClassAction.REQUEST_CLASS:
@@ -219,4 +210,32 @@ const getClassReducer = (state = initialState, action) => {
     }
 }
 
+const getEditorClassList = state => state.getClassReducer.editorClassList && [...state.getClassReducer.editorClassList]
+const getCurrentPage = state => state.getClassReducer.currentPage
+
+const getTotalPage = state => Math.ceil(state.getClassReducer.totalCount / 10)
+const getTotalCount = state => state.getClassReducer.totalCount
+
+const getSelectedPatchKey = state => state.getClassReducer.selectedPatchKey
+const getClassErrorMessage = state => state.getClassReducer.errorMessage
+const getIsEditing = state => state.getClassReducer.isEditing
+
+const getClassShowList = createSelector(
+    [getEditorClassList, getCurrentPage],
+    (editorClassList, currentPage) => {
+        const start = (currentPage - 1) * 10;
+        const end = start + 10
+        return editorClassList?.slice(start, end)
+    })
+
 export default getClassReducer
+
+export {
+    getCurrentPage,
+    getTotalPage,
+    getTotalCount,
+    getSelectedPatchKey,
+    getIsEditing,
+    getClassErrorMessage,
+    getClassShowList,
+}

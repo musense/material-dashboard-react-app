@@ -1,7 +1,7 @@
 import React from 'react';
-import { MdFormatBold, MdFormatItalic, MdStrikethroughS, MdFormatUnderlined, MdFormatQuote, MdFormatAlignLeft, MdFormatAlignCenter, MdFormatAlignRight, MdFormatAlignJustify, MdFormatListNumbered, MdFormatListBulleted, MdInsertLink, MdLinkOff, MdVideoLibrary, MdImage, MdAdd, MdKeyboardArrowRight, MdArrowForward, MdSmartButton, MdLogout, MdFormatColorFill, MdFormatColorText, MdCheck, MdOutlineStickyNote2, MdOutlineEdit, MdOutlineEditOff } from 'react-icons/md'
-import { BsTypeH1, BsTypeH2, BsTypeH3, BsCameraVideoFill, BsCode } from 'react-icons/bs'
-import { FaSuperscript, FaSubscript, FaArrowRight } from 'react-icons/fa'
+import { MdFormatBold, MdFormatItalic, MdStrikethroughS, MdFormatUnderlined, MdFormatQuote, MdFormatAlignLeft, MdFormatAlignCenter, MdFormatAlignRight, MdFormatAlignJustify, MdFormatListNumbered, MdFormatListBulleted, MdInsertLink, MdLinkOff, MdVideoLibrary, MdImage, MdAdd, MdArrowForward, MdSmartButton, MdLogout, MdFormatColorFill, MdFormatColorText, MdCheck, MdOutlineStickyNote2, MdOutlineEdit, MdOutlineEditOff } from 'react-icons/md'
+import { BsTypeH1, BsTypeH2, BsTypeH3, BsCameraVideoFill, BsCode, BsArrowUp, BsArrowDown } from 'react-icons/bs'
+import { FaSuperscript, FaSubscript } from 'react-icons/fa'
 import { AiOutlineEdit, AiOutlineTable, AiOutlineInsertRowBelow, AiOutlineInsertRowRight, AiOutlineDelete, AiFillTag, AiOutlineUpload, AiOutlineArrowsAlt, AiOutlineInsertRowAbove, AiOutlineInsertRowLeft, AiFillHtml5, AiOutlineDeleteRow, AiOutlineDeleteColumn } from 'react-icons/ai'
 import { SiLatex } from 'react-icons/si'
 import { BiHide } from 'react-icons/bi'
@@ -48,6 +48,8 @@ const iconList = {
     videoPlayer: <BsCameraVideoFill size={20} />,
     insertHtml: <AiFillHtml5 size={20} />,
     arrowRight: <MdArrowForward size={35} />,
+    arrowUp: <BsArrowUp size={15} />,
+    arrowDown: <BsArrowDown size={15} />,
     pen: <AiOutlineEdit size={20} />,
     edit: <MdOutlineEdit size={20} />,
     editOff: <MdOutlineEditOff size={20} />,

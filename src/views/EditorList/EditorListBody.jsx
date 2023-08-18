@@ -18,8 +18,9 @@ import {
     getTotalPage,
     getCurrentPage,
     getTotalCount,
-    getShowList,
-    getServerMessage
+    getEditorShowList,
+    getEditorErrorMessage,
+    getSelectedPatchKey
 } from 'reducers/GetEditorReducer'
 
 const headerMap = {
@@ -39,11 +40,12 @@ const headerMap = {
 
 export default function EditorListBody() {
 
-    const showList = useSelector(getShowList);
+    const showList = useSelector(getEditorShowList);
     const currentPage = useSelector(getCurrentPage);
     const totalPage = useSelector(getTotalPage);
     const totalCount = useSelector(getTotalCount);
-    const serverMessage = useSelector(getServerMessage);
+    const selectedPatchKey = useSelector(getSelectedPatchKey);
+    const serverMessage = useSelector(getEditorErrorMessage);
 
     console.log("🚀 ~ file: EditorListBody.jsx:34 ~ EditorListBody ~ showList:", showList)
 
@@ -92,7 +94,9 @@ export default function EditorListBody() {
             totalCount={totalCount}
         />
         <form className='view-list-form'>
-            <RowHeader headerConfig={headerMap} />
+            <RowHeader
+                headerConfig={headerMap}
+                selectedPatchKey={selectedPatchKey} />
             <RowBody
                 headerConfig={headerMap}
                 showList={showList}

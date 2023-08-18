@@ -12,7 +12,13 @@ export default function SingleStatusSelect({
   setState
 }) {
 
-  const statusOptions = useSelector((state) => state.getClassReducer.editorStatus);
+  const statusOptions = [
+    { _id: 0, name: '全部' },
+    { _id: 1, name: '草稿' },
+    { _id: 2, name: '已排程' },
+    { _id: 3, name: '隱藏文章' },
+    { _id: 4, name: '已發布' },
+  ]
 
   return (
     <Selector

@@ -9,13 +9,13 @@ import EditorListBody from "./EditorListBody";
 
 import * as GetEditorAction from "../../actions/GetEditorAction";
 import { reDispatchMessage } from './../../reducers/errorMessage';
-import { getServerMessage } from 'reducers/GetEditorReducer';
+import { getEditorErrorMessage } from 'reducers/GetEditorReducer';
 
 
 function EditorList() {
 
   const dispatch = useDispatch();
-  const serverMessage = useSelector(getServerMessage);
+  const serverMessage = useSelector(getEditorErrorMessage);
 
   useEffect(() => {
     if (reDispatchMessage.includes(serverMessage)) {

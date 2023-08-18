@@ -16,7 +16,8 @@ import {
     getCurrentPage,
     getTotalPage,
     getTotalCount,
-    getTagErrorMessage
+    getTagErrorMessage,
+    getSelectedPatchKey
 } from "reducers/GetTagsReducer";
 
 const headerMap = {
@@ -37,6 +38,7 @@ export default function TagRightBody() {
     const showList = useSelector(getTagShowList);
     const totalPage = useSelector(getTotalPage);
     const totalCount = useSelector(getTotalCount);
+    const selectedPatchKey = useSelector(getSelectedPatchKey);
     const serverMessage = useSelector(getTagErrorMessage);
     console.log("🚀 ~ file: TagRightBody.jsx:29 ~ TagRightBody ~ showList:", showList)
 
@@ -78,7 +80,9 @@ export default function TagRightBody() {
             totalCount={totalCount}
         />
         <form className='view-list-form'>
-            <RowHeader headerConfig={headerMap} />
+            <RowHeader
+                headerConfig={headerMap}
+                selectedPatchKey={selectedPatchKey} />
             <RowBody
                 headerConfig={headerMap}
                 showList={showList}

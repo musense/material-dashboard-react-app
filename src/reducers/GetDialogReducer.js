@@ -54,3 +54,17 @@ const getDialogReducer = (state = initialState, action) => {
 }
 
 export default getDialogReducer
+
+const getDialogContentData = state => state.getDialogReducer.contentData;
+const getDialogData = state => state.getDialogReducer.contentData;
+const getDialogConfirm = state => state.getDialogReducer.confirm;
+const getDialogMessageDialogReturnValue = state => state.getDialogReducer.messageDialogReturnValue;
+const getDialogMessage = state => state.getDialogReducer.message;
+
+export {
+  getDialogContentData,
+  getDialogData,
+  getDialogConfirm,
+  getDialogMessageDialogReturnValue,
+  getDialogMessage,
+}

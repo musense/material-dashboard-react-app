@@ -16,7 +16,6 @@ export default function useEditCellFunction({
     },
 
 }) {
-    console.log("🚀 ~ file: useEditCellFunction.js:19 ~ editData:", editData)
     const dispatch = useDispatch();
     const onCopy = useCallback((sitemapUrl, result) => {
         dispatch({

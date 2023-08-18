@@ -9,6 +9,7 @@ const initialState = {
         createDate: 'asc',
         isHot: 'asc',
     },
+    selectedPatchKey: null,
     tagList: null,
     selectedTag: {
         id: '',
@@ -135,7 +136,8 @@ const getTagsReducer = (state = initialState, action) => {
                 let e1, e2
                 e1 = tag1[key]
                 e2 = tag2[key]
-                // typeOf = typeof new Date(tag1[key]).getMonth === 'function' ? 'date' : typeOf
+                const testDateValue = new Date(e1)
+                typeOf = testDateValue instanceof Date && !isNaN(testDateValue) ? 'date' : typeOf
                 const sorting = state.sortingMap[key]
                 switch (typeOf) {
                     case 'string': {
@@ -183,6 +185,7 @@ const getTagsReducer = (state = initialState, action) => {
                     ...state.sortingMap,
                     [key]: state.sortingMap[key] === 'asc' ? 'desc' : 'asc',
                 },
+                selectedPatchKey: key,
                 currentPage: 1
             }
         case GetTagsAction.GET_TAG_FAIL:
@@ -229,6 +232,8 @@ const getCurrentPage = state => state.getTagsReducer.currentPage
 
 const getTotalPage = state => Math.ceil(state.getTagsReducer.totalCount / 10)
 const getTotalCount = state => state.getTagsReducer.totalCount
+
+const getSelectedPatchKey = state => state.getTagsReducer.selectedPatchKey
 const getTagErrorMessage = state => state.getTagsReducer.errorMessage
 const getNextSorting = state => state.getTagsReducer.nextSorting
 const getIsEditing = state => state.getTagsReducer.isEditing
@@ -237,7 +242,6 @@ const getIsEditing = state => state.getTagsReducer.isEditing
 const getTagShowList = createSelector(
     [getTagList, getCurrentPage],
     (tagList, currentPage) => {
-        console.log("🚀 ~ file: GetTagsReducer.js:237 ~ tagList:", tagList)
         const start = (currentPage - 1) * 10;
         const end = start + 10
         return tagList?.slice(start, end)
@@ -258,6 +262,7 @@ export {
     getCurrentPage,
     getTotalPage,
     getTotalCount,
+    getSelectedPatchKey,
     getNextSorting,
     getIsEditing,
     getTagErrorMessage,

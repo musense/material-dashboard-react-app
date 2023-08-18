@@ -22,3 +22,9 @@ const getConfigReducer = (state = initialState, action) => {
 }
 
 export default getConfigReducer
+
+const getMaxSizeClassName = state => state.getConfigReducer.maxSizeClassName
+
+export {
+    getMaxSizeClassName
+}

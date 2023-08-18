@@ -1,0 +1,33 @@
+.header-cell>input {
+    z-index: 1;
+}
+
+.header-cell {
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: center;
+    align-items: center;
+    height: 50px;
+    user-select: none;
+}
+
+.header-cell>span {
+    z-index: 1;
+    cursor: pointer;
+}
+
+.header-cell>svg {
+    position: absolute;
+    left: 10px;
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity ease-in-out 0.2s;
+}
+
+.header-cell>span:hover+svg {
+    opacity: 1;
+}
+
+.header-cell.active>svg {
+    opacity: 1;
+}

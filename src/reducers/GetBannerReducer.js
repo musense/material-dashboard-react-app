@@ -1,3 +1,4 @@
+import getSortedList from 'utils/getSortedList';
 import *  as GetBannerAction from '../actions/GetBannerAction';
 import { errorMessage } from './errorMessage';
 import { createSelector } from 'reselect'
@@ -149,60 +150,9 @@ const getBannerReducer = (state = initialState, action) => {
             }
         case GetBannerAction.SHOW_BANNER_LIST_SORTING:
             const { key } = action.payload;
-
-            const sortedBannerList = state.bannerList.sort((banner1, banner2) => {
-                let typeOf = typeof banner1[key]
-                let k1, k2, e1, e2
-                if (key.indexOf('.') !== -1) {
-                    k1 = key.split('.')[0]
-                    k2 = key.split('.')[1]
-                    e1 = banner1[k1][k2]
-                    e2 = banner2[k1][k2]
-                    typeOf = typeof banner1[k1][k2]
-                } else {
-                    e1 = banner1[key]
-                    e2 = banner2[key]
-                    typeOf = typeof banner1[key]
-                }
-                // typeOf = typeof new Date(e1).getMonth === 'function' ? 'date' : typeOf
-                const sorting = state.sortingMap[key]
-                switch (typeOf) {
-                    case 'string': {
-                        if (sorting === 'asc') {
-                            return e2.localeCompare(e1)
-                        } else {
-                            return e1.localeCompare(e2)
-                        }
-                    }
-                    case 'boolean': {
-                        if (sorting === 'asc') {
-                            return e2.toString().localeCompare(e1.toString())
-                        } else {
-                            return e1.toString().localeCompare(e2.toString())
-                        }
-                    }
-                    case 'number': {
-                        if (sorting === 'asc') {
-                            return parseInt(e2) - parseInt(e1)
-                        } else {
-                            return parseInt(e1) - parseInt(e2)
-
-                        }
-                    }
-                    case 'date': {
-                        if (sorting === 'asc') {
-                            return (new Date(e2)).getTime() - (new Date(e1)).getTime()
-                        } else {
-                            return (new Date(e1)).getTime() - (new Date(e2)).getTime()
-                        }
-                    }
-
-                }
-            })
-
             return {
                 ...state,
-                bannerList: sortedBannerList,
+                bannerList: getSortedList(state.bannerList, key, state.sortingMap),
                 sortingMap: {
                     ...state.sortingMap,
                     [key]: state.sortingMap[key] === 'asc' ? 'desc' : 'asc',

@@ -19,7 +19,6 @@
 .header-cell>svg {
     position: absolute;
     left: 10px;
-    cursor: pointer;
     opacity: 0;
     transition: opacity ease-in-out 0.2s;
 }

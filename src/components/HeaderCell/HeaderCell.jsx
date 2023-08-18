@@ -5,11 +5,11 @@ import styles from './HeaderCell.module.css'
 
 export default function HeaderCell({
   name,
-  selectedPatchKey = null,
-  patchKey = null,
-  patchType = null,
-  className = null,
-  reducerName = null
+  selectedPatchKey = '',
+  patchKey = '',
+  patchType = '',
+  className = '',
+  reducerName = ''
 }) {
 
   const dispatch = useDispatch();

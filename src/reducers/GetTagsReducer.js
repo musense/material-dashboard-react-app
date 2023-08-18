@@ -1,6 +1,7 @@
 import *  as GetTagsAction from '../actions/GetTagsAction';
 import { errorMessage } from './errorMessage';
 import { createSelector } from 'reselect'
+import getSortedList from 'utils/getSortedList';
 
 const initialState = {
     sortingMap: {
@@ -131,56 +132,9 @@ const getTagsReducer = (state = initialState, action) => {
             }
         case GetTagsAction.SHOW_TAG_LIST_SORTING:
             const { key } = action.payload;
-            let sortedTagList = state.tagList.sort((tag1, tag2) => {
-                let typeOf = typeof tag1[key]
-                let e1, e2
-                e1 = tag1[key]
-                e2 = tag2[key]
-                const testDateValue = new Date(e1)
-                typeOf = testDateValue instanceof Date && !isNaN(testDateValue) ? 'date' : typeOf
-                const sorting = state.sortingMap[key]
-                switch (typeOf) {
-                    case 'string': {
-                        if (sorting === 'asc') {
-                            return e1.localeCompare(e2)
-                        } else {
-                            return e2.localeCompare(e1)
-                        }
-                    }
-                    case 'boolean': {
-                        if (sorting === 'asc') {
-                            return e1.toString().localeCompare(e2.toString())
-                        } else {
-                            return e2.toString().localeCompare(e1.toString())
-                        }
-                    }
-                    case 'number': {
-                        if (sorting === 'asc') {
-                            return parseInt(e1) - parseInt(e2)
-                        } else {
-                            return parseInt(e2) - parseInt(e1)
-                        }
-                    }
-                    case 'date': {
-                        if (sorting === 'asc') {
-                            return (new Date(e1)).getTime() - (new Date(e2)).getTime()
-                        } else {
-                            return (new Date(e2)).getTime() - (new Date(e1)).getTime()
-                        }
-                    }
-                }
-            })
-            if (key === 'sorting') {
-                const popularTagList = sortedTagList.filter(tag => tag.popular === true)
-                const unpopularTagList = sortedTagList.filter(tag => tag.popular === false)
-                sortedTagList = [
-                    ...popularTagList,
-                    ...unpopularTagList
-                ]
-            }
             return {
                 ...state,
-                tagList: sortedTagList,
+                tagList: getSortedList(state.tagList, key, state.sortingMap),
                 sortingMap: {
                     ...state.sortingMap,
                     [key]: state.sortingMap[key] === 'asc' ? 'desc' : 'asc',

@@ -2,6 +2,7 @@ import { createSelector } from 'reselect';
 import * as GetEditorAction from '../actions/GetEditorAction';
 import * as GetSlateAction from '../actions/GetSlateAction';
 import { errorMessage } from './errorMessage';
+import getSortedList from 'utils/getSortedList';
 
 const initialState = {
   sortingMap: {
@@ -71,59 +72,9 @@ const getEditorReducer = (state = initialState, action) => {
       }
     case GetEditorAction.SHOW_EDITOR_LIST_SORTING:
       const { key } = action.payload;
-      const sortedTagList = state.titleList.sort((editor1, editor2) => {
-        let typeOf
-        let e1, e2,
-          k1, k2;
-
-        if (key.indexOf('.') !== -1) {
-          k1 = key.split('.')[0]
-          k2 = key.split('.')[1]
-          e1 = editor1[k1][k2]
-          e2 = editor2[k1][k2]
-          typeOf = typeof editor1[k1][k2]
-        } else {
-          e1 = editor1[key]
-          e2 = editor2[key]
-          typeOf = typeof editor1[key]
-        }
-        const testDateValue = new Date(e1)
-        typeOf = testDateValue instanceof Date && !isNaN(testDateValue) ? 'date' : typeOf
-        const sorting = state.sortingMap[key]
-        switch (typeOf) {
-          case 'string': {
-            if (sorting === 'asc') {
-              return e1.localeCompare(e2)
-            } else {
-              return e2.localeCompare(e1)
-            }
-          }
-          case 'boolean': {
-            if (sorting === 'asc') {
-              return e1.toString().localeCompare(e2.toString())
-            } else {
-              return e2.toString().localeCompare(e1.toString())
-            }
-          }
-          case 'number': {
-            if (sorting === 'asc') {
-              return parseInt(e1) - parseInt(e2)
-            } else {
-              return parseInt(e2) - parseInt(e1)
-            }
-          }
-          case 'date': {
-            if (sorting === 'asc') {
-              return (new Date(e1)).getTime() - (new Date(e2)).getTime()
-            } else {
-              return (new Date(e2)).getTime() - (new Date(e1)).getTime()
-            }
-          }
-        }
-      })
       return {
         ...state,
-        titleList: sortedTagList,
+        titleList: getSortedList(state.titleList, key, state.sortingMap),
         sortingMap: {
           ...state.sortingMap,
           [key]: state.sortingMap[key] === 'asc' ? 'desc' : 'asc',

@@ -1,3 +1,4 @@
+import getSortedList from 'utils/getSortedList';
 import * as GetClassAction from '../actions/GetClassAction';
 import { errorMessage } from './errorMessage';
 import { createSelector } from 'reselect'
@@ -72,59 +73,9 @@ const getClassReducer = (state = initialState, action) => {
             }
         case GetClassAction.SHOW_CLASS_LIST_SORTING:
             const { key } = action.payload;
-            const sortedEditorClassList = state.editorClassList.sort((class1, class2) => {
-                let typeOf
-                let e1, e2,
-                    k1, k2;
-
-                if (key.indexOf('.') !== -1) {
-                    k1 = key.split('.')[0]
-                    k2 = key.split('.')[1]
-                    e1 = class1[k1][k2]
-                    e2 = class2[k1][k2]
-                    typeOf = typeof class1[k1][k2]
-                } else {
-                    e1 = class1[key]
-                    e2 = class2[key]
-                    typeOf = typeof class1[key]
-                }
-                const testDateValue = new Date(e1)
-                typeOf = testDateValue instanceof Date && !isNaN(testDateValue) ? 'date' : typeOf
-                const sorting = state.sortingMap[key]
-                switch (typeOf) {
-                    case 'string': {
-                        if (sorting === 'asc') {
-                            return e1.localeCompare(e2)
-                        } else {
-                            return e2.localeCompare(e1)
-                        }
-                    }
-                    case 'boolean': {
-                        if (sorting === 'asc') {
-                            return e1.toString().localeCompare(e2.toString())
-                        } else {
-                            return e2.toString().localeCompare(e1.toString())
-                        }
-                    }
-                    case 'number': {
-                        if (sorting === 'asc') {
-                            return parseInt(e1) - parseInt(e2)
-                        } else {
-                            return parseInt(e2) - parseInt(e1)
-                        }
-                    }
-                    case 'date': {
-                        if (sorting === 'asc') {
-                            return (new Date(e1)).getTime() - (new Date(e2)).getTime()
-                        } else {
-                            return (new Date(e2)).getTime() - (new Date(e1)).getTime()
-                        }
-                    }
-                }
-            })
             return {
                 ...state,
-                editorClassList: sortedEditorClassList,
+                editorClassList: getSortedList(state.editorClassList, key, state.sortingMap),
                 sortingMap: {
                     ...state.sortingMap,
                     [key]: state.sortingMap[key] === 'asc' ? 'desc' : 'asc',

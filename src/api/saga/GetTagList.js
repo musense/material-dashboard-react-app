@@ -83,27 +83,27 @@ function* GetTagList(payload = 1) {
 
         const {
             nextSorting,
-            responseData,
+            resData,
             totalCount,
             currentPage
         } = yield Promise.all([promise1, promise2]).then(res => {
             const nextSorting = res[0].data.maxTagNumber
             const { data: responseData, totalCount, currentPage } = res[1].data
-            responseData.map(tag => {
+            const resData = responseData.map((tag, index) => {
                 return {
                     ...tag,
-                    sorting: tag.sorting ? NaN : tag.sorting
+                    sorting: tag.popular === false ? nextSorting + index : tag.sorting,
                 }
             })
             return {
                 nextSorting,
-                responseData,
+                resData,
                 totalCount,
                 currentPage
             }
         })
 
-        const tagList = toFrontendData(responseData)
+        const tagList = toFrontendData(resData)
         yield put({
             type: GetTagsAction.REQUEST_TAG_SUCCESS,
             payload: {

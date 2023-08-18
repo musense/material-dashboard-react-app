@@ -29,7 +29,7 @@ export default function RowBody({
                                     )
                                 }
                                 if (rowItem.patchKey === 'sorting') {
-                                    return tag.sorting
+                                    return tag.popular
                                         ? (
                                             <BodyCell
                                                 key={index}

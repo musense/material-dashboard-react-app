@@ -17,14 +17,14 @@ const style = {
 };
 
 const imageDivStyle = {
-    width: "768px",
-    height: "384px",
+    width: "auto",
+    height: "500px",
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'center',
 }
 const imageStyle = {
-    width: '100%',
+    width: 'auto',
     height: '100%',
     objectFit: 'contain',
     objectPosition: 'center',
@@ -32,7 +32,8 @@ const imageStyle = {
 
 export default function MediaModal({ open, handleClose, mediaInfo }) {
 
-    const onClose = useCallback(() => {
+    const onClose = useCallback((event, reason) => {
+        if (reason === 'backdropClick') return
         handleClose()
     }, [handleClose])
     const [isImage, setIsImage] = useState(true);
@@ -69,7 +70,7 @@ export default function MediaModal({ open, handleClose, mediaInfo }) {
                 <CloseIcon
                     color="white"
                     onClose={onClose}
-                    distance={-20} />
+                    distance={-30} />
                 {isImage ?
                     <div style={imageDivStyle}>
                         <img src={iframeUrl} style={imageStyle} />
@@ -78,8 +79,8 @@ export default function MediaModal({ open, handleClose, mediaInfo }) {
                     <Iframe
                         url={iframeUrl}
                         loading='lazy'
-                        width="768px"
-                        height="384px"
+                        width="888px"
+                        height="500PX"
                         display="block"
                         position="relative"
                     />}

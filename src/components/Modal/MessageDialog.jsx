@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useCallback } from 'react'
 import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
@@ -27,13 +27,17 @@ export default function MessageDialog({
   data = null,
   editor = null
 }) {
-
+  const handleClose = useCallback((event, reason) => {
+    if (reason === 'backdropClick') return
+    setClose()
+  }, [setClose])
   return dialogTitle && (
     <Dialog
       open={open}
-      onClose={setClose}
+      onClose={handleClose}
       aria-labelledby="alert-dialog-title"
       aria-describedby="alert-dialog-description"
+      disableEscapeKeyDown={true}
     >
       <Box sx={style}>
         <DialogTitle id="alert-dialog-title">
@@ -51,7 +55,7 @@ export default function MessageDialog({
             dialogContent={dialogContent}
             editorID={editorID}
             sitemapUrl={sitemapUrl}
-            setClose={setClose}
+            setClose={handleClose}
           />
           : <ConfirmButtonWrapper
             confirm={confirm}

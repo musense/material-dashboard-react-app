@@ -1,7 +1,6 @@
 import *  as GetBannerAction from '../actions/GetBannerAction';
 import { errorMessage } from './errorMessage';
-import { createSelector } from 'reselect';
-import { useSelector } from 'react-redux';
+import { createSelector } from 'reselect'
 
 const initialState = {
     sortingMap: {
@@ -12,6 +11,7 @@ const initialState = {
         startDate: 'asc',
         status: 'asc',
     },
+    selectedPatchKey: null,
     bannerList: null,
     selectedBanner: {
         _id: '',
@@ -138,7 +138,6 @@ const getBannerReducer = (state = initialState, action) => {
                 bannerList: action.payload.bannerList,
                 currentPage: action.payload.currentPage,
                 totalCount: action.payload.totalCount,
-                totalPage: Math.ceil(action.payload.totalCount / 10),
                 errorMessage: errorMessage.getFinish
             }
         case GetBannerAction.REQUEST_BANNER_PAGE:
@@ -150,63 +149,65 @@ const getBannerReducer = (state = initialState, action) => {
             }
         case GetBannerAction.SHOW_BANNER_LIST_SORTING:
             const { key } = action.payload;
+
+            const sortedBannerList = state.bannerList.sort((banner1, banner2) => {
+                let typeOf = typeof banner1[key]
+                let k1, k2, e1, e2
+                if (key.indexOf('.') !== -1) {
+                    k1 = key.split('.')[0]
+                    k2 = key.split('.')[1]
+                    e1 = banner1[k1][k2]
+                    e2 = banner2[k1][k2]
+                    typeOf = typeof banner1[k1][k2]
+                } else {
+                    e1 = banner1[key]
+                    e2 = banner2[key]
+                    typeOf = typeof banner1[key]
+                }
+                // typeOf = typeof new Date(e1).getMonth === 'function' ? 'date' : typeOf
+                const sorting = state.sortingMap[key]
+                switch (typeOf) {
+                    case 'string': {
+                        if (sorting === 'asc') {
+                            return e2.localeCompare(e1)
+                        } else {
+                            return e1.localeCompare(e2)
+                        }
+                    }
+                    case 'boolean': {
+                        if (sorting === 'asc') {
+                            return e2.toString().localeCompare(e1.toString())
+                        } else {
+                            return e1.toString().localeCompare(e2.toString())
+                        }
+                    }
+                    case 'number': {
+                        if (sorting === 'asc') {
+                            return parseInt(e2) - parseInt(e1)
+                        } else {
+                            return parseInt(e1) - parseInt(e2)
+
+                        }
+                    }
+                    case 'date': {
+                        if (sorting === 'asc') {
+                            return (new Date(e2)).getTime() - (new Date(e1)).getTime()
+                        } else {
+                            return (new Date(e1)).getTime() - (new Date(e2)).getTime()
+                        }
+                    }
+
+                }
+            })
+
             return {
                 ...state,
-                bannerList: state.bannerList
-                    ? state.bannerList.sort((banner1, banner2) => {
-                        let typeOf = typeof banner1[key]
-                        let k1, k2, e1, e2
-                        if (key.indexOf('.') !== -1) {
-                            k1 = key.split('.')[0]
-                            k2 = key.split('.')[1]
-                            e1 = banner1[k1][k2]
-                            e2 = banner2[k1][k2]
-                            typeOf = typeof banner1[k1][k2]
-                        } else {
-                            e1 = banner1[key]
-                            e2 = banner2[key]
-                            typeOf = typeof banner1[key]
-                        }
-                        // typeOf = typeof new Date(e1).getMonth === 'function' ? 'date' : typeOf
-                        const sorting = state.sortingMap[key]
-                        switch (typeOf) {
-                            case 'string': {
-                                if (sorting === 'asc') {
-                                    return e2.localeCompare(e1)
-                                } else {
-                                    return e1.localeCompare(e2)
-                                }
-                            }
-                            case 'boolean': {
-                                if (sorting === 'asc') {
-                                    return e2.toString().localeCompare(e1.toString())
-                                } else {
-                                    return e1.toString().localeCompare(e2.toString())
-                                }
-                            }
-                            case 'number': {
-                                if (sorting === 'asc') {
-                                    return parseInt(e2) - parseInt(e1)
-                                } else {
-                                    return parseInt(e1) - parseInt(e2)
-
-                                }
-                            }
-                            case 'date': {
-                                if (sorting === 'asc') {
-                                    return (new Date(e2)).getTime() - (new Date(e1)).getTime()
-                                } else {
-                                    return (new Date(e1)).getTime() - (new Date(e2)).getTime()
-                                }
-                            }
-
-                        }
-                    }).slice(0, 10)
-                    : null,
+                bannerList: sortedBannerList,
                 sortingMap: {
                     ...state.sortingMap,
                     [key]: state.sortingMap[key] === 'asc' ? 'desc' : 'asc',
                 },
+                selectedPatchKey: key,
                 currentPage: 1
             }
         case GetBannerAction.GET_BANNER_SUCCESS:
@@ -257,18 +258,39 @@ const getBannerReducer = (state = initialState, action) => {
 
 export default getBannerReducer
 
-const getShowList = state => state.getBannerReducer.bannerList
-    && state.getBannerReducer.bannerList.slice(
-        (state.getBannerReducer.currentPage - 1) * 10,
-        (state.getBannerReducer.currentPage - 1) * 10 + 10
-    )
+const getBannerList = state => state.getBannerReducer?.bannerList && [...state.getBannerReducer.bannerList]
+const getCurrentPage = state => state.getBannerReducer?.currentPage
 
+const getTotalPage = state => Math.ceil(state.getBannerReducer.totalCount / 10)
+const getTotalCount = state => state.getBannerReducer.totalCount
+
+const getSelectedPatchKey = state => state.getBannerReducer.selectedPatchKey
+const getBannerErrorMessage = state => state.getBannerReducer.errorMessage
+const getNextSorting = state => state.getBannerReducer.nextSorting
 
 const getIsEditing = state => state.getBannerReducer.isEditing
 const getShowUrl = state => state.getBannerReducer.showUrl
 
+const getBannerShowList = createSelector(
+    [getBannerList, getCurrentPage],
+    (bannerList, currentPage) => {
+        const start = (currentPage - 1) * 10;
+        const end = start + 10
+        return bannerList?.slice(start, end)
+    })
+
+
+
+
 export {
+    getBannerList,
+    getCurrentPage,
+    getTotalPage,
+    getTotalCount,
+    getSelectedPatchKey,
+    getBannerErrorMessage,
+    getNextSorting,
     getIsEditing,
     getShowUrl,
-    getShowList
+    getBannerShowList
 }

@@ -11,8 +11,16 @@ import useModal from "../../hook/useModal";
 import useModalResult from "../../hook/useModalResult";
 import useDeleteSelectedRow from "hook/useDeleteSelectedRow";
 import getErrorMessage from "utils/getErrorMessage";
-import { getShowList } from "reducers/GetBannerReducer";
+import {
+    getBannerErrorMessage,
+    getBannerShowList,
+    getCurrentPage,
+    getSelectedPatchKey,
+    getTotalCount,
+    getTotalPage
+} from "reducers/GetBannerReducer";
 import MediaModal from "components/Modal/MediaModal";
+
 
 const headerMap = {
     headerRow: [
@@ -31,12 +39,13 @@ const headerMap = {
 
 export default function BannerRightBody() {
 
-    const showList = useSelector(getShowList);
 
-    const currentPage = useSelector((state) => state.getBannerReducer.currentPage);
-    const totalPage = useSelector((state) => state.getBannerReducer.totalPage);
-    const totalCount = useSelector((state) => state.getBannerReducer.totalCount);
-    const serverMessage = useSelector((state) => state.getBannerReducer.errorMessage);
+    const selectedPatchKey = useSelector(getSelectedPatchKey);
+    const currentPage = useSelector(getCurrentPage);
+    const showList = useSelector(getBannerShowList)
+    const totalPage = useSelector(getTotalPage);
+    const totalCount = useSelector(getTotalCount);
+    const serverMessage = useSelector(getBannerErrorMessage);
 
     console.log("🚀 ~ file: BannerRightBody.jsx:29 ~ BannerRightBody ~ showList:", showList)
 
@@ -72,7 +81,6 @@ export default function BannerRightBody() {
 
     const {
         open: openDialog,
-        // handleOpen: handleOpenDialog,
         handleClose: handleCloseDialog
     } = useModal(title)
 
@@ -86,7 +94,9 @@ export default function BannerRightBody() {
             totalCount={totalCount}
         />
         <form className='view-list-form'>
-            <RowHeader headerConfig={headerMap} />
+            <RowHeader
+                headerConfig={headerMap}
+                selectedPatchKey={selectedPatchKey} />
             <RowBody
                 headerConfig={headerMap}
                 showList={showList}

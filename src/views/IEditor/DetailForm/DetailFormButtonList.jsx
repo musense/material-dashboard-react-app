@@ -22,8 +22,8 @@ export default function FormButtonList({
 
     return <section id="button">
         <div className={'button-wrapper'}>
-            <input type='submit' onClick={(e) => onErrorMessageChange(e, createType, 'submit')} value='確認' />
-            <input type='submit' onClick={(e) => onErrorMessageChange(e, createType, 'preview')} value='預覽' />
+            <input onClick={(e) => onErrorMessageChange(e, createType, 'submit')} value='確認' class="submit-btn" />
+            <input onClick={(e) => onErrorMessageChange(e, createType, 'preview')} value='預覽' class="submit-btn" />
         </div>
     </section>;
 }

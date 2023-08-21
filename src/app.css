@@ -30,9 +30,11 @@ div>input[type='button'] {
 
 input[type='submit'],
 .submit-btn {
+  text-align: center;
   background-color: darkviolet;
   color: white;
   border: none;
+  width: 180px;
 }
 
 input[type='submit']:hover,
@@ -52,35 +54,39 @@ input[type='file'] {
 }
 
 .container {
+  position: inherit;
   width: 100%;
-  height: fit-content;
+  height: 100%;
   background-color: white;
 }
 
 .wrapper {
+  position: inherit;
+  padding: 1rem 0;
   width: 100%;
   height: 100%;
   display: flex;
   flex-direction: row;
-  padding: 1rem 0;
+}
+
+.wrapper>div {
+  height: 100%;
+  padding: 0 1rem;
+  ;
 }
 
 .left-side {
   width: 70%;
-  /* height: 100%; */
-  height: auto;
-  padding: 0 1rem;
   /* background-color: lightgrey; */
 }
 
 .left-side>form {
+  position: inherit;
   height: 100%;
 }
 
 .right-side {
   width: 30%;
-  height: 100%;
-  padding: 0 1rem;
   overflow: auto;
   /* background-color: lightblue; */
 }
@@ -236,12 +242,26 @@ input[type='file'] {
 .button-wrapper {
   display: flex;
   flex-direction: row;
-  gap: 10rem;
+  justify-content: space-between;
+  gap: 5rem;
+}
+
+@media (max-width: 1500px) {
+  .button-wrapper {
+    flex-direction: column;
+    align-content: center;
+    gap: 1rem;
+  }
+
+  .button-wrapper>input.submit-btn {
+    width: 100%;
+  }
 }
 
 .ieditor-detail-form {
   display: flex;
   flex-direction: column;
+
   gap: 1rem;
 }
 

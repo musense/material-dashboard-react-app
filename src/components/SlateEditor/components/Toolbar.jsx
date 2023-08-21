@@ -16,13 +16,13 @@ import { useSlate, useSlateStatic } from 'slate-react'
 import TableContextMenu from '../TableContextMenu/TableContextMenu'
 import HtmlContextMenu from '../CodeToText/HtmlContextMenu'
 
-export default function Toolbar({
+function InnerToolbar({
     handleClickOpen,
     handleCodeToText,
     currentUrl,
     currentAltText,
     currentHref
-}) {
+}, ref) {
     const editor = useSlate()
     const editorStatic = useSlateStatic()
     const style = css` 
@@ -32,15 +32,15 @@ export default function Toolbar({
     flex-direction: row;
     flex-wrap: wrap;
     gap: 1rem;
+    row-gap: 0.5rem;
     padding-top: 0;
     padding-bottom: 0.5rem;
-    margin-bottom: 1rem;
     border-bottom: 2px solid rgb(238, 238, 238);
     background-color: white;
     z-index: 1;
     `
     return <>
-        <div className={style}>
+        <div ref={ref} className={style}>
             {/* inline-block style */}
             <MarkButton editor={editor} type={'bold'} icon={'bold'} title={'黑體 ctrl+b'} />
             <MarkButton editor={editor} type={'italic'} icon={'italic'} title={'斜體 ctrl+i'} />
@@ -83,3 +83,7 @@ export default function Toolbar({
         </div>
     </>
 }
+
+const Toolbar = React.forwardRef(InnerToolbar)
+
+export default Toolbar

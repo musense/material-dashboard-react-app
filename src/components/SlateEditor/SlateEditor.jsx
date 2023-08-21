@@ -12,6 +12,7 @@ import useCreateSlateEditor from './customHooks/useCreateSlateEditor'
 import useModal from '../../hook/useModal';
 import MyScrollbar from 'components/MyScrollbar/MyScrollbar';
 import CodeToText from './CodeToText/CodeToText';
+import useGetToolbarHeight from './customHooks/useGetToolbarHeight'
 
 function SlateEditor({
   slateValue,
@@ -19,6 +20,9 @@ function SlateEditor({
 }) {
 
   const slateEditor = useCreateSlateEditor()
+
+  const toolbarRef = useRef(null)
+  const toolbarHeight = useGetToolbarHeight(toolbarRef)
 
   const urlRef = useRef(null);
   const altTextRef = useRef(null);
@@ -48,12 +52,11 @@ function SlateEditor({
   }
   return (
     <div className={css` 
-    position: relative;
+    position: inherit;
     background: rgb(255, 255, 255);
     max-width: 100%;
     height: calc(100% - 82px);
     overflow: hidden;
-    padding-top: 0;
     `}>
       <Slate
         editor={slateEditor}
@@ -61,18 +64,20 @@ function SlateEditor({
         onChange={setState}
       >
         <Toolbar
+          ref={toolbarRef}
           handleClickOpen={handleOpen}
           handleCodeToText={handleCodeToText}
           currentUrl={urlRef.current}
           currentAltText={altTextRef.current}
           currentHref={hrefRef.current}
         />
-        <MyScrollbar height='calc(100vh - 280px)'>
+        <MyScrollbar height={`calc(100% - ${toolbarHeight}px)`}>
           <Editable
             style={{
               fontSize: '1rem',
               height: 'fit-content',
               minHeight: '100%',
+              paddingTop: '1rem',
             }}
             renderElement={renderElement}
             renderLeaf={renderLeaf}

@@ -56,7 +56,7 @@ const DetailForm = ({ createType }) => {
     }, [dispatch])
 
     return (
-        <MyScrollbar height='814px'>
+        <MyScrollbar height='calc(100vh - 166px)'>
             <form className={'ieditor-detail-form'} >
                 <WebHeader
                     headTitle={headTitle}

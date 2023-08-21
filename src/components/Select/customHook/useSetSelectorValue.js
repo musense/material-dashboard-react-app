@@ -8,12 +8,14 @@ export default function useSetSelectorValue(defaultSelected, isMulti) {
         if (isMulti) {
             return selectedValue.map(selected => ({
                 _id: selected.value,
-                name: selected.label
+                name: selected.label,
+                [selected.__isNew__ ? '__isNew__' : '']: true
             }))
         }
         return {
             _id: selectedValue.value,
-            name: selectedValue.label
+            name: selectedValue.label,
+            [selectedValue.__isNew__ ? '__isNew__' : '']: true
         }
     }, [isMulti])
 

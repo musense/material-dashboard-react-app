@@ -19,6 +19,7 @@ export default function MultiTagSelectSort({
       controlWidth={width}
       setState={setState}
       defaultSelected={defaultSelected}
+      name="標籤"
     />
   );
 }

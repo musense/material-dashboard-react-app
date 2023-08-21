@@ -1,11 +1,10 @@
 import { SortableContainer } from 'react-sortable-hoc';
 import Select from 'react-select';
-import Createable from 'react-select/creatable';
 import CreatableSelect from 'react-select/creatable';
 
 export default function useCreateSortableSelector() {
     const SortableSelect = SortableContainer(Select)
-    const SortableCreatable = SortableContainer(Createable)
+    const SortableCreatable = SortableContainer(CreatableSelect)
 
     const SortableCreatableSelectProps = (props) => <SortableCreatable {...props} />
     const SortableSelectProps = (props) => <SortableSelect {...props} />

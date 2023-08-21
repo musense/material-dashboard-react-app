@@ -2,6 +2,7 @@ import useSetSelectorValue from '../customHook/useSetSelectorValue';
 import useSetSelectorOption from '../customHook/useSetSelectorOption';
 import useSelectorStyle from '../customHook/useSelectorStyle';
 import useSelectorProps from '../customHook/useSelectorProps';
+import useSelectorCreatableProps from '../customHook/useSelectorCreatableProps';
 import useCreateSortableSelector from '../customHook/useCreateSortableSelector';
 
 const Selector = ({
@@ -11,7 +12,8 @@ const Selector = ({
   controlWidth = null,
   controlHeight = null,
   setState = null,
-  defaultSelected = null
+  defaultSelected = null,
+  name = ''
 }) => {
 
   const options = useSetSelectorOption(defaultOptions)
@@ -31,6 +33,9 @@ const Selector = ({
     styles,
     isMulti
   })
+  const creatableProps = useSelectorCreatableProps({
+    name,
+  })
 
   const {
     SortableCreatableSelectProps,
@@ -41,10 +46,10 @@ const Selector = ({
 
   return isMulti ? (
     creatable
-      ? SortableCreatableSelectProps(props)
+      ? SortableCreatableSelectProps({ ...props, ...creatableProps })
       : SortableSelectProps(props)
   ) : creatable
-    ? CreatableSelectProps(props)
+    ? CreatableSelectProps({ ...props, ...creatableProps })
     : SelectProps(props)
 }
 

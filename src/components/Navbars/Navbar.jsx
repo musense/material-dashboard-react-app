@@ -16,11 +16,14 @@ function Header({ ...props }) {
   const location = useLocation()
   function makeBrand() {
     let name;
-    props.routes.map((prop, key) => {
+    props.routes.map((prop) => {
       if (prop.layout + prop.path === location.pathname) {
         name = prop.name;
+      } else if (location.pathname.includes('/admin/editorList/')) {
+        name = '編輯文章'
+      } else {
+        return null;
       }
-      return null;
     });
     return name;
   }
@@ -31,7 +34,7 @@ function Header({ ...props }) {
   return (
     <AppBar className={classes.appBar + appBarClasses}>
       <Toolbar className={classes.container}>
-        <div className={classes.flex}>
+        <div className={classes.flex} style={{ flex: 1, marginRight: 'auto' }}>
           {/* Here we create navbar brand, based on route name */}
           <Button color="transparent" href="#" className={classes.title}>
             {makeBrand()}

@@ -16,6 +16,8 @@ function NewIEditor() {
 
   useSetEditorDefaultValue()
 
+  const editor = useSelector((state) => state.getEditorReducer.editor);
+
   const submitState = useSelector((state) => state.getSlateReducer.submitState);
   const isPreview = useSelector((state) => state.getSlateReducer.isPreview);
   const returnMessage = useSelector((state) => state.getSlateReducer.errorMessage);
@@ -34,7 +36,7 @@ function NewIEditor() {
   } = useModalResult({
     message,
     name: '文章',
-    data: submitState,
+    data: editor,
     isEditor: true
   })
 

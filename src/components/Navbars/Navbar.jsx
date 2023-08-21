@@ -5,7 +5,6 @@ import withStyles from "@material-ui/core/styles/withStyles";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import IconButton from "@material-ui/core/IconButton";
-import Hidden from "@material-ui/core/Hidden";
 import Menu from "@material-ui/icons/Menu";
 import AdminNavbarLinks from "./AdminNavbarLinks.jsx";
 import Button from "components/CustomButtons/Button.jsx";
@@ -40,19 +39,15 @@ function Header({ ...props }) {
             {makeBrand()}
           </Button>
         </div>
-        <Hidden smDown implementation="css">
-          <AdminNavbarLinks {...props} />
-        </Hidden>
-        {/* <Hidden mdUp implementation="css"> */}
+        <AdminNavbarLinks {...props} />
         <IconButton
           color="inherit"
           aria-label="open drawer"
+          title="開啟/關閉選單"
           onClick={props.handleDrawerToggle}
-        // sx={{ display: { md: 'none', xs: 'block' } }}
         >
           <Menu />
         </IconButton>
-        {/* </Hidden> */}
       </Toolbar>
     </AppBar>
   );

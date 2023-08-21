@@ -54,7 +54,7 @@ const iconList = {
     edit: <MdOutlineEdit size={20} />,
     editOff: <MdOutlineEditOff size={20} />,
     smartButton: <MdSmartButton size={20} />,
-    logout: <MdLogout size={32} color='white' title='logout' />,
+    logout: <MdLogout size={25} color='white' title='logout' />,
     tableToLeft: <PiAlignLeftSimple size={25} />,
     tableToCenter: <PiAlignCenterHorizontalSimple size={25} />,
     tableToRight: <PiAlignRightSimple size={25} />,

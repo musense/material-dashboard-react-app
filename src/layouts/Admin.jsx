@@ -23,10 +23,9 @@ import * as GetConfigAction from "actions/GetConfigAction.js";
 
 
 const myContainerStyle = {
-  minHeight: 'unset',
+  position: 'relative',
   marginTop: '74px',
   height: 'calc(100vh - 74px)',
-  overflow: 'hidden',
 }
 
 function Dashboard({ ...props }) {
@@ -49,11 +48,7 @@ function Dashboard({ ...props }) {
   function getRoute() {
     return props.location && props.location.pathname !== '/admin/maps';
   }
-  const resizeFunction = () => {
-    if (window.innerWidth >= 960) {
-      setMobileOpen(false);
-    }
-  };
+
   const getAgentPlatform = () => {
     return navigator
       ? navigator.userAgentData
@@ -71,11 +66,8 @@ function Dashboard({ ...props }) {
 
     if (mainPanel.current === null) {
       //componentDidMount
-      mainPanel.current = classes.mainPanel;
-      window.addEventListener('resize', resizeFunction);
     } else {
       //componentDidUpdate
-
       import(process.env.REACT_APP_LOGO_DIR).then(res => {
         setLogo(res.default)
         // setLogoText(process.env.REACT_APP_LOGO_TEXT)
@@ -83,7 +75,6 @@ function Dashboard({ ...props }) {
     }
     return () => {
       //componentWillUnmount
-      window.removeEventListener('resize', resizeFunction);
     };
   }, []);
   return (

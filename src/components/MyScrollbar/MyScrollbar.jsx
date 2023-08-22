@@ -11,7 +11,7 @@ export default function MyScrollbar({
         <div style={{ height: height }}>
             <PerfectScrollBar
                 component={component}
-                suppressScrollX={true}
+            // suppressScrollX={true}
             >
                 {children}
             </PerfectScrollBar>

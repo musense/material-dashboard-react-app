@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 
 export default function useGetToolbarHeight(toolbarRef) {
     const [toolbar, setToolbar] = useState();
-    const [toolbarHeight, setToolbarHeight] = useState();
+    const [toolbarHeight, setToolbarHeight] = useState(37);
 
     const onResize = useCallback(() => {
         if (!toolbar) return

@@ -28,8 +28,8 @@ function BannerList() {
 
     return (
         <div className={styles['banner-container']}>
-            <BannerRightWrapper />
-            <BannerLeftWrapper />
+            <BannerRightWrapper styles={styles} />
+            <BannerLeftWrapper styles={styles} />
         </div >
 
     );

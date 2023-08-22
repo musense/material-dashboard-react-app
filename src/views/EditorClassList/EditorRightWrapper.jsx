@@ -7,7 +7,6 @@ import Card from 'components/Card/Card.jsx';
 import CardBody from 'components/Card/CardBody.jsx';
 import GridContainer from 'components/Grid/GridContainer.jsx';
 import GridItem from 'components/Grid/GridItem.jsx';
-import styles from './EditorClassList.module.css';
 import EditorClassButtonList from './EditorClassButtonList';
 import EditorHeader from './EditorHeader';
 
@@ -32,7 +31,7 @@ const headerMap = {
     reducerName: 'getClassReducer',
 };
 
-export default function EditorRightWrapper() {
+export default function EditorRightWrapper({ styles }) {
 
     const maxSizeClassName = useSelector(getMaxSizeClassName);
 

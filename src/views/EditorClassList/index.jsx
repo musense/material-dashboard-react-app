@@ -30,8 +30,8 @@ function EditorClassList() {
 
     return (
         <div className={styles['editor-container']}>
-            <EditorRightWrapper />
-            <EditorLeftWrapper />
+            <EditorRightWrapper styles={styles} />
+            <EditorLeftWrapper styles={styles} />
         </div >
 
     );

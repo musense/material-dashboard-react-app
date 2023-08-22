@@ -5,7 +5,6 @@ import * as GetBannerAction from 'actions/GetBannerAction';
 import Card from 'components/Card/Card.jsx';
 import CardBody from 'components/Card/CardBody.jsx';
 import CardHeader from 'components/Card/CardHeader.jsx';
-import styles from './BannerList.module.css'
 import usePressEnterEventHandler from 'hook/usePressEnterEventHandler';
 import useModalResult from 'hook/useModalResult';
 
@@ -27,7 +26,7 @@ import {
 import SingleBannerStatusSelector from 'components/Select/SingleBannerStatusSelect'
 import { Checkbox, FormControlLabel } from '@mui/material';
 
-export default function BannerLeftWrapper() {
+export default function BannerLeftWrapper({ styles }) {
 
     const formRef = useRef(null);
     const dispatch = useDispatch();

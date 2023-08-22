@@ -7,7 +7,6 @@ import CardBody from 'components/Card/CardBody.jsx';
 import CardHeader from 'components/Card/CardHeader.jsx';
 import GridContainer from 'components/Grid/GridContainer.jsx';
 import GridItem from 'components/Grid/GridItem.jsx';
-import styles from './EditorClassList.module.css'
 
 import usePressEnterEventHandler from 'hook/usePressEnterEventHandler';
 import useModalResult from '../../hook/useModalResult';
@@ -18,7 +17,7 @@ import FormButtonList from 'components/FormButtonList/FormButtonList';
 import getErrorMessage from 'utils/getErrorMessage';
 import useClearForm from 'hook/useClearForm';
 
-export default function EditorLeftWrapper() {
+export default function EditorLeftWrapper({ styles }) {
 
     const formRef = useRef(null);
     const dispatch = useDispatch();
@@ -178,7 +177,7 @@ export default function EditorLeftWrapper() {
                                 <div >
                                     <label htmlFor="customUrl">前台顯示網址</label>
                                     {manualUrl.length > 0
-                                        ? <input readOnly disabled type="text" name='manualUrl' value={`p_${manualUrl}.html`} />
+                                        ? <input readOnly disabled type="text" name='manualUrl' value={`c_${manualUrl}.html`} />
                                         : <div><a target="_blank" rel="noopener noreferrer" href={customUrl}>{customUrl}</a></div>
                                     }
                                 </div>

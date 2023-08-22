@@ -34,7 +34,6 @@ export const CustomEditor = {
 
     isMarkActive(editor, format) {
         const marks = Editor.marks(editor)
-        console.log("🚀 ~ file: CustomEditor.jsx:37 ~ isMarkActive ~ marks:", marks)
         if (!marks) return false
         if (marks[format] === false) return false
         return marks[format]

@@ -199,7 +199,7 @@ export default function TagLeftWrapper() {
                                 ? <div>
                                     <label htmlFor="customUrl">前台顯示網址</label>
                                     {manualUrl.length > 0
-                                        ? <input readOnly disabled type="text" name='manualUrl' value={`p_${manualUrl}.html`} />
+                                        ? <input readOnly disabled type="text" name='manualUrl' value={`tag_${manualUrl}.html`} />
                                         : <div><a target="_blank" rel="noopener noreferrer" href={customUrl}>{customUrl}</a></div>
                                     }
                                 </div>

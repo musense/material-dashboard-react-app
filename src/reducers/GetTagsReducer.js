@@ -63,7 +63,7 @@ const getTagsReducer = (state = initialState, action) => {
                     title: data.webHeader.title,
                     description: data.webHeader.description,
                     keywords: data.webHeader.keywords,
-                    manualUrl: data.webHeader.manualUrl,
+                    manualUrl: '',
                     customUrl: data.webHeader.customUrl,
                     popular: data.popular,
                     sorting: data.sorting,

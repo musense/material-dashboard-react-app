@@ -128,7 +128,7 @@ const getClassReducer = (state = initialState, action) => {
                     title: editorClass.title,
                     description: editorClass.description,
                     keywords: editorClass.keywords,
-                    manualUrl: editorClass.manualUrl,
+                    manualUrl: '',
                     customUrl: editorClass.customUrl,
                     parentClass: editorClass.parentClass,
                 },

@@ -17,7 +17,7 @@ import getErrorMessage from 'utils/getErrorMessage.js';
 
 function IEditor() {
 
-  const data = useLoaderData()
+  // const data = useLoaderData()
   const { id } = useParams();
   const editor = useSelector((state) => state.getEditorReducer.editor);
 

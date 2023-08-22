@@ -10,8 +10,6 @@ export default function EditBodyCell({
     name,
     editType,
     editData,
-    // onNote = null,
-    // note = null,
     className,
     callback = null
 }) {
@@ -26,7 +24,7 @@ export default function EditBodyCell({
         },
         onEdit: {
             editType,
-            data: editData,
+            editData: editData,
             callback: callback
         }
     }
@@ -35,11 +33,6 @@ export default function EditBodyCell({
         <Stack spacing={2} direction={'row'}
             useFlexGap flexWrap="wrap" justifyContent={"space-evenly"}
         >
-            {/* {note && <IconCell
-                iconName={'note'}
-                iconTitle={'備註'}
-                callback={onNote}
-            />} */}
             <IconCell
                 copy={copyText ? true : false}
                 iconName={'link'}

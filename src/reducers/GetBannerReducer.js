@@ -16,20 +16,25 @@ const initialState = {
     bannerList: null,
     selectedBanner: {
         _id: '',
-        serialNumber: 0,
         name: '',
-        sort: 1,
-        hyperlink: '',
+        serialNumber: '',
+        sort: '',
         remark: '',
-        eternal: false,
-        display: 0,
-        media: {
-            homeImagePath: '',
-            contentImagePath: '',
-        },
-        startDate: '',
-        endDate: '',
         status: '',
+        media: {
+            contentImagePath: '',
+            homeImagePath: '',
+            hyperlink: '',
+        },
+        publishInfo: {
+            isEternal: false,
+            isDisplay: false,
+            isScheduled: false,
+            scheduledAt: {
+                startDate: '',
+                endDate: ''
+            }
+        }
     },
     showUrl: '',
     currentPage: null,
@@ -82,22 +87,27 @@ const getBannerReducer = (state = initialState, action) => {
                 ...state,
                 selectedBanner: {
                     _id: banner._id,
-                    serialNumber: banner.serialNumber,
                     name: banner.name,
+                    serialNumber: banner.serialNumber,
                     sort: banner.sort,
-                    hyperlink: banner.hyperlink,
                     remark: banner.remark,
+                    status: banner.status,
                     eternal: banner.eternal,
                     display: banner.display,
                     media: {
                         homeImagePath: banner.homeImagePath,
                         contentImagePath: banner.contentImagePath,
+                        hyperlink: banner.hyperlink,
                     },
-                    startDate: banner.startDate,
-                    endDate: banner.endDate,
-                    createdAt: banner.createdAt,
-                    updatedAt: banner.updatedAt,
-                    status: banner.status,
+                    publishInfo: {
+                        isEternal: banner.eternal,
+                        isDisplay: banner.display,
+                        isScheduled: banner.startDate || banner.endDate ? true : false,
+                        scheduledAt: {
+                            startDate: banner.startDate,
+                            endDate: banner.endDate
+                        }
+                    }
                 },
                 showUrl: banner.homeImagePath,
                 isEditing: true,
@@ -229,6 +239,11 @@ const getBannerShowList = createSelector(
         return bannerList?.slice(start, end)
     })
 
+const getSelectedBanner = state => state.getBannerReducer.selectedBanner && state.getBannerReducer.selectedBanner
+const getSelectedBannerMedia = state => state.getBannerReducer.selectedBanner?.media
+const getSelectedBannerPublishInfo = state => state.getBannerReducer.selectedBanner?.publishInfo
+const getSelectedBannerPublishInfoSchedulePeriod = state => state.getBannerReducer.selectedBanner?.publishInfo.scheduledAt
+
 
 
 
@@ -242,5 +257,9 @@ export {
     getNextSorting,
     getIsEditing,
     getShowUrl,
-    getBannerShowList
+    getBannerShowList,
+    getSelectedBanner,
+    getSelectedBannerMedia,
+    getSelectedBannerPublishInfo,
+    getSelectedBannerPublishInfoSchedulePeriod,
 }

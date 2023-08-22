@@ -5,7 +5,7 @@ import { Stack } from "@mui/material";
 
 export default function BannerPublishInfo({
     isOnShelvesImmediate,
-    isPermanent,
+    isEternal,
     startDate,
     endDate,
     onPropertyChange
@@ -14,8 +14,8 @@ export default function BannerPublishInfo({
         onPropertyChange(value, 'isOnShelvesImmediate')
     }, [onPropertyChange])
 
-    const onIsPermanent = useCallback((value) => {
-        onPropertyChange(value, 'isPermanent')
+    const onIsEternal = useCallback((value) => {
+        onPropertyChange(value, 'isEternal')
     }, [onPropertyChange])
 
     const onStartDateChange = useCallback((value) => {
@@ -35,18 +35,18 @@ export default function BannerPublishInfo({
                         label={'立即上架'}
                         setState={setIsOnShelvesImmediate} />
                     <CustomRadio
-                        value={isPermanent}
+                        value={isEternal}
                         label={'設為常駐'}
-                        setState={onIsPermanent} />
+                        setState={onIsEternal} />
                 </Stack> */}
                 <Stack direction={"column"} spacing={2}>
                     <DateTimeSelector
-                        disabled={isOnShelvesImmediate || isPermanent}
+                        disabled={isOnShelvesImmediate || isEternal}
                         defaultValue={startDate}
                         title={'排程開始日期'}
                         setState={onStartDateChange} />
                     <DateTimeSelector
-                        disabled={isPermanent}
+                        disabled={isEternal}
                         defaultValue={endDate}
                         title={'排程結束日期'}
                         setState={onEndDateChange} />

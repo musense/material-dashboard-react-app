@@ -15,31 +15,46 @@ import Media from 'components/Media/Media';
 import FormButtonList from 'components/FormButtonList/FormButtonList';
 import BannerPublishInfo from './BannerPublishInfo';
 import MyScrollbar from 'components/MyScrollbar/MyScrollbar';
-import { getIsEditing, getShowUrl } from 'reducers/GetBannerReducer';
-
-// import { useDebounce } from 'react-use'
+import {
+    getBannerErrorMessage,
+    getIsEditing,
+    getSelectedBanner,
+    getSelectedBannerMedia,
+    getSelectedBannerPublishInfo,
+    getSelectedBannerPublishInfoSchedulePeriod,
+    getShowUrl
+} from 'reducers/GetBannerReducer';
+import SingleBannerStatusSelector from 'components/Select/SingleBannerStatusSelect'
+import { Checkbox, FormControlLabel } from '@mui/material';
 
 export default function BannerLeftWrapper() {
 
     const formRef = useRef(null);
     const dispatch = useDispatch();
 
+    const selectedBanner = useSelector(getSelectedBanner)
+    console.log("🚀 ~ file: BannerLeftWrapper.jsx:35 ~ BannerLeftWrapper ~ selectedBanner:", selectedBanner)
+    const selectedBannerMedia = useSelector(getSelectedBannerMedia)
+    const selectedBannerPublishInfo = useSelector(getSelectedBannerPublishInfo)
+    const selectedBannerSchedulePeriod = useSelector(getSelectedBannerPublishInfoSchedulePeriod)
 
-    const id = useSelector((state) => state.getBannerReducer.selectedBanner._id);
-    const name = useSelector((state) => state.getBannerReducer.selectedBanner.name);
-    const sort = useSelector((state) => state.getBannerReducer.selectedBanner.sort);
-    const hyperlink = useSelector((state) => state.getBannerReducer.selectedBanner.hyperlink);
-    const note = useSelector((state) => state.getBannerReducer.selectedBanner.remark);
-    const homeImagePath = useSelector((state) => state.getBannerReducer.selectedBanner.media.homeImagePath);
-    const contentImagePath = useSelector((state) => state.getBannerReducer.selectedBanner.media.contentImagePath);
-    const startDate = useSelector((state) => state.getBannerReducer.selectedBanner.startDate);
-    const endDate = useSelector((state) => state.getBannerReducer.selectedBanner.endDate);
-    const status = useSelector((state) => state.getBannerReducer.selectedBanner.status);
+    // const id = selectedBanner._id
+    // const name = selectedBanner.name
+    // const sort = selectedBanner.sort
+    // const remark = selectedBanner.remark
+    // const status = selectedBanner.status
+
+    const homeImagePath = selectedBannerMedia.homeImagePath
+    const contentImagePath = selectedBannerMedia.contentImagePath
+    // const hyperlink = selectedBannerMedia.hyperlink
+
+    // const startDate = selectedBannerPublishInfo.startDate
+    // const endDate = selectedBannerPublishInfo.endDate
 
 
     const isEditing = useSelector(getIsEditing);
     const showUrl = useSelector(getShowUrl);
-    const serverMessage = useSelector((state) => state.getBannerReducer.errorMessage);
+    const serverMessage = useSelector(getBannerErrorMessage);
 
 
     usePressEnterEventHandler(formRef)
@@ -60,7 +75,7 @@ export default function BannerLeftWrapper() {
     function onAddNewEditor(e) {
         e.preventDefault()
 
-        if (!name) {
+        if (!selectedBanner.name) {
             dispatch({
                 type: GetBannerAction.SET_ERROR_MESSAGE,
                 payload: {
@@ -71,23 +86,23 @@ export default function BannerLeftWrapper() {
         }
 
         let tempData = {
-            name: name,
-            sort: sort,
-            hyperlink: hyperlink,
-            remark: note,
+            name: selectedBanner.name,
+            sort: selectedBanner.sort,
+            hyperlink: selectedBannerMedia.hyperlink,
+            remark: selectedBanner.remark,
             // eternal: eternal,
             // display: display,
             media: {
-                homeImagePath: homeImagePath,
-                contentImagePath: contentImagePath,
+                homeImagePath: selectedBannerMedia.homeImagePath,
+                contentImagePath: selectedBannerMedia.contentImagePath,
             },
-            startDate: new Date(startDate).getTime(),
-            endDate: new Date(endDate).getTime(),
-            status: status,
+            startDate: new Date(selectedBannerPublishInfo.startDate).getTime(),
+            endDate: new Date(selectedBannerPublishInfo.endDate).getTime(),
+            status: selectedBanner.status,
         }
 
-        if (sort) {
-            if (typeof parseInt(sort) !== 'number') {
+        if (selectedBanner.sort) {
+            if (typeof parseInt(selectedBanner.sort) !== 'number') {
                 dispatch({
                     type: GetBannerAction.SET_ERROR_MESSAGE,
                     payload: {
@@ -96,7 +111,7 @@ export default function BannerLeftWrapper() {
                 })
                 return
             }
-            if (parseInt(sort) < 1) {
+            if (parseInt(selectedBanner.sort) < 1) {
                 dispatch({
                     type: GetBannerAction.SET_ERROR_MESSAGE,
                     payload: {
@@ -107,7 +122,7 @@ export default function BannerLeftWrapper() {
             }
             tempData = {
                 ...tempData,
-                sort: sort
+                sort: selectedBanner.sort
             }
         }
 
@@ -118,7 +133,7 @@ export default function BannerLeftWrapper() {
                 type: GetBannerAction.EDIT_SAVING_BANNER,
                 payload: {
                     ...tempData,
-                    _id: id
+                    _id: selectedBanner._id
                 },
             });
             return
@@ -131,19 +146,11 @@ export default function BannerLeftWrapper() {
         });
     }
 
-    function getForm() {
-        return formRef.current;
-    }
-
     const onReset = useCallback(() => {
         dispatch({
             type: GetBannerAction.CANCEL_EDITING_BANNER
         })
     }, [dispatch])
-
-    const onCancel = useCallback(() => {
-        onReset()
-    }, [onReset])
 
     const onPropertyChange = useCallback((value, property, info = null) => {
         dispatch({
@@ -158,6 +165,10 @@ export default function BannerLeftWrapper() {
         })
     }, [dispatch])
 
+    const onStatusChange = useCallback((value) => {
+        onPropertyChange(value, 'status')
+    }, [onPropertyChange])
+
     const onShowUrlChange = useCallback((value) => {
         dispatch({
             type: GetBannerAction.SET_SHOW_URL,
@@ -171,6 +182,23 @@ export default function BannerLeftWrapper() {
         handleClose()
         onReset()
     }, [onReset, handleClose])
+
+    const statusStyle = {
+        display: 'block',
+        fontWeight: 'bold',
+        fontSize: '24px',
+        color: selectedBanner.status === '進行中'
+            ? '#009900'
+            : selectedBanner.status === '已排程'
+                ? '#000099'
+                : selectedBanner.status === '下架'
+                    ? '#990000'
+                    : '#000000',
+        textAlign: 'center',
+        lineHeight: '60px',
+    }
+    const statusString = selectedBanner.status === '下架' ? '已下架' : selectedBanner.status
+    const checkboxString = selectedBanner.status === '下架' ? "上架" : "下架"
     return <div className={styles['banner-left-wrapper']}>
         <Card style={{ height: 'calc(100% - 50px)' }}>
             <CardHeader color="primary">
@@ -180,19 +208,24 @@ export default function BannerLeftWrapper() {
                 <MyScrollbar component='form' height='700px'>
                     <form ref={formRef} name='class-form' className='banner-submit-form' onSubmit={onAddNewEditor}>
                         <div>
-                            <input type="hidden" name='_id' value={id} />
+                            <input type="hidden" name='_id' value={selectedBanner._id} />
+                        </div>
+                        <div className={styles['banner-status']}>
+                            <span style={statusStyle}>{statusString}</span>
+
+                            {selectedBanner.status !== '' && <FormControlLabel control={<Checkbox />} label={checkboxString} />}
                         </div>
                         <div>
                             <label htmlFor="name">Banner名稱</label>
-                            <input type="text" name='name' value={name} onChange={e => onPropertyChange(e.target.value, 'name')} />
+                            <input type="text" name='name' value={selectedBanner.name} onChange={e => onPropertyChange(e.target.value, 'name')} />
                         </div>
                         <div>
                             <label htmlFor="sorting">排序</label>
-                            <input type="number" min={1} name='sorting' value={sort} onChange={e => onPropertyChange(e.target.value, 'sort')} />
+                            <input type="number" min={1} name='sorting' value={selectedBanner.sort} onChange={e => onPropertyChange(e.target.value, 'sort')} />
                         </div>
                         <div>
                             <label htmlFor="hyperlink">超連結</label>
-                            <input type="text" name='hyperlink' value={hyperlink} onChange={e => onPropertyChange(e.target.value, 'hyperlink')} />
+                            <input type="text" name='hyperlink' value={selectedBannerMedia.hyperlink} onChange={e => onPropertyChange(e.target.value, 'hyperlink')} />
                         </div>
                         <Media
                             styles={styles}
@@ -204,17 +237,16 @@ export default function BannerLeftWrapper() {
                         <BannerPublishInfo
                             // isOnShelvesImmediate={isOnShelvesImmediate}
                             // isPermanent={isPermanent}
-                            startDate={startDate}
-                            endDate={endDate}
+                            startDate={selectedBannerSchedulePeriod.startDate}
+                            endDate={selectedBannerSchedulePeriod.endDate}
                             onPropertyChange={onPropertyChange}
                         />
                         <div>
-                            <label htmlFor="note">備註</label>
-                            <textarea type="text" name='note' value={note} onChange={e => onPropertyChange(e.target.value, 'remark')} />
+                            <label htmlFor="remark">備註</label>
+                            <textarea type="text" name='remark' value={selectedBanner.remark} onChange={e => onPropertyChange(e.target.value, 'remark')} />
                         </div>
                         <FormButtonList
                             isEditing={isEditing}
-                            onCancel={onCancel}
                             onReset={onReset}
                             callback={onAddNewEditor}
                         />

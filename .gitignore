@@ -12,6 +12,8 @@
 # npmjs
 /dist
 
+**/dist/**/*
+
 # misc
 .DS_Store
 .env

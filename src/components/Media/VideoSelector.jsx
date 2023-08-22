@@ -43,6 +43,13 @@ export default function VideoSelector({
                                         }`)} />
         </div>
         <div>
+            <input
+                type='button'
+                name='remove-image'
+                value='刪除影片'
+                onClick={onRemoveClick}
+                className='film-group'
+            />
             <label htmlFor='film-url-preview'>
                 選取影片
                 <input
@@ -52,12 +59,6 @@ export default function VideoSelector({
                     onClick={previewFilm}
                     className='film-group' />
             </label>
-            <input
-                type='button'
-                name='remove-image'
-                value='刪除影片'
-                onClick={onRemoveClick}
-                className='film-group' />
         </div>
     </div>;
 }

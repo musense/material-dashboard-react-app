@@ -34,7 +34,10 @@ function HeaderLinks(props) {
   return (
     <div>
       <IconButton
-        color="transparent"
+        sx={{
+          backgroundColor: 'transparent'
+        }}
+        // color="transparent"
         aria-label="logout"
         title='登出'
         onClick={logout}

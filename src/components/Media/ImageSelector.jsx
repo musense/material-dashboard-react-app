@@ -39,6 +39,13 @@ export default function ImageSelector({
             />}
         </div>
         <div>
+            <input
+                type='button'
+                name='remove-image'
+                value='刪除圖片'
+                onClick={onRemoveClick}
+                className='image-group'
+            />
             <label htmlFor='uploadImage'>
                 上傳圖片
                 <input
@@ -50,12 +57,6 @@ export default function ImageSelector({
                     // onChange={previewImage}
                     className='image-group' />
             </label>
-            <input
-                type='button'
-                name='remove-image'
-                value='刪除圖片'
-                onClick={onRemoveClick}
-                className='image-group' />
         </div>
     </div>;
 }

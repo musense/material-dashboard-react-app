@@ -1,6 +1,10 @@
-.form-button-container{
+.form-button-container {
     display: flex;
     flex-direction: row;
     gap: 4rem;
     margin-top: 1.5rem;
+}
+
+.form-button-container>input {
+    flex: 1;
 }

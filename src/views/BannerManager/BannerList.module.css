@@ -1,12 +1,3 @@
-input {
-  display: block;
-  width: 100%;
-  height: 1.8rem;
-  line-height: 1;
-  padding: 0 0.5rem;
-  box-sizing: border-box;
-}
-
 .banner-container {
   height: 100%;
   display: flex;

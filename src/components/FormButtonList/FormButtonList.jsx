@@ -24,7 +24,7 @@ export default function FormButtonList({
 
 const FormButtonContainer = ({ resetValue, submitValue, onReset, callback }) => {
     return <div className={styles['form-button-container']}>
-        <input type='button' value={resetValue} onClick={(e) => onReset(e)} />
-        <input className='submit-btn' type='button' value={submitValue} onClick={(e) => callback(e)} title="Enter" />
+        <input type='button' defaultValue={resetValue} onClick={(e) => onReset(e)} />
+        <input className='submit-btn' type='button' defaultValue={submitValue} onClick={(e) => callback(e)} title="Enter" />
     </div>
 }

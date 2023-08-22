@@ -37,6 +37,15 @@ input[type='submit'],
   width: 180px;
 }
 
+.btn {
+  display: block;
+  width: 100%;
+  height: 1.8rem;
+  line-height: 1;
+  padding: 0 0.5rem;
+  box-sizing: border-box;
+}
+
 input[type='submit']:hover,
 .submit-btn:hover {
   background-color: violet;
@@ -51,6 +60,15 @@ input[type='checkbox'] {
 input[type='file'] {
   padding: 0;
   margin: 0;
+}
+
+input {
+  display: block;
+  width: 100%;
+  height: 1.8rem;
+  line-height: 1;
+  padding: 0 0.5rem;
+  box-sizing: border-box;
 }
 
 .container {
@@ -239,11 +257,20 @@ input[type='file'] {
   gap: 40px;
 }
 
+.tag-list-form .button-list>input,
+.banner-list-form .button-list>input,
+.editor-list-form .button-list>input {
+  flex: 1;
+}
+
 .button-wrapper {
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
   gap: 5rem;
+}
+
+.button-wrapper>input {
+  flex: 1;
 }
 
 @media (max-width: 1500px) {

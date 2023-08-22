@@ -9,7 +9,7 @@ export default function TagRightWrapper() {
 
     const maxSizeClassName = useSelector((state) => state.getConfigReducer.maxSizeClassName);
 
-    return <div className={`${styles['tag-right-wrapper']} ${styles[maxSizeClassName]}`}>
+    return <div className={`${styles['tag-right-wrapper']} ${maxSizeClassName === "" ? '' : styles[maxSizeClassName]}`}>
         <Card>
             <TagRightHeader />
             <TagRightBody />

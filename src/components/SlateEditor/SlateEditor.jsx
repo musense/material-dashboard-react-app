@@ -12,7 +12,7 @@ import useCreateSlateEditor from './customHooks/useCreateSlateEditor'
 import useModal from '../../hook/useModal';
 import MyScrollbar from 'components/MyScrollbar/MyScrollbar';
 import CodeToText from './CodeToText/CodeToText';
-import useGetToolbarHeight from './customHooks/useGetToolbarHeight'
+import useSetSlateEditorHeight from './customHooks/useSetSlateEditorHeight'
 
 function SlateEditor({
   slateValue,
@@ -22,7 +22,8 @@ function SlateEditor({
   const slateEditor = useCreateSlateEditor()
 
   const toolbarRef = useRef(null)
-  const toolbarHeight = useGetToolbarHeight(toolbarRef)
+  const myScrollbarRef = useRef(null)
+  useSetSlateEditorHeight(toolbarRef, myScrollbarRef)
 
   const urlRef = useRef(null);
   const altTextRef = useRef(null);
@@ -71,7 +72,7 @@ function SlateEditor({
           currentAltText={altTextRef.current}
           currentHref={hrefRef.current}
         />
-        <MyScrollbar height={`calc(100% - ${toolbarHeight}px)`}>
+        <MyScrollbar ref={myScrollbarRef} >
           <Editable
             style={{
               fontSize: '1rem',

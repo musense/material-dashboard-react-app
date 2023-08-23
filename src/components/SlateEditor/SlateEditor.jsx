@@ -72,7 +72,7 @@ function SlateEditor({
           currentAltText={altTextRef.current}
           currentHref={hrefRef.current}
         />
-        <MyScrollbar ref={myScrollbarRef} >
+        <MyScrollbar height={'calc(100% - 37px)'} >
           <Editable
             style={{
               fontSize: '1rem',

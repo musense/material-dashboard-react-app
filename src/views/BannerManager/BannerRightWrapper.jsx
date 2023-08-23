@@ -8,7 +8,8 @@ export default function BannerRightWrapper({ styles }) {
 
     const maxSizeClassName = useSelector((state) => state.getConfigReducer.maxSizeClassName);
 
-    return <div className={`${styles['banner-right-wrapper']} ${styles[maxSizeClassName]}`}>
+    const bannerRightWrapperClassName = maxSizeClassName !== "" ? styles[maxSizeClassName] : ""
+    return <div className={`${styles['banner-right-wrapper']} ${bannerRightWrapperClassName}`}>
         <Card>
             <BannerRightHeader title={'Banner管理'} />
             <BannerRightBody />

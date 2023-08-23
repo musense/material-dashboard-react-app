@@ -25,11 +25,11 @@ function RouterIndex() {
         },
         {
             path: "/admin", element: <Admin />, children: [
-                // {
-                //     path: "banner",
-                //     element: <BannerManager />,
-                //     loader: bannerListGetter(dispatch)
-                // },
+                {
+                    path: "banner",
+                    element: <BannerManager />,
+                    loader: bannerListGetter(dispatch)
+                },
                 { path: "tag", element: <TagList /> },
                 { path: "editorClassList", element: <EditorClassList /> },
                 {
@@ -38,12 +38,12 @@ function RouterIndex() {
                         { path: "new", element: <NewIEditor /> },
                         {
                             path: ":id", element: <IEditor />,
-                            // loader: async ({ params, request: { signal } }) => {
-                            //     const res = await instance.get(`/editor/${params.id}`, { signal })
+                            loader: async ({ params, request: { signal } }) => {
+                                const res = await instance.get(`/editor/${params.id}`, { signal })
 
 
-                            //     return res.data
-                            // }
+                                return res.data
+                            }
                         },
                     ]
                 },

@@ -61,25 +61,42 @@ const getBannerReducer = (state = initialState, action) => {
             }
         }
         case GetBannerAction.SET_BANNER_PROPERTY: {
-            const { property, value, info } = action.payload.allProps
-            return info ? {
+            const { value, property, info, detail } = action.payload.allProps
+            if (!detail && !info) {
+                return {
+                    ...state,
+                    selectedBanner: {
+                        ...state.selectedBanner,
+                        [property]: value,
+                    }
+                }
+            }
+            if (!detail) {
+                return {
+                    ...state,
+                    selectedBanner: {
+                        ...state.selectedBanner,
+                        [info]: {
+                            ...state.selectedBanner[info],
+                            [property]: value,
+                        }
+                    }
+                }
+            }
+            return {
                 ...state,
                 selectedBanner: {
                     ...state.selectedBanner,
                     [info]: {
                         ...state.selectedBanner[info],
-                        [property]: value,
+                        [detail]: {
+                            ...state.selectedBanner[info][detail],
+                            [property]: value,
+                        }
                     }
-                }
-            } : {
-                ...state,
-                selectedBanner: {
-                    ...state.selectedBanner,
-                    [property]: value,
                 }
             }
         }
-
         case GetBannerAction.EDITING_BANNER:
             const banner = action.payload.data;
             console.log("🚀 ~ file: GetBannerReducer.js:81 ~ getBannerReducer ~ banner:", banner)

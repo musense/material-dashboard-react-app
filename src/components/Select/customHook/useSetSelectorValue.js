@@ -20,7 +20,7 @@ export default function useSetSelectorValue(defaultSelected, isMulti) {
     }, [isMulti])
 
     const transformedSelected = useMemo(() => {
-        if (!defaultSelected || defaultSelected.length === 0) return null;
+        if (!defaultSelected || defaultSelected.length === 0) return [];
         if (isMulti) {
             return defaultSelected.map((selected) => {
                 return {

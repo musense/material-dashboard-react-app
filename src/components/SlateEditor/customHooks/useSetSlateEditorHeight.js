@@ -1,30 +1,35 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef } from "react";
 
 export default function useSetSlateEditorHeight(toolbarRef, myScrollbarRef) {
-    const [toolbar, setToolbar] = useState();
-    const [myScrollbar, setMyScrollbar] = useState();
+    console.log("$$$ ~ file: useSetSlateEditorHeight.js:4 ~ useSetSlateEditorHeight ~ myScrollbarRef:", myScrollbarRef)
+    console.log("$$$ ~ file: useSetSlateEditorHeight.js:4 ~ useSetSlateEditorHeight ~ toolbarRef:", toolbarRef)
+    const effectRan = useRef(false);
+    let toolbar, myScrollbar
 
     const onResize = () => {
-        if (!toolbar) return
-        if (!myScrollbar) return
+        console.log('$$$ onResize');
 
-        const { height: toolbarHeight } = toolbar.getBoundingClientRect()
+        if (!toolbar) toolbar = toolbarRef.current
+        if (!myScrollbar) myScrollbar = myScrollbarRef.current
+        console.log("$$$ ~ file: useSetSlateEditorHeight.js:15 ~ onResize ~ toolbar:", toolbar)
+        console.log("$$$ ~ file: useSetSlateEditorHeight.js:15 ~ onResize ~ myScrollbar:", myScrollbar)
+
+        const {
+            height: toolbarHeight = 37
+        } = toolbar.getBoundingClientRect()
         myScrollbar.style.height = `calc(100% - ${toolbarHeight}px)`
     }
 
     useEffect(() => {
-        if (toolbarRef.current === null || myScrollbarRef.current === null) {
-            return
-        } else {
-            setToolbar(toolbarRef.current)
-            setMyScrollbar(myScrollbarRef.current)
+        if (effectRan.current === true) {
+            console.log('$$$ effect ran');
             window.addEventListener('resize', onResize)
             onResize()
         }
-
         return () => {
             console.log('$$$ unmount');
+            effectRan.current = true
             window.removeEventListener('resize', onResize)
         }
-    }, [toolbarRef, myScrollbarRef]);
+    }, []);
 }

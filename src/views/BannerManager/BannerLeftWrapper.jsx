@@ -89,15 +89,24 @@ export default function BannerLeftWrapper({ styles }) {
             sort: selectedBanner.sort,
             hyperlink: selectedBannerMedia.hyperlink,
             remark: selectedBanner.remark,
+            status: selectedBanner.status,
             // eternal: eternal,
             // display: display,
             media: {
                 homeImagePath: selectedBannerMedia.homeImagePath,
                 contentImagePath: selectedBannerMedia.contentImagePath,
             },
-            startDate: new Date(selectedBannerPublishInfo.startDate).getTime(),
-            endDate: new Date(selectedBannerPublishInfo.endDate).getTime(),
-            status: selectedBanner.status,
+            publishInfo: {
+                isEternal: false,
+                isDisplay: false,
+                isScheduled: false,
+                scheduledAt: {
+                    startDate: new Date(selectedBannerPublishInfo.startDate).getTime(),
+                    endDate: new Date(selectedBannerPublishInfo.endDate).getTime(),
+                }
+            }
+
+
         }
 
         if (selectedBanner.sort) {
@@ -126,7 +135,7 @@ export default function BannerLeftWrapper({ styles }) {
         }
 
         console.log("🚀 ~ file: BannerLeftWrapper.jsx:86 ~ onAddNewEditor ~ tempData:", tempData)
-        // return
+        return
         if (isEditing === true) {
             dispatch({
                 type: GetBannerAction.EDIT_SAVING_BANNER,
@@ -151,14 +160,15 @@ export default function BannerLeftWrapper({ styles }) {
         })
     }, [dispatch])
 
-    const onPropertyChange = useCallback((value, property, info = null) => {
+    const onPropertyChange = useCallback((value, property, info = null, detail = null) => {
         dispatch({
             type: GetBannerAction.SET_BANNER_PROPERTY,
             payload: {
                 allProps: {
                     property: property,
                     value: value,
-                    info: info
+                    info: info,
+                    detail: detail
                 }
             }
         })
@@ -199,11 +209,11 @@ export default function BannerLeftWrapper({ styles }) {
     const statusString = selectedBanner.status === '下架' ? '已下架' : selectedBanner.status
     const checkboxString = selectedBanner.status === '下架' ? "上架" : "下架"
     return <div className={styles['banner-left-wrapper']}>
-        <Card style={{ height: 'calc(100% - 50px)' }}>
+        <Card>
             <CardHeader color="primary">
                 <h4>{isEditing ? '編輯' : '新增'}</h4>
             </CardHeader>
-            <CardBody style={{ paddingRight: 0 }}>
+            <CardBody>
                 <MyScrollbar component='form' height='700px'>
                     <form ref={formRef} name='class-form' className='banner-submit-form' onSubmit={onAddNewEditor}>
                         <div>
@@ -224,7 +234,7 @@ export default function BannerLeftWrapper({ styles }) {
                         </div>
                         <div>
                             <label htmlFor="hyperlink">超連結</label>
-                            <input type="text" name='hyperlink' value={selectedBannerMedia.hyperlink} onChange={e => onPropertyChange(e.target.value, 'hyperlink')} />
+                            <input type="text" name='hyperlink' value={selectedBannerMedia.hyperlink} onChange={e => onPropertyChange(e.target.value, 'hyperlink', 'media')} />
                         </div>
                         <Media
                             styles={styles}
@@ -234,8 +244,8 @@ export default function BannerLeftWrapper({ styles }) {
                             alt={false}
                         />
                         <BannerPublishInfo
-                            // isOnShelvesImmediate={isOnShelvesImmediate}
-                            // isPermanent={isPermanent}
+                            isEternal={selectedBannerSchedulePeriod.isEternal}
+                            isDisplay={selectedBannerSchedulePeriod.isDisplay}
                             startDate={selectedBannerSchedulePeriod.startDate}
                             endDate={selectedBannerSchedulePeriod.endDate}
                             onPropertyChange={onPropertyChange}

@@ -47,7 +47,6 @@ function NewIEditor() {
 
   usePreview(previewID, isPreview)
   useEditorSave(message, submitState, isPreview)
-  const { onEditorSave } = useEditorSave(message, submitState, isPreview)
   // useBeforeUnloadSave(onEditorSave)
 
   return (

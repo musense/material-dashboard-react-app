@@ -23,7 +23,7 @@ function SlateEditor({
 
   const toolbarRef = useRef(null)
   const myScrollbarRef = useRef(null)
-  useSetSlateEditorHeight(toolbarRef, myScrollbarRef)
+  // useSetSlateEditorHeight(toolbarRef, myScrollbarRef)
 
   const urlRef = useRef(null);
   const altTextRef = useRef(null);

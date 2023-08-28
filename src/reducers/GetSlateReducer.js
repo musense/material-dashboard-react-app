@@ -176,6 +176,23 @@ const getSlateReducer = (state = initialState, action) => {
         } else {
           throw new Error('invalid createType')
         }
+        const mappedTags = trimmedState.tags?.map(tag => {
+          if (tag._id === tag.name) {
+            return {
+              _id: tag._id,
+              name: tag.name,
+              __isNew__: true
+            }
+          }
+          return {
+            _id: tag._id,
+            name: tag.name
+          }
+        })
+        trimmedState = {
+          ...trimmedState,
+          tags: mappedTags
+        }
       }
       // return
       return {
